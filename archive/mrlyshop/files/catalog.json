@@ -1,0 +1,410 @@
+[
+  {
+    "id": 630,
+    "category": "Accessories",
+    "title": "Bandana",
+    "link": "all-over-print-bandana",
+    "handle": "bandana",
+    "primaries": "Both"
+  },
+  {
+    "id": 458,
+    "category": "Accessories",
+    "title": "Beanie",
+    "link": "all-over-print-beanie",
+    "handle": "beanie",
+    "primaries": "Both"
+  },
+  {
+    "id": 545,
+    "category": "Accessories",
+    "title": "Headband",
+    "link": "all-over-print-headband",
+    "handle": "headband",
+    "primaries": "Both"
+  },
+  {
+    "id": 420,
+    "category": "Accessories",
+    "title": "Neck Gaiter",
+    "link": "all-over-print-neck-gaiter",
+    "handle": "neck-gaiter",
+    "primaries": "Both"
+  },
+  {
+    "id": 654,
+    "category": "Accessories",
+    "title": "Reversible Bucket Hat",
+    "link": "all-over-print-reversible-bucket-hat",
+    "handle": "reversible-bucket-hat",
+    "primaries": "Both"
+  },
+  {
+    "id": 530,
+    "category": "Accessories",
+    "title": "Scrunchie",
+    "link": "all-over-print-recycled-scrunchie",
+    "handle": "scrunchie",
+    "primaries": "Both"
+  },
+  {
+    "id": 279,
+    "category": "Bags",
+    "title": "Backpack",
+    "link": "all-over-print-backpack",
+    "handle": "backpack",
+    "primaries": "Black"
+  },
+  {
+    "id": 262,
+    "category": "Bags",
+    "title": "Drawstring Bag",
+    "link": "all-over-print-drawstring-bag",
+    "handle": "drawstring-bag",
+    "primaries": "Black"
+  },
+  {
+    "id": 465,
+    "category": "Bags",
+    "title": "Duffle Bag",
+    "link": "all-over-print-duffle-bag",
+    "handle": "duffle-bag",
+    "primaries": "Black"
+  },
+  {
+    "id": 350,
+    "category": "Bags",
+    "title": "Fanny Pack",
+    "link": "all-over-print-fanny-pack",
+    "handle": "fanny-pack",
+    "primaries": "Black"
+  },
+  {
+    "id": 594,
+    "category": "Bags",
+    "title": "Gym Bag",
+    "link": "all-over-print-gym-bag",
+    "handle": "gym-bag",
+    "primaries": "Black"
+  },
+  {
+    "id": 274,
+    "category": "Bags",
+    "title": "Large Tote Bag",
+    "link": "all-over-print-large-tote-bag",
+    "handle": "large-tote-bag",
+    "primaries": "Black"
+  },
+  {
+    "id": 389,
+    "category": "Bags",
+    "title": "Minimalist Backpack",
+    "link": "all-over-print-minimalist-backpack",
+    "handle": "minimalist-backpack",
+    "primaries": "Black"
+  },
+  {
+    "id": 84,
+    "category": "Bags",
+    "title": "Tote Bag",
+    "link": "all-over-print-tote",
+    "handle": "tote-bag",
+    "primaries": "Black"
+  },
+  {
+    "id": 744,
+    "category": "Bags",
+    "title": "Utility Crossbody Bag",
+    "link": "all-over-print-utility-crossbody-bag",
+    "handle": "utility-crossbody-bag",
+    "primaries": "Black"
+  },
+  {
+    "id": 384,
+    "category": "Kids",
+    "title": "Kids Crew Neck T-Shirt",
+    "link": "all-over-print-kids-crew-neck",
+    "handle": "kids-crew-neck-t-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 322,
+    "category": "Kids",
+    "title": "Kids Leggings",
+    "link": "all-over-print-kids-leggings",
+    "handle": "kids-leggings",
+    "primaries": "Both"
+  },
+  {
+    "id": 368,
+    "category": "Kids",
+    "title": "Kids Rash Guard",
+    "link": "all-over-print-kids-rash-guard",
+    "handle": "kids-rash-guard",
+    "primaries": "Both"
+  },
+  {
+    "id": 328,
+    "category": "Men",
+    "title": "Men's Athletic T-Shirt",
+    "link": "all-over-print-mens-athletic-t-shirt",
+    "handle": "mens-athletic-t-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 257,
+    "category": "Men",
+    "title": "Men's Crew Neck T-Shirt",
+    "link": "all-over-print-mens-crew-neck",
+    "handle": "mens-crew-neck-t-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 400,
+    "category": "Men",
+    "title": "Men's Joggers",
+    "link": "all-over-print-recycled-mens-joggers",
+    "handle": "mens-joggers",
+    "primaries": "Both"
+  },
+  {
+    "id": 288,
+    "category": "Men",
+    "title": "Men's Leggings",
+    "link": "all-over-print-mens-leggings",
+    "handle": "mens-leggings",
+    "primaries": "Both"
+  },
+  {
+    "id": 301,
+    "category": "Men",
+    "title": "Men's Rash Guard",
+    "link": "all-over-print-mens-rash-guard",
+    "handle": "mens-rash-guard",
+    "primaries": "Both"
+  },
+  {
+    "id": 276,
+    "category": "Men",
+    "title": "Men's Tank Top",
+    "link": "all-over-print-mens-tank-top",
+    "handle": "mens-tank-top",
+    "primaries": "Both"
+  },
+  {
+    "id": 918,
+    "category": "Unisex",
+    "title": "Unisex American Football Jersey",
+    "link": "all-over-print-american-football-jersey",
+    "handle": "unisex-american-football-jersey",
+    "primaries": "Both"
+  },
+  {
+    "id": 332,
+    "category": "Unisex",
+    "title": "Unisex Athletic Long Shorts",
+    "link": "all-over-print-unisex-athletic-long-shorts",
+    "handle": "unisex-athletic-long-shorts",
+    "primaries": "Both"
+  },
+  {
+    "id": 330,
+    "category": "Unisex",
+    "title": "Unisex Athletic Shorts",
+    "link": "all-over-print-unisex-athletic-shorts",
+    "handle": "unisex-athletic-shorts",
+    "primaries": "Both"
+  },
+  {
+    "id": 792,
+    "category": "Unisex",
+    "title": "Unisex Baseball Jersey",
+    "link": "all-over-print-recycled-unisex-baseball-jersey",
+    "handle": "unisex-baseball-jersey",
+    "primaries": "Both"
+  },
+  {
+    "id": 676,
+    "category": "Unisex",
+    "title": "Unisex Basketball Jersey",
+    "link": "all-over-print-recycled-unisex-basketball-jersey",
+    "handle": "unisex-basketball-jersey",
+    "primaries": "Both"
+  },
+  {
+    "id": 390,
+    "category": "Unisex",
+    "title": "Unisex Bomber Jacket",
+    "link": "all-over-print-unisex-bomber-jacket",
+    "handle": "unisex-bomber-jacket",
+    "primaries": "Both"
+  },
+  {
+    "id": 1367,
+    "category": "Unisex",
+    "title": "Unisex Boxy Football Jersey",
+    "link": "all-over-print-boxy-football-jersey",
+    "handle": "unisex-boxy-football-jersey",
+    "primaries": "Both"
+  },
+  {
+    "id": 659,
+    "category": "Unisex",
+    "title": "Unisex Button Shirt",
+    "link": "all-over-print-unisex-hawaiian-shirt",
+    "handle": "unisex-button-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 730,
+    "category": "Unisex",
+    "title": "Unisex Hockey Fan Jersey",
+    "link": "all-over-print-recycled-hockey-fan-jersey",
+    "handle": "unisex-hockey-fan-jersey",
+    "primaries": "Both"
+  },
+  {
+    "id": 388,
+    "category": "Unisex",
+    "title": "Unisex Hoodie",
+    "link": "all-over-print-recycled-unisex-hoodie",
+    "handle": "unisex-hoodie",
+    "primaries": "Both"
+  },
+  {
+    "id": 693,
+    "category": "Unisex",
+    "title": "Unisex Mesh Shorts",
+    "link": "all-over-print-recycled-unisex-mesh-shorts",
+    "handle": "unisex-mesh-shorts",
+    "primaries": "Both"
+  },
+  {
+    "id": 835,
+    "category": "Unisex",
+    "title": "Unisex Premium Basketball Jersey",
+    "link": "all-over-print-premium-basketball-jersey",
+    "handle": "unisex-premium-basketball-jersey",
+    "primaries": "Both"
+  },
+  {
+    "id": 644,
+    "category": "Unisex",
+    "title": "Unisex Sports Jersey",
+    "link": "all-over-print-recycled-unisex-sports-jersey",
+    "handle": "unisex-sports-jersey",
+    "primaries": "Both"
+  },
+  {
+    "id": 320,
+    "category": "Unisex",
+    "title": "Unisex Sweatshirt",
+    "link": "all-over-print-recycled-unisex-sweatshirt",
+    "handle": "unisex-sweatshirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 801,
+    "category": "Unisex",
+    "title": "Unisex Track Jacket",
+    "link": "all-over-print-recycled-unisex-track-jacket",
+    "handle": "unisex-track-jacket",
+    "primaries": "Both"
+  },
+  {
+    "id": 784,
+    "category": "Unisex",
+    "title": "Unisex Wide-Leg Joggers",
+    "link": "all-over-print-unisex-wide-leg-joggers",
+    "handle": "unisex-wide-leg-joggers",
+    "primaries": "Both"
+  },
+  {
+    "id": 604,
+    "category": "Unisex",
+    "title": "Unisex Wide-Leg Pants",
+    "link": "all-over-print-unisex-wide-leg-pants",
+    "handle": "unisex-wide-leg-pants",
+    "primaries": "Both"
+  },
+  {
+    "id": 717,
+    "category": "Unisex",
+    "title": "Unisex Zip Hoodie",
+    "link": "all-over-print-recycled-unisex-zip-hoodie",
+    "handle": "unisex-zip-hoodie",
+    "primaries": "Both"
+  },
+  {
+    "id": 329,
+    "category": "Women",
+    "title": "Women's Athletic T-Shirt",
+    "link": "all-over-print-womens-athletic-t-shirt",
+    "handle": "womens-athletic-t-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 261,
+    "category": "Women",
+    "title": "Women's Crew Neck T-Shirt",
+    "link": "all-over-print-womens-crew-neck",
+    "handle": "womens-crew-neck-t-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 401,
+    "category": "Women",
+    "title": "Women's Joggers",
+    "link": "all-over-print-recycled-womens-joggers",
+    "handle": "womens-joggers",
+    "primaries": "Both"
+  },
+  {
+    "id": 189,
+    "category": "Women",
+    "title": "Women's Leggings",
+    "link": "all-over-print-leggings",
+    "handle": "womens-leggings",
+    "primaries": "Both"
+  },
+  {
+    "id": 302,
+    "category": "Women",
+    "title": "Women's Rash Guard",
+    "link": "all-over-print-womens-rash-guard",
+    "handle": "womens-rash-guard",
+    "primaries": "Both"
+  },
+  {
+    "id": 202,
+    "category": "Women",
+    "title": "Women's Tank Top",
+    "link": "all-over-print-womens-tank-top",
+    "handle": "womens-tank-top",
+    "primaries": "Both"
+  },
+  {
+    "id": 385,
+    "category": "Youth",
+    "title": "Youth Crew Neck T-shirt",
+    "link": "all-over-print-youth-crew-neck-t-shirt",
+    "handle": "youth-crew-neck-t-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 323,
+    "category": "Youth",
+    "title": "Youth Leggings",
+    "link": "all-over-print-youth-leggings",
+    "handle": "youth-leggings",
+    "primaries": "Both"
+  },
+  {
+    "id": 369,
+    "category": "Youth",
+    "title": "Youth Rash Guard",
+    "link": "all-over-print-youth-rash-guard",
+    "handle": "youth-rash-guard",
+    "primaries": "Both"
+  }
+]

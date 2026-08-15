@@ -1,0 +1,15 @@
+# IMAGING
+# ffpmeg
+numpy
+pillow
+
+# CLOUD
+boto3
+
+# DEMOS
+matplotlib
+
+# MRLYFONT
+# brotli
+# fontTools
+# skia-pathops
