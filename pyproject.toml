@@ -1,0 +1,28 @@
+[project]
+
+name = "carlomitchener"
+version = "0.1.0"
+description = "MrlyMath and friends: one environment for every script in the repo"
+requires-python = ">=3.10"
+dependencies = [
+    "mrly",
+]
+
+[dependency-groups]
+
+# only mrlyaws / mrlycloud / mrlynet need these
+cloud = ["boto3"]
+# only mrlydemos/viewer.py needs this
+plots = ["matplotlib"]
+
+[tool.uv]
+
+package = false
+
+[tool.uv.workspace]
+
+members = ["mrlypy"]
+
+[tool.uv.sources]
+
+mrly = { workspace = true }

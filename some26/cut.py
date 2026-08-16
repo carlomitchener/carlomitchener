@@ -1,15 +1,15 @@
 import os
 import sys
 
-# ARCHIVE
+# MRLYPY
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ARCHIVE = os.path.normpath(os.path.join(HERE, "..", "archive"))
+MRLYPY = os.path.normpath(os.path.join(HERE, "..", "mrlypy"))
 
-if not os.path.isdir(os.path.join(ARCHIVE, "mrlysix")):
-    sys.exit(f"missing mrlysix: expected the archive at {ARCHIVE}")
+if not os.path.isdir(os.path.join(MRLYPY, "mrlysix")):
+    sys.exit(f"missing mrlysix: expected mrlypy at {MRLYPY}")
 
-sys.path.insert(0, ARCHIVE)
+sys.path.insert(0, MRLYPY)
 
 import math
 import re

@@ -1,7 +1,20 @@
+import os
+import sys
+
+# MRLYPY
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+MRLYPY = os.path.normpath(os.path.join(HERE, ".."))
+
+if not os.path.isdir(os.path.join(MRLYPY, "mrlysix")):
+    sys.exit(f"missing mrlysix: expected mrlypy at {MRLYPY}")
+
+sys.path.insert(0, MRLYPY)
+
 import mrlytwo as m2
 import numpy as np
 from config import DATA_DIR, IMAGE_SIZE
-from helpers import hex_key, is_prime
+from helpers import hex_key
 from PIL import Image
 from typing import Iterable
 

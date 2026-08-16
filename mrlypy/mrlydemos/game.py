@@ -1,3 +1,16 @@
+import os
+import sys
+
+# MRLYPY
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+MRLYPY = os.path.normpath(os.path.join(HERE, ".."))
+
+if not os.path.isdir(os.path.join(MRLYPY, "mrlysix")):
+    sys.exit(f"missing mrlysix: expected mrlypy at {MRLYPY}")
+
+sys.path.insert(0, MRLYPY)
+
 import math
 import mrlytwo as m2
 import mrlythree as m3
@@ -5,10 +18,8 @@ import mrlysix as m6
 from mrlycore.colors import black, blue, gradient, gray, white
 from mrlycore.enums import Mode
 import numpy as np
-import os
 from colors import *
 from config import DATA_DIR
-from helpers import hex_key
 from PIL import Image
 
 ORIENTATION = "landscape"

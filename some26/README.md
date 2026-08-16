@@ -76,7 +76,7 @@ Notice what the blow-up really is: the sponge being *rasterized* — turned into
 
 Watch the raw arrays cycle through the numbers: the snowflakes are already there, in pure pixels, before a single triangle is drawn.
 
-Both halves live in the archive: `mrlycore.rules.carpet` is the test, `mrlysix.geometry.cut` is the slice — the very function Gemini wrote, waiting below.
+Both halves live in `mrlypy`: `mrlycore.rules.carpet` is the test, `mrlysix.geometry.cut` is the slice — the very function Gemini wrote, waiting below.
 
 | the data drawn as squares | the same data drawn as triangles |
 | --- | --- |
@@ -347,7 +347,7 @@ def cut(cell: Cell3d):
 
 ![the four families, number 5, cut](files/showcase-cut-5.gif)
 
-And now, with Claude, we've grown up a bit and re-written everything in Rust. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [archive/](../archive/), which is what the scripts here actually run.
+And now, with Claude, we've grown up a bit and re-written everything in Rust. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlypy/](../mrlypy/), which is what the scripts here actually run.
 
 A quick overview of what it can do... every family draws four ways:
 
@@ -447,23 +447,60 @@ The other numbers weren't in the OEIS. They are now! The level-1 fills and voids
 ### OEIS A399019 - VOID - 0, 12, 78, 90, 276, …
 ![Illustration of a(1), a(2), a(3): the empty triangles, in black](files/a399019.png)
 
+## Moiré
+
+What happens when you stack them on top of each other? ...Something nobody drew.
+
+Take every odd number from 1 to 55, slice each sponge, blow all twenty-eight grams up to exactly the same size, and lay them down like sheets of tracing paper — each one faint enough that no single number gets to win.
+
+![every odd gram from 1 to 55, stacked](files/mrlygram-heatmap.gif)
+
+Watch it build. The first few frames are still recognizable snowflakes. Then somewhere past twenty the individual grams dissolve, and a picture surfaces that was in none of them: long straight rays crossing the whole hexagon, a ghost star at the middle, the six-fold symmetry still holding. That's *moiré* — the shimmer you get for free when you overlay grids of different pitch, the same one that ripples through two layers of net curtain, or across a photographed computer screen.
+
+And it has to be there. Every gram is the same *at most one odd* test, just chopped finer: 1 unit across, then 3, then 5, all the way to 55. Their features land on top of each other wherever the numbers agree, and cancel wherever they don't — the bright and dark rays are a map of that agreement. Arithmetic, made visible by nothing more cunning than stacking.
+
+The same trick works one dimension down. Here are the flat 2D carpets — the square grids from *How the pictures are made* — stacked the same way:
+
+![every odd 2D carpet from 1 to 55, stacked](files/mrlycarpet-heatmap.gif)
+
+Squares instead of triangles, so the rays run diagonally rather than at 60°, but it's the same phenomenon: the main diagonal comes out about twice as bright as the field around it. And look at the very center. That one dot alternates fill, void, fill, void as the number climbs — the same *n* mod 4 flip you met in the SOLUTION — so across twenty-eight numbers it settles at exactly 50/50: a perfect mid-gray pinprick at the heart of the picture.
+
+How far can you push it? Further than you'd guess. The stack doesn't fade to a flat gray the way a pile of random patterns would, precisely because every layer obeys the same rule. Pixels give out first: at 1080 across, somewhere past number 150 each cell is thinner than two pixels, and the finest grams quietly turn to fog. (Memory goes next — number 301 wants 1.7 GB just to hold its blown-up cube.)
+
+Run it yourself with `MIN` and `MAX` at the top of `mrlypy/mrlydemos/mrlygram.py`:
+
+```bash
+python3 mrlygram.py cut carpet     # the snowflakes, stacked
+python3 mrlygram.py flat carpet    # the 2D carpets, stacked
+python3 mrlygram.py sweep          # both views, all four families
+```
+
 ## Make a Snowflake
 
 Ready to get your hands... snowy?
 
-The sponge, the slice and the renderers all live in `mrlysix`, inside this repo's [archive/](../archive/) — clone the repo and everything is already next door:
+The sponge, the slice and the renderers all live in `mrlysix`, inside this repo's [mrlypy/](../mrlypy/) — clone the repo and everything is already next door:
 
 ```bash
 git clone https://github.com/carlomitchener/carlomitchener
+cd carlomitchener
+uv run some26/cut.py sweep
+```
+
+*(That's [uv](https://docs.astral.sh/uv/) — one command, and it fetches the right Python, the two libraries and the local `mrly` packages into a sandbox of its own. Nothing touches your system Python.)*
+
+No uv? The scripts find their own imports, so plain Python works too — you only need the two libraries:
+
+```bash
 cd carlomitchener/some26
 python3 -m venv .venv && source .venv/bin/activate
 pip install pillow numpy
 python3 cut.py sweep
 ```
 
-*(That third line makes a throwaway sandbox so pillow and numpy never touch your system Python — on Windows it's `.venv\Scripts\activate`. Delete the `.venv` folder when you're done and no trace is left.)*
+*(On Windows that middle line is `.venv\Scripts\activate`. Delete the `.venv` folder when you're done and no trace is left.)*
 
-The sweep redraws every snowflake in [files/](files/) — all the cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `python3 cut.py` on its own for the console, or `cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, and the rainbow hero up top from `image.py`.
+The sweep redraws every snowflake in [files/](files/) — all the cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `cut.py` on its own for the console, or `cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, and the rainbow hero up top from `image.py`.
 
 Everything in `files/` was output by that algorithm.
 
@@ -490,7 +527,7 @@ Enjoy!
 
 ## Extras
 
-If you enjoy cellular automata — grids of cells that live and die by simple rules, like Conway's famous Game of Life — find us on Instagram or YouTube (@mrlyprod). I'm working on applying all this to them. A demo is already live: `archive/mrlydemos/game.py`
+If you enjoy cellular automata — grids of cells that live and die by simple rules, like Conway's famous Game of Life — find us on Instagram or YouTube (@mrlyprod). I'm working on applying all this to them. A demo is already live: `mrlypy/mrlydemos/game.py`
 
 ![25 generations on the cut of the number-3 net sponge](files/frames.gif)
 
