@@ -1,40 +1,58 @@
+*This is my entry to the 2026 Summer of Math Exposition by 3Blue1Brown (https://some.3b1b.co)*
+
+*Note: I am continuously polishing this page — images, wording and the occasional new find — for the best experience possible.*
+
+*Tip for Desktop users: press the 'menu' icon in the top right corner of this viewer to open the outline view and reduce page width.*
+
 ![the diagonal cut of the number-5 sponge at level 2](files/image.png)
 
 # Slice a Sponge, Get Snowflakes
 
 *a generalized Menger sponge slice*
 
-Welcome to the wonderful world of MrlyMath! Let's slice some 3D fractal sponges into 2D grids of 1s and 0s, then render triangles and make pretty snowflakes!
+Here's a game you can play in your kitchen. Balance a cube of cheese on one of its corners, so the opposite corner points straight at the ceiling. Now slice it in half with one flat, level cut, right through the middle. Question: what shape is the new face you just revealed?
+
+Think about it for a second. A square? A rectangle? Some kind of diamond?
+
+And the better question: what happens if the cube is full of holes — a fractal sponge, tunnels drilled through tunnels, forever? Welcome to the wonderful world of MrlyMath! We're going to slice 3D fractal sponges into flat grids of 1s and 0s (plus one secret third symbol you'll meet later), draw those grids as triangles, and end up with snowflakes.
 
 *Up top: the cut of the number-5 sponge at level 2 — black is fill, white is void, and the rainbow is the rest of the triangular lattice, colored at random.*
 
 ## The Cut
 
-Cut a cube straight through its center, corner to opposite corner, and the face you reveal is a perfect hexagon. Do the same to a Menger sponge (cube with lots of holes in it) and the hexagon fills with six-pointed stars. Build sponges on other numbers and the cut shatters into shapes that look a bit like snowflakes.
+The answer... is a perfect hexagon. Six equal sides, cut out of a shape built entirely from squares.
+
+Do the same to a Menger sponge — a cube drilled full of holes, in a very organized way — and the hexagon fills up with six-pointed stars. Build sponges on other numbers (you'll learn how in a minute) and the cut shatters into sparkling little snowflakes.
 
 ![the diagonal cut of the level 3 Menger sponge](files/cut-3-3.png)
 
-A cube with a six-sided face? Sounds wrong, no?
+A cube with a six-sided face? Sounds wrong, no? Let's see why it's right.
 
 ## Start with a cube, take a bite, go deeper
 
 ![from the solid cube to level 3, one bite at a time](files/cut-levels-3.gif)
 
-Slice perpendicular to the long diagonal and the blade crosses six of the twelve edges, each at its midpoint, all the same distance from the center... a regular hexagon. Now take a bite: the 3×3×3 sponge is missing 7 of its 27 cubes, so the blade opens a hexagonal hole through the missing center, then clips a wedge off each of the six missing face cubes. Hole plus six wedges... a star! Now go deeper: every solid cube is itself a smaller sponge, so each survivor adds its own star — smaller and smaller, forever. It's fractal!
+**Start with a cube.** Balanced on a corner, the cube wears its twelve edges like a crown: three hug the bottom corner, three hug the top, and the other six zig-zag in a ring around the middle. A level blade through the exact center crosses precisely those six middle edges, each at its midpoint, all the same distance from the center... six identical crossings. A regular hexagon! (This is the *diagonal cut*: the blade runs perpendicular to the cube's long corner-to-corner diagonal.)
 
-This base cut is not mine and deserves full credit: Sébastien Pérez-Duarte rendered the diagonal slice first, and George Hart made a lovely video about why the stars appear, both linked below. Everything past the classic Menger slice — the other numbers, the raster algorithm, the families — is the new stuff.
+**Take a bite.** The 3×3×3 sponge is missing 7 of its 27 little cubes — the very center, plus the middle of each face. Quick, before you read on: how many of those seven does the blade actually touch? ...All of them. It sails through the missing center, opening a hexagonal hole, then clips a wedge off each of the six missing face cubes. Hole plus six wedges... a star!
+
+**Go deeper.** Every little cube that survived is secretly a whole sponge of its own, so the blade plays the same trick inside each survivor, and every one adds its own smaller star — and inside those, smaller stars still, forever. That's all the word *fractal* means: a shape that keeps its own picture inside itself, at every zoom. It's fractal!
+
+The classic cut is not my invention, and the credit goes where it's due: Sébastien Pérez-Duarte rendered the diagonal slice first, and George Hart made a lovely video about why the stars appear — both linked below. Everything past the classic Menger slice — the other numbers, the raster algorithm, the families, the counting — is the new stuff.
 
 ## Change the number
 
 ![numbers 1, 3, 5, 7, 9 at level 2](files/cut-numbers-2.gif)
 
-Nothing in the rule cares about 3. Keep at most one odd digit in any odd base and the same knife works: 5, 7 and 9 each build their own sponge and their own cut. At 5 the cut shatters into separate snowflakes; at 9 it's a whole constellation of them. Same little test, one number changed!
+Time for the sponge's secret recipe. Chop the cube 3×3×3, like a Rubik's cube, and give every little cube an address (x, y, z) — three numbers, each 0, 1 or 2. The whole Menger sponge is now one sentence: **keep a cube when at most one of its three address numbers is odd.** The dead center is (1, 1, 1) — three odds — drilled out. A face middle like (1, 0, 1) — two odds — drilled out. An edge cube like (1, 0, 0) — one odd — safe. Repeat the game inside every survivor, forever, and the Menger sponge appears.
+
+But look again: nothing in that sentence cares about 3. Chop 5×5×5 instead — addresses 0 to 4, same sentence — and out comes a brand-new sponge with a brand-new cut. 7 works. 9 works. Every odd number builds its own sponge, and the same knife slices them all: at 5 the cut shatters into separate snowflakes; at 9 it's a whole constellation of them. Same little test, one number changed!
 
 ## How the pictures are made
 
 The recipe: take the 3D matrix, blow it up by 4, slice it into a 2D grid, then draw triangles up, down, up, down. That's it... now slowly.
 
-The matrix is the sponge: 1 where a little cube survives, 0 where one was drilled out. One test decides the lot — keep a cube when at most one of x, y, z has an odd digit, at every base-b digit position. You've already seen this test in 2D: keep a square when at most one of x, y has an odd digit, and base 5 draws the MrlyProd logo —
+The matrix is the sponge: 1 where a little cube survives, 0 where one was drilled out — all decided by the *at most one odd* test you just met. The test doesn't even need 3D. Keep a square when at most one of x, y is odd, and a 5×5 grid draws the MrlyProd logo —
 
 ```
 11111
@@ -44,9 +62,15 @@ The matrix is the sponge: 1 where a little cube survives, 0 where one was drille
 11111
 ```
 
-Add a third axis and the same test carves the sponge.
+Add a third axis and the same test carves the sponge. Deeper levels hide one more trick: write each address in base *b* — base 5 for the 5-sponge — and run the odd-check on every digit separately. That's all "repeat inside each survivor" secretly means: level 1 checks one digit, level 2 checks two, level 3 checks three. Recursion is just digits!
 
-Why blow up? At full size the plane would only graze the corners of the little cubes. Split each into 4×4×4 and it passes cleanly through the middle, dissolving every survivor into about six triangles — half up, half down, a tiny hexagon. And why 4, not 2? Try it: at 2×2×2 every row of the slice comes out even — no middle triangle, no mirror spine — and far too coarse for the stars. Four is the smallest blow-up where every row lands odd, with a proper center. The plane keeps the cells where x + y + z = k, so layer z gives the line x + y = k − z. Stack the lines and that's the array. Notice what the blow-up really is: the sponge being rasterized. And that ugly raster turns out to be the literally perfect 2D array definition of these sponges.
+Why blow up? Because at full size the plane would only graze the corners of the little cubes — each cube meets the blade at a single point, and a point makes a lousy pixel. Split every cube into 4×4×4 micro-cubes and the plane passes cleanly through the middle, dissolving each survivor into about six triangles — half pointing up, half pointing down, a tiny hexagon of its own.
+
+And why 4, not 2? Try it: at 2×2×2 every row of the slice comes out even-length — no middle triangle, no mirror spine — far too coarse for the stars. Four is the smallest blow-up where every row lands odd, with a proper center.
+
+The slicing itself is one line of arithmetic. The blade keeps the micro-cubes whose address adds up to a magic constant: x + y + z = k. Look at a single layer z and that's the straight line x + y = k − z. Stack the lines, layer by layer, and out drops the 2D array.
+
+Notice what the blow-up really is: the sponge being *rasterized* — turned into pixels, like a photo. Except this raster isn't an approximation. Every cell is exactly fill or exactly void, no blur, no rounding — and that ugly pixel-grid turns out to be the perfect 2D array definition of these sponges.
 
 ![the raw arrays, numbers 1 to 9 at level 2](files/grid-numbers-2.gif)
 
@@ -58,13 +82,15 @@ Both halves live in the archive: `mrlycore.rules.carpet` is the test, `mrlysix.g
 | --- | --- |
 | ![squares](files/grid-3-2.png) | ![triangles](files/cut-3-2.png) |
 
-Squashed and jagged, no? That's because the cells were never squares: the diagonal plane of a cubic lattice is a triangular lattice. Draw the same array as triangles, point-up, point-down along each row, and the hexagon snaps into shape.
+Squashed and jagged, no? That's because these cells were never squares. Cut diagonally through a stack of cubes and the pattern of crossings is not a square grid — it's a triangular one. Draw the very same array as triangles — point-up, point-down, point-up along each row — and the hexagon snaps into shape.
 
 ## Origins
 
 ![the MrlyGrams: numbers 1 to 9 at level 1](files/cut-numbers-1.gif)
 
-Once upon a time, I was trying to find a way to slice my sponges. I had some 3D models lying around in Shapr3D so I took some screenshots. Then I went over to Photoshop and painstakingly overlaid a triangular lattice on top of each one. Then the fun began. I looped over every triangle with my eyes and wrote down its cell type: fill (1), void (0) or grid (-). I now had 5 text blobs in a TXT file: my sponges, sliced in a ternary fashion. The number after each row is its length in cells.
+Once upon a time, I was trying to find a way to slice my sponges — no formula, no algorithm, nothing but stubbornness. I had some 3D models lying around in Shapr3D, so I took some screenshots. Then I went over to Photoshop and painstakingly overlaid a triangular lattice on top of each one. Then the fun began: I looped over every triangle *with my eyes* and wrote down its cell type — fill (1), void (0) or grid (-). By the end I had 5 text blobs in a TXT file: my sponges, sliced by hand. The number after each row is its length in cells.
+
+Before you scroll past the blobs, stare for a minute. Patterns are hiding everywhere: every row reads the same forwards and backwards; the top half is the bottom half flipped; the row lengths climb by 2, and the longest row appears twice. The snowflakes are in there, wearing digits.
 
 ```txt
 MrlyGram1 (simple cube)
@@ -196,7 +222,7 @@ MrlyGram13
 ...
 ```
 
-Notice there are actually three types of cells, so I stored my slices in ternary.
+And there it is — the promised secret third symbol! Fill and void make the snowflake; the `-` cells are the empty lattice around it, padding the short rows out to a neat block. Three symbols instead of two means the slices are stored in *ternary*, not binary.
 
 ```
 VOID = 0
@@ -208,19 +234,21 @@ Draw a triangle for every cell — up, down, up, down, including the invisible G
 
 ## CHALLENGE
 
-Find an algorithm that will output the above sequence of slices. Then, loop over every cell and draw a square or better yet, a triangle!
+Your turn! Find an algorithm — a program, or just a pencil-and-paper recipe — that outputs the slices above for any odd number. Then loop over every cell and draw a square or, better yet, a triangle!
 
 The convention: 1 is material, 0 is hole. The level-1 slices ship in [files/](files/) as `cut-N-1.txt`, so you can check your answers.
 
-Stop here and come back when you're done. Eye candy...
+**Bonus round:** count the cells, too. How many fills, how many voids, how many grids, and how many triangles all together? The total drops out in a single line once you spot what shape you're looking at. The fill/void split is the hard one — can you get it straight from the number, with no drawing at all?
 
-![MrlyGram7.2](files/cut-7-2.png)
+This is a real stop-and-think moment, the best kind — I spent a happy week here. Come back when you're done. Eye candy while you ponder...
+
+![a game of life running on the cut of the number-3 net sponge](files/heatmap.gif)
 
 ## SOLUTION
 
-Around March 2025, after about a week of staring at 1s and 0s, I found a very pretty algorithm. It only works for Level 1s, but it works. I wrote it myself, and I'm quite proud of it.
+Around March 2025, after about a week of staring at 1s and 0s, I found a very pretty algorithm. It only works for level 1, but it works. I wrote it myself, and I'm quite proud of it.
 
-How does it work? I'm not sure. But this specific family of fractals seems to have a unique repeating code (a, b, c, d) and somehow you can loop over them and paste them and then you get the top half and then you need to copy/paste then reverse/flip the bottom. The centers alternate fill, void, fill, void as the number climbs; the final translate takes care of that.
+How does it work? Honest answer: I'm not sure! But this family of snowflakes seems to carry a secret four-word alphabet — `a = 0`, `b = 101`, `c = 11111`, `d = 0011100` — and the rows cycle through it in a loop of eight: a, b, c, d, d, c, b, a, over and over. Each row starts from its center word and grows outward, wrapping itself in its partner word, then in its own, alternating until it's long enough (then trim the edges to fit). Build one half, mirror it for the other. One last twist: the exact center of the snowflake alternates fill, void, fill, void as the number climbs, so when the number is one more than a multiple of 4, every bit flips at the end.
 
 Find it here: `solution/formula.py`
 
@@ -270,7 +298,7 @@ If you participated in the challenge, is this also what you found? I'd love to k
 
 ## Python with Gemini
 
-A couple months later I asked Gemini 2.5 Pro for a generalized algorithm that could slice any of my sponges. It failed miserably! But then I gave it the algorithm above and it kept testing and testing and well to my surprise, it succeeded. Disclaimer: I don't even understand this...
+A couple months later I asked Gemini 2.5 Pro for a generalized algorithm that could slice any of my sponges, at any level. It failed miserably! But then I gave it my level-1 formula above, and it kept testing and testing and, to my surprise, it succeeded. Full disclosure: I still don't entirely understand the code it wrote. The good news is I don't have to trust it, either — it reproduces every gram I ever transcribed by eye, digit for digit. The hand-typed blobs from Origins turned out to be the answer key.
 
 ```python
 # Cell3d is a fancy 3D matrix object
@@ -319,28 +347,97 @@ def cut(cell: Cell3d):
 
 And now, with Claude, we've grown up a bit and re-written everything in Rust. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [archive/](../archive/), which is what the scripts here actually run.
 
-A quick overview of what it can do... every sponge cuts three ways:
+A quick overview of what it can do... every family draws four ways:
 
-- **iso** — the whole sponge, seen isometrically
+- **flat** — the rule in 2D: the pattern before a third axis exists
+- **iso** — the whole 3D sponge, seen corner-on (the fancy word is *isometric*)
 - **pro** — the three faces the sponge shows you
 - **cut** — the diagonal slice through the middle
 
-and each way animates the four families, one frame each, labeled in the corner:
+and each view animates the four families, one frame each, labeled in the corner:
 
 - **carpet** — keep a cell when at most one axis is odd (the sponges above)
 - **net** — keep when all axes are odd, or all but one
 - **tree** — keep when the chosen axes are even
 - **void** — keep when every axis has the same parity
 
-All at level 2, tessellated radially. Numbers down the side, cuts across the top.
+All at level 2 — the three sponge views tiled in rings around the center, the flat view left bare. Views down the side, numbers across the top. Read a column top to bottom and you watch one number grow up — flat pattern → sponge → faces → snowflake — with the corner labels naming the family in every frame. (And peek at the flat carpet in the 5 column: it's the MrlyProd logo, one level deeper.)
 
-|  | iso | pro | cut |
+|  | 3 | 5 | 7 |
 | --- | --- | --- | --- |
-| **3** | ![the four families, number 3, iso](files/showcase-iso-3.gif) | ![the four families, number 3, pro](files/showcase-pro-3.gif) | ![the four families, number 3, cut](files/showcase-cut-3.gif) |
-| **5** | ![the four families, number 5, iso](files/showcase-iso-5.gif) | ![the four families, number 5, pro](files/showcase-pro-5.gif) | ![the four families, number 5, cut](files/showcase-cut-5.gif) |
-| **7** | ![the four families, number 7, iso](files/showcase-iso-7.gif) | ![the four families, number 7, pro](files/showcase-pro-7.gif) | ![the four families, number 7, cut](files/showcase-cut-7.gif) |
+| **flat** | ![the four families, number 3, flat](files/showcase-flat-3.gif) | ![the four families, number 5, flat](files/showcase-flat-5.gif) | ![the four families, number 7, flat](files/showcase-flat-7.gif) |
+| **iso** | ![the four families, number 3, iso](files/showcase-iso-3.gif) | ![the four families, number 5, iso](files/showcase-iso-5.gif) | ![the four families, number 7, iso](files/showcase-iso-7.gif) |
+| **pro** | ![the four families, number 3, pro](files/showcase-pro-3.gif) | ![the four families, number 5, pro](files/showcase-pro-5.gif) | ![the four families, number 7, pro](files/showcase-pro-7.gif) |
+| **cut** | ![the four families, number 3, cut](files/showcase-cut-3.gif) | ![the four families, number 5, cut](files/showcase-cut-5.gif) | ![the four families, number 7, cut](files/showcase-cut-7.gif) |
 
 Run `python3 showcase.py` for the console, `showcase.py all` to draw every cell above, or `showcase.py cut 5` for just one.
+
+## BONUS SOLUTION
+
+Did you count them? Now that we can build any gram at any level, let's see what's hiding in there.
+
+Start with the easy part. The grid cells are packing foam — they pad the short rows out to a block, and they were never part of the picture. Drop them and what's left is the hexagon. And here's the nice bit: a hexagon of side *k* is just six equilateral triangles glued around a point, and a triangle of side *k* holds exactly *k*² little cells — count its rows: 1 + 3 + 5 + 7... the odd numbers stack up into a perfect square! So the hexagon holds 6*k*² triangles, our hexagon always has side *number*^*level*, and the total is locked in before you draw a thing:
+
+```
+fill + void = 6 × number^(2 × level)
+```
+
+Every number, every level. MrlyGram5 has 6 × 5² = 150 triangles; at level 2 it has 6 × 25² = 3750, however shattered it looks.
+
+| number | fill | void | grid | total |
+| --- | --- | --- | --- | --- |
+| 1 | 6 | 0 | 0 | 6 |
+| 3 | 42 | 12 | 12 | 54 |
+| 5 | 72 | 78 | 40 | 150 |
+| 7 | 204 | 90 | 84 | 294 |
+| 9 | 210 | 276 | 144 | 486 |
+
+That's level 1, and the grid column is always 2*n*(*n*−1). Now watch the fill column: it doesn't just climb. Number 11 packs more material (486) than number 13 (420), and 15 (888) beats 17 (702). The odd numbers leapfrog each other. Keep that in your pocket — it's a clue.
+
+### Everything divides by six
+
+Every fill and every void in that table is a multiple of 6. That's not luck. Spin a gram by 60° — one sixth of a full turn — and it lands exactly back on itself. And here's the sneaky part: the center of the hexagon is a *corner* of the lattice, not the middle of a triangle, so during the spin no cell gets to sit still. Every triangle marches around in a ring of six, no stragglers — so everything comes in sixes.
+
+Which means you can divide by six and count just one 60° pizza slice instead:
+
+| number | fill/6 | void/6 | total/6 |
+| --- | --- | --- | --- |
+| 1 | 1 | 0 | 1 |
+| 3 | 7 | 2 | 9 |
+| 5 | 12 | 13 | 25 |
+| 7 | 34 | 15 | 49 |
+| 9 | 35 | 46 | 81 |
+
+That last column is *number*², of course — and at any level it's *number*^(2 × *level*), which is exactly the number of squares in the flat 2D grid (the *flat* view in the showcase above) at the same number and level. One wedge of the snowflake and one whole carpet hold the same count!
+
+### A formula, finally
+
+"Is there a closed-form fill/void?" sat in my open questions for a long while. (A closed form is a formula you plug the number straight into — no drawing, no counting, the answer just falls out.) For level 1, here it is at last — two families, split by the remainder when you divide the number by 4:
+
+| number | fill | void |
+| --- | --- | --- |
+| even | 3*n*² | 3*n*² |
+| 1, 5, 9, 13, … | 3(3*n*+1)(*n*+1)/4 | 3(5*n*+1)(*n*−1)/4 |
+| 3, 7, 11, 15, … | 3(5*n*−1)(*n*+1)/4 | 3(3*n*−1)(*n*−1)/4 |
+
+The two odd rows are mirrors of each other: swap the 3 and the 5, swap the +1 and the −1. And that leapfrog from before? Just the two families climbing at different speeds, taking turns in front.
+
+### Down the levels
+
+Now hold the number still and climb the levels instead. Each fill count is built from the two counts before it — the same kind of rule that runs the Fibonacci numbers, just with bigger multipliers — and every number keeps its own rule forever:
+
+| number | fill at level 1, 2, 3, 4 … | rule |
+| --- | --- | --- |
+| 3 | 42, 306, 2250, 16578, … | 9 × prev − 12 × the one before |
+| 5 | 72, 1164, 17268, 262116, … | 11 × prev + 62 × the one before |
+| 7 | 204, 6840, 228528, 7628256, … | 42 × prev − 288 × the one before |
+| 9 | 210, 10038, 426594, 18900966, … | 28 × prev + 693 × the one before |
+
+### One of these is already famous
+
+The Menger row — 42, 306, 2250, 16578 — lives in the OEIS (the online encyclopedia where mathematicians file every integer sequence they meet) as [A299916](https://oeis.org/A299916), and there's a lovely twist waiting there. Albert Säfström noticed the very same numbers count the *star-shaped holes* in the slice, largest first: at level 3 there is 1 big star, 6 medium ones and 42 small ones. Holes instead of material — same sequence! They match because every new star costs exactly 12 triangles.
+
+The other numbers aren't in the OEIS. Not yet!
 
 ## Make a Snowflake
 
@@ -374,13 +471,16 @@ Enjoy!
 
 - What's the area formula?
 - What's the perimeter formula?
-- Is there a closed-form fill/void for any of the families?
+- Why does the level-1 formula's four-word alphabet (a, b, c, d) work at all?
+- Is there a closed-form fill/void past level 1, or for the other families?
 - Or something more general for all of them?
 - Is Pi (or some other constant) lurking around here?
 
 ## Extras
 
-If you enjoy cellular automata, find us on Instagram or YouTube (@mrlyprod). I'm working on applying all this to cellular automata. A demo is already live: `archive/mrlydemos/game.py`
+If you enjoy cellular automata — grids of cells that live and die by simple rules, like Conway's famous Game of Life — find us on Instagram or YouTube (@mrlyprod). I'm working on applying all this to them. A demo is already live: `archive/mrlydemos/game.py`
+
+![25 generations on the cut of the number-3 net sponge](files/frames.gif)
 
 ## The End
 

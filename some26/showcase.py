@@ -15,6 +15,8 @@ from PIL import Image, ImageDraw, ImageFont
 from mrlysix import designs
 from mrlysix.geometry import radial
 from mrlysix.renderer import draw
+from mrlytwo import designs as designs_2d
+from mrlytwo.renderer import to_image
 
 NUMBERS = [3, 5, 7]
 LEVEL = 2
@@ -24,8 +26,9 @@ CANVAS = 810
 COLORS = 64
 DELAY = 1500
 H3 = 0.8660254
+STRIP = 110
 FAMILIES = ["carpet", "net", "tree", "void"]
-CUTS = ["iso", "pro", "cut"]
+VIEWS = ["flat", "iso", "pro", "cut"]
 
 # FRAME
 
@@ -36,7 +39,17 @@ def label(canvas, family):
         font = ImageFont.load_default()
     ImageDraw.Draw(canvas).text((30, CANVAS - 78), family, fill=(17, 17, 17), font=font)
 
+def flat_frame(family, number):
+    cell = getattr(designs_2d, f"{family}_2d")(number, LEVEL).paint()
+    image = to_image(cell, max(1, (CANVAS - STRIP) // cell.height))
+    canvas = Image.new("RGB", (CANVAS, CANVAS), (255, 255, 255))
+    canvas.paste(image, ((CANVAS - image.width) // 2, (CANVAS - STRIP - image.height) // 2), image)
+    label(canvas, family)
+    return canvas.quantize(colors=COLORS, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
+
 def frame(family, projection, number):
+    if projection == "flat":
+        return flat_frame(family, number)
     cell = getattr(designs, f"{family}_{projection}")(number, LEVEL).paint()
     sheet = radial(cell, RADIUS)
     image = draw(sheet, scale=SCALE, start=1 - cell.start)
@@ -72,6 +85,9 @@ def sheets(projection, numbers):
         print(f"{path} ({' '.join(FAMILIES)})")
     return 0
 
+def flat(numbers):
+    return sheets("flat", numbers)
+
 def iso(numbers):
     return sheets("iso", numbers)
 
@@ -82,7 +98,7 @@ def cut(numbers):
     return sheets("cut", numbers)
 
 def every(numbers):
-    for projection in CUTS:
+    for projection in VIEWS:
         sheets(projection, numbers)
     return 0
 
@@ -94,7 +110,8 @@ def pick(token):
 # TERMINAL
 
 COMMANDS = {
-    "all": (every, "every projection at every number"),
+    "all": (every, "every view at every number"),
+    "flat": (flat, "the family rule in 2D, before the third axis"),
     "iso": (iso, "the whole sponge, seen isometrically"),
     "pro": (pro, "the three faces the sponge shows you"),
     "cut": (cut, "the diagonal slice through the middle"),
@@ -102,7 +119,7 @@ COMMANDS = {
 
 def help():
     width = max(len(name) for name in COMMANDS)
-    print(f"showcase.py <command> <number>   {' '.join(FAMILIES)} at level {LEVEL}, tessellated radially")
+    print(f"showcase.py <command> <number>   {' '.join(FAMILIES)} at level {LEVEL}")
     print()
     for name, (_, blurb) in COMMANDS.items():
         print(f"  {name:<{width}}  {blurb}")

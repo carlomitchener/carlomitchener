@@ -11,7 +11,13 @@ from config import DATA_DIR
 from helpers import hex_key
 from PIL import Image
 
-IMAGE_SIZE = (1080, 1920)
+ORIENTATION = "landscape"
+FRAME_SIZES = {
+    "portrait": (1080, 1920),
+    "landscape": (1920, 1080),
+    "square": (1080, 1080),
+}
+IMAGE_SIZE = FRAME_SIZES[ORIENTATION]
 SCALE = 10
 
 GENERATIONS = 25
@@ -81,7 +87,7 @@ def print_cell(cell: m2.Cell2d):
 def new_cell():
     cell = m3.net_3d(3, 2)
     cell = m6.cut(cell)
-    return cell
+    return cell.cell
 
 def new_mask():
     cell = m2.carpet_2d(3, 1)
