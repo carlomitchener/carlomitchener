@@ -6,9 +6,9 @@
 
 ![the diagonal cut of the number-5 sponge at level 2](files/image.png)
 
-# Slice a Sponge, Get Snowflakes
+# Generalized Menger Sponge Slice
 
-*a generalized Menger sponge slice*
+*Slice a Sponge, Get Snowflakes*
 
 Here's a game you can play in your kitchen. Balance a cube of cheese on one of its corners, so the opposite corner points straight at the ceiling. Now slice it in half with one flat, level cut, right through the middle. Question: what shape is the new face you just revealed?
 
@@ -42,7 +42,7 @@ The classic cut is not my invention, and the credit goes where it's due: Sébast
 
 ## Change the number
 
-![numbers 1, 3, 5, 7, 9 at level 2](files/cut-numbers-2.gif)
+![numbers 1, 3, 5, 7, 9 at level 2](files/cut-numbers-1.gif)
 
 Time for the sponge's secret recipe. Chop the cube 3×3×3, like a Rubik's cube, and give every little cube an address (x, y, z) — three numbers, each 0, 1 or 2. The whole Menger sponge is now one sentence: **keep a cube when at most one of its three address numbers is odd.** The dead center is (1, 1, 1) — three odds — drilled out. A face middle like (1, 0, 1) — two odds — drilled out. An edge cube like (1, 0, 0) — one odd — safe. Repeat the game inside every survivor, forever, and the Menger sponge appears.
 
@@ -72,7 +72,7 @@ The slicing itself is one line of arithmetic. The blade keeps the micro-cubes wh
 
 Notice what the blow-up really is: the sponge being *rasterized* — turned into pixels, like a photo. Except this raster isn't an approximation. Every cell is exactly fill or exactly void, no blur, no rounding — and that ugly pixel-grid turns out to be the perfect 2D array definition of these sponges.
 
-![the raw arrays, numbers 1 to 9 at level 2](files/grid-numbers-2.gif)
+![the raw arrays, numbers 1 to 9 at level 2](files/grid-numbers-1.gif)
 
 Watch the raw arrays cycle through the numbers: the snowflakes are already there, in pure pixels, before a single triangle is drawn.
 
@@ -86,7 +86,7 @@ Squashed and jagged, no? That's because these cells were never squares. Cut diag
 
 ## Origins
 
-![the MrlyGrams: numbers 1 to 9 at level 1](files/cut-numbers-1.gif)
+![the MrlyGrams: numbers 1 to 9 at level 1](files/cut-numbers-3.gif)
 
 Once upon a time, I was trying to find a way to slice my sponges — no formula, no algorithm, nothing but stubbornness. I had some 3D models lying around in Shapr3D, so I took some screenshots. Then I went over to Photoshop and painstakingly overlaid a triangular lattice on top of each one. Then the fun began: I looped over every triangle *with my eyes* and wrote down its cell type — fill (1), void (0) or grid (-). By the end I had 5 text blobs in a TXT file: my sponges, sliced by hand. The number after each row is its length in cells.
 
@@ -345,6 +345,8 @@ def cut(cell: Cell3d):
 
 ## Rust with Claude
 
+![the four families, number 5, cut](files/showcase-cut-5.gif)
+
 And now, with Claude, we've grown up a bit and re-written everything in Rust. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [archive/](../archive/), which is what the scripts here actually run.
 
 A quick overview of what it can do... every family draws four ways:
@@ -437,7 +439,13 @@ Now hold the number still and climb the levels instead. Each fill count is built
 
 The Menger row — 42, 306, 2250, 16578 — lives in the OEIS (the online encyclopedia where mathematicians file every integer sequence they meet) as [A299916](https://oeis.org/A299916), and there's a lovely twist waiting there. Albert Säfström noticed the very same numbers count the *star-shaped holes* in the slice, largest first: at level 3 there is 1 big star, 6 medium ones and 42 small ones. Holes instead of material — same sequence! They match because every new star costs exactly 12 triangles.
 
-The other numbers aren't in the OEIS. Not yet!
+The other numbers weren't in the OEIS. They are now! The level-1 fills and voids of every odd sponge have just been filed as the twin sequences [A399018](https://oeis.org/A399018) (fill: 6, 42, 72, 204, 210, …) and [A399019](https://oeis.org/A399019) (void: 0, 12, 78, 90, 276, …) — two complementary snowflake counters, submitted from this very project, each carrying the closed forms above, a portrait of its grams, and a link back to this page. (They're fresh enough that you might still catch them wearing their *draft* badge.)
+
+### OEIS A399018 - FILL - 6, 42, 72, 204, 210, …
+![Illustration of a(1), a(2), a(3): the solid triangles, in black](files/a399018.png)
+
+### OEIS A399019 - VOID - 0, 12, 78, 90, 276, …
+![Illustration of a(1), a(2), a(3): the empty triangles, in black](files/a399019.png)
 
 ## Make a Snowflake
 
@@ -448,9 +456,12 @@ The sponge, the slice and the renderers all live in `mrlysix`, inside this repo'
 ```bash
 git clone https://github.com/carlomitchener/carlomitchener
 cd carlomitchener/some26
+python3 -m venv .venv && source .venv/bin/activate
 pip install pillow numpy
 python3 cut.py sweep
 ```
+
+*(That third line makes a throwaway sandbox so pillow and numpy never touch your system Python — on Windows it's `.venv\Scripts\activate`. Delete the `.venv` folder when you're done and no trace is left.)*
 
 The sweep redraws every snowflake in [files/](files/) — all the cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `python3 cut.py` on its own for the console, or `cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, and the rainbow hero up top from `image.py`.
 
@@ -475,6 +486,7 @@ Enjoy!
 - Is there a closed-form fill/void past level 1, or for the other families?
 - Or something more general for all of them?
 - Is Pi (or some other constant) lurking around here?
+- Prime numbers? Probably...
 
 ## Extras
 
@@ -484,6 +496,63 @@ If you enjoy cellular automata — grids of cells that live and die by simple ru
 
 ## The End
 
-Thank you for reading. I now invite you to join me on my quest to discover...
+Thank you for reading. I invite you to join me on my quest to discover...
 
 *The Wonderful World of MrlyMath*
+
+```txt
+--------------------------1111111111111111111111111111111111111111111111111111111--------------------------
+-------------------------111101111111111101111111111101111111111101111111111101111-------------------------
+------------------------11100000111111100000111111100000111111100000111111100000111------------------------
+-----------------------1111000001110111000001111111000001111111000001110111000001111-----------------------
+----------------------111111101111000111101111111111101111111111101111000111101111111----------------------
+---------------------11111111111100000111111111111111111111111111111100000111111111111---------------------
+--------------------1111111000000000000000001111111111111111111000000000000000001111111--------------------
+-------------------111101111000000000000000111101111111111101111000000000000000111101111-------------------
+------------------11100000111000000000000011100000111111100000111000000000000011100000111------------------
+-----------------1111000001110000000000000111000001110111000001110000000000000111000001111-----------------
+----------------111111101111000000000000000111101111000111101111000000000000000111101111111----------------
+---------------11111111111100000000000000000111111100000111111100000000000000000111111111111---------------
+--------------1111111111111111111000001111111111110000000111111111111000001111111111111111111--------------
+-------------111101111111111101111000111101111111000000000111111101111000111101111111111101111-------------
+------------11100000111111100000111011100000111100000000000111100000111011100000111111100000111------------
+-----------1111000001111111000001111111000001110000000000000111000001111111000001111111000001111-----------
+----------111111101111111111101111111111101111000000000000000111101111111111101111111111101111111----------
+---------11111111111111111111111111111111111100000000000000000111111111111111111111111111111111111---------
+--------1111111111111111111000000000000000000000000000000000000000000000000000001111111111111111111--------
+-------111101111111111101111000000000000000000000000000000000000000000000000000111101111111111101111-------
+------11100000111111100000111000000000000000000000000000000000000000000000000011100000111111100000111------
+-----1111000001110111000001111000000000000000000000000000000000000000000000001111000001110111000001111-----
+----111111101111000111101111111000000000000000000000000000000000000000000000111111101111000111101111111----
+---11111111111100000111111111111000000000000000000000000000000000000000000011111111111100000111111111111---
+--1111111000000000000000001111111000000000000000000000000000000000000000001111111000000000000000001111111--
+-111101111000000000000000111101111000000000000000000000000000000000000000111101111000000000000000111101111-
+11100000111000000000000011100000111000000000000000000000000000000000000011100000111000000000000011100000111
+11100000111000000000000011100000111000000000000000000000000000000000000011100000111000000000000011100000111
+-111101111000000000000000111101111000000000000000000000000000000000000000111101111000000000000000111101111-
+--1111111000000000000000001111111000000000000000000000000000000000000000001111111000000000000000001111111--
+---11111111111100000111111111111000000000000000000000000000000000000000000011111111111100000111111111111---
+----111111101111000111101111111000000000000000000000000000000000000000000000111111101111000111101111111----
+-----1111000001110111000001111000000000000000000000000000000000000000000000001111000001110111000001111-----
+------11100000111111100000111000000000000000000000000000000000000000000000000011100000111111100000111------
+-------111101111111111101111000000000000000000000000000000000000000000000000000111101111111111101111-------
+--------1111111111111111111000000000000000000000000000000000000000000000000000001111111111111111111--------
+---------11111111111111111111111111111111111100000000000000000111111111111111111111111111111111111---------
+----------111111101111111111101111111111101111000000000000000111101111111111101111111111101111111----------
+-----------1111000001111111000001111111000001110000000000000111000001111111000001111111000001111-----------
+------------11100000111111100000111011100000111100000000000111100000111011100000111111100000111------------
+-------------111101111111111101111000111101111111000000000111111101111000111101111111111101111-------------
+--------------1111111111111111111000001111111111110000000111111111111000001111111111111111111--------------
+---------------11111111111100000000000000000111111100000111111100000000000000000111111111111---------------
+----------------111111101111000000000000000111101111000111101111000000000000000111101111111----------------
+-----------------1111000001110000000000000111000001110111000001110000000000000111000001111-----------------
+------------------11100000111000000000000011100000111111100000111000000000000011100000111------------------
+-------------------111101111000000000000000111101111111111101111000000000000000111101111-------------------
+--------------------1111111000000000000000001111111111111111111000000000000000001111111--------------------
+---------------------11111111111100000111111111111111111111111111111100000111111111111---------------------
+----------------------111111101111000111101111111111101111111111101111000111101111111----------------------
+-----------------------1111000001110111000001111111000001111111000001110111000001111-----------------------
+------------------------11100000111111100000111111100000111111100000111111100000111------------------------
+-------------------------111101111111111101111111111101111111111101111111111101111-------------------------
+--------------------------1111111111111111111111111111111111111111111111111111111--------------------------
+```
