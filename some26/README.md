@@ -1,10 +1,10 @@
 *This is my entry to the 2026 Summer of Math Exposition by 3Blue1Brown (https://some.3b1b.co)*
 
-*Note: I am continuously polishing this page — images, wording and the occasional new find — for the best experience possible.*
+*Note: I am continuously polishing this page — code, images, wording and the occasional new find.*
 
 *Tip for Desktop users: press the 'menu' icon in the top right corner of this viewer to open the outline view and reduce page width.*
 
-![the diagonal cut of the number-5 sponge at level 2](files/image.png)
+![the diagonal cut of the number-5 sponge at level 2](files/hero.png)
 
 # Generalized Menger Sponge Slice
 
@@ -24,31 +24,35 @@ The answer... is a perfect hexagon. Six equal sides, cut out of a shape built en
 
 Do the same to a Menger sponge — a cube drilled full of holes, in a very organized way — and the hexagon fills up with six-pointed stars. Build sponges on other numbers (you'll learn how in a minute) and the cut shatters into sparkling little snowflakes.
 
-![the diagonal cut of the level 3 Menger sponge](files/cut-3-3.png)
+![slices at different planes by Paul Bourke](files/extras/slice2.png)
+
+*Render by [Paul Bourke](https://paulbourke.net/fractals/mrlymath/)*
 
 A cube with a six-sided face? Sounds wrong, no? Let's see why it's right.
 
 ## Start with a cube, take a bite, go deeper
 
-![from the solid cube to level 3, one bite at a time](files/cut-levels-3.gif)
+![from the solid cube to level 3, one bite at a time](files/gifs/cut-levels-3.gif)
 
 **Start with a cube.** Balanced on a corner, the cube wears its twelve edges like a crown: three hug the bottom corner, three hug the top, and the other six zig-zag in a ring around the middle. A level blade through the exact center crosses precisely those six middle edges, each at its midpoint, all the same distance from the center... six identical crossings. A regular hexagon! (This is the *diagonal cut*: the blade runs perpendicular to the cube's long corner-to-corner diagonal.)
 
 **Take a bite.** The 3×3×3 sponge is missing 7 of its 27 little cubes — the very center, plus the middle of each face. Quick, before you read on: how many of those seven does the blade actually touch? ...All of them. It sails through the missing center, opening a hexagonal hole, then clips a wedge off each of the six missing face cubes. Hole plus six wedges... a star!
 
-**Go deeper.** Every little cube that survived is secretly a whole sponge of its own, so the blade plays the same trick inside each survivor, and every one adds its own smaller star — and inside those, smaller stars still, forever. That's all the word *fractal* means: a shape that keeps its own picture inside itself, at every zoom. It's fractal!
+**Go deeper.** Every little cube that survived is secretly a whole sponge of its own, so the blade plays the same trick inside each survivor, and every one adds its own smaller star — and inside those, smaller stars still, forever. That's all the word *fractal* means: a shape that keeps its own picture inside itself, at every zoom.
 
 The classic cut is not my invention, and the credit goes where it's due: Sébastien Pérez-Duarte rendered the diagonal slice first, and George Hart made a lovely video about why the stars appear — both linked below. Everything past the classic Menger slice — the other numbers, the raster algorithm, the families, the counting — is the new stuff.
 
 ## Change the number
 
-![numbers 1, 3, 5, 7, 9 at level 2](files/cut-numbers-1.gif)
+![numbers 1, 3, 5, 7, 9 at level 2](files/gifs/cut-numbers-1.gif)
 
 Time for the sponge's secret recipe. Chop the cube 3×3×3, like a Rubik's cube, and give every little cube an address (x, y, z) — three numbers, each 0, 1 or 2. The whole Menger sponge is now one sentence: **keep a cube when at most one of its three address numbers is odd.** The dead center is (1, 1, 1) — three odds — drilled out. A face middle like (1, 0, 1) — two odds — drilled out. An edge cube like (1, 0, 0) — one odd — safe. Repeat the game inside every survivor, forever, and the Menger sponge appears.
 
 But look again: nothing in that sentence cares about 3. Chop 5×5×5 instead — addresses 0 to 4, same sentence — and out comes a brand-new sponge with a brand-new cut. 7 works. 9 works. Every odd number builds its own sponge, and the same knife slices them all: at 5 the cut shatters into separate snowflakes; at 9 it's a whole constellation of them. Same little test, one number changed!
 
 ## How the pictures are made
+
+![the sponges themselves: numbers 1, 3, 5, 7, 9 at level 1](files/gifs/sponges-1.gif)
 
 The recipe: take the 3D matrix, blow it up by 4, slice it into a 2D grid, then draw triangles up, down, up, down. That's it... now slowly.
 
@@ -70,25 +74,27 @@ And why 4, not 2? Try it: at 2×2×2 every row of the slice comes out even-lengt
 
 The slicing itself is one line of arithmetic. The blade keeps the micro-cubes whose address adds up to a magic constant: x + y + z = k. Look at a single layer z and that's the straight line x + y = k − z. Stack the lines, layer by layer, and out drops the 2D array.
 
-Notice what the blow-up really is: the sponge being *rasterized* — turned into pixels, like a photo. Except this raster isn't an approximation. Every cell is exactly fill or exactly void, no blur, no rounding — and that ugly pixel-grid turns out to be the perfect 2D array definition of these sponges.
+Notice what the blow-up really is: the sponge being *rasterized* — turned into pixels, like a photo. Except this raster isn't an approximation. Every cell is exactly fill or exactly void — and that ugly pixel-grid turns out to be the perfect 2D array definition of these sponges.
 
-![the raw arrays, numbers 1 to 9 at level 2](files/grid-numbers-1.gif)
+![the raw arrays, numbers 1 to 9 at level 2](files/gifs/grid-numbers-1.gif)
 
 Watch the raw arrays cycle through the numbers: the snowflakes are already there, in pure pixels, before a single triangle is drawn.
 
-Both halves live in `mrlypy`: `mrlycore.rules.carpet` is the test, `mrlysix.geometry.cut` is the slice — the very function Gemini wrote, waiting below.
-
 | the data drawn as squares | the same data drawn as triangles |
 | --- | --- |
-| ![squares](files/grid-3-2.png) | ![triangles](files/cut-3-2.png) |
+| ![squares](files/grids/grid-3-2.png) | ![triangles](files/cuts/cut-3-2.png) |
 
 Squashed and jagged, no? That's because these cells were never squares. Cut diagonally through a stack of cubes and the pattern of crossings is not a square grid — it's a triangular one. Draw the very same array as triangles — point-up, point-down, point-up along each row — and the hexagon snaps into shape.
 
+One more knob before we go. Flipping one value — `start`, whether the *first* triangle points up or down — sets the look of the whole picture, because every triangle after it simply alternates. It's also a common source of visual bugs: get it wrong and nothing crashes, every triangle just draws upside-down, and the snowflakes shatter into static. Here's the number-5 cut swapping between the two:
+
+![the same cut drawn with start 0 and start 1](files/gifs/start-5-2.gif)
+
 ## Origins
 
-![the MrlyGrams: numbers 1 to 9 at level 1](files/cut-numbers-3.gif)
+![screenshot of vs code showing rendered triangles and text file](files/old/Screenshot%202025-03-19%20at%2010.49.49 AM.png)
 
-Once upon a time, I was trying to find a way to slice my sponges — no formula, no algorithm, nothing but stubbornness. I had some 3D models lying around in Shapr3D, so I took some screenshots. Then I went over to Photoshop and painstakingly overlaid a triangular lattice on top of each one. Then the fun began: I looped over every triangle *with my eyes* and wrote down its cell type — fill (1), void (0) or grid (-). By the end I had 5 text blobs in a TXT file: my sponges, sliced by hand. The number after each row is its length in cells.
+Once upon a time, I was trying to find a way to slice my sponges — no formula, no algorithm, nothing but stubbornness. I had some 3D models lying around in Shapr3D, so I took some screenshots. Then I went over to Photoshop and painstakingly overlaid a triangular lattice on top of each one. Then the fun began: I looped over every triangle *with my eyes* and wrote down its cell type — fill (1), void (0) or grid (-). By the end I had six text blobs in a TXT file: my sponges, sliced by hand. The number after each row is its length in cells.
 
 Before you scroll past the blobs, stare for a minute. Patterns are hiding everywhere: every row reads the same forwards and backwards; the top half is the bottom half flipped; the row lengths climb by 2, and the longest row appears twice. The snowflakes are in there, wearing digits.
 
@@ -189,36 +195,6 @@ MrlyGram11
 ----------11111110111111101111111---------- (23)
 -------------------------------------------
 
-MrlyGram13
----------------------------------------------------
-------------111100011111000111110001111------------ (27)
------------11111000111110001111100011111----------- (29)
-----------0001000000010000000100000001000---------- (31)
----------100000001000000010000000100000001--------- (33)
---------11110001111100011111000111110001111-------- (35)
--------1111100011111000111110001111100011111------- (37)
-------000100000001000000010000000100000001000------ (39)
------10000000100000001000000010000000100000001----- (41)
-----1111000111110001111100011111000111110001111---- (43)
----111110001111100011111000111110001111100011111--- (45)
---00010000000100000001000000010000000100000001000-- (47)
--1000000010000000100000001000000010000000100000001- (49)
-111100011111000111110001111100011111000111110001111 (51)
-111100011111000111110001111100011111000111110001111 (51)
--1000000010000000100000001000000010000000100000001- (49)
---00010000000100000001000000010000000100000001000-- (47)
----111110001111100011111000111110001111100011111--- (45)
-----1111000111110001111100011111000111110001111---- (43)
------10000000100000001000000010000000100000001----- (41)
-------000100000001000000010000000100000001000------ (39)
--------1111100011111000111110001111100011111------- (37)
---------11110001111100011111000111110001111-------- (35)
----------100000001000000010000000100000001--------- (33)
-----------0001000000010000000100000001000---------- (31)
------------11111000111110001111100011111----------- (29)
-------------111100011111000111110001111------------ (27)
----------------------------------------------------
-
 ...
 ```
 
@@ -230,75 +206,32 @@ FILL = 1
 GRID = -
 ```
 
-Draw a triangle for every cell — up, down, up, down, including the invisible GRID cells — and the gram appears!
+Draw a triangle for every cell — up, down, up, down, including the invisible GRID cells — and the gram appears! (*Gram* — as in MrlyGram — is the house name for these snowflake pictures.)
 
-## CHALLENGE
+## The Challenge
 
-Your turn! Find an algorithm — a program, or just a pencil-and-paper recipe — that outputs the slices above for any odd number. Then loop over every cell and draw a square or, better yet, a triangle!
+![the hand-made grams from the Photoshop era, cycling](files/gifs/challenge.gif)
 
-The convention: 1 is material, 0 is hole. The level-1 slices ship in [files/](files/) as `cut-N-1.txt`, so you can check your answers.
+Your turn! Find an algorithm — a program, or just a pencil-and-paper recipe — that outputs the slices above for any odd number, straight from the number. No 3D sponge, no slicing: the raster method from earlier counts as a warm-up, but the real game is to stay flat. Then loop over every cell and draw a square or, better yet, a triangle!
+
+The stills above live in [files/old/images/](files/old/images/).
+
+The convention: 1 is material, 0 is hole. The level-1 slices ship in [files/cuts/](files/cuts/) as `cut-N-1.txt`, so you can check your answers.
 
 **Bonus round:** count the cells, too. How many fills, how many voids, how many grids, and how many triangles all together? The total drops out in a single line once you spot what shape you're looking at. The fill/void split is the hard one — can you get it straight from the number, with no drawing at all?
 
-This is a real stop-and-think moment, the best kind — I spent a happy week here. Come back when you're done. Eye candy while you ponder...
+This is a real stop-and-think moment, the best kind — I spent a happy week here. Come back when you're done.
 
-![a game of life running on the cut of the number-3 net sponge](files/heatmap.gif)
 
-## SOLUTION
+## The Solution
 
-Around March 2025, after about a week of staring at 1s and 0s, I found a very pretty algorithm. It only works for level 1, but it works. I wrote it myself, and I'm quite proud of it.
+Around March 2025, all that staring at 1s and 0s paid off: I found a very pretty algorithm. It only works for level 1, but it works: a secret four-word alphabet, cycling in a loop of eight. I wrote it myself, and I'm quite proud of it.
 
-How does it work? Honest answer: I'm not sure! But this family of snowflakes seems to carry a secret four-word alphabet — `a = 0`, `b = 101`, `c = 11111`, `d = 0011100` — and the rows cycle through it in a loop of eight: a, b, c, d, d, c, b, a, over and over. Each row starts from its center word and grows outward, wrapping itself in its partner word, then in its own, alternating until it's long enough (then trim the edges to fit). Build one half, mirror it for the other. One last twist: the exact center of the snowflake alternates fill, void, fill, void as the number climbs, so when the number is one more than a multiple of 4, every bit flips at the end.
-
-Find it here: `solution/formula.py`
-
-```python
-FLIP = str.maketrans("01", "10")
-
-def binary_mrlygram(number: int):
-    a = "0"
-    b = "101"
-    c = "11111"
-    d = "0011100"
-    rows = number
-    bottom = []
-    cursor = 0
-    for index in range(rows):
-        cursor = cursor % 8 + 1
-        match cursor:
-            case 1 | 8:
-                center = a
-                alternate = d
-            case 2 | 7:
-                center = b
-                alternate = c
-            case 3 | 6:
-                center = c
-                alternate = b
-            case 4 | 5:
-                center = d
-                alternate = a
-        binary = center
-        target = 4 * number - 1 - (2 * index)
-        while len(binary) < target:
-            binary = alternate + binary + alternate
-            binary = center + binary + center
-        while len(binary) != target:
-            binary = binary[1:-1]
-        bottom.append(binary)
-    top = bottom.copy()
-    top.reverse()
-    binary = top + bottom
-    if number % 4 == 1:
-        binary = [row.translate(FLIP) for row in binary]
-    return binary
-```
-
-If you participated in the challenge, is this also what you found? I'd love to know! Send your solution to the email on [my GitHub profile](https://github.com/carlomitchener).
+Spoilers — the alphabet, the puzzle-piece tile it comes from, and the code — live in **[SOLUTION.md](SOLUTION.md)**.
 
 ## Python with Gemini
 
-A couple months later I asked Gemini 2.5 Pro for a generalized algorithm that could slice any of my sponges, at any level. It failed miserably! But then I gave it my level-1 formula above, and it kept testing and testing and, to my surprise, it succeeded. Full disclosure: I still don't entirely understand the code it wrote. The good news is I don't have to trust it, either — it reproduces every gram I ever transcribed by eye, digit for digit. The hand-typed blobs from Origins turned out to be the answer key.
+A couple months later I asked Gemini 2.5 Pro for a generalized algorithm that could slice any of my sponges, at any level. It failed miserably! But then I gave it my level-1 formula from [SOLUTION.md](SOLUTION.md), and it kept testing and testing and, to my surprise, it succeeded. Full disclosure: I still don't entirely understand the code it wrote. The good news is I don't have to trust it, either — it reproduces every gram I ever transcribed by eye, digit for digit. The hand-typed blobs from Origins turned out to be the answer key.
 
 ```python
 # Cell3d is a fancy 3D matrix object
@@ -345,40 +278,17 @@ def cut(cell: Cell3d):
 
 ## Rust with Claude
 
-![the four families, number 5, cut](files/showcase-cut-5.gif)
+![the four families, number 5, cut](files/gifs/showcase-cut-5.gif)
 
-And now, with Claude, we've grown up a bit and re-written everything in Rust. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlypy/](../mrlypy/), which is what the scripts here actually run.
+And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlypy/](../mrlypy/), which is what the scripts here actually run.
 
-A quick overview of what it can do... every family draws four ways:
+For a tour of all four families, see [SHOWCASE.md](SHOWCASE.md).
 
-- **flat** — the rule in 2D: the pattern before a third axis exists
-- **iso** — the whole 3D sponge, seen corner-on (the fancy word is *isometric*)
-- **pro** — the three faces the sponge shows you
-- **cut** — the diagonal slice through the middle
-
-and each view animates the four families, one frame each, labeled in the corner:
-
-- **carpet** — keep a cell when at most one axis is odd (the sponges above)
-- **net** — keep when all axes are odd, or all but one
-- **tree** — keep when the chosen axes are even
-- **void** — keep when every axis has the same parity
-
-All at level 2 — the three sponge views tiled in rings around the center, the flat view left bare. Views down the side, numbers across the top. Read a column top to bottom and you watch one number grow up — flat pattern → sponge → faces → snowflake — with the corner labels naming the family in every frame. (And peek at the flat carpet in the 5 column: it's the MrlyProd logo, one level deeper.)
-
-|  | 3 | 5 | 7 |
-| --- | --- | --- | --- |
-| **flat** | ![the four families, number 3, flat](files/showcase-flat-3.gif) | ![the four families, number 5, flat](files/showcase-flat-5.gif) | ![the four families, number 7, flat](files/showcase-flat-7.gif) |
-| **iso** | ![the four families, number 3, iso](files/showcase-iso-3.gif) | ![the four families, number 5, iso](files/showcase-iso-5.gif) | ![the four families, number 7, iso](files/showcase-iso-7.gif) |
-| **pro** | ![the four families, number 3, pro](files/showcase-pro-3.gif) | ![the four families, number 5, pro](files/showcase-pro-5.gif) | ![the four families, number 7, pro](files/showcase-pro-7.gif) |
-| **cut** | ![the four families, number 3, cut](files/showcase-cut-3.gif) | ![the four families, number 5, cut](files/showcase-cut-5.gif) | ![the four families, number 7, cut](files/showcase-cut-7.gif) |
-
-Run `python3 showcase.py` for the console, `showcase.py all` to draw every cell above, or `showcase.py cut 5` for just one.
-
-## BONUS SOLUTION
+## The Bonus Solution
 
 Did you count them? Now that we can build any gram at any level, let's see what's hiding in there.
 
-Start with the easy part. The grid cells are packing foam — they pad the short rows out to a block, and they were never part of the picture. Drop them and what's left is the hexagon. And here's the nice bit: a hexagon of side *k* is just six equilateral triangles glued around a point, and a triangle of side *k* holds exactly *k*² little cells — count its rows: 1 + 3 + 5 + 7... the odd numbers stack up into a perfect square! So the hexagon holds 6*k*² triangles, our hexagon always has side *number*^*level*, and the total is locked in before you draw a thing:
+Start with the easy part. The grid cells are packing foam — never part of the picture. Drop them and what's left is the hexagon. And here's the nice bit: a hexagon of side *k* is just six equilateral triangles glued around a point, and a triangle of side *k* holds exactly *k*² little cells — count its rows: 1 + 3 + 5 + 7... the odd numbers stack up into a perfect square! So the hexagon holds 6*k*² triangles, our hexagon always has side *number*^*level*, and the total is locked in before you draw a thing:
 
 ```
 fill + void = 6 × number^(2 × level)
@@ -393,6 +303,11 @@ Every number, every level. MrlyGram5 has 6 × 5² = 150 triangles; at level 2 it
 | 5 | 72 | 78 | 40 | 150 |
 | 7 | 204 | 90 | 84 | 294 |
 | 9 | 210 | 276 | 144 | 486 |
+| 11 | 486 | 240 | 220 | 726 |
+| 13 | 420 | 594 | 312 | 1014 |
+| 15 | 888 | 462 | 420 | 1350 |
+| 17 | 702 | 1032 | 544 | 1734 |
+| 19 | 1410 | 756 | 684 | 2166 |
 
 That's level 1, and the grid column is always 2*n*(*n*−1). Now watch the fill column: it doesn't just climb. Number 11 packs more material (486) than number 13 (420), and 15 (888) beats 17 (702). The odd numbers leapfrog each other. Keep that in your pocket — it's a clue.
 
@@ -409,12 +324,17 @@ Which means you can divide by six and count just one 60° pizza slice instead:
 | 5 | 12 | 13 | 25 |
 | 7 | 34 | 15 | 49 |
 | 9 | 35 | 46 | 81 |
+| 11 | 81 | 40 | 121 |
+| 13 | 70 | 99 | 169 |
+| 15 | 148 | 77 | 225 |
+| 17 | 117 | 172 | 289 |
+| 19 | 235 | 126 | 361 |
 
-That last column is *number*², of course — and at any level it's *number*^(2 × *level*), which is exactly the number of squares in the flat 2D grid (the *flat* view in the showcase above) at the same number and level. One wedge of the snowflake and one whole carpet hold the same count!
+That last column is *number*², of course — and at any level it's *number*^(2 × *level*), which is exactly the number of squares in the flat 2D grid (the *flat* view in `SHOWCASE.md`) at the same number and level. One wedge of the snowflake and one whole carpet hold the same count!
 
 ### A formula, finally
 
-"Is there a closed-form fill/void?" sat in my open questions for a long while. (A closed form is a formula you plug the number straight into — no drawing, no counting, the answer just falls out.) For level 1, here it is at last — two families, split by the remainder when you divide the number by 4:
+"Is there a closed-form fill/void?" sat in my open questions for a long while. (A closed form is a formula you plug the number straight into — no drawing, no counting, the answer just falls out.) For level 1, here it is at last — two branches, split by the remainder when you divide the number by 4:
 
 | number | fill | void |
 | --- | --- | --- |
@@ -422,7 +342,7 @@ That last column is *number*², of course — and at any level it's *number*^(2 
 | 1, 5, 9, 13, … | 3(3*n*+1)(*n*+1)/4 | 3(5*n*+1)(*n*−1)/4 |
 | 3, 7, 11, 15, … | 3(5*n*−1)(*n*+1)/4 | 3(3*n*−1)(*n*−1)/4 |
 
-The two odd rows are mirrors of each other: swap the 3 and the 5, swap the +1 and the −1. And that leapfrog from before? Just the two families climbing at different speeds, taking turns in front.
+(The even row is a freebie: nothing stops the test on even numbers — their cut just splits exactly half-and-half.) The two odd rows are mirrors of each other: swap the 3 and the 5, swap the +1 and the −1. And that leapfrog from before? Just the two branches climbing at different speeds, taking turns in front.
 
 ### Down the levels
 
@@ -442,10 +362,10 @@ The Menger row — 42, 306, 2250, 16578 — lives in the OEIS (the online encycl
 The other numbers weren't in the OEIS. They are now! The level-1 fills and voids of every odd sponge have just been filed as the twin sequences [A399018](https://oeis.org/A399018) (fill: 6, 42, 72, 204, 210, …) and [A399019](https://oeis.org/A399019) (void: 0, 12, 78, 90, 276, …) — two complementary snowflake counters, submitted from this very project, each carrying the closed forms above, a portrait of its grams, and a link back to this page. (They're fresh enough that you might still catch them wearing their *draft* badge.)
 
 ### OEIS A399018 - FILL - 6, 42, 72, 204, 210, …
-![Illustration of a(1), a(2), a(3): the solid triangles, in black](files/a399018.png)
+![Illustration of a(1), a(2), a(3): the solid triangles, in black](files/extras/a399018.png)
 
 ### OEIS A399019 - VOID - 0, 12, 78, 90, 276, …
-![Illustration of a(1), a(2), a(3): the empty triangles, in black](files/a399019.png)
+![Illustration of a(1), a(2), a(3): the empty triangles, in black](files/extras/a399019.png)
 
 ## Moiré
 
@@ -453,7 +373,7 @@ What happens when you stack them on top of each other? ...Something nobody drew.
 
 Take every odd number from 1 to 55, slice each sponge, blow all twenty-eight grams up to exactly the same size, and lay them down like sheets of tracing paper — each one faint enough that no single number gets to win.
 
-![every odd gram from 1 to 55, stacked](files/mrlygram-heatmap.gif)
+![every odd 3D carpet from 1 to 55, stacked](files/extras/mrlygram-heatmap.gif)
 
 Watch it build. The first few frames are still recognizable snowflakes. Then somewhere past twenty the individual grams dissolve, and a picture surfaces that was in none of them: long straight rays crossing the whole hexagon, a ghost star at the middle, the six-fold symmetry still holding. That's *moiré* — the shimmer you get for free when you overlay grids of different pitch, the same one that ripples through two layers of net curtain, or across a photographed computer screen.
 
@@ -461,19 +381,35 @@ And it has to be there. Every gram is the same *at most one odd* test, just chop
 
 The same trick works one dimension down. Here are the flat 2D carpets — the square grids from *How the pictures are made* — stacked the same way:
 
-![every odd 2D carpet from 1 to 55, stacked](files/mrlycarpet-heatmap.gif)
+![every odd 2D carpet from 1 to 55, stacked](files/extras/mrlycarpet-heatmap.gif)
 
-Squares instead of triangles, so the rays run diagonally rather than at 60°, but it's the same phenomenon: the main diagonal comes out about twice as bright as the field around it. And look at the very center. That one dot alternates fill, void, fill, void as the number climbs — the same *n* mod 4 flip you met in the SOLUTION — so across twenty-eight numbers it settles at exactly 50/50: a perfect mid-gray pinprick at the heart of the picture.
+Squares instead of triangles, so the rays run diagonally rather than at 60°, but it's the same phenomenon: the main diagonal comes out twice as bright as the field around it. And that *twice* is exact — keep stacking and the ratio settles at precisely 2. (Twice the white *paper* showing, to be exact.) Look again: the other diagonal is its pixel-perfect twin, because every gram reads the same forwards and backwards. The picture carries a bright X. And look at the very center. That one dot alternates fill, void, fill, void as the number climbs — the same *n* mod 4 flip that powers [the solution](SOLUTION.md) — so across twenty-eight numbers it settles at exactly 50/50: a perfect mid-gray pinprick at the heart of the picture.
 
-How far can you push it? Further than you'd guess. The stack doesn't fade to a flat gray the way a pile of random patterns would, precisely because every layer obeys the same rule. Pixels give out first: at 1080 across, somewhere past number 150 each cell is thinner than two pixels, and the finest grams quietly turn to fog. (Memory goes next — number 301 wants 1.7 GB just to hold its blown-up cube.)
+How far can you push it? Further than you'd guess. The field between the rays does slowly gray out — barely slower than a pile of random patterns would, it turns out — but the rays themselves never dim: each one keeps its exact brightness forever and only grows thinner, so every layer you add makes the picture sharper, not blurrier. Pixels give out first: at 1080 across, somewhere past number 150 each cell is thinner than two pixels, and the finest grams quietly turn to fog. (Memory goes next — number 301 wants 1.7 GB just to hold its blown-up cube.)
 
 Run it yourself with `MIN` and `MAX` at the top of `mrlypy/mrlydemos/mrlygram.py`:
 
 ```bash
-python3 mrlygram.py cut carpet     # the snowflakes, stacked
-python3 mrlygram.py flat carpet    # the 2D carpets, stacked
-python3 mrlygram.py sweep          # both views, all four families
+uv run mrlypy/mrlydemos/mrlygram.py cut carpet     # the snowflakes, stacked
+uv run mrlypy/mrlydemos/mrlygram.py flat carpet    # the 2D carpets, stacked
+uv run mrlypy/mrlydemos/mrlygram.py sweep          # both views, all four families
 ```
+
+### The stack answers back
+
+Two of the open questions at the bottom of this page used to ask: *is Pi lurking around here? What about prime numbers?* We stacked, we measured, we proved — and the answers are stranger than the questions. The proofs are still being written up (link at the end), so for now, the headlines:
+
+**Pi plays a magic trick.** Behind every brightness in these stacks sits a wave, and every wave carries a π. But measure anything you can actually *see* — how bright a ray is, how the diagonal compares to the field — and the π's cancel out, exactly, every time. Every visible strength is a plain fraction. So where does π survive? In the *ink budget*: track how much ink the whole picture uses as the layers pile up, subtract the obvious part, and what's left creeps toward numbers built from π — and from a rarer celebrity, *Catalan's constant*, a number so mysterious nobody has even proved it isn't secretly a fraction.
+
+**The primes hide one dimension down.** Compare any two of the flat carpets. If their numbers share a factor, the pictures echo each other — 9 echoes 3, 15 echoes 5, always. If they share none, the two pictures have *exactly* nothing in common: knowing where one is black tells you nothing at all about the other. So an odd number is prime exactly when its carpet is a total stranger to every carpet that came before it. The snowflakes, wonderfully, refuse to obey — the slice bends this law into something new, and each snowflake secretly whispers to its *double* instead. Chasing that is a story of its own.
+
+**And the brightest lines had no name.** The strongest lines crossing the stacked snowflake sit at the quarter marks of its width — an exact step in brightness, one eighth, that every single layer votes for.
+
+**One last secret: recipes have fingerprints.** Our sponge comes from one little parity test, but in 3D there are exactly 256 such tests — a whole zoo of sponges. Stack the slices of any of them and the picture reads its recipe's fingerprint: some recipes *blink* as the number climbs (one layer mostly ink, the next mostly paper — you met this leapfrog in the bonus solution), some hold perfectly steady, and you can tell which is which straight from the recipe, before drawing a single triangle. The *void* family is the showstopper: its stack keeps a twelve-armed star and a jet-black center dot *forever*, while the carpet's ghost star slowly dissolves into the gray.
+
+The proofs, the code, and the full hunt — run by teams of AI agents checking each other's work, refuting each other freely — will live at [mrly.net/research](https://mrly.net/research/). Coming soon!
+
+![every odd 3D void from 1 to 55, stacked](files/extras/cut-void-1.gif)
 
 ## Make a Snowflake
 
@@ -492,17 +428,15 @@ uv run some26/cut.py sweep
 No uv? The scripts find their own imports, so plain Python works too — you only need the two libraries:
 
 ```bash
-cd carlomitchener/some26
+cd carlomitchener
 python3 -m venv .venv && source .venv/bin/activate
 pip install pillow numpy
-python3 cut.py sweep
+python3 some26/cut.py sweep
 ```
 
 *(On Windows that middle line is `.venv\Scripts\activate`. Delete the `.venv` folder when you're done and no trace is left.)*
 
-The sweep redraws every snowflake in [files/](files/) — all the cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `cut.py` on its own for the console, or `cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, and the rainbow hero up top from `image.py`.
-
-Everything in `files/` was output by that algorithm.
+The sweep redraws the regular snowflake set in [files/](files/) — cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `uv run some26/cut.py` on its own for the console, or `uv run some26/cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, the corner-on sponges from `sponges.py`, the `start` flip-book from `start.py`, the challenge gif from `challenge.py`, and the rainbow hero up top from `hero.py`.
 
 Enjoy!
 
@@ -519,17 +453,25 @@ Enjoy!
 
 - What's the area formula?
 - What's the perimeter formula?
-- Why does the level-1 formula's four-word alphabet (a, b, c, d) work at all?
+- Why does the solution's four-row tile ([SOLUTION.md](SOLUTION.md)) tessellate every odd snowflake?
 - Is there a closed-form fill/void past level 1, or for the other families?
-- Or something more general for all of them?
-- Is Pi (or some other constant) lurking around here?
-- Prime numbers? Probably...
+
+## Why?
+
+![screenshot of vs code showing a mrlygram printfile](files/old/Screenshot%202025-01-22%20at%204.56.38 PM.png)
+
+You may be wondering... Why would a human go down such a wormhole? I was trying to create an automated print-on-demand business and wanted pretty-looking t-shirts. MrlySponge slices seemed like the perfect pattern. The slicing algorithm was meant as one sub-system in a bigger printfile generator. Here's a mockup of a MrlyGram iPhone case.
+
+![iPhone case mockup with MrlyGram pattern](files/old/abdb96fe-8e9c-4707-af05-fbf0cfc0e0de.png)
 
 ## Extras
 
-If you enjoy cellular automata — grids of cells that live and die by simple rules, like Conway's famous Game of Life — find us on Instagram or YouTube (@mrlyprod). I'm working on applying all this to them. A demo is already live: `mrlypy/mrlydemos/game.py`
+I'm working on applying all this to cellular automata — grids of cells that live and die by simple rules, like Conway's famous Game of Life. A demo is already live: `mrlypy/mrlydemos/game.py`. To follow along, find us on Instagram or YouTube (@mrlyprod).
 
-![25 generations on the cut of the number-3 net sponge](files/frames.gif)
+![25 generations on the cut of the number-3 net sponge, frame by frame](files/extras/frames.gif)
+
+
+![the same 25 generations, overlaid as a heatmap](files/extras/heatmap.gif)
 
 ## The End
 

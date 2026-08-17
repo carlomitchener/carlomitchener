@@ -1,15 +1,6 @@
-import os
 import sys
 
-# MRLYPY
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-MRLYPY = os.path.normpath(os.path.join(HERE, "..", "mrlypy"))
-
-if not os.path.isdir(os.path.join(MRLYPY, "mrlysix")):
-    sys.exit(f"missing mrlysix: expected mrlypy at {MRLYPY}")
-
-sys.path.insert(0, MRLYPY)
+import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
 
 from PIL import Image, ImageDraw, ImageFont
 from mrlysix import designs
@@ -18,14 +9,17 @@ from mrlysix.renderer import draw
 from mrlytwo import designs as designs_2d
 from mrlytwo.renderer import to_image
 
+from lib.canvas import H3, INK, PAPER, quantize
+from lib.gif import write_gif
+from lib.paths import GIFS, ensure, show
+from lib.terminal import menu
+
 NUMBERS = [3, 5, 7]
 LEVEL = 2
 RADIUS = 2
 SCALE = 10
 CANVAS = 810
 COLORS = 64
-DELAY = 1500
-H3 = 0.8660254
 STRIP = 110
 FAMILIES = ["carpet", "net", "tree", "void"]
 VIEWS = ["flat", "iso", "pro", "cut"]
@@ -37,15 +31,15 @@ def label(canvas, family):
         font = ImageFont.load_default(48)
     except TypeError:
         font = ImageFont.load_default()
-    ImageDraw.Draw(canvas).text((30, CANVAS - 78), family, fill=(17, 17, 17), font=font)
+    ImageDraw.Draw(canvas).text((30, CANVAS - 78), family, fill=INK.to_rgb(), font=font)
 
 def flat_frame(family, number):
     cell = getattr(designs_2d, f"{family}_2d")(number, LEVEL).paint()
     image = to_image(cell, max(1, (CANVAS - STRIP) // cell.height))
-    canvas = Image.new("RGB", (CANVAS, CANVAS), (255, 255, 255))
+    canvas = Image.new("RGB", (CANVAS, CANVAS), PAPER.to_rgb())
     canvas.paste(image, ((CANVAS - image.width) // 2, (CANVAS - STRIP - image.height) // 2), image)
     label(canvas, family)
-    return canvas.quantize(colors=COLORS, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
+    return quantize(canvas, COLORS)
 
 def frame(family, projection, number):
     if projection == "flat":
@@ -59,30 +53,19 @@ def frame(family, projection, number):
     else:
         image = image.resize((round(w * H3), h), Image.LANCZOS)
     image.thumbnail((CANVAS, CANVAS), Image.LANCZOS)
-    canvas = Image.new("RGB", (CANVAS, CANVAS), (255, 255, 255))
+    canvas = Image.new("RGB", (CANVAS, CANVAS), PAPER.to_rgb())
     canvas.paste(image, ((CANVAS - image.width) // 2, (CANVAS - image.height) // 2), image)
     label(canvas, family)
-    return canvas.quantize(colors=COLORS, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
+    return quantize(canvas, COLORS)
 
 # SHEETS
-
-def ready():
-    os.chdir(HERE)
-    os.makedirs("files", exist_ok=True)
 
 def sheets(projection, numbers):
     for number in numbers:
         frames = [frame(family, projection, number) for family in FAMILIES]
-        path = f"files/showcase-{projection}-{number}.gif"
-        frames[0].save(
-            path,
-            save_all=True,
-            append_images=frames[1:],
-            duration=DELAY,
-            loop=0,
-            optimize=True,
-        )
-        print(f"{path} ({' '.join(FAMILIES)})")
+        path = GIFS / f"showcase-{projection}-{number}.gif"
+        write_gif(path, frames)
+        print(f"{show(path)} ({' '.join(FAMILIES)})")
     return 0
 
 def flat(numbers):
@@ -118,24 +101,18 @@ COMMANDS = {
 }
 
 def help():
-    width = max(len(name) for name in COMMANDS)
-    print(f"showcase.py <command> <number>   {' '.join(FAMILIES)} at level {LEVEL}")
-    print()
-    for name, (_, blurb) in COMMANDS.items():
-        print(f"  {name:<{width}}  {blurb}")
-    print()
-    for number in NUMBERS:
-        print(f"  {number}")
-    print()
-    print("a command alone sweeps every number; add a number to draw just that one.")
+    menu(f"showcase.py <command> <number>   {' '.join(FAMILIES)} at level {LEVEL}",
+         COMMANDS,
+         [str(number) for number in NUMBERS],
+         "a command alone sweeps every number; add a number to draw just that one.")
 
 def terminal():
     match sys.argv[1:]:
         case [cmd] if cmd in COMMANDS:
-            ready()
+            ensure()
             sys.exit(COMMANDS[cmd][0](NUMBERS) or 0)
         case [cmd, token] if cmd in COMMANDS:
-            ready()
+            ensure()
             sys.exit(COMMANDS[cmd][0](pick(token)) or 0)
         case _:
             help()

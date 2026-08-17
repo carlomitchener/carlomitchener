@@ -1,16 +1,6 @@
-import os
-import sys
 import math
 
-# MRLYPY
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-MRLYPY = os.path.normpath(os.path.join(HERE, "..", "mrlypy"))
-
-if not os.path.isdir(os.path.join(MRLYPY, "mrlysix")):
-    sys.exit(f"missing mrlysix: expected mrlypy at {MRLYPY}")
-
-sys.path.insert(0, MRLYPY)
+import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
 
 import numpy as np
 from PIL import Image
@@ -21,6 +11,9 @@ from mrlysix import FILL, GRID, VOID
 from mrlysix.designs import carpet_cut
 from mrlysix.renderer import draw
 
+from lib.canvas import H3, quantize
+from lib.paths import HERO, ensure, show
+
 NUMBER = 5
 LEVEL = 2
 MARGIN = 0
@@ -30,7 +23,6 @@ SEED = 26
 STEPS = 240
 COLORS = 256
 HUES = ["red", "orange", "yellow", "green", "mint", "cyan", "blue", "indigo", "purple", "pink", "red"]
-H3 = math.sqrt(3) / 2
 
 # FRAME
 
@@ -74,16 +66,15 @@ def crop(image):
 # RUN
 
 def main():
-    os.chdir(HERE)
-    os.makedirs("files", exist_ok=True)
+    ensure()
     cell = rainbow(widen(carpet_cut(NUMBER, LEVEL)))
     scale = math.ceil(2 * WIDTH / (cell.width + 1))
     image = draw(cell, scale=scale, start=cell.start)
     w, h = image.size
     image = crop(image.resize((w, round(h * H3)), Image.LANCZOS))
-    image = image.quantize(colors=COLORS, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
-    image.save("files/image.png", optimize=True)
-    print("wrote files/image.png %dx%d %.2f MB" % (*image.size, os.path.getsize("files/image.png") / 1e6))
+    image = quantize(image, COLORS)
+    image.save(HERO, optimize=True)
+    print("wrote %s %dx%d %.2f MB" % (show(HERO), *image.size, HERO.stat().st_size / 1e6))
 
 if __name__ == "__main__":
     main()

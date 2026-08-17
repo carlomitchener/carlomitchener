@@ -11,6 +11,7 @@
 /memory/
 
 # OUTPUT
+mrlygram-*.svg
 data/
 dist/
 pkg/

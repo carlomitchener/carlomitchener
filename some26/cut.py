@@ -1,36 +1,28 @@
-import os
-import sys
-
-# MRLYPY
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-MRLYPY = os.path.normpath(os.path.join(HERE, "..", "mrlypy"))
-
-if not os.path.isdir(os.path.join(MRLYPY, "mrlysix")):
-    sys.exit(f"missing mrlysix: expected mrlypy at {MRLYPY}")
-
-sys.path.insert(0, MRLYPY)
-
 import math
 import re
+import sys
+
+import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
+
 from PIL import Image
 from mrlycore import binary, formulas
-from mrlycore.colors import Color, alpha
+from mrlycore.colors import alpha
 from mrlysix import FILL, GRID, VOID
 from mrlysix.designs import carpet_cut
 from mrlysix.renderer import draw, svg
 from mrlytwo.renderer import svg_square, to_image
 
-INK = Color(17, 17, 17)
-PAPER = Color(255, 255, 255)
-H3 = math.sqrt(3) / 2
+from lib.canvas import H3, INK, PAPER, flatten, quantize
+from lib.gif import write_gif
+from lib.paths import CUTS, GIFS, GRIDS, ensure, show, write
+from lib.terminal import menu, pick_level, pick_number
+
 SIZE = 1080
 SUPER = 3
 GIFW = 810
 GIFH = round(GIFW * H3)
 GIFSQ = GIFW * 2 // 3
 GREYS = 16
-DELAY = 1500
 NUMBERS = [1, 3, 5, 7, 9]
 DEPTH = 2
 LEVELS = {1: 3, 3: 3, 5: 3}
@@ -55,11 +47,6 @@ def cut(number, level):
     return carpet_cut(number, level).paint(PALETTE)
 
 # CANVAS
-
-def flatten(image):
-    canvas = Image.new("RGB", image.size, PAPER.to_rgb())
-    canvas.paste(image, (0, 0), image)
-    return canvas
 
 def save_png(path, image):
     image.convert("L").save(path, optimize=True)
@@ -109,7 +96,7 @@ def frame(cell):
     image.thumbnail((GIFW, GIFH), Image.BOX)
     canvas = Image.new("L", (GIFW, GIFH), PAPER.r)
     canvas.paste(image, ((GIFW - image.width) // 2, (GIFH - image.height) // 2))
-    return canvas.quantize(colors=GREYS, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
+    return quantize(canvas, GREYS)
 
 def frame_sq(cell):
     image = flatten(to_image(cell.cell)).convert("L")
@@ -117,23 +104,9 @@ def frame_sq(cell):
     image = image.resize((GIFW, height), Image.NEAREST)
     canvas = Image.new("L", (GIFW, GIFSQ), PAPER.r)
     canvas.paste(image, (0, (GIFSQ - height) // 2))
-    return canvas.quantize(colors=GREYS, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
-
-def write_gif(path, frames):
-    frames[0].save(
-        path,
-        save_all=True,
-        append_images=frames[1:],
-        duration=DELAY,
-        loop=0,
-        optimize=True,
-    )
+    return quantize(canvas, GREYS)
 
 # TEXT
-
-def write(path, body):
-    with open(path, "w") as f:
-        f.write(body if body.endswith("\n") else body + "\n")
 
 def write_txt(path, cell):
     write(path, "\n".join(cell.text(GLYPHS)))
@@ -157,24 +130,20 @@ def stats(number, level, cell):
               % (seed, number, formulas.carpet_3d_dimension(number)))
 
 def one(number, level, cell):
-    stem = "files/cut-%d-%d" % (number, level)
-    grid = "files/grid-%d-%d" % (number, level)
-    write_txt(stem + ".txt", cell)
-    png_tri(stem + ".png", cell)
-    png_sq(grid + ".png", cell)
+    stem = "cut-%d-%d" % (number, level)
+    grid = "grid-%d-%d" % (number, level)
+    write_txt(CUTS / (stem + ".txt"), cell)
+    png_tri(CUTS / (stem + ".png"), cell)
+    png_sq(GRIDS / (grid + ".png"), cell)
     count = cell.width * cell.height
     if count <= SVG_CAP:
-        svg_tri(stem + ".svg", cell)
-        svg_sq(grid + ".svg", cell)
+        svg_tri(CUTS / (stem + ".svg"), cell)
+        svg_sq(GRIDS / (grid + ".svg"), cell)
     else:
         print("skipped svg for %s: %d cells" % (stem, count))
 
-def ready():
-    os.chdir(HERE)
-    os.makedirs("files", exist_ok=True)
-
 def draw_one(number, level):
-    ready()
+    ensure()
     cell = cut(number, level)
     preview(cell)
     one(number, level, cell)
@@ -182,7 +151,7 @@ def draw_one(number, level):
     return 0
 
 def sweep():
-    ready()
+    ensure()
     cells = {}
     for number in NUMBERS:
         for level in range(1, depth(number) + 1):
@@ -199,22 +168,15 @@ def sweep():
         story = [frames[(number, l)] for l in range(1, depth(number) + 1)]
         if number != 1:
             story.insert(0, frames[(1, 1)])  # level 0: the solid cube
-        write_gif("files/cut-levels-%d.gif" % number, story)
+        write_gif(GIFS / ("cut-levels-%d.gif" % number), story)
     deepest = max(depth(n) for n in NUMBERS)
     for level in range(1, deepest + 1):
-        write_gif("files/cut-numbers-%d.gif" % level,
+        write_gif(GIFS / ("cut-numbers-%d.gif" % level),
                   [frames[(n, level)] for n in NUMBERS if depth(n) >= level])
-        write_gif("files/grid-numbers-%d.gif" % level,
+        write_gif(GIFS / ("grid-numbers-%d.gif" % level),
                   [squares[(n, level)] for n in NUMBERS if depth(n) >= level])
-    print("wrote %d gifs" % (len(NUMBERS) + 2 * deepest))
+    print("wrote %d gifs in %s" % (len(NUMBERS) + 2 * deepest, show(GIFS)))
     return 0
-
-def pick(number, level):
-    if not number.isdigit() or int(number) < 1 or int(number) % 2 == 0:
-        sys.exit(f"'{number}' must be odd and positive")
-    if not level.isdigit() or int(level) < 1:
-        sys.exit(f"'{level}' must be an integer >= 1")
-    return int(number), int(level)
 
 # TERMINAL
 
@@ -224,23 +186,17 @@ COMMANDS = {
 }
 
 def help():
-    width = max(len(name) for name in COMMANDS)
-    print("cut.py <command> <number> <level>   slice a generalized Menger sponge")
-    print()
-    for name, (_, blurb) in COMMANDS.items():
-        print(f"  {name:<{width}}  {blurb}")
-    print()
-    for number in NUMBERS:
-        print(f"  {number} to level {depth(number)}")
-    print()
-    print("'sweep' alone draws the lot; 'draw' takes any odd number and any level.")
+    menu("cut.py <command> <number> <level>   slice a generalized Menger sponge",
+         COMMANDS,
+         ["%d to level %d" % (number, depth(number)) for number in NUMBERS],
+         "'sweep' alone draws the lot; 'draw' takes any odd number and any level.")
 
 def terminal():
     match sys.argv[1:]:
         case ["sweep"]:
             sys.exit(sweep() or 0)
         case ["draw", number, level]:
-            sys.exit(draw_one(*pick(number, level)) or 0)
+            sys.exit(draw_one(pick_number(number), pick_level(level)) or 0)
         case _:
             help()
 
