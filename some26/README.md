@@ -220,9 +220,7 @@ The convention: 1 is material, 0 is hole. The level-1 slices ship in [files/cuts
 
 **Bonus round:** count the cells, too. How many fills, how many voids, how many grids, and how many triangles all together? The total drops out in a single line once you spot what shape you're looking at. The fill/void split is the hard one — can you get it straight from the number, with no drawing at all?
 
-This is a real stop-and-think moment, the best kind — I spent a happy week here. Come back when you're done.
-
-When you're happy, view the [SOLUTION.md](SOLUTION.md).
+This is a real stop-and-think moment, the best kind — I spent a happy week here. When you're happy, view the [SOLUTION.md](SOLUTION.md).
 
 ## Python with Gemini
 
