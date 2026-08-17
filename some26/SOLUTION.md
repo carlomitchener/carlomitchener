@@ -1,6 +1,6 @@
 # The Solution
 
-*Spoilers for [the challenge](README.md#the-challenge) — go slice some sponges first!*
+Around March 2025, all that staring at 1s and 0s paid off: I found a very pretty algorithm. It only works for level 1, but it works: a secret four-word alphabet, cycling in a loop of eight. I wrote it myself, and I'm quite proud of it.
 
 How does it work? Here's the path that led me to it. First: the snowflake divides by six — spin it 60° and it lands back on itself — so forget the hexagon and stare at a single 60° slice. Second: inside that slice, the pattern grows outward in a way that's almost embarrassingly regular. Third: the regularity has a *unit*. One puzzle piece, four rows tall, tessellates the entire slice:
 

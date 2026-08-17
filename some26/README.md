@@ -222,12 +222,7 @@ The convention: 1 is material, 0 is hole. The level-1 slices ship in [files/cuts
 
 This is a real stop-and-think moment, the best kind — I spent a happy week here. Come back when you're done.
 
-
-## The Solution
-
-Around March 2025, all that staring at 1s and 0s paid off: I found a very pretty algorithm. It only works for level 1, but it works: a secret four-word alphabet, cycling in a loop of eight. I wrote it myself, and I'm quite proud of it.
-
-Spoilers — the alphabet, the puzzle-piece tile it comes from, and the code — live in **[SOLUTION.md](SOLUTION.md)**.
+When you're happy, view the [SOLUTION.md](SOLUTION.md).
 
 ## Python with Gemini
 
@@ -453,7 +448,6 @@ Enjoy!
 
 - What's the area formula?
 - What's the perimeter formula?
-- Why does the solution's four-row tile ([SOLUTION.md](SOLUTION.md)) tessellate every odd snowflake?
 - Is there a closed-form fill/void past level 1, or for the other families?
 
 ## Why?
