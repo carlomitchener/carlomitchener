@@ -452,7 +452,7 @@ Enjoy!
 
 ![screenshot of vs code showing a mrlygram printfile](files/old/Screenshot%202025-01-22%20at%204.56.38 PM.png)
 
-You may be wondering... Why would a human go down such a wormhole? I was trying to create an automated print-on-demand business and wanted pretty-looking t-shirts. MrlySponge slices seemed like the perfect pattern. The slicing algorithm was meant as one sub-system in a bigger printfile generator. Here's a mockup of a MrlyGram iPhone case.
+You may be wondering... Why would a human go down such a wormhole? I was trying to create an automated print-on-demand business and wanted pretty-looking t-shirts. MrlySponge slices seemed like the perfect pattern (they're actually hard to print on fabric). The slicing algorithm was meant as one sub-system in a bigger printfile generator. Here's a mockup of a MrlyGram iPhone case.
 
 ![iPhone case mockup with MrlyGram pattern](files/old/abdb96fe-8e9c-4707-af05-fbf0cfc0e0de.png)
 
