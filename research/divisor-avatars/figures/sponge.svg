@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="378" height="152" viewBox="0 0 378 152">
+<rect x="10" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="10" y="44" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="10" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="44" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="44" y="44" width="34" height="34" fill="#6b7280" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="44" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="78" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="78" y="44" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="78" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<text x="61" y="132" font-family="Georgia, serif" font-size="13" fill="#7c8798" text-anchor="middle">z = 1</text>
+<rect x="138" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="138" y="44" width="34" height="34" fill="#6b7280" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="138" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="172" y="78" width="34" height="34" fill="#6b7280" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="172" y="44" width="34" height="34" fill="#6b7280" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="172" y="10" width="34" height="34" fill="#6b7280" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="206" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="206" y="44" width="34" height="34" fill="#6b7280" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="206" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<text x="189" y="132" font-family="Georgia, serif" font-size="13" fill="#7c8798" text-anchor="middle">z = 2</text>
+<rect x="266" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="266" y="44" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="266" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="300" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="300" y="44" width="34" height="34" fill="#6b7280" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="300" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="334" y="78" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="334" y="44" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<rect x="334" y="10" width="34" height="34" fill="#cfe0f5" stroke="#8fa3bb" stroke-width="1"/>
+<text x="317" y="132" font-family="Georgia, serif" font-size="13" fill="#7c8798" text-anchor="middle">z = 3</text>
+</svg>

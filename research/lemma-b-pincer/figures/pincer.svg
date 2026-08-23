@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" width="900" height="250">
+<rect width="900" height="250" fill="#ffffff"/>
+<rect x="60.0" y="91.0" width="348.4" height="10" fill="#d5d5d5"/>
+<rect x="559.4" y="91.0" width="280.6" height="10" fill="#d5d5d5"/>
+<rect x="408.4" y="91.0" width="150.9" height="10" fill="#c0392b"/>
+<line x1="60.0" y1="96.0" x2="858.0" y2="96.0" stroke="#1b1b1b" stroke-width="1.5"/>
+<line x1="60.0" y1="82.0" x2="60.0" y2="110.0" stroke="#1b1b1b" stroke-width="1.5"/>
+<text x="60.0" y="74.0" font-family="Helvetica,Arial,sans-serif" font-size="15" text-anchor="middle" fill="#1b1b1b" font-weight="normal">0</text>
+<line x1="840.0" y1="82.0" x2="840.0" y2="110.0" stroke="#1b1b1b" stroke-width="1.5"/>
+<text x="840.0" y="74.0" font-family="Helvetica,Arial,sans-serif" font-size="15" text-anchor="middle" fill="#1b1b1b" font-weight="normal">1</text>
+<line x1="408.4" y1="76.0" x2="408.4" y2="116.0" stroke="#1b1b1b" stroke-width="2"/>
+<line x1="559.4" y1="76.0" x2="559.4" y2="116.0" stroke="#1b1b1b" stroke-width="2"/>
+<text x="231.6" y="74.0" font-family="Helvetica,Arial,sans-serif" font-size="15" text-anchor="middle" fill="#555555" font-weight="normal">closed</text>
+<text x="699.6" y="74.0" font-family="Helvetica,Arial,sans-serif" font-size="15" text-anchor="middle" fill="#555555" font-weight="normal">closed</text>
+<text x="483.9" y="74.0" font-family="Helvetica,Arial,sans-serif" font-size="15" text-anchor="middle" fill="#c0392b" font-weight="bold">open window</text>
+<text x="408.4" y="138.0" font-family="Helvetica,Arial,sans-serif" font-size="15" text-anchor="middle" fill="#1b1b1b" font-weight="normal">0.446717</text>
+<text x="408.4" y="156.0" font-family="Helvetica,Arial,sans-serif" font-size="12" text-anchor="middle" fill="#555555" font-weight="normal">moment ladder</text>
+<text x="559.4" y="138.0" font-family="Helvetica,Arial,sans-serif" font-size="15" text-anchor="middle" fill="#1b1b1b" font-weight="normal">0.640212</text>
+<text x="559.4" y="156.0" font-family="Helvetica,Arial,sans-serif" font-size="12" text-anchor="middle" fill="#555555" font-weight="normal">burst certificate</text>
+<line x1="409.4" y1="108.0" x2="409.4" y2="180.0" stroke="#9a9a9a" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="415.4" y="192.0" font-family="Helvetica,Arial,sans-serif" font-size="12" text-anchor="start" fill="#555555" font-weight="normal">0.447931  ladder cap</text>
+<line x1="450.0" y1="108.0" x2="450.0" y2="202.0" stroke="#9a9a9a" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="456.0" y="214.0" font-family="Helvetica,Arial,sans-serif" font-size="12" text-anchor="start" fill="#555555" font-weight="normal">1/2  per-ray wall</text>
+<line x1="532.1" y1="108.0" x2="532.1" y2="224.0" stroke="#9a9a9a" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="526.1" y="236.0" font-family="Helvetica,Arial,sans-serif" font-size="12" text-anchor="end" fill="#555555" font-weight="normal">0.605303  supergolden target</text>
+<text x="450.0" y="30.0" font-family="Helvetica,Arial,sans-serif" font-size="16" text-anchor="middle" fill="#1b1b1b" font-weight="bold">Lemma B at dimension one: the prime exponent beta = log_3 p / n</text>
+</svg>
