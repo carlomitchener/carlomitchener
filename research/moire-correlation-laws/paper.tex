@@ -247,6 +247,60 @@ T=\sum_{k,l\ \text{odd}}\frac{1}{k^2l^2\max(k,l)}=1.1122336970\ldots,
 so the second term contributes $0.06920155\ldots$ and the first carries the rest. Failure modes: no closed form is known for $T$, so the constant is \emph{reduced}, not evaluated; the reduction's error term is only measured, at five digits and still drifting; and the finite-$L$ approach is slow enough ($23\%$ short at $L=28$) that agreement at accessible $L$ is weak evidence for any particular closed form. Nothing in this paper depends on this conjecture.
 \end{conjecture}
 
+\subsection{The spectral measure of the stack}
+\label{sec:spectrum}
+
+The correlation laws above are diagonal statistics; this section records the whole spectrum. The basis is the product sine system $\{2\sin(\pi a u)\sin(\pi b v)\}_{a,b\ge1}$, orthonormal and complete on the square.
+
+\begin{theorem}[spectral measure of the stack]
+\label{thm:spectrum}
+Let $G_L$ be the stack of \cref{def:corr} and write $\sigma_k^S(a) = \sum_{n \in S,\ n \mid a} n^k$ for the divisor sums restricted to the stack's scales. For odd $a, b \ge 1$,
+\[
+\int_0^1\!\!\int_0^1 G_L(u,v)\, \sin(\pi a u)\sin(\pi b v)\, du\, dv
+= \frac{1}{\pi^2 ab} \Bigl[ 1 - \frac{\sigma_1^S(a)}{L} - \frac{\sigma_1^S(b)}{L} + \frac{\sigma_2^S\bigl(\gcd(a,b)\bigr)}{L} \Bigr],
+\]
+and the integral vanishes whenever $a$ or $b$ is even. For $\gcd(a,b) \le 2L-1$ the divisor sums are complete: $\sigma_2^S(\gcd(a,b)) = \sigma_2(\gcd(a,b))$, the full sum of squared divisors. In particular the doubly-oscillatory component of the stack carries the coefficient field $\sigma_2(\gcd(a,b))/(ab)$ on odd frequency pairs: a pure point spectrum whose weights are squared-divisor sums of the frequency gcd.
+\end{theorem}
+
+\begin{corollary}[the variance splits into its spectral blocks]
+\label{cor:parseval}
+Write $\widehat{s}_n = s_n - 1/n$ (the centred wave; $\langle s_n \rangle = 1/n$ for odd $n$ by \cref{cor:odd}) and $\alpha_n = 1 - 1/n$, so that
+\[
+\mathrm{C}_n = \tfrac14\bigl[ \alpha_n^2 - \alpha_n \widehat{s}_n(u) - \alpha_n \widehat{s}_n(v) + \widehat{s}_n(u)\widehat{s}_n(v) \bigr]
+\]
+decomposes $G_L - \langle G_L \rangle$ into three mutually orthogonal blocks: two axis blocks and one interior block. Parseval then evaluates the paper's exact variance (\cref{prop:variance}) blockwise, with $d = \gcd(m,n)$:
+\[
+\operatorname{Var}(G_L) = \underbrace{\frac{2}{16L^2} \sum_{m,n \in S} \frac{(m-1)(n-1)(d^2-1)}{m^2n^2}}_{\text{axis blocks}} \; + \; \underbrace{\frac{1}{16L^2} \sum_{m,n \in S} \frac{(d^2-1)^2}{m^2n^2}}_{\text{interior block}},
+\]
+which is exactly the two-term split of the carpet covariance law of \cref{thm:four}.
+\end{corollary}
+
+\begin{theorem}[zeta quotients]
+\label{thm:zetaquot}
+Let $\lambda(w) = (1 - 2^{-w})\,\zeta(w)$, the odd-index zeta. Then, with all sums over odd $a, b \ge 1$ and $g = \gcd(a,b)$:
+\[
+\sum_{a,b} \frac{\sigma_2(g)}{(ab)^w} = \lambda(w)^2\, \lambda(2w-2) \qquad (\operatorname{Re} w > \tfrac32),
+\]
+\[
+\sum_{a,b} \frac{\sigma_2(g)^2}{(ab)^w} = \frac{\lambda(w)^2\, \lambda(2w-2)^2\, \lambda(2w-4)}{\lambda(4w-4)} \qquad (\operatorname{Re} w > \tfrac52).
+\]
+The second identity is Ramanujan's $\sum \sigma_a(n)\sigma_b(n) n^{-s}$ evaluation at $a = b = 2$, restricted to odd integers, combined with the gcd decoupling of the first. Every polynomial spectral statistic of the stack is such a finite product and quotient of zeta values at integer-shifted arguments.
+\end{theorem}
+
+\begin{corollary}[weighted stacks render divisor functions]
+\label{cor:weighted}
+Weight layer $n$ by $n^{-s}$ instead of $1/L$: $G^{(s)} = \sum_{n \ge 1 \text{ odd}} n^{-s}\, \mathrm{C}_n$, convergent pointwise a.e.\ and in $L^2$ for $\operatorname{Re} s > 1$. Its interior spectral coefficients are $\sigma_{2-s}$-divisor sums of the frequency gcd: the interior coefficient at odd $(a,b)$ is $(\pi^2 ab)^{-1} \sum_{n \mid \gcd(a,b)} n^{2-s}$ (odd divisors), each an entire function of $s$, and
+\[
+\sum_{a,b \text{ odd}} \frac{\sigma_{2-s}(\gcd(a,b))}{(ab)^{w}} = \lambda(w)^2\, \lambda(2w + s - 2).
+\]
+A weighted stack is a Dirichlet series rendered as a picture: the weights of its spectrum are the coefficients of $\lambda(2w+s-2)$'s Euler product, frequency pair by frequency pair.
+\end{corollary}
+
+\begin{remark}[what the spectrum does and does not carry]
+\label{rem:spectrumcap}
+The stack's spectral measure is classical divisor-sum content and nothing beyond: every statistic in \cref{thm:zetaquot} lies in the Estermann--Ramanujan class of zeta quotients, the same class as $\sum \sigma_a(n)\sigma_b(n)n^{-s}$. Their meromorphic continuations behave accordingly -- the quotient in the second identity has $\lambda(4w-4)$ in its denominator, so its continuation past the natural half-plane inherits the zeros of $\zeta(4w-4)$, exactly as Ramanujan's identity always does; nothing here sharpens or evades that classical sensitivity, and no new $L$-function appears. This is the spectral companion of \cref{prop:brightness}: the brightness carries no M\"obius information, and the spectrum carries divisor information only.
+\end{remark}
+
 \subsection{Where the exactness stops}
 \label{sec:stops}
 
@@ -372,6 +426,39 @@ Along the line, $u=pw$ and $v=qw$, so the mean in question is $\int_0^1 s(npw)s(
 $\operatorname{Var}(G_L)=\frac1{L^2}\sum_{m,n\in S}\operatorname{Cov}(\mathrm{C}_m,\mathrm{C}_n)$ by bilinearity, and each summand is given by \cref{thm:four}; the diagonal terms $m=n$ are covered by the same formula, which at $d=m=n$ reduces to $\operatorname{Var}(\mathrm{C}_n)$, and the terms with $n=1$ vanish since $\mathrm{C}_1\equiv0$. Every summand is rational, so the total is. The three quoted values are computed exactly in \texttt{scripts/verify.py}.
 \end{proof}
 
+\begin{proof}[Proof of \cref{thm:spectrum}]
+Two one-dimensional integrals do all the work. First, $\int_0^1 \sin(\pi a u)\, du = (1 - \cos \pi a)/(\pi a)$, which is $2/(\pi a)$ for odd $a$ and $0$ for even $a$. Second, expanding the square wave in its odd-harmonic series $s(x) = \frac4\pi \sum_{j \text{ odd}} \sin(\pi j x)/j$ (valid in $L^2$) and using $\int_0^1 \sin(\pi j n u)\sin(\pi a u)\, du = \tfrac12 \mathbf 1[jn = a]$ for positive integers $jn, a$,
+\[
+\int_0^1 s(nu)\,\sin(\pi a u)\, du = \frac{2}{\pi}\,\frac{n}{a}\,\mathbf 1\bigl[\,n \mid a \text{ and } a/n \text{ odd}\,\bigr].
+\]
+For odd $a$ and odd $n$ the cofactor condition is automatic. Now $\mathrm{C}_n = \tfrac14\bigl(1 - s_n(u)\bigr)\bigl(1 - s_n(v)\bigr)$ splits the double integral into four products of the two displays: for odd $a, b$,
+\[
+\int_0^1\!\!\int_0^1 \mathrm{C}_n \sin(\pi a u)\sin(\pi b v)\, du\, dv = \frac{1}{\pi^2 ab}\Bigl[ 1 - n\,\mathbf 1[n \mid a] - n\,\mathbf 1[n \mid b] + n^2\,\mathbf 1[n \mid \gcd(a,b)] \Bigr].
+\]
+Averaging over $n \in S$ assembles the bracket of the theorem with $\sigma_1^S$ and $\sigma_2^S$. For even $a$ every term vanishes: the constant and the pure-$v$ terms because $\int_0^1 \sin(\pi a u)\, du = 0$, the others because $jn = a$ is impossible with $j, n$ odd. When $\gcd(a,b) \le 2L-1$ every divisor of the odd number $\gcd(a,b)$ is odd and at most $2L-1$, hence lies in $S$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:parseval}]
+$\langle s_n \rangle = 1/n$ for odd $n$ (\cref{cor:odd}), so $\widehat{s}_n = s_n - 1/n$ has mean zero, and $1 - s_n = \alpha_n - \widehat{s}_n$ gives the stated four-term form of $\mathrm{C}_n$. The three families -- constants, mean-zero functions of one variable, and products of two mean-zero one-variable functions -- are mutually orthogonal in $L^2$ of the square, because every cross-pairing contains a factor $\langle \widehat{s}_n \rangle = 0$. Within the axis blocks, $\langle \widehat{s}_m \widehat{s}_n \rangle = \langle s_m s_n \rangle - 1/(mn) = (d^2-1)/(mn)$ by \cref{thm:master}; within the interior block, $\langle \widehat{s}_m(u)\widehat{s}_m(v)\, \widehat{s}_n(u)\widehat{s}_n(v) \rangle = \langle \widehat{s}_m \widehat{s}_n \rangle^2 = (d^2-1)^2/(mn)^2$. Hence
+\[
+\operatorname{Var}(G_L) = \frac{2}{16L^2}\sum_{m,n \in S} \alpha_m \alpha_n \frac{d^2-1}{mn} + \frac{1}{16L^2}\sum_{m,n \in S} \frac{(d^2-1)^2}{m^2n^2},
+\]
+and $\alpha_m \alpha_n / (mn) = (m-1)(n-1)/(m^2n^2)$ gives the display. Adding the two summands recovers $(d^2-1)[2(m-1)(n-1) + d^2 - 1]/(16m^2n^2)$, the carpet law of \cref{thm:four}, so this is a second, spectral derivation of \cref{prop:variance}.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:zetaquot}]
+For the first identity, write $\sigma_2(g) = \sum_{d \mid g} d^2$ and exchange sums: with all variables odd,
+\[
+\sum_{a,b} \frac{\sigma_2(\gcd(a,b))}{(ab)^w} = \sum_{d} d^2 \sum_{d \mid a,\ d \mid b} (ab)^{-w} = \sum_d d^{2-2w} \Bigl( \sum_{a'} a'^{-w} \Bigr)^{\!2} = \lambda(2w-2)\, \lambda(w)^2,
+\]
+using that $a = da'$ ranges over odd multiples exactly when $d$ and $a'$ are odd. Convergence needs $\operatorname{Re} w > 1$ and $\operatorname{Re}(2w-2) > 1$, i.e.\ $\operatorname{Re} w > 3/2$.
+For the second, two classical steps. Step 1: $E(s) := \sum_{n \text{ odd}} \sigma_2(n)^2 n^{-s} = \lambda(s)\lambda(s-2)^2\lambda(s-4)/\lambda(2s-4)$. This is Ramanujan's identity $\sum_n \sigma_a(n)\sigma_b(n) n^{-s} = \zeta(s)\zeta(s-a)\zeta(s-b)\zeta(s-a-b)/\zeta(2s-a-b)$ at $a = b = 2$ \cite{ramanujan,titchmarsh}, restricted to odd $n$: both sides are Euler products over primes, the local factor at $p$ being $(1 - p^{4-2s})\bigl[(1-p^{-s})(1-p^{2-s})^2(1-p^{4-s})\bigr]^{-1}$, so deleting the $p = 2$ factor replaces each $\zeta$ by $\lambda$. Step 2: for any multiplicative $f$ on the odd integers, $\sum_{a,b \text{ odd}} f(\gcd(a,b))(ab)^{-w} = \lambda(w)^2 \sum_{g \text{ odd}} (f * \mu)(g)\, g^{-2w} = \lambda(w)^2\, D_f(2w)/\lambda(2w)$, where $D_f$ is the Dirichlet series of $f$ over odd integers, by M\"obius inversion of the divisor-sum exchange in the first display. Taking $f = \sigma_2^2$, $D_f = E$, gives $\lambda(w)^2 E(2w)/\lambda(2w) = \lambda(w)^2 \lambda(2w-2)^2 \lambda(2w-4)/\lambda(4w-4)$. Convergence needs $\operatorname{Re}(2w-4) > 1$, i.e.\ $\operatorname{Re} w > 5/2$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:weighted}]
+For $\operatorname{Re} s > 1$ the layer sum converges absolutely: $0 \le \mathrm{C}_n \le 1$. The interior coefficient of layer $n$ is $(\pi^2 ab)^{-1} n^2 \mathbf 1[n \mid \gcd(a,b)]$ exactly as in the proof of \cref{thm:spectrum}, so weighting by $n^{-s}$ and summing gives $(\pi^2 ab)^{-1} \sum_{n \mid \gcd(a,b)} n^{2-s}$ over odd $n$; for odd $a, b$ every divisor qualifies and the sum is finite, entire in $s$. The Dirichlet identity is the first display of the proof of \cref{thm:zetaquot} with $d^2$ replaced by $d^{2-s}$.
+\end{proof}
+
 \begin{proof}[Proof of \cref{prop:space}]
 A function on $\{\pm1\}^k$ has a unique multilinear expansion whose coefficients are the correlations with the corresponding monomials. For $H$: the value is $0$ only at $(\sigma_1,\sigma_2)=(-1,-1)$ and $1$ elsewhere, so the constant term is $3/4$, each single coefficient is $\frac14(1+1-1+0)=\frac14$, and the pair coefficient is $\frac14(1-1-1+0)=-\frac14$. For $F$: the value is $1$ at the four patterns with at most one $-1$ and $0$ at the other four, so the constant term is $1/2$; each single coefficient is $\frac18(1-1+1+1)=\frac14$; each pair coefficient is $\frac18(1-1-1+1)=0$; the triple coefficient is $\frac18(1-1-1-1)=-\frac14$. Both expansions are verified by exhaustive evaluation in \texttt{scripts/verify.py}.
 \end{proof}
@@ -385,7 +472,7 @@ Take $b$ even. Then $K(a/b)=0$ for every reduced $a/b$, while $\mu$ takes all th
 
 Two scripts, both plain \texttt{python3} with only the standard library, both run from the paper's own directory, no arguments and no network. Together they take under two seconds on a laptop.
 
-\texttt{python3 scripts/verify.py} runs in about $1.2$ seconds and prints one line per block, ending in \texttt{all green}; every check is an assertion naming the value it got and the value it wanted, and exit code $0$ is the only pass signal. It checks, in order: (i) \cref{thm:master} against an exact rational integration on the $\mathrm{lcm}$ grid for \emph{all} pairs $1\le m\le n\le40$, zero mismatches, and confirms that the unqualified law $g^2/(mn)$ fails on exactly $532$ of those pairs, with $(1,2)\mapsto0$ and $(2,6)\mapsto1/3$; (ii) the same integration for all odd pairs $1\le m\le n\le99$, zero mismatches, and $\langle s(mu)\rangle=1/m$ for every odd $m\le99$; (iii) the carpet, net and void covariances by genuine two-dimensional cell counting on the $\mathrm{lcm}\times\mathrm{lcm}$ grid at $(3,9),(5,15),(9,15),(7,21),(3,5),(5,7)$, matching \cref{thm:four} exactly, with $\operatorname{Cov}(\mathrm{C}_3,\mathrm{C}_9)=20/729$ and $\operatorname{Cov}(\mathrm{N}_3,\mathrm{N}_9)=44/729$, and the net's Pearson formula against the ratio built from those same counts; (iv) all four closed forms of \cref{thm:four} against covariances assembled from the brute-forced integrals, for every odd pair $3\le m\le n\le39$, together with \cref{thm:zeroset} on that domain, where exactly $139$ pairs are coprime, and the four correlations quoted at $(3,9)$ in their stated order; (v) \cref{fact:separation} in full over odd $3\le n\le199$, each of the three quoted scores at $n=169$ recomputed as a true maximum over all odd $m<169$; (vi) \cref{prop:origin} for every odd $n\le9$ and all coprime $p,q\le8$; (vii) the finite-stack ray values of \cref{rem:finiteN} at $L=28$ in exact rationals; (viii) \cref{prop:variance} at $L=28,101,501$, the whole double sum accumulated in exact rational arithmetic and all three values asserted; (ix) the classical sawtooth identity of \cref{sec:prior} for all pairs $1\le m\le n\le16$; (x) the truncation of $T$ at cutoff $1001$, giving $1.112233083$ against the quoted $1.1122336970$; (xi) \cref{prop:brightness} over all $4081$ reduced $a/b$ with even $b\le200$, the vanishing ray strength of each recomputed independently of the formula, as the exact triangle-wave stack average $\frac1b\sum_{n}T(na/b)$ over the $b$ odd scales $n<2b$, which is $0$ because $n\mapsto n+b$ pairs the terms with opposite signs; and (xii) \cref{prop:space} by exhaustive evaluation of both rules.
+\texttt{python3 scripts/verify.py} runs in about $1.2$ seconds and prints one line per block, ending in \texttt{all green}; every check is an assertion naming the value it got and the value it wanted, and exit code $0$ is the only pass signal. It checks, in order: (i) \cref{thm:master} against an exact rational integration on the $\mathrm{lcm}$ grid for \emph{all} pairs $1\le m\le n\le40$, zero mismatches, and confirms that the unqualified law $g^2/(mn)$ fails on exactly $532$ of those pairs, with $(1,2)\mapsto0$ and $(2,6)\mapsto1/3$; (ii) the same integration for all odd pairs $1\le m\le n\le99$, zero mismatches, and $\langle s(mu)\rangle=1/m$ for every odd $m\le99$; (iii) the carpet, net and void covariances by genuine two-dimensional cell counting on the $\mathrm{lcm}\times\mathrm{lcm}$ grid at $(3,9),(5,15),(9,15),(7,21),(3,5),(5,7)$, matching \cref{thm:four} exactly, with $\operatorname{Cov}(\mathrm{C}_3,\mathrm{C}_9)=20/729$ and $\operatorname{Cov}(\mathrm{N}_3,\mathrm{N}_9)=44/729$, and the net's Pearson formula against the ratio built from those same counts; (iv) all four closed forms of \cref{thm:four} against covariances assembled from the brute-forced integrals, for every odd pair $3\le m\le n\le39$, together with \cref{thm:zeroset} on that domain, where exactly $139$ pairs are coprime, and the four correlations quoted at $(3,9)$ in their stated order; (v) \cref{fact:separation} in full over odd $3\le n\le199$, each of the three quoted scores at $n=169$ recomputed as a true maximum over all odd $m<169$; (vi) \cref{prop:origin} for every odd $n\le9$ and all coprime $p,q\le8$; (vii) the finite-stack ray values of \cref{rem:finiteN} at $L=28$ in exact rationals; (viii) \cref{prop:variance} at $L=28,101,501$, the whole double sum accumulated in exact rational arithmetic and all three values asserted; (ix) the classical sawtooth identity of \cref{sec:prior} for all pairs $1\le m\le n\le16$; (x) the truncation of $T$ at cutoff $1001$, giving $1.112233083$ against the quoted $1.1122336970$; (xi) \cref{prop:brightness} over all $4081$ reduced $a/b$ with even $b\le200$, the vanishing ray strength of each recomputed independently of the formula, as the exact triangle-wave stack average $\frac1b\sum_{n}T(na/b)$ over the $b$ odd scales $n<2b$, which is $0$ because $n\mapsto n+b$ pairs the terms with opposite signs; and (xii) \cref{prop:space} by exhaustive evaluation of both rules. Four blocks cover the spectral section: (xiii) \cref{thm:spectrum} at $L = 5$ by cell-exact evaluation of the layer integrals $\int_0^1 \chi_n \sin(\pi a u)\, du$ against the divisor-sum formula for all pairs $a, b \le 15$ and at $(45,45)$, with every even-indexed coefficient vanishing to $10^{-12}$; (xiv) the blockwise variance split of \cref{cor:parseval} as an exact rational identity for $L = 2$ through $8$; (xv) both zeta-quotient identities of \cref{thm:zetaquot}, the truncated double gcd-sums at $w = 3$ and $w = 3.5$ against the $\lambda$-products with $\zeta$ evaluated by Euler--Maclaurin; and (xvi) the weighted-stack identity of \cref{cor:weighted} at $s = 3$, $w = 2$.
 
 \texttt{python3 scripts/figure.py} runs in well under a second and writes \texttt{figures/carpet.svg}, the correlation matrix $r(\mathrm{C}_m,\mathrm{C}_n)$ over odd $3\le m,n\le63$ shaded from white at $0$ to black at $1$, with the prime scales labelled; the white rows and columns are the primes. It is the only figure the repository's \texttt{README.md} embeds; \cref{fig:overlap} is drawn inline in the manuscript.
 
@@ -406,8 +493,14 @@ L. B\'aez-Duarte, \emph{A new necessary and sufficient condition for the Riemann
 \bibitem{mcintosh}
 B. C. Berndt, L. Xie and A. Zaharescu, \emph{Proofs of McIntosh's conjecture on Franel integrals and two generalizations}, Adv. Math. \textbf{423} (2023), 109041. \url{https://arxiv.org/abs/2211.06504}
 
+\bibitem{ramanujan}
+S.~Ramanujan, \emph{Some formulae in the analytic theory of numbers}, Messenger of Mathematics \textbf{45} (1916), 81--84. The identity $\sum_n \sigma_a(n)\sigma_b(n) n^{-s} = \zeta(s)\zeta(s-a)\zeta(s-b)\zeta(s-a-b)/\zeta(2s-a-b)$.
+
 \bibitem{steinshakarchi}
 E. M. Stein and R. Shakarchi, \emph{Fourier Analysis: An Introduction}, Princeton Lectures in Analysis 1, Princeton University Press, 2003. \url{https://press.princeton.edu/books/hardcover/9780691113845/fourier-analysis}
+
+\bibitem{titchmarsh}
+E.~C. Titchmarsh, \emph{The Theory of the Riemann Zeta-Function}, 2nd ed., Oxford University Press, 1986. Section 1.3 for the Ramanujan identity and its Euler-product proof.
 
 \bibitem{oeis}
 OEIS Foundation Inc., \emph{The On-Line Encyclopedia of Integer Sequences}, sequence A000040 (the prime numbers). \url{https://oeis.org/A000040}

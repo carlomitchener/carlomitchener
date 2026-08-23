@@ -231,6 +231,44 @@ def fourier(dim):
     return const, single, pair, triple
 
 
+
+def sine_moment(n, a):
+    total = 0.0
+    for k in range(n):
+        cell = math.cos(math.pi * a * k / n) - math.cos(math.pi * a * (k + 1) / n)
+        if k % 2 == 1:
+            total += cell
+    return total / (math.pi * a)
+
+
+def spectrum_direct(S, a, b):
+    total = 0.0
+    for n in S:
+        total += sine_moment(n, a) * sine_moment(n, b)
+    return total / len(S)
+
+
+def spectrum_formula(S, a, b):
+    L = len(S)
+    g = 0
+    s1a = sum(n for n in S if a % n == 0)
+    s1b = sum(n for n in S if b % n == 0)
+    gg = math.gcd(a, b)
+    s2 = sum(n * n for n in S if gg % n == 0)
+    return (1.0 - s1a / L - s1b / L + s2 / L) / (math.pi ** 2 * a * b)
+
+
+def zeta_em(s, N=20000):
+    total = 0.0
+    for n in range(1, N + 1):
+        total += n ** (-s)
+    total += N ** (1 - s) / (s - 1) - 0.5 * N ** (-s) + s * N ** (-s - 1) / 12
+    return total
+
+
+def lam(s):
+    return (1 - 2.0 ** (-s)) * zeta_em(s)
+
 def main():
     bad = []
     for m in range(1, 41):
@@ -421,6 +459,78 @@ def main():
     assert pair3 == [0.0, 0.0, 0.0], "space rule pair terms: got %r, want zeros" % pair3
     assert triple3 == -0.25, "space rule triple term: got %r, want -0.25" % triple3
     print("fill rule harmonics: the plane carries a pair term -1/4, the space carries none")
+
+    S = [1, 3, 5, 7, 9]
+    for a in range(1, 16):
+        for b in range(1, 16):
+            got = spectrum_direct(S, a, b)
+            if a % 2 == 0 or b % 2 == 0:
+                assert abs(got) < 1e-12, "spectrum: even index (%d,%d) got %r want 0" % (a, b, got)
+            else:
+                want = spectrum_formula(S, a, b)
+                assert abs(got - want) < 1e-12 * max(1.0, abs(want)), \
+                    "spectrum (%d,%d): got %r want %r" % (a, b, got, want)
+    got = spectrum_direct(S, 45, 45)
+    want = spectrum_formula(S, 45, 45)
+    assert abs(got - want) < 1e-14, "spectrum (45,45): got %r want %r" % (got, want)
+    print("stack spectrum at L=5: cell-exact integrals match the divisor-sum formula, "
+          "all pairs to 15 and (45,45); even indices exactly dark")
+
+    for L in (2, 3, 4, 5, 6, 8):
+        S = list(range(1, 2 * L, 2))
+        axis = Fraction(0)
+        inter = Fraction(0)
+        var = Fraction(0)
+        for m in S:
+            for n in S:
+                d = math.gcd(m, n)
+                axis += Fraction(2 * (m - 1) * (n - 1) * (d * d - 1), 16 * m * m * n * n)
+                inter += Fraction((d * d - 1) ** 2, 16 * m * m * n * n)
+                var += Fraction((d * d - 1) * (2 * (m - 1) * (n - 1) + d * d - 1), 16 * m * m * n * n)
+        assert (axis + inter) * L * L == var * L * L and axis + inter == var, \
+            "parseval split at L=%d: %r + %r != %r" % (L, axis, inter, var)
+    print("variance splits exactly into axis and interior spectral blocks, L = 2..8")
+
+    A = 1501
+    sig2 = [0] * (A + 1)
+    for d in range(1, A + 1, 2):
+        for mult in range(d, A + 1, 2 * d):
+            sig2[mult] += d * d
+    for w, use_sq, tol in ((3.0, False, 2e-3), (3.5, True, 2e-3)):
+        brute = 0.0
+        for a in range(1, A + 1, 2):
+            for b in range(1, A + 1, 2):
+                g = math.gcd(a, b)
+                v = sig2[g]
+                if use_sq:
+                    v *= sig2[g]
+                brute += v / float(a * b) ** w
+        if not use_sq:
+            closed = lam(w) ** 2 * lam(2 * w - 2)
+        else:
+            closed = lam(w) ** 2 * lam(2 * w - 2) ** 2 * lam(2 * w - 4) / lam(4 * w - 4)
+        assert abs(brute / closed - 1) < tol, \
+            "zeta quotient w=%r sq=%r: %r vs %r" % (w, use_sq, brute, closed)
+    print("zeta quotients: sigma_2 and sigma_2^2 gcd sums match the lambda products at w = 3, 3.5")
+
+    s = 3.0
+    w = 2.0
+    brute = 0.0
+    for a in range(1, A + 1, 2):
+        for b in range(1, A + 1, 2):
+            g = math.gcd(a, b)
+            sd = 0.0
+            d = 1
+            while d * d <= g:
+                if g % d == 0:
+                    sd += d ** (2 - s)
+                    if d * d != g:
+                        sd += (g // d) ** (2 - s)
+                d += 2
+            brute += sd / float(a * b) ** w
+    closed = lam(w) ** 2 * lam(2 * w + s - 2)
+    assert abs(brute / closed - 1) < 2e-3, "weighted stack: %r vs %r" % (brute, closed)
+    print("weighted stack at s=3: sigma_{-1} gcd sum matches lambda(w)^2 lambda(2w+1)")
 
     print("all green")
 

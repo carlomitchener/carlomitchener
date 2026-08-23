@@ -31,7 +31,7 @@
 \begin{document}
 
 \begin{abstract}
-Slice a Menger sponge along its main diagonal and count the cubes the cut meets; then do the same in every dimension. The count obeys a linear recurrence with constant coefficients of order at most $\lceil D/2 \rceil$ in dimension $D$, a fourfold sharpening of the order $2D+1$ that the standard carry automaton gives for free; exactness of that order is verified for $2 \le D \le 24$. At $D = 3$ the machine outputs $\bigl(\begin{smallmatrix} 6 & 6 \\ 1 & 3\end{smallmatrix}\bigr)$, reproducing the published hexagon-triangle substitution spectrum and the integers $1, 6, 42, 306, 2250, 16578, 122202$ by a route that never mentions a hexagon.
+Slice a Menger sponge along its main diagonal and count the cubes the cut meets; then do the same in every dimension. The count obeys a linear recurrence with constant coefficients of order at most $\lceil D/2 \rceil$ in dimension $D$, a fourfold sharpening of the order $2D+1$ that the standard carry automaton gives for free; exactness of that order is verified for $2 \le D \le 24$. A discrete Fourier extraction then turns a relaxed census into an exact product of cosines, and the formula decides half of the sign law this cut obeys: at every odd dimension $D$ with $D \not\equiv 1 \pmod 3$, the counting exponent sits strictly above the solid's dimension minus one, proved, with the parity carried by the single factor $(-1)^{D-1}(D-1)$ that every term of the formula ends in. Two exact identities frame what remains: the dominant root is pinned to within $2(D-1)/3$ of $f_D/3$ unconditionally, so the slice exponent converges to the generic Marstrand--Mattila value in every case, and the whole sign law is equivalent to the parity-free statement that the Perron carry vector puts more than a third of its mass on carries divisible by three. At $D = 3$ the machine outputs $\bigl(\begin{smallmatrix} 6 & 6 \\ 1 & 3\end{smallmatrix}\bigr)$, reproducing the published hexagon-triangle substitution spectrum and the integers $1, 6, 42, 306, 2250, 16578, 122202$ by a route that never mentions a hexagon.
 \end{abstract}
 
 \maketitle
@@ -62,7 +62,7 @@ This paper asks the same question one dimension at a time. In dimension $D$ the 
 \label{fig:order}
 \end{figure}
 
-The answer is \cref{thm:order}: at most $\lceil D/2 \rceil$ terms, in every dimension at once. \Cref{fig:order} is the whole contribution in one picture. Three moves do it. First, the digit polynomial factors,
+The answer is \cref{thm:order}: at most $\lceil D/2 \rceil$ terms, in every dimension at once. \Cref{fig:order} is that half of the contribution in one picture; the other half is \cref{thm:sign}, a proved sign law at odd dimension. Three moves prove the order. First, the digit polynomial factors,
 \[
 P_D(t) = (1+t^2)^{D-1}(1+Dt+t^2),
 \]
@@ -72,7 +72,7 @@ which is a two-line count of how a kept digit vector can sum to $s$. Second, the
 \noindent\textbf{What is not new.} That some constant-coefficient recurrence exists is free and standard. A finite carry state space makes $a_D(L)$ a $3$-regular sequence in the sense of Allouche and Shallit \cite{allouche}, and the untrimmed automaton on states $-D,\dots,D$ already hands over order $2D+1$ with no argument at all. A paper that led with ``these slices obey a linear recurrence'' would be selling a textbook fact. The object is not new either: higher-dimensional Menger continua are classical, and Hocking \cite{hocking2023} cuts exactly the $D = 4$ diagonal for its geometry and its pictures. The $D = 3$ integers are catalogued as OEIS \href{https://oeis.org/A299916}{A299916} \cite{oeis}, whose Menger reading is a user comment counting the star-shaped holes rather than the tiles.
 
 \medskip
-\noindent\textbf{What is new.} The exact factorisation of $P_D$, the sharp order $\lceil D/2 \rceil$ proved for every $D \ge 2$, the exactness of that order verified through $D = 24$, the closed form of the reduced matrix, and every census at $D \ge 4$. Roughly a factor of four, uniformly in the dimension.
+\noindent\textbf{What is new.} The exact factorisation of $P_D$, the sharp order $\lceil D/2 \rceil$ proved for every $D \ge 2$, the exactness of that order verified through $D = 24$, the closed form of the reduced matrix, and every census at $D \ge 4$. Roughly a factor of four, uniformly in the dimension. Then, from the same factorisation read on the unit circle: an exact trigonometric product formula for a relaxed census (\cref{thm:product}), and with it the odd half of the sign law -- $\rho_D > f_D/3$ for every odd $D \not\equiv 1 \pmod 3$, proved (\cref{thm:sign}), a statement that had resisted spectral routes because the relevant gap closes like $4/D$ (\cref{con:gap}).
 
 \medskip
 \noindent\textbf{The cold anchor.} At $D = 3$ the construction, which never mentions a hexagon or a triangle, returns the $2 \times 2$ integer matrix $\bigl(\begin{smallmatrix} 6 & 6 \\ 1 & 3 \end{smallmatrix}\bigr)$, characteristic polynomial $\lambda^2 - 9\lambda + 12$, dominant root $(9+\sqrt{33})/2$ and census $1, 6, 42, 306, 2250, 16578, 122202$. Abel's tile substitution $\bigl(\begin{smallmatrix} 6 & 1 \\ 6 & 3 \end{smallmatrix}\bigr)$ \cite{abelstars} has the same trace $9$ and determinant $12$, A299916 has signature $(9,-12)$ and the same integers, and $\log_3\bigl((9+\sqrt{33})/2\bigr) = 1.818410$ is Abel's published dimension. Two different routes to one spectrum is the reason to believe the machine in the dimensions where nobody has looked.
@@ -182,10 +182,10 @@ $\limsup_L a_D(L)^{1/L}$ is the modulus of a root of $\chi_D$, hence an algebrai
 For every $D$ with $2 \le D \le 24$ the Hankel determinant $H_D = \det\bigl[ a_D(i+j+1) \bigr]_{0 \le i,j < n_D}$, computed in exact rational arithmetic, is nonzero; hence the minimal order of $a_D$ is exactly $\lceil D/2 \rceil$ for those $D$. The first values are $H_2 = 2$, $H_3 = 72$, $H_4 = -6336$, $H_5 = -1029600000$, $H_6 = -62272025640000$, and $H_{24}$ is a nonzero integer of $899$ digits. Checked by \texttt{scripts/verify.py}.
 \end{fact}
 
-\begin{fact}
-\label{fact:reach}
-For every $D$ with $2 \le D \le 24$ the set of carry states reachable from $c = 0$ is exactly the core $\{c : \lvert c \rvert \le \lfloor (D-1)/2 \rfloor\}$, of size $D-1$ at even $D$ and $D$ at odd $D$. Checked by \texttt{scripts/verify.py}.
-\end{fact}
+\begin{proposition}
+\label{prop:reach}
+For every $D \ge 2$ the set of carry states reachable from $c = 0$ is exactly the core $C_D$, of size $D-1$ at even $D$ and $D$ at odd $D$. Moreover $M_C$ is irreducible and aperiodic: every state reaches $0$ in one step, $0$ loops to itself, and $0$ reaches every state.
+\end{proposition}
 
 \begin{fact}
 \label{fact:trace}
@@ -205,17 +205,113 @@ The even values are $2, 11, 47, 191, 767, 3071, 12287, \dots$ and the odd values
 At $D = 3$, $M_{\mathrm{even}}^{(3)} = \bigl(\begin{smallmatrix} 6 & 6 \\ 1 & 3 \end{smallmatrix}\bigr)$ with $\chi_3(\lambda) = \lambda^2 - 9\lambda + 12$, dominant root $(9+\sqrt{33})/2$ and census $1, 6, 42, 306, 2250, 16578, 122202$, matching OEIS \href{https://oeis.org/A299916}{A299916} term for term and its signature $(9,-12)$, and $\log_3\bigl((9+\sqrt{33})/2\bigr) = 1.818410$ to six places. At $D = 2$ the census is $2^L$, of order $1$. At $D = 4$, $\chi_4(\lambda) = \lambda^2 - 11\lambda - 66$ with dominant root $(11+\sqrt{385})/2$ and census $1, 6, 132, 1848, 29040, 441408, 6772128$. At $D = 5$ and $D = 6$ the censuses begin $1, 30, 1000, 35700, 1321600$ and $1, 20, 4030, 242300, 24642700$. Checked by \texttt{scripts/verify.py}, which also confirms that three independent generators, brute-force digit enumeration, the substitution product $\prod_{j<L} P_D(t^{3^j})$, and the untrimmed carry automaton on states $-D,\dots,D$, agree term for term for $2 \le D \le 7$ and $0 \le L \le 4$.
 \end{fact}
 
+\begin{definition}
+\label{def:sheaf}
+The \emph{diagonal sheaf census} is
+\[
+b_D(L) = \#\Bigl\{ x \in S_L^{(D)} : \textstyle\sum_i x_i \equiv D(3^L-1)/2 \ (\mathrm{mod}\ 3^L) \Bigr\}, \qquad b_D(0) = 1 :
+\]
+the total census of the central hyperplane together with its translates by multiples of $3^L$.
+\end{definition}
+
+\begin{lemma}
+\label{lem:circle}
+For every real $\psi$,
+\[
+P_D\bigl(e^{i\psi}\bigr) = e^{iD\psi}\, \Phi_D(\psi), \qquad \Phi_D(\psi) = (2\cos\psi)^{D-1}\,\bigl(D + 2\cos\psi\bigr),
+\]
+and $\Phi_D$ is real-valued. For odd $D$, $\Phi_D(\psi) \ge 0$ for every $\psi$; for even $D > 2$, $\Phi_D(\psi) < 0$ exactly when $\cos\psi < 0$.
+\end{lemma}
+
+\begin{theorem}
+\label{thm:product}
+For every $D \ge 2$ and $L \ge 0$,
+\[
+b_D(L) = \sum_{c \in C_D} \bigl( M_C^L \bigr)_{c0}
+= \frac{1}{3^L} \sum_{m=0}^{3^L-1} \; \prod_{j=0}^{L-1} \Phi_D\!\Bigl( \frac{2\pi m 3^j}{3^L} \Bigr).
+\]
+In particular the right-hand side, a sum of $3^L$ products of cosines, is a positive integer.
+\end{theorem}
+
+\begin{corollary}
+\label{cor:step}
+For $k \ge 1$ let $U_k = \{ 1 \le u < 3^k : 3 \nmid u \}$ and
+\[
+W_k = \sum_{u \in U_k} \prod_{j=0}^{k-1} \Phi_D\!\Bigl( \frac{2\pi u 3^j}{3^k} \Bigr).
+\]
+Then $3^L b_D(L) = \sum_{k=0}^{L} f_D^{\,L-k}\, W_k$ with $W_0 = 1$, equivalently
+\[
+3\, b_D(k) - f_D\, b_D(k-1) = 3^{1-k}\, W_k \qquad (k \ge 1).
+\]
+Moreover the innermost factor of every product in $W_k$ is $\Phi_D(2\pi u/3)$ with $3 \nmid u$, and
+\[
+\Phi_D(2\pi/3) = \Phi_D(4\pi/3) = (-1)^{D-1}(D-1),
+\]
+so $W_k = (-1)^{D-1}(D-1)\, V_k$ with $V_k = \sum_{u \in U_k} \prod_{j=0}^{k-2} \Phi_D\bigl(2\pi u 3^j/3^k\bigr)$.
+\end{corollary}
+
+\begin{theorem}
+\label{thm:sign}
+Let $\rho_D$ be the spectral radius of $M_{\mathrm{even}}^{(D)}$; it is a root of $\chi_D$, and it is the dominant one. For every odd $D \ge 3$,
+\[
+\rho_D \;\ge\; \frac{f_D}{3},
+\]
+and if moreover $D \not\equiv 1 \pmod 3$, the inequality is strict:
+\[
+\rho_D \;>\; \frac{f_D}{3} \qquad (D \text{ odd},\ D \equiv 0, 2 \pmod 3).
+\]
+This is the odd half of \cref{con:sign} for two of the three residue classes.
+\end{theorem}
+
+\begin{fact}
+\label{fact:signodd}
+For the remaining residue class $D \equiv 1 \pmod 3$, the integer $\det\bigl(f_D I - 3 M_{\mathrm{even}}^{(D)}\bigr)$ is nonzero for every $D \le 80$, checked in exact integer arithmetic by \texttt{scripts/verify.py}; with \cref{thm:sign} this gives $\rho_D > f_D/3$ for every odd $D \le 80$ with no exception. Two structural notes, both checked on the same sweep: for $D \equiv 1 \pmod 3$ the $3$-adic valuation of the determinant is at least $n_D$, so $\chi_D(f_D/3)$ is a nonzero \emph{integer} there; and its valuation is otherwise erratic ($2, 7, 6, 10, 17, 11, 11, 34, 16, 17, 33, 20, 20$ over $D \equiv 1 \pmod 3$, $4 \le D \le 40$, both parities), so no uniform $3$-adic argument is in sight for this class.
+\end{fact}
+
+\begin{theorem}[the pinning]
+\label{thm:pin}
+For every $D \ge 2$,
+\[
+\Bigl\lvert \rho_D - \frac{f_D}{3} \Bigr\rvert \;\le\; \frac{2(D-1)}{3},
+\]
+refined by parity to $f_D/3 - 2(D-1)/3 \le \rho_D \le f_D/3 + (D-1)/3$ at even $D$ and $f_D/3 - (D-1)/3 \le \rho_D \le f_D/3 + 2(D-1)/3$ at odd $D$. In particular $\rho_D = (f_D/3)\bigl(1 + O(D^2 2^{-D})\bigr)$, so
+\[
+\log_3 \rho_D - \bigl( \log_3 f_D - 1 \bigr) \longrightarrow 0 :
+\]
+whatever the sign law does, the counting exponent of the recurrence converges to the generic Marstrand--Mattila value $\log_3 f_D - 1$, and the central diagonal plane becomes asymptotically generic. Only the \emph{side} of the approach remains in question, and only at even $D$.
+\end{theorem}
+
+\begin{proposition}[the mass identity]
+\label{prop:mass}
+Let $v$ be the Perron vector of $M_C$, unique up to scale by \cref{prop:reach}, and let $p_D = \sum_{c \in C_D,\, 3 \mid c} v_c \,\big/ \sum_{c \in C_D} v_c$ be its mass on carries divisible by $3$. Then, exactly,
+\[
+3\rho_D \;=\; f_D + (-1)^{D-1}(D-1)\,\bigl(3p_D - 1\bigr),
+\qquad\text{i.e.}\qquad
+\operatorname{sgn}\Bigl(\rho_D - \frac{f_D}{3}\Bigr) = (-1)^{D+1} \operatorname{sgn}\Bigl(p_D - \frac13\Bigr).
+\]
+Consequently the full sign law, both parities at once, is equivalent to the parity-free statement that $p_D > \tfrac13$ for every $D \ge 2$: the Perron carry vector always puts more than a third of its mass on the carries divisible by three.
+\end{proposition}
+
 \begin{conjecture}
 \label{con:sign}
-For every $D \ge 2$ the counting exponent sits on alternating sides of the solid's own dimension minus one, $\log_3 f_D - 1 = \log_3(f_D/3)$:
+For every even $D \ge 2$, and for every odd $D \equiv 1 \pmod 3$ beyond the verified range,
 \[
-\operatorname{sgn}\bigl( \rho_D - f_D/3 \bigr) = (-1)^{D+1}, \qquad f_D = 2^{D-1}(D+2),
+\operatorname{sgn}\bigl( \rho_D - f_D/3 \bigr) = (-1)^{D+1}, \qquad f_D = 2^{D-1}(D+2).
 \]
-where $\rho_D$ is the dominant root of $\chi_D$.
-The comparison value $\log_3 f_D - 1$ is the generic one: for a set of Hausdorff dimension $s$ in $\mathbb{R}^D$, almost every hyperplane meets it in dimension at most $s-1$, with equality on a positive-measure set of translates once $s > 1$ \cite{marstrand,mattila}, and $\log_3 f_D$ is the dimension of the solid. The central diagonal hyperplane is one specific, highly symmetric slice, to which no such theorem applies; the conjecture is that its counting exponent misses the generic value in every dimension, alternately above and below.
-Evidence: the sign alternates without exception for $2 \le D \le 20$ computed from the roots of $\chi_D$, and the exact rational sign of $\chi_D(f_D/3)$ alternates as $(-1)^D$ for $2 \le D \le 30$, both in \texttt{scripts/verify.py}; the two agree wherever they overlap, and the second uses no floating point at all.
-Failure mode: the exact determinant sign is the sign of $\prod_i (f_D/3 - \lambda_i)$ over the whole spectrum, so it reports on $\rho_D$ alone only while every other eigenvalue satisfies $\lvert \lambda_i \rvert < f_D/3$. That side condition is itself unproved, and \cref{con:gap} says any proof of it must be delicate. A single dimension where a subdominant eigenvalue crosses $f_D/3$ would break the bridge between the two pieces of evidence without disturbing either computation.
+The comparison value $\log_3 f_D - 1$ is the generic one: for a set of Hausdorff dimension $s$ in $\mathbb{R}^D$, almost every hyperplane meets it in dimension at most $s-1$, with equality on a positive-measure set of translates once $s > 1$ \cite{marstrand,mattila}, and $\log_3 f_D$ is the dimension of the solid. The central diagonal hyperplane is one specific, highly symmetric slice, to which no such theorem applies; together with \cref{thm:sign} the conjecture says its counting exponent misses the generic value in every dimension, alternately above and below.
+Evidence: the sign alternates without exception for $2 \le D \le 20$ computed from the roots of $\chi_D$, and the exact rational sign of $\chi_D(f_D/3)$ alternates as $(-1)^D$ for $2 \le D \le 30$, both in \texttt{scripts/verify.py}.
+The sharpest reduced target on the even side is a two-step census contraction: for even $D$, exact computation finds $9\, b_D(2j+2) \le f_D^2\, b_D(2j)$ and $3\, b_D(2j+1) < f_D\, b_D(2j)$ with no violation through index $400$ for every even $D \le 50$, with the ratio $-W_{k+1}/(f_D W_k)$ at odd $k$ peaking near $(D-2)/(D+2)$, a uniform margin. By induction these two inequalities give $b_D(L) \le (f_D/3)^L$, which with \cref{prop:reach} (irreducibility) and the nonvanishing of \cref{fact:signodd} would give the even half; neither inequality is proved. Equivalently, by \cref{prop:mass}, everything left of the law -- the even half and the residue class $D \equiv 1 \pmod 3$ -- is the single parity-free inequality $p_D > 1/3$.
+Failure mode, and why the even half is genuinely harder: for odd $D$ the integrand $\Phi_D$ of \cref{thm:product} is nonnegative, and \cref{thm:sign} follows; for even $D$ it is not, and the cancellation is real. Already $V_2 = 2\bigl[\Phi_D(2\pi/9) + \Phi_D(4\pi/9) + \Phi_D(8\pi/9)\bigr]$ is negative for every even $D \ge 6$, because $\Phi_D(8\pi/9) = -(2\cos(\pi/9))^{D-1}(D - 2\cos(\pi/9))$ outweighs the positive terms, $2\cos(\pi/9) > 2\cos(2\pi/9)$. And no finite sign table of the $W_k$ can decide the even half: since $b_D(L) \sim C \rho_D^L$ with $C > 0$, \cref{cor:step} forces $W_L \sim C\, 3^{L-1} \rho_D^{L-1} (3\rho_D - f_D)$, so the eventual sign of $W_k$ \emph{is} the assertion $\rho_D < f_D/3$ itself; the signs observed at small $k$ (they alternate transiently at base $3$) are no evidence either way.
 \end{conjecture}
+
+\begin{remark}
+\label{rem:rate}
+The size of the excess appears to be governed by the same tower of angles. Numerically,
+\[
+\rho_D - \frac{f_D}{3} \;=\; (-1)^{D+1}\, \frac{2(D-1)}{3} \prod_{k \ge 2} \Bigl( \cos \frac{2\pi}{3^k} \Bigr)^{\!D-1} \frac{D + 2\cos(2\pi/3^k)}{D+2} \;\cdot\; \bigl(1 + o(1)\bigr),
+\]
+with the ratio of the two sides within $10^{-8}$ of $1$ at $D = 61$, where the left side is computed by exact rational bisection of $\chi_{61}$ against the bracket $\chi_{61}(f_{61}/3) < 0 < \chi_{61}(f_{61}/3 + 1)$ in \texttt{scripts/verify.py}. The per-dimension decay constant is then $\prod_{k\ge2} \cos(2\pi/3^k) = 0.7428747134\ldots$, and the linear factor $D-1$ is the parity factor of \cref{cor:step}. This asymptotic is a conjecture supported by computation; only the inequalities of \cref{thm:sign} carry theorem dress.
+\end{remark}
 
 \begin{conjecture}
 \label{con:gap}
@@ -225,7 +321,7 @@ There is no uniform spectral gap: writing $\lambda_2$ for a second-largest eigen
 \]
 Evidence: the computed ratios fall from $3.551785$ at $D = 4$ to $1.222222$ at $D = 20$, monotonically from $D = 6$ on; over $6 \le D \le 20$ they agree with $(D+2)/(D-2)$ to within $0.05$, and to six decimal places by $D = 18$. The two smallest dimensions in that range sit outside the agreement, $3.551785$ against $3$ at $D = 4$ and $2.253050$ against $2.333333$ at $D = 5$, which is where the $O(D^{-3})$ correction is largest. \texttt{scripts/verify.py} asserts the monotonicity, and the agreement over $6 \le D \le 20$.
 Failure mode: the ratios are floating-point roots of exactly computed integer polynomials, so a genuine near-degeneracy at some larger $D$ could be misread; and the fitted shape $(D+2)/(D-2)$ is an observed match, not a derivation.
-This is the lighthouse of the paper. Any argument that pins the subdominant spectrum below $f_D/3$, which is what \cref{con:sign} needs, has to work inside a margin that shrinks like $4/D$, and so cannot be a fixed-size perturbation estimate. Four natural routes were tried and refuted by their own computations: $M_{\mathrm{even}}^{(D)}$ is not banded plus low rank, not totally nonnegative, not symmetrizable by a positive diagonal, and $f_D/3 \cdot I - M_{\mathrm{even}}^{(D)}$ is not an M-matrix.
+This is the lighthouse that explains why \cref{thm:sign} had to go around the spectrum. The classical route to the sign law reads it off $\operatorname{sgn} \chi_D(f_D/3) = \prod_i \operatorname{sgn}(f_D/3 - \lambda_i)$, which reports on $\rho_D$ alone only if every subdominant eigenvalue sits below $f_D/3$; any argument pinning that has to work inside a margin that shrinks like $4/D$, and so cannot be a fixed-size perturbation estimate. Four natural routes were tried and refuted by their own computations: $M_{\mathrm{even}}^{(D)}$ is not banded plus low rank, not totally nonnegative, not symmetrizable by a positive diagonal, and $f_D/3 \cdot I - M_{\mathrm{even}}^{(D)}$ is not an M-matrix. The census route of \cref{thm:sign} never mentions $\lambda_2$, which is how the odd half fell; the even half of \cref{con:sign} still awaits either this separation or a second idea of the same kind.
 \end{conjecture}
 
 \section{Proofs}
@@ -280,10 +376,9 @@ Suppose $\lvert c \rvert \le r_D = \lfloor (D-1)/2 \rfloor \le (D-1)/2$. Then
 Since $c'$ is an integer, $\lvert c' \rvert < D/2$ forces $\lvert c' \rvert \le \lfloor (D-1)/2 \rfloor = r_D$, whether $D$ is even or odd: at even $D$ an integer below $D/2$ is at most $D/2 - 1 = r_D$, and at odd $D$ it is at most $(D-1)/2 = r_D$. So the core is forward invariant. The start state $c = 0$ lies in the core because $r_D \ge 0$ for $D \ge 2$, and induction on the number of steps finishes the claim.
 \end{proof}
 
-\begin{remark}
-\label{rem:lower}
-The reverse containment, that every core state is actually reached from $c = 0$, is not needed for \cref{thm:order} and is not proved here. It is \cref{fact:reach}: verified for $2 \le D \le 24$ by breadth-first search, and open beyond. Only the upper bound of \cref{lem:carry} carries theorem dress.
-\end{remark}
+\begin{proof}[Proof of \cref{prop:reach}]
+Containment in the core is \cref{lem:carry}. For the reverse, note first that every coefficient $B_D(s)$ with $0 \le s \le 2D$ is positive, by the closed forms of \cref{lem:poly}: $B_D(2k) = \binom{D}{k} > 0$ for $0 \le k \le D$ and $B_D(2k+1) = D\binom{D-1}{k} > 0$ for $0 \le k \le D-1$. Hence from carry $c$ the one-step reachable set is exactly the set of integers in $[(c-D)/3,\, (c+D)/3]$, an interval that always contains $0$ since $\lvert c \rvert \le r_D < D$. If the states reachable in at most $t$ steps include the interval $[-m, m]$, then one more step reaches every integer in $[-(m+D)/3,\, (m+D)/3]$, because the one-step intervals of consecutive sources overlap. So the reachable radius climbs as $m \mapsto \lfloor (m+D)/3 \rfloor$, starting from $\lfloor D/3 \rfloor$; while $m \le r_D - 1 \le (D-3)/2$ we have $m + D \ge 3m + 3$, so each step gains at least $1$, and by \cref{lem:carry} the climb stops exactly at $r_D$. Irreducibility follows since every state reaches $0$ in one step and $0$ reaches every state; aperiodicity from the loop $M^{(D)}_{00} = B_D(D) > 0$.
+\end{proof}
 
 \begin{proof}[Proof of \cref{lem:reflect}]
 The map $v \mapsto (2,\dots,2)-v$ is an involution of $\{0,1,2\}^D$ that preserves the number of coordinates equal to $1$, so it permutes $F_D$, and it sends digit sum $s$ to $2D-s$. Hence $B_D(s) = B_D(2D-s)$ for all $s$. Now
@@ -327,11 +422,67 @@ By \cref{thm:order}, $a_D(L) = \sum_i p_i(L) \lambda_i^L$ where the $\lambda_i$ 
 Exactness of the order is a Hankel condition, not an eigenvalue condition. Given the upper bound $n_D$ of \cref{thm:order}, nonvanishing of $H_D = \det\bigl[a_D(i+j+1)\bigr]_{0 \le i,j < n_D}$ forces the minimal order to be exactly $n_D$; that is \cref{fact:exact}. Indeed, if $a_D$ obeyed some recurrence $a_D(L+m) = \sum_{k=1}^{m} c_k a_D(L+m-k)$ of order $m < n_D$ for every $L \ge 0$, then for every $i \ge m$ row $i$ of that matrix would be the combination $\sum_{k=1}^{m} c_k \cdot (\text{row } i-k)$ of earlier rows, all $n_D$ rows would lie in the span of the first $m$, and $H_D$ would vanish. Only this direction holds: a vanishing $H_D$ proves nothing, as the sequence $5, 2, 4, 8, 16, \dots$ shows, whose minimal order is $2$ because $a(L+2) = 2a(L+1)$ for every $L \ge 0$ while no order-one recurrence fits, yet whose shifted Hankel determinant $\det\bigl(\begin{smallmatrix} 2 & 4 \\ 4 & 8 \end{smallmatrix}\bigr)$ is zero. Distinct eigenvalues would not suffice either: writing $a_D(L) = \sum_i \lambda_i^L\, (e_0^{\top} \Pi_i\, e_0)$ with spectral projections $\Pi_i$, exactness also needs every weight $e_0^{\top}\Pi_i e_0$ to be nonzero. The two-line counterexample is $M = \mathrm{diag}(1,2)$ with start vector $e_0 = (1,0)$: the eigenvalues are distinct and the matrix is non-derogatory, yet the sequence $e_0^{\top}M^L e_0 = 1$ has order $1$, not $2$. The Hankel determinant sees this where the eigenvalues do not, and it is what \texttt{scripts/verify.py} computes, in exact rational arithmetic.
 \end{remark}
 
+\begin{proof}[Proof of \cref{lem:circle}]
+Write $1 + e^{2i\psi} = 2\cos\psi \, e^{i\psi}$ and $1 + De^{i\psi} + e^{2i\psi} = e^{i\psi}\bigl(D + 2\cos\psi\bigr)$. Substituting into the factorisation of \cref{lem:poly},
+\[
+P_D\bigl(e^{i\psi}\bigr) = \bigl(2\cos\psi\bigr)^{D-1} e^{i(D-1)\psi} \cdot e^{i\psi}\bigl(D + 2\cos\psi\bigr) = e^{iD\psi}\,\Phi_D(\psi).
+\]
+For odd $D$ the power $D-1$ is even, so $(2\cos\psi)^{D-1} \ge 0$, and $D + 2\cos\psi \ge D - 2 > 0$ for $D \ge 3$. For even $D > 2$ the power is odd and $D + 2\cos\psi > 0$, so the sign of $\Phi_D$ is the sign of $\cos\psi$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:product}]
+\emph{Step 1: the sheaf census is the free-end census.} Write $N_p = D(3^p-1)/2$, an integer for every $D$ because $3^p - 1$ is even. The coordinate sums $T \equiv N_L \pmod{3^L}$ are exactly $T = N_L - 3^L c'$ over $c' \in \mathbb{Z}$, where terms with $T$ outside $[0, D(3^L-1)]$ contribute nothing, so by Step 1 of the proof of \cref{thm:order},
+\[
+b_D(L) = \sum_{c' \in \mathbb{Z}} \bigl[t^{\,N_L - 3^L c'}\bigr] \prod_{j=0}^{L-1} P_D\bigl(t^{3^j}\bigr).
+\]
+Fix $c'$. A monomial choice from the product is a tuple $(s_0,\dots,s_{L-1})$ of digit sums with $\sum_j s_j 3^j = N_L - 3^L c'$, weighted by $\prod_j B_D(s_j)$. For $0 \le p \le L$ set $T_p = \sum_{j<p} s_j 3^j$ and $c_p = (N_p - T_p)/3^p \in \mathbb{Q}$; then $c_0 = 0$, the identity $3c_{p+1} = c_p + D - s_p$ holds over $\mathbb{Q}$, and $c_p \in \mathbb{Z}$ exactly when $T_p \equiv N_p \pmod{3^p}$. The full congruence $T \equiv N_L \pmod{3^L}$ implies every partial one: $T_p \equiv T \equiv N_L \equiv N_p \pmod{3^p}$, since $N_L - N_p = D(3^L - 3^p)/2 = 3^p N_{L-p}$. So each tuple in the class determines an integer carry path from $c_0 = 0$ with final carry $c_L = c'$, stepping with the weights of \cref{def:transfer}. Conversely, an integer carry path $0 = c_0 \to \dots \to c_L$ has $s_p = c_p + D - 3c_{p+1}$ and the same telescoping gives $T = N_L - 3^L c_L \equiv N_L \pmod{3^L}$. Hence the weighted count of tuples with final carry $c'$ is $\bigl((M^{(D)})^L\bigr)_{c'0}$, paths out of the start state $0$ (in \cref{def:transfer} the first index is the destination). By \cref{lem:carry} no path from $0$ leaves the core and $M_C$ is a submatrix of $M^{(D)}$ with equal entries, so $b_D(L) = \sum_{c' \in C_D} (M_C^L)_{c'0} = \mathbf{1}^{\top} M_C^L\, e_0$.
+
+\emph{Step 2: extraction.} With $\zeta = e^{2\pi i/3^L}$ and $N_L = D(3^L-1)/2$,
+\[
+b_D(L) = \sum_{T \equiv N_L (3^L)} \bigl[t^T\bigr] \prod_{j<L} P_D\bigl(t^{3^j}\bigr)
+= \frac{1}{3^L}\sum_{m=0}^{3^L-1} \zeta^{-N_L m} \prod_{j=0}^{L-1} P_D\bigl(\zeta^{m 3^j}\bigr).
+\]
+
+\emph{Step 3: the phases cancel.} By \cref{lem:circle}, $P_D(\zeta^{m3^j}) = e^{iD \cdot 2\pi m 3^j/3^L}\, \Phi_D\bigl(2\pi m 3^j/3^L\bigr)$, and
+\[
+\prod_{j=0}^{L-1} e^{iD\, 2\pi m 3^j/3^L} = \exp\Bigl( 2\pi i\, m D \tfrac{3^L-1}{2 \cdot 3^L} \Bigr) = \zeta^{\,m N_L},
+\]
+which cancels the extraction phase $\zeta^{-N_L m}$ exactly, leaving the stated real sum. It is a positive integer because it equals the census $b_D(L)$, and $b_D(L) \ge a_D(L) \ge B_D(D)^L \ge 1$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:step}]
+Sort the summation index $m$ of \cref{thm:product} by its $3$-adic valuation: $m = 0$ contributes $\Phi_D(0)^L = f_D^L$, and $m = 3^{L-k} u$ with $u \in U_k$, $1 \le k \le L$, has angles $2\pi u 3^j/3^k$ reduced mod $2\pi$: for $j \ge k$ the angle is an integer multiple of $2\pi$ and the factor is $\Phi_D(0) = f_D$; the remaining factors are $\prod_{j<k} \Phi_D(2\pi u 3^j/3^k)$. Hence $3^L b_D(L) = \sum_{k=0}^{L} f_D^{L-k} W_k$, and subtracting $f_D$ times the same identity at $L-1$ leaves $3^L b_D(L) - f_D\, 3^{L-1} b_D(L-1) = W_L$. For the innermost factor, $u 3^{k-1}/3^k = u/3$ with $3 \nmid u$, and $2\cos(2\pi/3) = 2\cos(4\pi/3) = -1$ gives $\Phi_D = (-1)^{D-1}(D-1)$ there.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:sign}]
+\emph{The spectral radius is the dominant root.} $M_{\mathrm{even}}^{(D)}$ is a square matrix, so its spectral radius is the maximal modulus of the roots of $\chi_D$; that it is itself a root is Perron--Frobenius for nonnegative matrices (no irreducibility required): a nonnegative square matrix has its spectral radius as an eigenvalue, with an entrywise nonnegative eigenvector \cite[Theorem 8.3.1]{hornjohnson}. Nonnegativity of $M_{\mathrm{even}}^{(D)}$ holds because its entries are $B_D(D-3i)$ and $B_D(D+j-3i) + B_D(D-j-3i)$.
+
+\emph{Step 1: the census grows at least like $(f_D/3)^L$.} For odd $D$, $\Phi_D \ge 0$ everywhere by \cref{lem:circle}, so every $W_k \ge 0$, and \cref{cor:step} gives $3^L b_D(L) = \sum_k f_D^{L-k} W_k \ge f_D^L$, i.e. $b_D(L) \ge (f_D/3)^L$ for every $L$.
+
+\emph{Step 2: the growth is bounded by the spectral radius of the core.} $b_D(L)$ is the $0$-column sum of $M_C^L$, so $b_D(L) \le \lVert M_C^L \rVert_1$, the maximal column sum. By Gelfand's formula $\lVert M_C^L \rVert_1^{1/L} \to \rho(M_C)$, so $\rho(M_C) \ge \limsup_L b_D(L)^{1/L} \ge f_D/3$.
+
+\emph{Step 3: the core radius is $\rho_D$.} By Perron--Frobenius again there is $v \ge 0$, $v \ne 0$, with $M_C v = \rho(M_C)\, v$. Its even part $w = (v + Rv)/2$ is nonnegative, and nonzero: $w = 0$ would force $Rv = -v$ with both sides nonnegative, hence $v = 0$. Since $R$ commutes with $M_C$ (\cref{lem:reflect}), $w$ is an eigenvector of $M_C$ at $\rho(M_C)$ lying in the $+1$ eigenspace $E$, so $\rho(M_C)$ is an eigenvalue of $M_{\mathrm{even}}^{(D)} = M_C|_E$ and $\rho_D \ge \rho(M_C)$. Conversely every eigenvalue of $M_C|_E$ is an eigenvalue of $M_C$, so $\rho_D \le \rho(M_C)$. Hence $\rho_D = \rho(M_C) \ge f_D/3$.
+
+\emph{Step 4: strictness off the residue class $D \equiv 1$.} The matrix $J = f_D I - 3 M_{\mathrm{even}}^{(D)}$ has integer entries, and $\chi_D(f_D/3) = \det\bigl( (f_D/3) I - M_{\mathrm{even}}^{(D)} \bigr) = 3^{-n_D} \det J$. Mod $3$ the term $3 M_{\mathrm{even}}^{(D)}$ vanishes, so $\det J \equiv f_D^{\,n_D} \pmod 3$. Since $f_D = 2^{D-1}(D+2)$, $3 \mid f_D$ exactly when $D \equiv 1 \pmod 3$; for $D \not\equiv 1 \pmod 3$, $\det J \not\equiv 0 \pmod 3$, so $\chi_D(f_D/3) \ne 0$ and $f_D/3$ is not an eigenvalue. Combined with $\rho_D \ge f_D/3$ and the fact that $\rho_D$ is an eigenvalue, $\rho_D > f_D/3$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:pin}]
+By \cref{lem:carry} the core is forward invariant, so no column of $M_C$ loses mass under the restriction: the column of $M_C$ at source $c$ sums to $\sum_{s \equiv c + D \ (\mathrm{mod}\ 3)} B_D(s)$, which by \cref{lem:classes} equals $f_D/3 + 2\varepsilon_D$ when $c \equiv 0 \pmod 3$ and $f_D/3 - \varepsilon_D$ otherwise, with $\varepsilon_D = (D-1)(-1)^{D-1}/3$. The spectral radius of a nonnegative matrix lies between its smallest and largest column sums \cite[Theorem 8.1.22]{hornjohnson}, and $\rho(M_C) = \rho_D$ by Step 3 of the proof of \cref{thm:sign}. Reading off the two values by the parity of $\varepsilon_D$ gives the refined brackets, and both are contained in $\lvert \rho_D - f_D/3 \rvert \le 2(D-1)/3$. Finally $2(D-1)/3$ against $f_D/3 = 2^{D-1}(D+2)/3$ gives the relative error $O(D^2 2^{-D})$, and $\log_3$ of $1 + O(D^2 2^{-D})$ tends to $0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:mass}]
+By \cref{prop:reach}, $M_C$ is irreducible, so its Perron vector $v \ge 0$ is unique up to scale and $M_C v = \rho_D v$ with $\rho(M_C) = \rho_D$ as above. Multiply by the all-ones row vector: $\rho_D \sum_c v_c = \mathbf{1}^{\top} M_C v = \sum_c \sigma(c)\, v_c$, where $\sigma(c)$ is the column sum at $c$, two-valued as in the proof of \cref{thm:pin}. Writing $\sigma(c) = f_D/3 + \varepsilon_D\,(3 \cdot \mathbf 1[3 \mid c] - 1)$ and dividing by $\sum_c v_c$,
+\[
+\rho_D = \frac{f_D}{3} + \varepsilon_D\,(3p_D - 1),
+\]
+which is the identity. Multiplying $\rho_D - f_D/3 = (-1)^{D-1}(D-1)(p_D - \tfrac13)$ by $(-1)^{D+1}$ gives the sign statement, and the equivalence with the sign law follows because $(-1)^{D+1}\operatorname{sgn}(\rho_D - f_D/3) = \operatorname{sgn}(p_D - \tfrac13)$ at every $D$.
+\end{proof}
+
 \section{Reproducibility}
 
 Two scripts, plain Python~3, no dependencies, no arguments, every path relative to the lane; run them from the lane root.
 
-\texttt{scripts/verify.py} runs in about four seconds and dies loudly on the first mismatch, naming what it got and what it wanted. It covers, in order: the factorisation of \cref{lem:poly} and its closed entry form against brute-force enumeration of all $3^D$ digit tuples for $2 \le D \le 8$; agreement of three independent generators, brute enumeration, the substitution product $\prod_{j<L} P_D(t^{3^j})$, and the untrimmed carry automaton on states $-D,\dots,D$, for $2 \le D \le 7$ and $0 \le L \le 4$; the exact reachable carry set by breadth-first search for $2 \le D \le 24$, which is \cref{fact:reach}; nonvanishing of the exact rational Hankel determinant for $2 \le D \le 24$, which is \cref{fact:exact} and \cref{rem:hankel}; the two trace formulas of \cref{fact:trace} for $2 \le D \le 24$; the fill and the three residue-class sums of \cref{lem:classes} for $2 \le D \le 12$; \cref{prop:offcentre} for $3 \le D \le 7$ at every offset $1 \le m \le r_D$ over windows through $L = 2n_D+3$, together with the sharpness witness of \cref{rem:sharp} at $D = 4$, $m = 2$; the anchors of \cref{fact:anchor} at $D = 2,3,4,5,6$, including the matrix, its characteristic polynomial, the census, and $\log_3\bigl((9+\sqrt{33})/2\bigr)$ to six places; the spectral ratios of \cref{con:gap} for $4 \le D \le 20$, whose monotonicity and agreement with $(D+2)/(D-2)$ are asserted over $6 \le D \le 20$; and both sign checks of \cref{con:sign}, floating-point roots for $2 \le D \le 20$ and the exact rational sign of $\chi_D(f_D/3)$ for $2 \le D \le 30$. Characteristic polynomials are computed by the Faddeev--LeVerrier recursion over exact rationals; only the two spectral checks and the $D = 3$ dimension use floating point, and the spectral checks do so on integer polynomials rescaled by $f_D/3$ so that all roots have modulus near one.
+\texttt{scripts/verify.py} runs in about four seconds and dies loudly on the first mismatch, naming what it got and what it wanted. It covers, in order: the factorisation of \cref{lem:poly} and its closed entry form against brute-force enumeration of all $3^D$ digit tuples for $2 \le D \le 8$; agreement of three independent generators, brute enumeration, the substitution product $\prod_{j<L} P_D(t^{3^j})$, and the untrimmed carry automaton on states $-D,\dots,D$, for $2 \le D \le 7$ and $0 \le L \le 4$; the exact reachable carry set by breadth-first search for $2 \le D \le 24$, corroborating \cref{prop:reach}; nonvanishing of the exact rational Hankel determinant for $2 \le D \le 24$, which is \cref{fact:exact} and \cref{rem:hankel}; the two trace formulas of \cref{fact:trace} for $2 \le D \le 24$; the fill and the three residue-class sums of \cref{lem:classes} for $2 \le D \le 12$; \cref{prop:offcentre} for $3 \le D \le 7$ at every offset $1 \le m \le r_D$ over windows through $L = 2n_D+3$, together with the sharpness witness of \cref{rem:sharp} at $D = 4$, $m = 2$; the anchors of \cref{fact:anchor} at $D = 2,3,4,5,6$, including the matrix, its characteristic polynomial, the census, and $\log_3\bigl((9+\sqrt{33})/2\bigr)$ to six places; the spectral ratios of \cref{con:gap} for $4 \le D \le 20$, whose monotonicity and agreement with $(D+2)/(D-2)$ are asserted over $6 \le D \le 20$; and both sign checks of the sign law, floating-point roots for $2 \le D \le 20$ and the exact rational sign of $\chi_D(f_D/3)$ for $2 \le D \le 30$, now corroboration of \cref{thm:sign} on the odd side and evidence for \cref{con:sign} on the even side. The new results are covered by five further blocks: the sheaf census of \cref{def:sheaf} computed three independent ways (free-end transfer count, coefficient-class sums of the substitution product in exact integers, and the trigonometric sum of \cref{thm:product} in floating point) for $2 \le D \le 7$; the step identity and parity factor of \cref{cor:step} in exact integers; strict positivity of every $W_k$, $k \le 8$, at every odd $D \le 25$, the mechanism of \cref{thm:sign}; nonvanishing of the exact integer $\det(f_D I - 3M_{\mathrm{even}}^{(D)})$ for $2 \le D \le 80$ together with its congruence to $f_D^{n_D}$ mod $3$, which is \cref{fact:signodd}; and the sign of $W_2$ at even $6 \le D \le 24$, the obstruction quoted in \cref{con:sign}; and the mass identity of \cref{prop:mass} together with both parity-refined brackets of \cref{thm:pin}, by power iteration on the core matrix for $2 \le D \le 20$. Characteristic polynomials are computed by the Faddeev--LeVerrier recursion over exact rationals; only the spectral checks, the product-formula cross-check and the $D = 3$ dimension use floating point, and the spectral checks do so on integer polynomials rescaled by $f_D/3$ so that all roots have modulus near one.
 
 \texttt{scripts/figure.py} runs instantly and redraws \texttt{figures/order.svg}, the README's copy of \cref{fig:order}, from the same two formulas $2D+1$ and $\lceil D/2 \rceil$.
 
@@ -357,6 +508,9 @@ G.~Hart, \emph{Mathematical Impressions: The Surprising Menger Sponge Slice}, Si
 
 \bibitem{hocking2023}
 G.~Hocking, \emph{Three-Dimensional Diagonal Cross-Sections of Four-Dimensional Menger Sponges}, Bridges 2023 Conference Proceedings, 291--294. \url{https://archive.bridgesmathart.org/2023/bridges2023-291.pdf}
+
+\bibitem{hornjohnson}
+R.~A. Horn and C.~R. Johnson, \emph{Matrix Analysis}, 2nd ed., Cambridge University Press, 2013. Theorem 8.3.1: a nonnegative square matrix has its spectral radius as an eigenvalue, with an entrywise nonnegative eigenvector; no irreducibility is assumed.
 
 \bibitem{marstrand}
 J.~M. Marstrand, \emph{Some fundamental geometrical properties of plane sets of fractional dimensions}, Proc. London Math. Soc. \textbf{s3-4} (1954), 257--302. \url{https://doi.org/10.1112/plms/s3-4.1.257}

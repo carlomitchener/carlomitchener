@@ -1,6 +1,6 @@
 from fractions import Fraction
 from itertools import product
-from math import comb, log
+from math import comb, log, cos, pi
 
 # SLICE
 
@@ -198,6 +198,44 @@ def gap_ratio(D):
     z = sorted((abs(r) for r in roots(scaled)), reverse=True)
     return z[0] / z[1]
 
+
+# SIGN LAW
+
+def core_transfer(D):
+    r = (D - 1) // 2
+    states = list(range(-r, r + 1))
+    return [[bcoef(D, c + D - 3 * cp) for c in states] for cp in states], r
+
+def sheaf(D, top):
+    M, r = core_transfer(D)
+    n = 2 * r + 1
+    v = [1 if i == r else 0 for i in range(n)]
+    out = [1]
+    for _ in range(top):
+        v = [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
+        out.append(sum(v))
+    return out
+
+def sheaf_from_product(D, L):
+    coeffs = substitution(D, L)
+    NL = D * (3 ** L - 1) // 2
+    step = 3 ** L
+    return sum(x for T, x in enumerate(coeffs) if (T - NL) % step == 0)
+
+def phi_circle(D, psi):
+    c2 = 2.0 * cos(psi)
+    return c2 ** (D - 1) * (D + c2)
+
+def sheaf_dft(D, L):
+    Q = 3 ** L
+    tot = 0.0
+    for m in range(Q):
+        p = 1.0
+        for j in range(L):
+            p *= phi_circle(D, 2 * pi * ((m * 3 ** j) % Q) / Q)
+        tot += p
+    return tot / Q
+
 def main():
     for D in range(2, 9):
         got = digit_poly(D)
@@ -324,6 +362,111 @@ def main():
         want = (-1) ** D
         assert got == want, f"D={D}: sign of chi(fill/3) got {got} want {want}"
     print("D=2..30: exact rational sign of chi(fill/3) alternates as (-1)^D")
+
+    for D in range(2, 8):
+        b = sheaf(D, 5)
+        for L in range(1, 5):
+            got = sheaf_from_product(D, L)
+            assert got == b[L], f"D={D} L={L}: class sum {got} want {b[L]}"
+        for L in range(1, 6):
+            approx = sheaf_dft(D, L)
+            assert abs(approx - b[L]) < 1e-6 * max(1.0, b[L]), f"D={D} L={L}: dft {approx} want {b[L]}"
+    print("D=2..7: sheaf census = coefficient class sums = trigonometric product formula")
+
+    for D in range(2, 8):
+        fill = 2 ** (D - 1) * (D + 2)
+        b = sheaf(D, 5)
+        for k in range(1, 6):
+            W = 3 ** (k - 1) * (3 * b[k] - fill * b[k - 1])
+            U = [u for u in range(1, 3 ** k) if u % 3]
+            direct = 0.0
+            for u in U:
+                p = 1.0
+                for j in range(k):
+                    p *= phi_circle(D, 2 * pi * ((u * 3 ** j) % 3 ** k) / 3 ** k)
+                direct += p
+            assert abs(direct - W) < 1e-6 * max(1.0, abs(W)), f"D={D} k={k}: W {W} vs unit sum {direct}"
+        par = phi_circle(D, 2 * pi / 3)
+        assert abs(par - (-1) ** (D - 1) * (D - 1)) < 1e-9, f"D={D}: parity factor {par}"
+    print("D=2..7: step identity W_k matches unit sums, parity factor (-1)^(D-1)(D-1)")
+
+    for D in range(3, 26, 2):
+        fill = 2 ** (D - 1) * (D + 2)
+        b = sheaf(D, 8)
+        for k in range(1, 9):
+            W = 3 ** (k - 1) * (3 * b[k] - fill * b[k - 1])
+            assert W > 0, f"D={D} k={k}: W_k = {W} want positive"
+        assert 3 ** 8 * b[8] >= fill ** 8, f"D={D}: sheaf census below (fill/3)^8"
+    print("odd D=3..25: every W_k > 0 for k<=8 and b(8) >= (fill/3)^8, the theorem's mechanism")
+
+    for D in range(6, 25, 2):
+        fill = 2 ** (D - 1) * (D + 2)
+        b = sheaf(D, 2)
+        W2 = 3 * (3 * b[2] - fill * b[1])
+        assert W2 > 0, f"D={D}: W_2 = {W2} want positive, i.e. V_2 < 0"
+    print("even D=6..24: W_2 > 0 so V_2 < 0, the even-side obstruction")
+
+    for D in range(2, 81):
+        fill = 2 ** (D - 1) * (D + 2)
+        Me = m_even(D)
+        n = len(Me)
+        J = [[fill * (i == j) - 3 * Me[i][j] for j in range(n)] for i in range(n)]
+        dj = det(J)
+        assert dj.denominator == 1 and dj != 0, f"D={D}: det J = {dj} want nonzero integer"
+        dji = int(dj)
+        assert (dji - fill ** n) % 3 == 0, f"D={D}: det J != fill^n mod 3"
+        if D % 3 != 1:
+            assert dji % 3 != 0, f"D={D}: det J divisible by 3 with D != 1 mod 3"
+    print("D=2..80: det(fill I - 3 M_even) is a nonzero integer, == fill^n mod 3")
+
+    D = 61
+    fill = 2 ** (D - 1) * (D + 2)
+    cp = charpoly(m_even(D))
+    def chi_at(x):
+        v = Fraction(0)
+        for c in cp:
+            v = v * x + c
+        return v
+    lo, hi = Fraction(fill, 3), Fraction(fill, 3) + 1
+    assert chi_at(lo) < 0 and chi_at(hi) > 0, "D=61: bracketing of rho failed"
+    for _ in range(100):
+        mid = (lo + hi) / 2
+        if chi_at(mid) < 0:
+            lo = mid
+        else:
+            hi = mid
+    gap61 = float(lo - Fraction(fill, 3))
+    pred = 2 * (D - 1) / 3
+    k = 2
+    while 3 ** k < 10 ** 13:
+        c2 = 2 * cos(2 * pi / 3 ** k)
+        pred *= (c2 / 2) ** (D - 1) * (D + c2) / (D + 2)
+        k += 1
+    assert abs(gap61 / pred - 1) < 1e-8, f"D=61: gap {gap61} vs tower product {pred}"
+    print("D=61: exact-bisected rho - fill/3 matches the tower product within 1e-8")
+
+    for D in range(2, 21):
+        fill = 2 ** (D - 1) * (D + 2)
+        M, r = core_transfer(D)
+        n = 2 * r + 1
+        v = [1.0] * n
+        for _ in range(300):
+            w = [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
+            top = max(w)
+            v = [x / top for x in w]
+        w = [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
+        rho = sum(w) / sum(v)
+        eps = (D - 1) * (-1) ** (D - 1) / 3.0
+        p = sum(v[i] for i in range(n) if (i - r) % 3 == 0) / sum(v)
+        lhs = rho - fill / 3.0
+        rhs = eps * (3 * p - 1)
+        assert abs(lhs - rhs) < 1e-6 * max(1.0, abs(eps) * 3), \
+            "D=%d: mass identity lhs %r rhs %r" % (D, lhs, rhs)
+        assert abs(lhs) <= 2 * (D - 1) / 3.0 + 1e-9, "D=%d: pinning violated: %r" % (D, lhs)
+        lo = fill / 3.0 - (2 if D % 2 == 0 else 1) * (D - 1) / 3.0 - 1e-9
+        hi = fill / 3.0 + (1 if D % 2 == 0 else 2) * (D - 1) / 3.0 + 1e-9
+        assert lo <= rho <= hi, "D=%d: parity-refined pinning violated: %r" % (D, rho)
+    print("D=2..20: mass identity 3 rho = fill + (-1)^(D-1)(D-1)(3p-1) and both pinning brackets")
 
     print("all green")
 
