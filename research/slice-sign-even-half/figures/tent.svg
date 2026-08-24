@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" width="760" height="340">
+<rect width="760" height="340" fill="white"/>
+<text x="58.0" y="26.0" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#1a1a1a" text-anchor="start" font-weight="bold">The Jacobsthal tent</text>
+<text x="58.0" y="42.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="start">dimension of the kernel of the even core mod 2, base 3, odd D</text>
+<line x1="58.0" y1="272.0" x2="734.0" y2="272.0" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="50.0" y="276.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="end">0</text>
+<line x1="58.0" y1="224.6" x2="734.0" y2="224.6" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="50.0" y="228.6" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="end">10</text>
+<line x1="58.0" y1="177.1" x2="734.0" y2="177.1" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="50.0" y="181.1" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="end">20</text>
+<line x1="58.0" y1="129.7" x2="734.0" y2="129.7" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="50.0" y="133.7" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="end">30</text>
+<line x1="58.0" y1="82.2" x2="734.0" y2="82.2" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="50.0" y="86.2" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="end">40</text>
+<line x1="58.0" y1="267.3" x2="734.0" y2="267.3" stroke="#c8ccd4" stroke-width="1.4"/>
+<line x1="58.0" y1="272.0" x2="734.0" y2="272.0" stroke="#1a1a1a" stroke-width="1.2"/>
+<line x1="58.0" y1="272.0" x2="58.0" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="62.5" y1="272.0" x2="62.5" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="67.1" y1="272.0" x2="67.1" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="71.6" y1="272.0" x2="71.6" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="76.1" y1="272.0" x2="76.1" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="80.7" y1="272.0" x2="80.7" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="103.4" y1="272.0" x2="103.4" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="107.9" y1="272.0" x2="107.9" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="148.7" y1="272.0" x2="148.7" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="153.3" y1="272.0" x2="153.3" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="248.6" y1="272.0" x2="248.6" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="253.1" y1="272.0" x2="253.1" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="439.1" y1="272.0" x2="439.1" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<line x1="443.6" y1="272.0" x2="443.6" y2="280.0" stroke="#1a3f8f" stroke-width="1.2"/>
+<text x="58.0" y="298.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">3</text>
+<text x="278.0" y="298.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">100</text>
+<text x="504.9" y="298.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">200</text>
+<text x="731.7" y="298.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="middle">300</text>
+<text x="58.0" y="318.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#555" text-anchor="start">dimension D</text>
+<text x="150.0" y="318.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#1a3f8f" text-anchor="start">ticks below the axis: the floors 2J(k)+1 and 2J(k)+3, where the kernel drops to 1</text>
+<path d="M 58.0 267.3 L 62.5 267.3 L 67.1 267.3 L 71.6 267.3 L 76.1 267.3 L 80.7 267.3 L 85.2 262.5 L 89.8 257.8 L 94.3 257.8 L 98.8 262.5 L 103.4 267.3 L 107.9 267.3 L 112.4 262.5 L 117.0 257.8 L 121.5 253.0 L 126.1 248.3 L 130.6 248.3 L 135.1 253.0 L 139.7 257.8 L 144.2 262.5 L 148.7 267.3 L 153.3 267.3 L 157.8 262.5 L 162.3 257.8 L 166.9 253.0 L 171.4 248.3 L 176.0 243.5 L 180.5 238.8 L 185.0 234.0 L 189.6 229.3 L 194.1 224.6 L 198.6 219.8 L 203.2 219.8 L 207.7 224.6 L 212.3 229.3 L 216.8 234.0 L 221.3 238.8 L 225.9 243.5 L 230.4 248.3 L 234.9 253.0 L 239.5 257.8 L 244.0 262.5 L 248.6 267.3 L 253.1 267.3 L 257.6 262.5 L 262.2 257.8 L 266.7 253.0 L 271.2 248.3 L 275.8 243.5 L 280.3 238.8 L 284.8 234.0 L 289.4 229.3 L 293.9 224.6 L 298.5 219.8 L 303.0 215.1 L 307.5 210.3 L 312.1 205.6 L 316.6 200.8 L 321.1 196.1 L 325.7 191.3 L 330.2 186.6 L 334.8 181.9 L 339.3 177.1 L 343.8 172.4 L 348.4 172.4 L 352.9 177.1 L 357.4 181.9 L 362.0 186.6 L 366.5 191.3 L 371.0 196.1 L 375.6 200.8 L 380.1 205.6 L 384.7 210.3 L 389.2 215.1 L 393.7 219.8 L 398.3 224.6 L 402.8 229.3 L 407.3 234.0 L 411.9 238.8 L 416.4 243.5 L 421.0 248.3 L 425.5 253.0 L 430.0 257.8 L 434.6 262.5 L 439.1 267.3 L 443.6 267.3 L 448.2 262.5 L 452.7 257.8 L 457.2 253.0 L 461.8 248.3 L 466.3 243.5 L 470.9 238.8 L 475.4 234.0 L 479.9 229.3 L 484.5 224.6 L 489.0 219.8 L 493.5 215.1 L 498.1 210.3 L 502.6 205.6 L 507.2 200.8 L 511.7 196.1 L 516.2 191.3 L 520.8 186.6 L 525.3 181.9 L 529.8 177.1 L 534.4 172.4 L 538.9 167.6 L 543.4 162.9 L 548.0 158.1 L 552.5 153.4 L 557.1 148.7 L 561.6 143.9 L 566.1 139.2 L 570.7 134.4 L 575.2 129.7 L 579.7 124.9 L 584.3 120.2 L 588.8 115.4 L 593.4 110.7 L 597.9 106.0 L 602.4 101.2 L 607.0 96.5 L 611.5 91.7 L 616.0 87.0 L 620.6 82.2 L 625.1 77.5 L 629.7 72.7 L 634.2 68.0 L 638.7 68.0 L 643.3 72.7 L 647.8 77.5 L 652.3 82.2 L 656.9 87.0 L 661.4 91.7 L 665.9 96.5 L 670.5 101.2 L 675.0 106.0 L 679.6 110.7 L 684.1 115.4 L 688.6 120.2 L 693.2 124.9 L 697.7 129.7 L 702.2 134.4 L 706.8 139.2 L 711.3 143.9 L 715.9 148.7 L 720.4 153.4 L 724.9 158.1 L 729.5 162.9 L 734.0 167.6" fill="none" stroke="#1a3f8f" stroke-width="1.8" stroke-linejoin="round"/>
+<circle cx="634.2" cy="68.0" r="3.0" fill="#1a3f8f"/>
+<text x="624.2" y="72.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#1a3f8f" text-anchor="end">D = 257, kernel 43</text>
+</svg>

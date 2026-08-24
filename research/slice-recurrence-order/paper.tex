@@ -69,7 +69,7 @@ P_D(t) = (1+t^2)^{D-1}(1+Dt+t^2),
 which is a two-line count of how a kept digit vector can sum to $s$. Second, the carry map $c \mapsto (c+D-s)/3$ contracts: its fixed point is $D/2$, integrality is a wall, and every carry reachable from zero obeys $\lvert c \rvert \le \lfloor (D-1)/2 \rfloor$. Third, the design is invariant under $v \mapsto (2,\dots,2)-v$, so $P_D[s] = P_D[2D-s]$, the carry reflection $c \mapsto -c$ commutes with the transfer matrix, and the orbit of the start state lives inside its $+1$ eigenspace, whose dimension is $\lfloor (D-1)/2 \rfloor + 1 = \lceil D/2 \rceil$.
 
 \medskip
-\noindent\textbf{What is not new.} That some constant-coefficient recurrence exists is free and standard. A finite carry state space makes $a_D(L)$ a $3$-regular sequence in the sense of Allouche and Shallit \cite{allouche}, and the untrimmed automaton on states $-D,\dots,D$ already hands over order $2D+1$ with no argument at all. A paper that led with ``these slices obey a linear recurrence'' would be selling a textbook fact. The object is not new either: higher-dimensional Menger continua are classical, and Hocking \cite{hocking2023} cuts exactly the $D = 4$ diagonal for its geometry and its pictures. The $D = 3$ integers are catalogued as OEIS \href{https://oeis.org/A299916}{A299916} \cite{oeis}, whose Menger reading is a user comment counting the star-shaped holes rather than the tiles.
+\noindent\textbf{What is not new.} That some constant-coefficient recurrence exists is free and standard. A finite carry state space makes $a_D(L)$ a $3$-regular sequence in the sense of Allouche and Shallit \cite{allouche}, and the untrimmed automaton on states $-D,\dots,D$ already hands over order $2D+1$ with no argument at all. A paper that led with ``these slices obey a linear recurrence'' would be selling a textbook fact. The object is not new either: higher-dimensional Menger continua are classical, and Hocking \cite{hocking2023} cuts exactly the $D = 4$ diagonal for its geometry and its pictures. The $D = 3$ integers are catalogued as OEIS \href{https://oeis.org/A299916}{A299916} \cite{oeis}, whose Menger reading is a user comment counting the star-shaped holes rather than the tiles. The carry-automaton frame is classical too: with unrestricted digits it is the carries Markov chain of Holte's ``amazing matrix'' \cite{holte}, whose spectrum is known exactly; the design's joint digit restriction and pinned output digit take the matrix here outside that theory, and the precise relationship is spelled out in \cite{evenhalf}.
 
 \medskip
 \noindent\textbf{What is new.} The exact factorisation of $P_D$, the sharp order $\lceil D/2 \rceil$ proved for every $D \ge 2$, the exactness of that order verified through $D = 24$, the closed form of the reduced matrix, and every census at $D \ge 4$. Roughly a factor of four, uniformly in the dimension. Then, from the same factorisation read on the unit circle: an exact trigonometric product formula for a relaxed census (\cref{thm:product}), and with it the odd half of the sign law -- $\rho_D > f_D/3$ for every odd $D \not\equiv 1 \pmod 3$, proved (\cref{thm:sign}), a statement that had resisted spectral routes because the relevant gap closes like $4/D$ (\cref{con:gap}).
@@ -304,6 +304,11 @@ The sharpest reduced target on the even side is a two-step census contraction: f
 Failure mode, and why the even half is genuinely harder: for odd $D$ the integrand $\Phi_D$ of \cref{thm:product} is nonnegative, and \cref{thm:sign} follows; for even $D$ it is not, and the cancellation is real. Already $V_2 = 2\bigl[\Phi_D(2\pi/9) + \Phi_D(4\pi/9) + \Phi_D(8\pi/9)\bigr]$ is negative for every even $D \ge 6$, because $\Phi_D(8\pi/9) = -(2\cos(\pi/9))^{D-1}(D - 2\cos(\pi/9))$ outweighs the positive terms, $2\cos(\pi/9) > 2\cos(2\pi/9)$. And no finite sign table of the $W_k$ can decide the even half: since $b_D(L) \sim C \rho_D^L$ with $C > 0$, \cref{cor:step} forces $W_L \sim C\, 3^{L-1} \rho_D^{L-1} (3\rho_D - f_D)$, so the eventual sign of $W_k$ \emph{is} the assertion $\rho_D < f_D/3$ itself; the signs observed at small $k$ (they alternate transiently at base $3$) are no evidence either way.
 \end{conjecture}
 
+\begin{remark}[note added, August 2026]
+\label{rem:noteadded}
+The even half of \cref{con:sign} has since been proved, in every even dimension at once, at base $3$ and at base $5$: see the companion paper \cite{evenhalf}, which builds exactly the second idea asked for above -- a Collatz--Wielandt certificate closed analytically at depth $\Theta(D^2)$, the transient identified in closed form. The statement above is kept as written, both for the record and because its remaining content, strictness at odd $D \equiv 1 \pmod 3$ beyond the verified range, is still open; \cite{evenhalf} reduces it to a single $2$-adic valuation bound.
+\end{remark}
+
 \begin{remark}
 \label{rem:rate}
 The size of the excess appears to be governed by the same tower of angles. Numerically,
@@ -503,11 +508,17 @@ J.-P. Allouche and J.~Shallit, \emph{The ring of $k$-regular sequences}, Theoret
 \bibitem{cook}
 J.~D. Cook, \emph{Code to slice open a Menger sponge}, 2011. \url{https://www.johndcook.com/blog/2011/08/30/slice-a-menger-sponge/}
 
+\bibitem{evenhalf}
+C.~Mitchener, \emph{The Even Half of the Slice Sign Law}, 2026. The companion paper: the even half of \cref{con:sign} proved at bases $3$ and $5$, and the strictness gap reduced to a $2$-adic valuation bound. \url{https://github.com/carlomitchener/carlomitchener/tree/main/research/slice-sign-even-half}
+
 \bibitem{hart}
 G.~Hart, \emph{Mathematical Impressions: The Surprising Menger Sponge Slice}, Simons Foundation, 2012. \url{https://www.simonsfoundation.org/2012/12/10/mathematical-impressions-the-surprising-menger-sponge-slice/}
 
 \bibitem{hocking2023}
 G.~Hocking, \emph{Three-Dimensional Diagonal Cross-Sections of Four-Dimensional Menger Sponges}, Bridges 2023 Conference Proceedings, 291--294. \url{https://archive.bridgesmathart.org/2023/bridges2023-291.pdf}
+
+\bibitem{holte}
+J.~M. Holte, \emph{Carries, combinatorics, and an amazing matrix}, Amer. Math. Monthly \textbf{104} (1997), no.~2, 138--149. \url{https://doi.org/10.2307/2974981}
 
 \bibitem{hornjohnson}
 R.~A. Horn and C.~R. Johnson, \emph{Matrix Analysis}, 2nd ed., Cambridge University Press, 2013. Theorem 8.3.1: a nonnegative square matrix has its spectral radius as an eigenvalue, with an entrywise nonnegative eigenvector; no irreducibility is assumed.

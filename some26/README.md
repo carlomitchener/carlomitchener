@@ -362,47 +362,9 @@ The other numbers weren't in the OEIS. They are now! The level-1 fills and voids
 
 ## Moiré
 
-What happens when you stack them on top of each other? ...Something nobody drew.
-
-Take every odd number from 1 to 55, slice each sponge, blow all twenty-eight grams up to exactly the same size, and lay them down like sheets of tracing paper — each one faint enough that no single number gets to win.
-
-![every odd 3D carpet from 1 to 55, stacked](files/extras/mrlygram-heatmap.gif)
-
-Watch it build. The first few frames are still recognizable snowflakes. Then somewhere past twenty the individual grams dissolve, and a picture surfaces that was in none of them: long straight rays crossing the whole hexagon, a ghost star at the middle, the six-fold symmetry still holding. That's *moiré* — the shimmer you get for free when you overlay grids of different pitch, the same one that ripples through two layers of net curtain, or across a photographed computer screen.
-
-And it has to be there. Every gram is the same *at most one odd* test, just chopped finer: 1 unit across, then 3, then 5, all the way to 55. Their features land on top of each other wherever the numbers agree, and cancel wherever they don't — the bright and dark rays are a map of that agreement. Arithmetic, made visible by nothing more cunning than stacking.
-
-The same trick works one dimension down. Here are the flat 2D carpets — the square grids from *How the pictures are made* — stacked the same way:
-
-![every odd 2D carpet from 1 to 55, stacked](files/extras/mrlycarpet-heatmap.gif)
-
-Squares instead of triangles, so the rays run diagonally rather than at 60°, but it's the same phenomenon: the main diagonal comes out twice as bright as the field around it. And that *twice* is exact — keep stacking and the ratio settles at precisely 2. (Twice the white *paper* showing, to be exact.) Look again: the other diagonal is its pixel-perfect twin, because every gram reads the same forwards and backwards. The picture carries a bright X. And look at the very center. That one dot alternates fill, void, fill, void as the number climbs — the same *n* mod 4 flip that powers [the solution](SOLUTION.md) — so across twenty-eight numbers it settles at exactly 50/50: a perfect mid-gray pinprick at the heart of the picture.
-
-How far can you push it? Further than you'd guess. The field between the rays does slowly gray out — barely slower than a pile of random patterns would, it turns out — but the rays themselves never dim: each one keeps its exact brightness forever and only grows thinner, so every layer you add makes the picture sharper, not blurrier. Pixels give out first: at 1080 across, somewhere past number 150 each cell is thinner than two pixels, and the finest grams quietly turn to fog. (Memory goes next — number 301 wants 1.7 GB just to hold its blown-up cube.)
-
-Run it yourself with `MIN` and `MAX` at the top of `mrlypy/mrlydemos/mrlygram.py`:
-
-```bash
-uv run mrlypy/mrlydemos/mrlygram.py cut carpet     # the snowflakes, stacked
-uv run mrlypy/mrlydemos/mrlygram.py flat carpet    # the 2D carpets, stacked
-uv run mrlypy/mrlydemos/mrlygram.py sweep          # both views, all four families
-```
-
-### The stack answers back
-
-Two of the open questions at the bottom of this page used to ask: *is Pi lurking around here? What about prime numbers?* We stacked, we measured, we proved — and the answers are stranger than the questions. The proofs are still being written up (link at the end), so for now, the headlines:
-
-**Pi plays a magic trick.** Behind every brightness in these stacks sits a wave, and every wave carries a π. But measure anything you can actually *see* — how bright a ray is, how the diagonal compares to the field — and the π's cancel out, exactly, every time. Every visible strength is a plain fraction. So where does π survive? In the *ink budget*: track how much ink the whole picture uses as the layers pile up, subtract the obvious part, and what's left creeps toward numbers built from π — and from a rarer celebrity, *Catalan's constant*, a number so mysterious nobody has even proved it isn't secretly a fraction.
-
-**The primes hide one dimension down.** Compare any two of the flat carpets. If their numbers share a factor, the pictures echo each other — 9 echoes 3, 15 echoes 5, always. If they share none, the two pictures have *exactly* nothing in common: knowing where one is black tells you nothing at all about the other. So an odd number is prime exactly when its carpet is a total stranger to every carpet that came before it. The snowflakes, wonderfully, refuse to obey — the slice bends this law into something new, and each snowflake secretly whispers to its *double* instead. Chasing that is a story of its own.
-
-**And the brightest lines had no name.** The strongest lines crossing the stacked snowflake sit at the quarter marks of its width — an exact step in brightness, one eighth, that every single layer votes for.
-
-**One last secret: recipes have fingerprints.** Our sponge comes from one little parity test, but in 3D there are exactly 256 such tests — a whole zoo of sponges. Stack the slices of any of them and the picture reads its recipe's fingerprint: some recipes *blink* as the number climbs (one layer mostly ink, the next mostly paper — you met this leapfrog in the bonus solution), some hold perfectly steady, and you can tell which is which straight from the recipe, before drawing a single triangle. The *void* family is the showstopper: its stack keeps a twelve-armed star and a jet-black center dot *forever*, while the carpet's ghost star slowly dissolves into the gray.
-
-The proofs, the code, and the full hunt — run by teams of AI agents checking each other's work, refuting each other freely — will live at [mrly.net/research](https://mrly.net/research/). Coming soon!
-
 ![every odd 3D void from 1 to 55, stacked](files/extras/cut-void-1.gif)
+
+Stack every snowflake from 1 to 55 like sheets of tracing paper and a picture surfaces that was in none of them: straight rays, ghost stars, and exact laws about π and the prime numbers — each with a paper behind it. The whole story lives in [MOIRE.md](MOIRE.md).
 
 ## Make a Snowflake
 
@@ -446,7 +408,8 @@ Enjoy!
 
 - What's the area formula?
 - What's the perimeter formula?
-- Is there a closed-form fill/void past level 1, or for the other families?
+- Is there a closed-form fill/void past level 1? (Level 1 is now closed, for all 256 recipes at once, by [the spectrometer](../research/walsh-spectrometer/).)
+- Why does one four-row tile tessellate every odd snowflake? (From [the solution](SOLUTION.md).)
 
 ## Why?
 
