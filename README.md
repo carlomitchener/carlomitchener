@@ -5,7 +5,7 @@ Entrepreneur, inventor and CEO (or as I prefer, *Captain*) of [MrlyProd, Inc.](h
 Born (October 7th 1998) and raised in Brussels, Belgium — French, Italian, American, and Belgian.
 
 - The *legacy* `mrlyprod/` folder in this repo is production-ready and hosts the `mrlyprod.com` Shopify store.
-- The `mrlyprod` Rust-powered monorepo is under construction with all sites hosted at `*.mrly.net` domains.
+- The `mrlyprod` Rust repo is the research code: the MrlyMath crates.
 
 ## MrlyProd
 
