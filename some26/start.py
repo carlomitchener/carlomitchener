@@ -3,10 +3,10 @@ import math
 import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
 
 from PIL import Image, ImageDraw, ImageFont
-from mrlycore.colors import alpha
-from mrlysix import FILL, GRID, VOID
-from mrlysix.designs import carpet_cut
-from mrlysix.renderer import draw
+from mrlypy.core.colors import alpha
+from mrlypy.six import FILL, GRID, VOID
+from mrlypy.six.designs import carpet_cut
+from mrlypy.six.renderer import draw
 
 from lib.canvas import H3, INK, PAPER, flatten, quantize
 from lib.gif import write_gif

@@ -1,12 +1,12 @@
 import os
 import sys
 
-# MRLYPY
+# MRLYPROD
 
 LIB = os.path.dirname(os.path.abspath(__file__))
-MRLYPY = os.path.normpath(os.path.join(LIB, "..", "..", "mrlypy"))
+MRLYPROD = os.path.normpath(os.path.join(LIB, "..", "..", "mrlyprod"))
 
-if not os.path.isdir(os.path.join(MRLYPY, "mrlysix")):
-    sys.exit(f"missing mrlysix: expected mrlypy at {MRLYPY}")
+if not os.path.isdir(os.path.join(MRLYPROD, "mrlypy", "six")):
+    sys.exit(f"missing mrlypy: expected it at {MRLYPROD}")
 
-sys.path.insert(0, MRLYPY)
+sys.path.insert(0, MRLYPROD)

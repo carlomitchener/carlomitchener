@@ -18,12 +18,12 @@ Squares instead of triangles, so the rays run diagonally rather than at 60°, bu
 
 How far can you push it? Further than you'd guess. The field between the rays does slowly gray out — barely slower than a pile of random patterns would, it turns out — but the rays themselves never dim: each one keeps its exact brightness forever and only grows thinner, so every layer you add makes the picture sharper, not blurrier. Pixels give out first: at 1080 across, somewhere past number 150 each cell is thinner than two pixels, and the finest grams quietly turn to fog. (Memory goes next — number 301 wants 1.7 GB just to hold its blown-up cube.)
 
-Run it yourself with `MIN` and `MAX` at the top of `mrlypy/mrlydemos/mrlygram.py`:
+Run it yourself with `MIN` and `MAX` at the top of `demos/mrlygram.py`:
 
 ```bash
-uv run mrlypy/mrlydemos/mrlygram.py cut carpet     # the snowflakes, stacked
-uv run mrlypy/mrlydemos/mrlygram.py flat carpet    # the 2D carpets, stacked
-uv run mrlypy/mrlydemos/mrlygram.py sweep          # both views, all four families
+uv run demos/mrlygram.py cut carpet     # the snowflakes, stacked
+uv run demos/mrlygram.py flat carpet    # the 2D carpets, stacked
+uv run demos/mrlygram.py sweep          # both views, all four families
 ```
 
 ## The stack answers back

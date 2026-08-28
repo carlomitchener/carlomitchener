@@ -273,7 +273,7 @@ def cut(cell: Cell3d):
 
 ![the four families, number 5, cut](files/gifs/showcase-cut-5.gif)
 
-And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlypy/](../mrlypy/), which is what the scripts here actually run.
+And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/rs/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlyprod/mrlypy/](../mrlyprod/mrlypy/), which is what the scripts here actually run.
 
 For a tour of all four families, see [SHOWCASE.md](SHOWCASE.md).
 
@@ -370,7 +370,7 @@ Stack every snowflake from 1 to 55 like sheets of tracing paper and a picture su
 
 Ready to get your hands... snowy?
 
-The sponge, the slice and the renderers all live in `mrlysix`, inside this repo's [mrlypy/](../mrlypy/) — clone the repo and everything is already next door:
+The sponge, the slice and the renderers all live in `mrlypy/six`, inside this repo's [mrlyprod/mrlypy/](../mrlyprod/mrlypy/) — clone the repo and everything is already next door:
 
 ```bash
 git clone https://github.com/carlomitchener/carlomitchener
@@ -421,7 +421,7 @@ You may be wondering... Why would a human go down such a wormhole? I was trying 
 
 ## Extras
 
-I'm working on applying all this to cellular automata — grids of cells that live and die by simple rules, like Conway's famous Game of Life. A demo is already live: `mrlypy/mrlydemos/game.py`. To follow along, find us on Instagram or YouTube (@mrlyprod).
+I'm working on applying all this to cellular automata — grids of cells that live and die by simple rules, like Conway's famous Game of Life. A demo is already live: `demos/game.py`. To follow along, find us on Instagram or YouTube (@mrlyprod).
 
 ![25 generations on the cut of the number-3 net sponge, frame by frame](files/extras/frames.gif)
 

@@ -5,12 +5,12 @@ import sys
 import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
 
 from PIL import Image
-from mrlycore import binary, formulas
-from mrlycore.colors import alpha
-from mrlysix import FILL, GRID, VOID
-from mrlysix.designs import carpet_cut
-from mrlysix.renderer import draw, svg
-from mrlytwo.renderer import svg_square, to_image
+from mrlypy.core import binary, formulas
+from mrlypy.core.colors import alpha
+from mrlypy.six import FILL, GRID, VOID
+from mrlypy.six.designs import carpet_cut
+from mrlypy.six.renderer import draw, svg
+from mrlypy.two.renderer import svg_square, to_image
 
 from lib.canvas import H3, INK, PAPER, flatten, quantize
 from lib.gif import write_gif
@@ -42,7 +42,7 @@ def cost(number, level):
 def cut(number, level):
     weight = cost(number, level)
     if weight > CUBE_CAP:
-        sys.exit("%d-%d needs %.1f GB: mrlysix.cut blows the cube up by 4 before slicing it"
+        sys.exit("%d-%d needs %.1f GB: mrlypy.six.cut blows the cube up by 4 before slicing it"
                  % (number, level, weight / 1e9))
     return carpet_cut(number, level).paint(PALETTE)
 

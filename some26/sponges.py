@@ -4,9 +4,9 @@ import sys
 import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
 
 from PIL import Image
-from mrlycore.colors import alpha, black, gradient, white
-from mrlysix import GRID, LEFT, RIGHT, UP
-from mrlysix.designs import carpet_iso
+from mrlypy.core.colors import alpha, black, gradient, white
+from mrlypy.six import GRID, LEFT, RIGHT, UP
+from mrlypy.six.designs import carpet_iso
 
 from lib.canvas import H3, PAPER, flatten, quantize
 from lib.gif import write_gif
@@ -36,7 +36,7 @@ def cost(number, level):
 def sponge(number, level):
     weight = cost(number, level)
     if weight > CUBE_CAP:
-        sys.exit("%d-%d is %d little cubes: mrlysix.iso walks every one of them"
+        sys.exit("%d-%d is %d little cubes: mrlypy.six.iso walks every one of them"
                  % (number, level, weight))
     return carpet_iso(number, level).paint(PALETTE)
 

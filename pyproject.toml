@@ -5,14 +5,13 @@ version = "0.1.0"
 description = "MrlyMath and friends: one environment for every script in the repo"
 requires-python = ">=3.10"
 dependencies = [
-    "mrly",
+    "mrlyprod",
 ]
 
 [dependency-groups]
 
-# only mrlyaws / mrlycloud / mrlynet need these
 cloud = ["boto3"]
-# only mrlydemos/viewer.py needs this
+font = ["brotli", "fonttools", "skia-pathops"]
 plots = ["matplotlib"]
 
 [tool.uv]
@@ -21,8 +20,8 @@ package = false
 
 [tool.uv.workspace]
 
-members = ["mrlypy"]
+members = ["mrlyprod"]
 
 [tool.uv.sources]
 
-mrly = { workspace = true }
+mrlyprod = { workspace = true }

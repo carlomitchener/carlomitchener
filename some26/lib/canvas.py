@@ -1,7 +1,7 @@
 import math
 
 from PIL import Image
-from mrlycore.colors import Color
+from mrlypy.core.colors import Color
 
 H3 = math.sqrt(3) / 2
 INK = Color(17, 17, 17)

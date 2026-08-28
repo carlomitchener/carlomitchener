@@ -3,11 +3,11 @@ import sys
 import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
 
 from PIL import Image, ImageDraw, ImageFont
-from mrlysix import designs
-from mrlysix.geometry import radial
-from mrlysix.renderer import draw
-from mrlytwo import designs as designs_2d
-from mrlytwo.renderer import to_image
+from mrlypy.six import designs
+from mrlypy.six.geometry import radial
+from mrlypy.six.renderer import draw
+from mrlypy.two import designs as designs_2d
+from mrlypy.two.renderer import to_image
 
 from lib.canvas import H3, INK, PAPER, quantize
 from lib.gif import write_gif

@@ -4,6 +4,9 @@ Entrepreneur, inventor and CEO (or as I prefer, *Captain*) of [MrlyProd, Inc.](h
 
 Born (October 7th 1998) and raised in Brussels, Belgium — French, Italian, American, and Belgian.
 
+- The *legacy* `mrlyprod/` folder in this repo is production-ready and hosts the `mrlyprod.com` Shopify store.
+- The `mrlyprod` Rust-powered monorepo is under construction with all sites hosted at `*.mrly.net` domains.
+
 ## MrlyProd
 
 Inspired by the Bob Marley documentary (2012), I created a PSN account named "Im_Mrly", then a YouTube channel "zMrly" (2013) where I made Photoshop art, MW2 montages, and skateboard edits. The name stuck.
@@ -68,6 +71,19 @@ MrlyProd's mission is to apply MrlyMath in any way possible. Imagine a world whe
 - [Instagram](https://www.instagram.com/carlo.mitchener)
 - [YouTube](https://www.youtube.com/@carlomitchener)
 - [Pinterest](https://www.pinterest.com/carlomitchener)
+
+## OEIS
+
+Sequences I have published in the [On-Line Encyclopedia of Integer Sequences](https://oeis.org).
+
+| | |
+|---|---|
+| [A395241](https://oeis.org/A395241) | Void cubes of the 3D carpet, n²(4n+3) |
+| [A396934](https://oeis.org/A396934) | Coprime points of the Sierpinski triangle |
+| [A398348](https://oeis.org/A398348) | Toroidal n×n×n binary arrays up to symmetry |
+| [A399018](https://oeis.org/A399018) | Solid triangles in the Menger sponge cross-section |
+| [A399019](https://oeis.org/A399019) | Empty triangles in the Menger sponge cross-section |
+| [A399364](https://oeis.org/A399364) | Coprime points of the Menger sponge |
 
 Thank you, come again!
 
