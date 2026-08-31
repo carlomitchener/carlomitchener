@@ -19,6 +19,7 @@ Formal write-ups of [MrlyMath](../README.md#mrlymath): the mathematics that fall
 - [order-sensitivity-of-kronecker-words](order-sensitivity-of-kronecker-words/) - what survives swapping nested patterns, and the connectivity that does not.
 - [moire-correlation-laws](moire-correlation-laws/) - two parity carpets agree by an exact gcd law, zero exactly when the scales are coprime; the stack's full spectrum is the squared-divisor field of the frequency gcd, zeta quotients and nothing more.
 - [divisor-avatars](divisor-avatars/) - when a parity design's cell census is the divisor count of a power, and exactly which integers have one.
+- [sequence-census](sequence-census/) - how many integer sequences a parity rule can write, which ones the catalogue already holds, and why the polygonal numbers keep turning up.
 - [lorem-ipsum](lorem-ipsum/) - the pipeline shakedown: a toy theorem in full ceremonial dress.
 
 ## BUILD
