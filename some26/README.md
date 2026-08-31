@@ -337,6 +337,8 @@ That last column is *number*², of course — and at any level it's *number*^(2 
 
 (The even row is a freebie: nothing stops the test on even numbers — their cut just splits exactly half-and-half.) The two odd rows are mirrors of each other: swap the 3 and the 5, swap the +1 and the −1. And that leapfrog from before? Just the two branches climbing at different speeds, taking turns in front.
 
+The flat carpet — the square-grid view from [How the pictures are made](#how-the-pictures-are-made) — closes even faster. An odd side *q* fills exactly *q*² − ((*q*−1)/2)² squares: take everything, hand back one little square for every all-odd address. Check it on the MrlyProd logo — 25 − 4 = 21 filled cells, count them yourself. Those are the *octagonal numbers* 3*k*² − 2*k*, and that one line is the entire flat half of the bonus round.
+
 ### Down the levels
 
 Now hold the number still and climb the levels instead. Each fill count is built from the two counts before it — the same kind of rule that runs the Fibonacci numbers, just with bigger multipliers — and every number keeps its own rule forever:
@@ -348,17 +350,39 @@ Now hold the number still and climb the levels instead. Each fill count is built
 | 7 | 204, 6840, 228528, 7628256, … | 42 × prev − 288 × the one before |
 | 9 | 210, 10038, 426594, 18900966, … | 28 × prev + 693 × the one before |
 
+Notice every rule in that table needs exactly *two* memories — the previous count and the one before it, never a third. That's a theorem now, and it doesn't stop at three dimensions. Slice the *D*-dimensional cousin of the sponge the same way and its counts still obey a short rule, needing only ⌈*D*/2⌉ memories: two in 3D, two in 4D, three in 5D and 6D — about a quarter of what the construction hands you for free. The proof is a little carry machine that reads the counts like digits, on [the research shelf](../research/slice-recurrence-order/). Its sequel answers a stranger question: the slice comes out a whisker *thicker* than a random cut would be in odd dimensions and a whisker *thinner* in even ones — the even half is fully proved in [its own paper](../research/slice-sign-even-half/), while a sliver of the odd half still resists.
+
 ### One of these is already famous
 
 The Menger row — 42, 306, 2250, 16578 — lives in the OEIS (the online encyclopedia where mathematicians file every integer sequence they meet) as [A299916](https://oeis.org/A299916), and there's a lovely twist waiting there. Albert Säfström noticed the very same numbers count the *star-shaped holes* in the slice, largest first: at level 3 there is 1 big star, 6 medium ones and 42 small ones. Holes instead of material — same sequence! They match because every new star costs exactly 12 triangles.
 
-The other numbers weren't in the OEIS. They are now! The level-1 fills and voids of every odd sponge have just been filed as the twin sequences [A399018](https://oeis.org/A399018) (fill: 6, 42, 72, 204, 210, …) and [A399019](https://oeis.org/A399019) (void: 0, 12, 78, 90, 276, …) — two complementary snowflake counters, submitted from this very project, each carrying the closed forms above, a portrait of its grams, and a link back to this page. (They're fresh enough that you might still catch them wearing their *draft* badge.)
+The other numbers weren't in the OEIS. They are now! The level-1 fills and voids of every odd sponge have just been filed as the twin sequences [A399018](https://oeis.org/A399018) (fill: 6, 42, 72, 204, 210, …) and [A399019](https://oeis.org/A399019) (void: 0, 12, 78, 90, 276, …) — two complementary snowflake counters, submitted from this very project, each carrying the closed forms above, a portrait of its grams, and a link back to this page.
 
 ### OEIS A399018 - FILL - 6, 42, 72, 204, 210, …
 ![Illustration of a(1), a(2), a(3): the solid triangles, in black](files/extras/a399018.png)
 
 ### OEIS A399019 - VOID - 0, 12, 78, 90, 276, …
 ![Illustration of a(1), a(2), a(3): the empty triangles, in black](files/extras/a399019.png)
+
+### When is the snowflake prime?
+
+One more thing to count: the *corners* — the lattice points where the triangles meet. The number-*n* hexagon has exactly 3*n*² + 3*n* + 1 of them, a *centered hexagonal* number: 7, 37, 91, 169... And centered hexagonal numbers hide a cute secret: each one is the difference of two consecutive *cubes* (37 = 4³ − 3³, try it), so whenever the corner count happens to be prime, it's a **cuban prime** — a prime born from cubes ([A002407](https://oeis.org/A002407)). Your kitchen cube scores 7. The Menger sponge scores 37. Number 9's shattered constellation has 271 corners — prime again. And if you ever doubt a count, here's the one-line sanity check: corners − edges + triangles = 1, always, for every number — the hexagon's full mesh is one honest disk with no holes. (The *fills*, of course, are riddled with holes. The stars attest.)
+
+## The Six-Gasket Cut
+
+All this time we've been slicing one family of sponges. Time to pick up a different cube.
+
+Chop a cube 2×2×2 — just eight little cubes — and throw away two opposite corners. Keep the six survivors, then do it again inside each of them, forever. In the house numbering this recipe is *number 126*: write a 1 for every corner you keep, read the eight corners as the bits of a byte, and `01111110` is 126. (The shape it builds is an old friend of the fractal bestiary — the *Sierpinski octahedron*, six half-size octahedra nested in an octahedron — wearing cube coordinates.)
+
+Now the same kitchen knife: balance it on a corner, cut level. Every cut that meets this sponge at all is a perfect **Sierpinski gasket** — the famous triangle-inside-triangle fractal — with exactly 3^*L* points at level *L*. No stars, no shattering, no lucky heights: every cut, the exact same size, a gasket every time. Better still, the *binary digits of the height* pick which gasket you get — each digit flips the orientation of the triangles at one zoom scale. The blade reads the height like a barcode.
+
+And the middle? Cut at the two central heights and look at both slices together, straight down the diagonal: six gaskets — three pointing up, three pointing down — tiling a hexagon. Our hexagon, paved with six copies of the *other* snowflake.
+
+![six Sierpinski gaskets tiling a hexagon: the two central cuts of the number-126 sponge at level 7](files/extras/cuts-126.png)
+
+The barcode trick has just entered the literature: Nakajima and Watanabe (2026) proved the same digit mechanism for slices of the Sierpinski *tetrahedron*, where the digits also change how many pieces you get. Recipe 126 is the tidy case — its digits only ever flip orientation, never the count — and that constancy is exactly what lets the six gaskets tile. The full story, proofs and all, lives in [cuts](https://github.com/mrlyprod/mrlyprod/blob/main/research/cuts.md).
+
+One last wink. Wolfram numbers his elementary cellular automata — the rules from the Extras below — the very same way: the byte of the patterns you keep. His **Rule 126** turns a cell on unless its three neighbors all agree... which is *word for word* our recipe: keep a corner unless its three address digits all agree. Same test, same byte, same number — and run from a single cell, Rule 126 famously prints row after row of nested triangles. The sponge whose every cut is a gasket and the automaton that draws gaskets are one rule wearing two hats.
 
 ## Moiré
 
@@ -408,8 +432,8 @@ Enjoy!
 
 - What's the area formula?
 - What's the perimeter formula?
-- Is there a closed-form fill/void past level 1? (Level 1 is now closed, for all 256 recipes at once, by [the spectrometer](../research/walsh-spectrometer/).)
-- Why does one four-row tile tessellate every odd snowflake? (From [the solution](SOLUTION.md).)
+- Why does one four-row tile tessellate every odd snowflake? (From [the solution](SOLUTION.md).) Best clue so far: [spectra](https://github.com/mrlyprod/mrlyprod/blob/main/research/spectra.md) finds every odd snowflake built from just two tiles — a hexagon and a triangle, rewritten by fixed counts at every level — but the four-row tessellation itself is still unproved.
+- ~~Is there a closed-form fill/void past level 1?~~ Mostly answered, in three installments. Level 1 is closed for all 256 recipes at once by [the spectrometer](../research/walsh-spectrometer/). Past level 1, every odd number keeps its own two-term rule — the "Down the levels" table, with the recipes collected in [spectra](https://github.com/mrlyprod/mrlyprod/blob/main/research/spectra.md) and the Menger rule long since published on [A299916](https://oeis.org/A299916). And climbing the *dimensions* at level 1, the slice counts 2, 6, 6, 30, 20, 140, … turn out to be an old friend in disguise — the swinging factorial [A056040](https://oeis.org/A056040), unmasked in [the census](../research/sequence-census/).
 
 ## Why?
 
