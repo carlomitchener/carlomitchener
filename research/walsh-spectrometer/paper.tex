@@ -170,7 +170,7 @@ K_2 & 3 & -1 & -1 & 3\\
 K_3 & 1 & -1 & 1 & -1
 \end{array}
 \]
-where $K_j$ is the Krawtchouk polynomial $K_j(w) = \sum_{|S|=j} (-1)^{x \cdot S}$, $|x| = w$, in the normalisation of \cite[Ch.~5]{macwilliams}. The map $(m_0,m_1,m_2,m_3) \mapsto (\Sigma_0,\Sigma_1,\Sigma_2,\Sigma_3)$ is invertible.
+where $K_j$ is the Krawtchouk polynomial $K_j(w) = \sum_{|S|=j} (-1)^{x \cdot S}$, $|x| = w$, in the normalisation of \cite[Ch.~5]{macwilliams}. The map sending $(m_0,m_1,m_2,m_3)$ to $(\Sigma_0,\Sigma_1,\Sigma_2,\Sigma_3)$ is invertible.
 \end{lemma}
 
 \begin{theorem}[The ink law]
@@ -254,7 +254,7 @@ Everything above is proved about $\mathcal{P}_n$ with the macro-parity fill rule
 
 \begin{fact}[The computational domain]
 \label{fact:domain}
-For every odd $n \le 55$, three independent routes to $N_k(n)$ agree with \cref{thm:count} and with each other: direct enumeration of $\mathcal{P}_n$, coefficient extraction from the generating function of \cref{eq:gf}, and evaluation of the reduced finite sum of \cref{eq:split}, the form the proof closes with. At $n = 9$ all three give $(N_0,N_1,N_2,N_3) = (114, 32, 84, 24)$. For all $256$ designs at every odd $n \le 55$, and at the cold sizes $n \in \{101, 555, 999, 9991\}$ reached by a separate interval-counting enumerator, the exact rational ink equals the right-hand side of \cref{thm:ink} with zero mismatches. Checked by \texttt{scripts/verify.py}.
+For every odd $n \le 55$, three independent routes to $N_k(n)$ agree with \cref{thm:count} and with each other: direct enumeration of $\mathcal{P}_n$, coefficient extraction from the generating function of \cref{eq:gf}, and evaluation of the reduced finite sum of \cref{eq:split}, the form the proof closes with. At $n = 9$ all three give $(N_0,N_1,N_2,N_3) = (114, 32, 84, 24)$. For all $256$ designs at every odd $n \le 55$, and at the cold sizes $n \in \{101, 555, 999, 9991\}$ reached by a separate interval-counting enumerator, the exact rational ink equals the right-hand side of \cref{thm:ink}, with no mismatches. Checked by \texttt{scripts/verify.py}.
 \end{fact}
 
 \begin{conjecture}[Higher dimensions]
@@ -271,11 +271,13 @@ Fix a dimension $d \ge 2$ and let $\mathcal{P}^{(d)}_n$ be the analogous diagona
 
 By \cref{def:walsh},
 \[
-\Sigma_j = \sum_{|S|=j} \tfrac18 \sum_{x} f_D(x) (-1)^{x \cdot S}
- = \tfrac18 \sum_{x} f_D(x) \!\!\sum_{|S|=j}\!\! (-1)^{x \cdot S}
+\begin{aligned}
+\Sigma_j &= \sum_{|S|=j} \tfrac18 \sum_{x} f_D(x) (-1)^{x \cdot S}\\
+ &= \tfrac18 \sum_{x} f_D(x) \!\!\sum_{|S|=j}\!\! (-1)^{x \cdot S}
  = \tfrac18 \sum_{x} f_D(x) K_j(|x|),
+\end{aligned}
 \]
-because $\sum_{|S|=j}(-1)^{x \cdot S}$ depends on $x$ only through $|x|$: choosing $S$ of weight $j$ with $i$ of its ones inside the support of $x$ contributes $(-1)^i \binom{|x|}{i}\binom{3-|x|}{j-i}$. Grouping $x$ by weight gives the displayed sum. Evaluating $K_j(w) = \sum_i (-1)^i \binom{w}{i}\binom{3-w}{j-i}$ at $w,j \in \{0,1,2,3\}$ gives the table. The matrix $K = \bigl(K_j(w)\bigr)$ satisfies $K^2 = 8I$, so $K^{-1} = \tfrac18 K$ and the map is invertible; expanding along the first row gives $\det K = 64 \ne 0$, consistent with $(\det K)^2 = 8^4$. \qed
+because $\sum_{|S|=j}(-1)^{x \cdot S}$ depends on $x$ only through $|x|$: choosing $S$ of weight $j$ with $i$ of its ones inside the support of $x$ contributes $(-1)^i \binom{|x|}{i}\binom{3-|x|}{j-i}$. Grouping $x$ by weight gives the displayed sum. Now evaluate $K_j(w) = \sum_i (-1)^i \binom{w}{i}\binom{3-w}{j-i}$ at $w,j \in \{0,1,2,3\}$ to get the table. The matrix $K = \bigl(K_j(w)\bigr)$ satisfies $K^2 = 8I$, so $K^{-1} = \tfrac18 K$ and the map is invertible; expanding along the first row gives $\det K = 64 \ne 0$, consistent with $(\det K)^2 = 8^4$. \qed
 
 \subsection*{Proof of \cref{thm:count}}
 
@@ -324,9 +326,11 @@ B(\ell) = \begin{cases} \binom{\ell/2+2}{2} = \dfrac{(\ell+2)(\ell+4)}{8}, & \el
 \]
 we obtain the exact finite sum
 \begin{equation}
+\begin{multlined}
 N_k(2h+1) = \sum_{a=0}^{2}\rho_a \sum_{i=0}^{3-k}\sum_{j=0}^{k}
-(-1)^{i+j}\binom{3-k}{i}\binom{k}{j}
-B\bigl(3h{+}1{-}k{-}a{-}i(2h{+}2){-}2jh\bigr).
+(-1)^{i+j}\binom{3-k}{i}\binom{k}{j}\\
+\times B\bigl(3h{+}1{-}k{-}a{-}i(2h{+}2){-}2jh\bigr).
+\end{multlined}
 \label{eq:finite}
 \end{equation}
 No asymptotics and no interpolation have entered; \cref{eq:finite} is a finite sum of at most $3 \cdot 2^3$ terms.
@@ -404,7 +408,7 @@ each entry being the mean of the two residue-class values plus $s$ times half th
  + \frac{1}{48n}\sum_w m_w B_w
  + \frac{1}{48n^2}\sum_w m_w C_w .
 \]
-Now read the three vectors in the Krawtchouk basis of \cref{lem:kraw}, whose rows are $K_0 = (1,1,1,1)$, $K_1 = (3,1,-1,-3)$, $K_2 = (3,-1,-1,3)$, $K_3 = (1,-1,1,-1)$:
+Now read the three vectors in the Krawtchouk basis of \cref{lem:kraw}, with rows $K_0 = (1,1,1,1)$, $K_1 = (3,1,-1,-3)$, $K_2 = (3,-1,-1,3)$ and $K_3 = (1,-1,1,-1)$:
 \[
 \begin{aligned}
 A &= 6K_0 - 3s\,K_3, \\

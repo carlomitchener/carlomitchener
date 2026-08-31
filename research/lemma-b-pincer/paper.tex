@@ -73,7 +73,7 @@ Call this set $G_n$. It is the familiar triangle-of-triangles, drawn with intege
 \label{fig:pincer}
 \end{figure}
 
-Above dimension one this is a routine sieve, and the reason is worth seeing, because it is exactly the reason the sieve stops at a line. A prime $p$ in the greatest common divisor confines the point to the sublattice $p\mathbb Z^2$, whose share of a $D$-dimensional digital design is of order $p^{-D}$; summing over the large primes costs $\sum_{p > z} p^{-D}$, which converges for $D > 1$ and can be made small by taking $z$ large. At $D = 1$ that sum is $\sum_{p>z} 1/p$, which diverges for every $z$, and the argument stops. The gasket is the canonical dimension-one object. Nothing below depends on the picture just drawn; it is only the reason dimension one is the interesting case. What blocks the proof there is a single estimate, called Lemma B below: the points of $G_n$ whose coordinates a large prime $p$ divides must not be too many, summed over all large $p$ at once.
+Above dimension one this is a routine sieve, and the reason is worth seeing, because it is exactly the reason the sieve stops at a line. A prime $p$ in the greatest common divisor confines the point to the sublattice $p\mathbb Z^2$, whose share of a $D$-dimensional digital design is of order $p^{-D}$; summing over the large primes costs $\sum_{p > z} p^{-D}$, which converges for $D > 1$ and can be made small by taking $z$ large. At $D = 1$ that sum is $\sum_{p>z} 1/p$, which diverges for every $z$, and the argument stops. The gasket is the canonical dimension-one object. Nothing below depends on the picture just drawn; it is only the reason dimension one is the interesting case. What blocks the proof there is a single estimate: the points whose coordinates a large prime $p$ divides must not be too many, summed over all large $p$ at once. For a general digital design that estimate is known as \emph{Lemma B}. Only its gasket case is at stake here, and since the two are different statements they get different names: the gasket case is \emph{Lemma G}, written out as \cref{def:lemmag} below.
 
 The estimate is easy for small $p$ and easy for enormous $p$. It is hard in the middle, and ``the middle'' can be named precisely. Write a prime's size against the level as its \emph{exponent}
 \[
@@ -145,22 +145,22 @@ Coprimality forbids $3 \mid \gcd(a,b)$, so the trichotomy is exhaustive. The \em
 For $k, w \ge 1$ let $D_k(w) = \#\{S \subseteq \{1,\dots,w\} : \text{no two elements of } S \text{ differ by exactly } k\}$.
 \end{definition}
 
-\begin{definition}[Lemma B and its exponent]
-\label{def:lemmab}
+\begin{definition}[Lemma G and its exponent]
+\label{def:lemmag}
 Fix a prime $p \ne 3$ and let
 \[
   T_p(n) \ = \ \#\{\,x \in G_n \setminus \{0\} \ : \ p \mid \gcd(x_1,x_2)\,\},
 \]
-the mass a single prime carries in the greatest common divisor. The origin is excluded because it lies in every residue class of every modulus and carries no information. \emph{Lemma B} is the statement
+the mass a single prime carries in the greatest common divisor. The origin is excluded because it lies in every residue class of every modulus and carries no information. \emph{Lemma G} is the statement
 \[
   \lim_{z \to \infty} \ \limsup_{n \to \infty} \ \frac{1}{3^n} \sum_{p > z} T_p(n) \ = \ 0 ,
 \]
-and \emph{Lemma B holds on an exponent range $I \subseteq (0,1]$} when the same limit taken over the primes with $\log_3 p / n \in I$ is $0$. Both sums are finite: a nonzero point of $G_n$ has both coordinates below $3^n$ and not both zero, so its gcd is a positive integer below $3^n$ and only primes $p < 3^n$ occur at all.
+and \emph{Lemma G holds on an exponent range $I \subseteq (0,1]$} when the same limit taken over the primes with $\log_3 p / n \in I$ is $0$. Both sums are finite: a nonzero point of $G_n$ has both coordinates below $3^n$ and not both zero, so its gcd is a positive integer below $3^n$ and only primes $p < 3^n$ occur at all. The letter keeps this statement apart from Lemma B of the wider coprimality programme, which asserts the same vanishing for a general digital design, with its own point set and its own normalisation; Lemma G is the gasket case and is all that is meant below.
 \end{definition}
 
 \begin{definition}[Hypothesis L, the low range]
 \label{def:hypL}
-\emph{Hypothesis L} is the statement that Lemma B holds on $(0,\ \beta_0]$ for $\beta_0 = 0.447597813453$. It is a theorem of a separate machine, the Fourier moment ladder \cite{ladder}: exact moment identities for the gasket's character sums, a three-block H\"older bound at moment order $2K$ whose middle block is supplied by an energy cap, and a dyadic summation over the primes. Its rungs $\beta_0^{(2K)}$ are indexed by the moment order and rise through the orders computed; the constant above is a truncation of the tenth rung, which is the highest rung whose master bound is written out and whose growth constant is bracketed in exact arithmetic rather than merely computed. It works with the target-uniform count $\max_\tau \#\{x \in G_n : x \equiv \tau \bmod p\}$, which dominates $T_p(n)$, so what it delivers on $(0,\beta_0]$ is at least \cref{def:lemmab}; that weaker consequence is all we import. The argument shares no object with this paper and is not reproduced here, so every statement below that uses it is labelled as using it.
+\emph{Hypothesis L} is the statement that Lemma G holds on $(0,\ \beta_0]$ for $\beta_0 = 0.447597813453$. It is a theorem of a separate machine, the Fourier moment ladder \cite{ladder}: exact moment identities for the gasket's character sums, a three-block H\"older bound at moment order $2K$ whose middle block is supplied by an energy cap, and a dyadic summation over the primes. Its rungs $\beta_0^{(2K)}$ are indexed by the moment order and rise through the orders computed; the constant above is a truncation of the tenth rung, which is the highest rung whose master bound is written out and whose growth constant is bracketed in exact arithmetic rather than merely computed. It works with the target-uniform count $\max_\tau \#\{x \in G_n : x \equiv \tau \bmod p\}$, which dominates $T_p(n)$, so what it delivers on $(0,\beta_0]$ is at least \cref{def:lemmag}; that weaker consequence is all we import. The argument shares no object with this paper and is not reproduced here, so every statement below that uses it is labelled as using it.
 
 One further statement is imported from the same machine and used nowhere in a proof, only as a signpost: the rungs obey the cap $\beta_0^{(2K)} < 2/(3 + \log_3 5)$ for every $K$, because the Fourier peak forces the ladder parameter $\kappa_{2K}$ below $2$. So no moment order reaches $1/2$, and the tenth rung already sits within $0.00034$ of that cap. Since the cap is far below the upper edge of \cref{thm:topedge}, the ladder can never close the window on its own, however high the moment order: whatever closes it must come from above. The numbers this definition contributes are re-checked arithmetically in \cref{fact:ladder}, and the growth constant behind the tenth rung is re-certified there from scratch.
 \end{definition}
@@ -188,7 +188,7 @@ Write $\psi_\varphi(c) = 2c + (1-c)\log_3\varphi$ and $c = 1 - \beta'$. The numb
 \[
   N_{\mathrm{top}}(n) \ \le \ 2^{n+1} \ + \ 600 \cdot 3^{\,n\,\psi_\varphi(c)} .
 \]
-Since $\psi_\varphi(c) < 1$ exactly when $c < c^* = (1 - \log_3\varphi)/(2 - \log_3\varphi) = 0.3597878$, Lemma B holds on $(\beta', 1]$ for every
+Since $\psi_\varphi(c) < 1$ exactly when $c < c^* = (1 - \log_3\varphi)/(2 - \log_3\varphi) = 0.3597878$, Lemma G holds on $(\beta', 1]$ for every
 \[
   \beta' \ > \ 1 - c^* \ = \ \frac{1}{2 - \log_3\varphi} \ = \ 0.6402121938 \dots ,
 \]
@@ -197,7 +197,7 @@ unconditionally, with no unproved input.
 
 \begin{corollary}[The pincer]
 \label{cor:pincer}
-Under \cref{def:hypL}, Lemma B at dimension one can fail only for prime exponents in
+Under \cref{def:hypL}, Lemma G can fail only for prime exponents in
 \[
   \beta \ \in \ (\,0.447597813453,\ \ 0.6402121938\,] .
 \]
@@ -216,7 +216,9 @@ This is a statement about the relaxation, not a lower bound for the true ray mas
 Let $\nu$ be any probability measure on rays with $\nu(\{r_0\}) = q > 0$ for some ray $r_0$ with $\rho(r_0) = \varphi$; by \cref{lem:shift} every shift ray $(1,3^k)$, $k \ge 1$, is such a ray. Then
 \[
   \int \rho^w \, d\nu \ \ge \ \max\Bigl\{ \bigl(\textstyle\int \rho \, d\nu\bigr)^w, \ q\,\varphi^w \Bigr\} ,
-  \qquad \text{so} \qquad
+\]
+and consequently
+\[
   \liminf_{w \to \infty} \Bigl( \int \rho^w \, d\nu \Bigr)^{1/w} \ \ge \ \varphi .
 \]
 Since a ray in octave $j$ carries mass at most $\rho^{\,w}$ with $w = n - j$, and mass is what the octave sum adds, replacing $\sup_r \rho(r)$ by any $\nu$-average leaves the exponent of \cref{thm:topedge} untouched. Moreover the inverse-square weight $1/(a^2+b^2)$ is not a probability measure: $\sum_{(a,b)} 1/(a^2+b^2)$ over rays diverges, so every weighted mean of that shape exists only relative to a height cutoff.
@@ -283,7 +285,7 @@ For every octave $1 \le j \le 4$ and every parameter $k \ge 1$, direct enumerati
 
 \begin{conjecture}[Strictness and the supergolden supremum]
 \label{con:supergolden}
-$\rho(a,b) < \varphi$ for every non-shift ray, with $\sup \rho = 1.4655712319$, the real root of $x^3 = x^2 + 1$ \cite{oeissuper}. Under it, \cref{thm:topedge} improves to every $\beta' > 1/(2 - \log_3 1.4655712319) = 0.6053028664$.
+$\rho(a,b) < \varphi$ for every non-shift ray, with $\sup \rho = 1.4655712319$, the real root of $x^3 = x^2 + 1$ \cite{oeissuper}. Under it, \cref{thm:topedge} improves to every $\beta'$ above $1/(2 - \log_3 1.4655712319)$, that is above $0.6053028664$.
 
 \emph{Evidence.} All $1{,}102$ coprime rays of height at most $60$ were generated and their radii computed independently: $(4,9)$, $(3,10)$ and $(1,12)$ all sit at $1.465571231876768$, the supergolden root to numerical precision; the next family, at $(3,7)$, sits at $1.380277569$; nothing off the shifts approaches $\varphi$. Every radius observed is a root of $x^m = x^{m-1} + 1$ or $x^m = x + 1$, exactly the run-length-constrained counts that near-shift geometry predicts. The certified upper bounds of \cref{fact:catalogue} confirm this at height $40$ with exact integer arithmetic. A mechanism is visible in \cref{thm:burst}: the deep carry $\lfloor c_1 / 3^k \rfloor$ is a deterministic function of the state, and the shifts are exactly the rays where it always sits where the adversary would put it.
 
@@ -361,15 +363,15 @@ We claim, for $0 \le j \le k$,
   c_1^{(i+j)} = a' \sum_{m < j} 3^{\,k-j+m}\, d_{i+m} \ + \ \Bigl\lfloor \frac{c_1^{(i)}}{3^{\,j}} \Bigr\rfloor .
 \]
 The case $j = 1$ is the displayed recursion. Assume it for some $j < k$. Every exponent $k-j+m$ with $0 \le m < j$ is at least $k - j \ge 1$, so each term of the sum is divisible by $3$, and applying the recursion once more,
-\[
-  c_1^{(i+j+1)} = 3^{k-1}a' d_{i+j} + \Bigl\lfloor \frac{c_1^{(i+j)}}{3} \Bigr\rfloor
-   = 3^{k-1} a' d_{i+j} + a' \sum_{m<j} 3^{\,k-j-1+m} d_{i+m} + \Bigl\lfloor \frac{c_1^{(i)}}{3^{\,j+1}} \Bigr\rfloor ,
-\]
+\begin{align*}
+  c_1^{(i+j+1)} &= 3^{k-1}a' d_{i+j} + \Bigl\lfloor \frac{c_1^{(i+j)}}{3} \Bigr\rfloor \\
+   &= 3^{k-1} a' d_{i+j} + a' \sum_{m<j} 3^{\,k-j-1+m} d_{i+m} + \Bigl\lfloor \frac{c_1^{(i)}}{3^{\,j+1}} \Bigr\rfloor ,
+\end{align*}
 which is the claim at $j+1$ because $3^{k-1} = 3^{\,k-(j+1)+j}$. Now the type at step $i+j$ is $t_{i+j} = c_1^{(i+j)} \bmod 3$ by \cref{lem:types}. For $j < k$ every exponent $k-j+m \ge 1$, so the digit terms vanish mod $3$ and $t_{i+j} \equiv \lfloor c_1^{(i)}/3^{\,j} \rfloor$, which is (1). At $j = k$ the exponents are $m$ for $0 \le m < k$, so only $m = 0$ survives mod $3$:
 \[
   t_{i+k} \ \equiv \ a' d_i + \Bigl\lfloor \frac{c_1^{(i)}}{3^{\,k}} \Bigr\rfloor \pmod 3 .
 \]
-Two admissible digits at a $2$-branching state are distinct mod $3$ by \cref{lem:types}, and $3 \nmid a'$, so $a'd_i$ separates them: the two types at step $i+k$ differ. That is (2).
+At a $2$-branching state the two admissible digits are distinct mod $3$ by \cref{lem:types}, and $3 \nmid a'$, so $a'd_i$ separates them, and the two types at step $i+k$ differ. That is (2).
 
 \emph{opp.} Write $a + b = 3^k m$ with $3 \nmid m$, and $T_i = c_1^{(i)} + c_2^{(i)}$. On an admissible step with output $(r_1,r_2) \in F$,
 \[
@@ -396,10 +398,10 @@ Class eq is immediate from \cref{lem:types}(3): at most one admissible digit at 
 
 Let $(a,b)$ be div or opp with parameter $k$ and branching type $B$. At each $2$-branching state, \cref{lem:delay}(2) gives the two admissible digits distinct types at step $i+k$, so at most one of those two types equals $B$. Define the \emph{designated} digit at a $2$-branching step $i$ to be the admissible digit whose type at step $i+k$ is not $B$, choosing the smaller digit when both qualify, and choosing the smaller digit also when the predetermined window ahead is dead, meaning one of the types $t_{i+1},\dots,t_{i+k-1}$ fixed by \cref{lem:delay}(1) equals $2$. The rule is total, and in the dead-window case the designation is never consulted, because no admissible path of the length under consideration passes through step $i+k$.
 
-Fix a start state $s$ and $w \ge 1$. To an admissible path $(d_0,\dots,d_{w-1})$ assign
+Fix a start state $s$ and $w \ge 1$. To an admissible path $(d_0,\dots,d_{w-1})$ assign the subset $S \subseteq \{1,\dots,w\}$ given by
 \[
   S \ = \ \bigl\{\, i + 1 \ : \ 0 \le i < w, \ \text{step } i \text{ is } 2\text{-branching},
-  \ d_i \text{ designated} \,\bigr\} \ \subseteq \ \{1,\dots,w\} .
+  \ d_i \text{ designated} \,\bigr\} .
 \]
 
 \emph{The map is injective.} Two distinct admissible paths from $s$ agree up to some first index $i$ and differ there. Both continuations being admissible, step $i$ has two admissible digits, so it is $2$-branching by \cref{lem:types}, and the states along the two paths coincide up to step $i$, so both paths see the same designation there. Exactly one of the two digits is designated, so $i+1$ lies in one image set and not the other.
@@ -468,11 +470,11 @@ since $9^{cn}\varphi^{(1-c)n} = 3^{\,n(2c + (1-c)\log_3\varphi)}$. As $2c \le \p
 \]
 with the stated constant left generous. Writing $L = \log_3\varphi$, $\psi_\varphi(c) < 1$ is $c(2-L) < 1-L$, that is $c < c^* = (1-L)/(2-L)$, and $1 - c^* = 1/(2-L)$. So for every $\beta' > 1/(2-L)$ we get $N_{\mathrm{top}}(n) = o(3^n)$, since $2^{n+1} = o(3^n)$ as well.
 
-Finally, Lemma B on $(\beta',1]$ follows. Let $p$ be a prime with $\log_3 p / n \in (\beta',1]$, so $p > 3^{\beta' n}$. Every point counted by $T_p(n)$ of \cref{def:lemmab} is a nonzero point of $G_n$ whose gcd is divisible by such a prime, hence is one of the $N_{\mathrm{top}}(n)$ points just bounded. A single point is counted for at most $1/\beta'$ of these primes, since their product divides its gcd and that is below $3^n$. Therefore
+Finally, Lemma G on $(\beta',1]$ follows. Let $p$ be a prime with $\log_3 p / n \in (\beta',1]$, so $p > 3^{\beta' n}$. Every point counted by $T_p(n)$ of \cref{def:lemmag} is a nonzero point of $G_n$ whose gcd is divisible by such a prime, hence is one of the $N_{\mathrm{top}}(n)$ points just bounded. A single point is counted for at most $1/\beta'$ of these primes, since their product divides its gcd and that is below $3^n$. Therefore
 \[
   \sum_{\log_3 p / n \, \in \, (\beta',\,1]} T_p(n) \ \le \ \frac{1}{\beta'}\, N_{\mathrm{top}}(n) \ = \ o(3^n) ,
 \]
-so the inner $\limsup$ of \cref{def:lemmab} restricted to this range is $0$ for every $z$, and so is the limit.
+so the inner $\limsup$ of \cref{def:lemmag} restricted to this range is $0$ for every $z$, and so is the limit.
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:closure-one}]
@@ -486,7 +488,7 @@ We repeat the caveat, because it is easy to misread this theorem as a lower boun
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:closure-two}]
-The first inequality is Jensen applied to the convex function $t \mapsto t^w$ on $[0,\infty)$; the second is monotonicity, $\int \rho^w d\nu \ge \nu(\{r_0\})\rho(r_0)^w = q\varphi^w$. Taking $w$-th roots, $(\int\rho^w d\nu)^{1/w} \ge q^{1/w}\varphi \to \varphi$. The shift rays do have $\rho = \varphi$, for every $k \ge 1$, by \cref{lem:shift}.
+The first inequality is Jensen applied to the convex function $t \mapsto t^w$ on $[0,\infty)$; the second is monotonicity, since $\int \rho^w d\nu \ge \nu(\{r_0\})\rho(r_0)^w = q\varphi^w$. Taking $w$-th roots gives $(\int\rho^w d\nu)^{1/w} \ge q^{1/w}\varphi$, which tends to $\varphi$. The shift rays do have $\rho = \varphi$, for every $k \ge 1$, by \cref{lem:shift}.
 
 For the consequence, note that the octave-$j$ inner sum of the proof of \cref{thm:topedge} is a sum of ray masses, each at most $\rho^{\,w}$ up to the parameter factor, with $w = n-j$. Any scheme that replaces the supremum of $\rho$ over the octave by a $\nu$-average of $\rho$ is asserting $\int \rho^w d\nu \le (\int \rho\, d\nu)^w$, the reverse of the first inequality. Since some rays in every octave large enough to contain one are shifts, $q > 0$ for the natural choices of $\nu$, and the $w$-th root of the true quantity tends to $\varphi$. So the exponent $\psi_\varphi$ is unchanged.
 
@@ -498,19 +500,23 @@ which tends to infinity with $H$ by Mertens \cite{mertens}. So the inverse-squar
 \end{proof}
 
 \begin{proof}[Proof of \cref{cor:pincer}]
-\Cref{thm:topedge} gives Lemma B on $(\beta',1]$ for every $\beta' > 0.6402121938$, hence on $(0.6402121938, 1]$ by taking a decreasing sequence of such $\beta'$ and noting that the exponent ranges nest. \Cref{def:hypL} gives it on $(0, 0.447597813453]$. The union leaves exactly the stated interval, on which nothing is claimed.
+\Cref{thm:topedge} gives Lemma G on $(\beta',1]$ for every $\beta' > 0.6402121938$, hence on $(0.6402121938, 1]$ by taking a decreasing sequence of such $\beta'$ and noting that the exponent ranges nest. \Cref{def:hypL} gives it on $(0, 0.447597813453]$. The union leaves exactly the stated interval, on which nothing is claimed.
 \end{proof}
 
 \section{Reproducibility}
 \label{sec:repro}
 
-Everything numerical in this paper is re-checked by one script, \texttt{scripts/verify.py}, which uses the Python standard library only, takes no arguments, reads no files, and runs from the lane root in a couple of seconds on a laptop. Every assertion in it names the value obtained and the value expected, and any mismatch aborts the run. It covers exactly the following.
+One script, \texttt{scripts/verify.py}, re-checks everything numerical in this paper. It uses the Python standard library only, takes no arguments, reads no files, and runs from the lane root in a couple of seconds on a laptop. Every assertion in it names the value obtained and the value expected, and any mismatch aborts the run. It covers exactly the following.
 
 \begin{itemize}
-  \item \emph{Constants.} $\log_3\varphi$, the edge $1/(2-\log_3\varphi) = 0.6402121938$, $c^* = 0.3597878$, the supergolden root $1.4655712319$ and the edge $0.6053028664$ it would give, the cap $2/(3+\log_3 5) = 0.447930988$, and, from $\lambda_8 = 456+3\sqrt{11017}$ and $\lambda_{10} = 6664.113662506$, the two ladder rungs $0.446717310462$ and $0.447597813454$ of \cref{fact:ladder}.
-  \item \emph{\cref{fact:ladder}, the tenth rung, from scratch.} The order-$10$ carry matrix rebuilt from $F$ alone on the box $\{-2,\dots,2\}^2$, its six energies $E_{10}(G_a)$ for $a \le 5$, the values at $a \le 3$ against direct convolution of the digit set, the degree-$25$ characteristic polynomial in exact rational arithmetic against the displayed factorisation, and Sturm chains over $\mathbb Q$ placing no real root of any factor above the exact rational $6664.1136626$ and exactly one root of $q$ in the bracket below it, whence the truncated $\kappa_{10} > 1.985805792698$ and $\beta_0^{(10)} > 0.447597813453$. The closure $\lfloor (r+K)/3 \rfloor \le r$ of the carry box and the order-$4$ control $E_4(G_a) = 15^a$ are checked alongside.
-  \item \emph{The quarantined substitutions of \cref{rem:quarantine}.} $1/(2-\log_3 1.0639086) = 0.5145062$ and $1/(2-\log_3 1.0997454) = 0.5226147$, checked as arithmetic identities so that the two are never confused.
-  \item \emph{\cref{lem:subsets}.} $D_k(w)$ against brute-force enumeration of all subsets for $w \le 14$ and $1 \le k \le 5$, and $D_k(w) \le \varphi^{\,w+k}$ for $1 \le k \le 6$, $w \le 60$.
+  \item \emph{Constants.} The value $\log_3\varphi$, the edge $1/(2-\log_3\varphi) = 0.6402121938$ that it gives, and the exponent $c^* = 0.3597878$ behind that edge. Then the supergolden root $1.4655712319$, with the edge $0.6053028664$ that it would give in turn, and the ladder cap $2/(3+\log_3 5) = 0.447930988$. Then the two rungs of \cref{fact:ladder}: $0.446717310462$ from $\lambda_8 = 456+3\sqrt{11017}$ and $0.447597813454$ from $\lambda_{10} = 6664.113662506$.
+  \item \emph{\cref{fact:ladder}, the tenth rung, from scratch.} The order-$10$ carry matrix rebuilt from $F$ alone on the box $\{-2,\dots,2\}^2$, its six energies $E_{10}(G_a)$ for $a \le 5$, the values at $a \le 3$ against direct convolution of the digit set, the degree-$25$ characteristic polynomial in exact rational arithmetic against the displayed factorisation, and Sturm chains over $\mathbb Q$ placing no real root of any factor above the exact rational $6664.1136626$, with exactly one root of $q$ in the bracket below it, whence the truncated bounds $\kappa_{10} > 1.985805792698$ and $\beta_0^{(10)} > 0.447597813453$. The closure $\lfloor (r+K)/3 \rfloor \le r$ of the carry box and the order-$4$ control $E_4(G_a) = 15^a$ are checked alongside.
+  \item \emph{The quarantined substitutions of \cref{rem:quarantine}.} The two identities
+  \[
+    1/(2-\log_3 1.0639086) = 0.5145062, \qquad 1/(2-\log_3 1.0997454) = 0.5226147 ,
+  \]
+  checked as arithmetic so that the two numbers are never confused.
+  \item \emph{\cref{lem:subsets}.} $D_k(w)$ against brute-force enumeration of all subsets, for $w \le 14$ and $1 \le k \le 5$; and the bound $D_k(w) \le \varphi^{\,w+k}$ for $1 \le k \le 6$ and $w \le 60$.
   \item \emph{\cref{lem:types}.} Exact branch counts, not merely bounds, at every state of every primitive ray of height at most $24$: div and opp states admit exactly $2$, $1$ or $0$ digits as the residue rule predicts, and eq states admit at most $1$.
   \item \emph{\cref{lem:delay}.} The predetermination and the split, at every state of every div or opp ray of height at most $24$: the types at the next $k-1$ steps depend only on the state, and the two admissible digits at a $2$-branching state give different types $k$ steps later.
   \item \emph{\cref{thm:burst}.} $P_w(s) \le D_k(w)$ at every start state, for every primitive ray of height at most $24$ and every $w \le 20$.

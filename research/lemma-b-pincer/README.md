@@ -6,7 +6,7 @@ Take the base-3 Sierpinski gasket at level `n` - the `3^n` lattice points whose 
 
 Measure a prime by its exponent against the level, $\beta = \log_3 p / n$. A big prime in a common factor forces a short ray $(a,b)$, and counting the multiples of a ray inside the gasket is a finite automaton on the base-3 digits of the multiplier, with growth rate $\rho(a,b)$. There are infinitely many rays and the automata grow like $ab$, so no computation settles them.
 
-**Theorem.** $\rho(a,b) \le \varphi$ for every primitive ray, at every 3-adic depth, and therefore Lemma B holds for every prime exponent $\beta > 1/(2 - \log_3 \varphi) = 0.6402121938$, unconditionally.
+**Theorem.** $\rho(a,b) \le \varphi$ for every primitive ray, at every 3-adic depth, and therefore Lemma G - the gasket case of the coprimality programme's Lemma B, and the only case this paper claims - holds for every prime exponent $\beta > 1/(2 - \log_3 \varphi) = 0.6402121938$, unconditionally.
 
 Combine that with the lower edge $0.447597813453$, the tenth rung of a separate Fourier moment ladder, which that machine proves elsewhere and which this paper imports rather than reproduces, and the estimate can fail only for $\beta \in (0.447597813453,\ 0.6402121938]$. Both edges are unconditional. The lower one is now within $0.00034$ of the ladder's own structural cap $0.447930988$, so the window will not close from below.
 

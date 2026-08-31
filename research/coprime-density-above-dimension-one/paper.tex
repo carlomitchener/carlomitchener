@@ -277,7 +277,7 @@ $6$ & $262144$ & $131072$ & $122880$ \\
 Checked by \texttt{scripts/verify.py}.
 \end{fact}
 
-The identity $B(F)k^n$ is \cref{prop:base} with inclusion-exclusion over $\{2,3\}$, so the left column is Proved; the table is the finite domain on which it was re-run to the integer. The design is spanning with $k=8>6$, so \cref{thm:main} applies and its density is
+The identity $B(F)k^n$ is \cref{prop:base} together with inclusion-exclusion over $\{2,3\}$, so the left column is Proved; the table is the finite domain on which it was re-run to the integer. The design is spanning with $k=8>6$, so \cref{thm:main} applies and its density is
 \[
   \delta \;=\; \tfrac12 \cdot \tfrac{6}{\pi^{2}} \cdot \tfrac{4}{3} \cdot \tfrac{9}{8}
   \;=\; \frac{9}{2\pi^{2}} \;=\; 0.455945326391\ldots
@@ -316,7 +316,7 @@ $q=6$ second& $6$ & $2$ & $8$ & $1/2$ & $0.455945326391$ & $-0.004361$ \\
 
 \begin{remark}[rate honesty]
 \label{rem:rate}
-\Cref{tab:endpoints} is evidence of convergence and nothing more. The proof supplies no useful rate: chaining \cref{lem:box,lem:cheb} with the sieve of \cref{sec:proofs} gives an error only of order $(\log n)^{1-\alpha}$, which is qualitative, while the measured errors are far smaller. Nor is the numerical behaviour monotone. The signed errors of the last four levels of the or-triangle run $-0.021970$, $-0.000530$, $-0.002021$, $+0.001231$, and of the Vicsek plus $-0.015118$, $+0.013042$, $-0.008078$, $+0.008818$: they change sign, so no rate can be read off them. Convergence is also slow for some designs: the $q=5$, $D=3$ axes design is still $4.4 \times 10^{-2}$ from $\delta$ at the top of the enumerated domain. The table must not be read as confirming a geometric rate; it confirms only the values it lists.
+\Cref{tab:endpoints} is evidence of convergence and nothing more. The proof supplies no useful rate: chaining \cref{lem:box,lem:cheb} with the sieve of \cref{sec:proofs} gives an error only of order $(\log n)^{1-\alpha}$, which is qualitative, while the measured errors are far smaller. Nor is the numerical behaviour monotone. The signed errors of the last four levels of the or-triangle run $-0.021970$, $-0.000530$, $-0.002021$, $+0.001231$. Those of the Vicsek plus run $-0.015118$, $+0.013042$, $-0.008078$, $+0.008818$. They change sign, so no rate can be read off them. Convergence is also slow for some designs: the $q=5$, $D=3$ axes design is still $4.4 \times 10^{-2}$ from $\delta$ at the top of the enumerated domain. The table must not be read as confirming a geometric rate; it confirms only the values it lists.
 \end{remark}
 
 \subsection{No linear recurrence}
@@ -406,7 +406,7 @@ so $f_{l_0}(t) \le 1 - \frac{2}{k}\bigl(1-\cos\frac{\pi}{2q}\bigr) = c(q,k)$. Ev
 
 \begin{corollary}[equidistribution rate]
 \label{cor:equi}
-Let the design be spanning, $\gcd(d,q)=1$, and $a \in (\mathbb{Z}/d)^{D}$. Then
+Let the design be spanning, let $d$ satisfy $\gcd(d,q)=1$, and let $a \in (\mathbb{Z}/d)^{D}$. Then
 \[
   \Bigl| \frac{\#\{x \in S_n : x \equiv a \bmod d\}}{k^{n}} - \frac{1}{d^{D}} \Bigr|
   \;\le\; c(q,k)^{\lfloor n/\mathrm{ord}_d(q)\rfloor}.
@@ -494,13 +494,13 @@ Write $P(z) = \prod_{p \le z} p$ and let
 by inclusion--exclusion over the primes up to $z$; the sum is finite, over squarefree $d$ only.
 
 \emph{Step 1: the sifted count converges at fixed $z$.} Take $z$ at least the largest prime factor of $q$, so that every prime dividing $q$ divides $P(z)$; this costs nothing, since $z \to \infty$ two steps below. Each squarefree $d \mid P(z)$ then factors uniquely as $d = e m$ with $e \mid \mathrm{rad}(q)$ and $\gcd(m,q)=1$, and $e$ ranges over \emph{all} of the divisors of $\mathrm{rad}(q)$ as $d$ ranges over the divisors of $P(z)$. \Cref{lem:peel} gives $T_d(n)/k^n \to (k_e/k)m^{-D}$. Summing the finitely many terms and factoring the resulting multiplicative sum,
-\[
+\begin{align*}
   \frac{A_z(n)}{k^{n}} \;\xrightarrow[n\to\infty]{}\;
   \sum_{d \mid P(z)}\mu(d)\frac{k_{e(d)}}{k}\frac{1}{m(d)^{D}}
-  \;=\; \Bigl(\sum_{e \mid \mathrm{rad}(q)}\mu(e)\frac{k_e}{k}\Bigr)
-  \prod_{\substack{p \le z \\ p \nmid q}}\bigl(1-p^{-D}\bigr)
-  \;=:\; \delta_z .
-\]
+  &\;=\; \Bigl(\sum_{e \mid \mathrm{rad}(q)}\mu(e)\frac{k_e}{k}\Bigr)
+  \prod_{\substack{p \le z \\ p \nmid q}}\bigl(1-p^{-D}\bigr) \\
+  &\;=:\; \delta_z .
+\end{align*}
 Note that the origin, if present in $S_n$, is counted by every $T_d(n)$ and so contributes $\sum_{d\mid P(z)}\mu(d) = 0$ to $A_z(n)$: it cancels out, and no starred correction is needed here.
 
 \emph{Step 2: the sifted count overshoots by little, uniformly in $n$.} Every $x$ counted by $A_z(n)$ but not by $A(n)$ is nonzero -- the origin is not counted by $A_z(n)$ once $z \ge 2$, as just observed, since it cancels; more directly, we may discard it and work with $S_n\setminus\{0\}$ throughout, changing each count by at most $1$ and each fraction by at most $k^{-n}$ -- and has $\gcd(x)>1$ with every prime factor exceeding $z$, so $\log\gcd(x) > \log z$. Hence

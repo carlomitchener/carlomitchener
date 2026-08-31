@@ -49,7 +49,7 @@ def build():
         p.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#9a9a9a" stroke-width="1" stroke-dasharray="4 4"/>' % (px(t), Y + 12, px(t), Y + dy - 12))
         off = 6 if anchor == "start" else -6
         p.append(text(px(t) + off, Y + dy, lab, 12, anchor=anchor, fill="#555555"))
-    p.append(text(px(0.5), 30, "Lemma B at dimension one: the prime exponent beta = log_3 p / n", 16, weight="bold"))
+    p.append(text(px(0.5), 30, "Lemma G, the gasket case: the prime exponent beta = log_3 p / n", 16, weight="bold"))
     p.append("</svg>")
     return "\n".join(p) + "\n"
 

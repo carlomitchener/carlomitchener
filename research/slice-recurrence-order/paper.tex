@@ -284,11 +284,11 @@ whatever the sign law does, the counting exponent of the recurrence converges to
 \begin{proposition}[the mass identity]
 \label{prop:mass}
 Let $v$ be the Perron vector of $M_C$, unique up to scale by \cref{prop:reach}, and let $p_D = \sum_{c \in C_D,\, 3 \mid c} v_c \,\big/ \sum_{c \in C_D} v_c$ be its mass on carries divisible by $3$. Then, exactly,
-\[
-3\rho_D \;=\; f_D + (-1)^{D-1}(D-1)\,\bigl(3p_D - 1\bigr),
-\qquad\text{i.e.}\qquad
+\begin{gather*}
+3\rho_D \;=\; f_D + (-1)^{D-1}(D-1)\,\bigl(3p_D - 1\bigr), \\
+\text{i.e.}\qquad
 \operatorname{sgn}\Bigl(\rho_D - \frac{f_D}{3}\Bigr) = (-1)^{D+1} \operatorname{sgn}\Bigl(p_D - \frac13\Bigr).
-\]
+\end{gather*}
 Consequently the full sign law, both parities at once, is equivalent to the parity-free statement that $p_D > \tfrac13$ for every $D \ge 2$: the Perron carry vector always puts more than a third of its mass on the carries divisible by three.
 \end{proposition}
 
@@ -313,7 +313,7 @@ The even half of \cref{con:sign} has since been proved, in every even dimension 
 \label{rem:rate}
 The size of the excess appears to be governed by the same tower of angles. Numerically,
 \[
-\rho_D - \frac{f_D}{3} \;=\; (-1)^{D+1}\, \frac{2(D-1)}{3} \prod_{k \ge 2} \Bigl( \cos \frac{2\pi}{3^k} \Bigr)^{\!D-1} \frac{D + 2\cos(2\pi/3^k)}{D+2} \;\cdot\; \bigl(1 + o(1)\bigr),
+\rho_D - \frac{f_D}{3} \;=\; (-1)^{D+1}\, \frac{2(D-1)}{3} \prod_{k \ge 2} \Bigl( \cos \frac{2\pi}{3^k} \Bigr)^{\!D-1} \frac{D + 2\cos(2\pi/3^k)}{D+2} \cdot \bigl(1 + o(1)\bigr),
 \]
 with the ratio of the two sides within $10^{-8}$ of $1$ at $D = 61$, where the left side is computed by exact rational bisection of $\chi_{61}$ against the bracket $\chi_{61}(f_{61}/3) < 0 < \chi_{61}(f_{61}/3 + 1)$ in \texttt{scripts/verify.py}. The per-dimension decay constant is then $\prod_{k\ge2} \cos(2\pi/3^k) = 0.7428747134\ldots$, and the linear factor $D-1$ is the parity factor of \cref{cor:step}. This asymptotic is a conjecture supported by computation; only the inequalities of \cref{thm:sign} carry theorem dress.
 \end{remark}
@@ -386,7 +386,7 @@ Containment in the core is \cref{lem:carry}. For the reverse, note first that ev
 \end{proof}
 
 \begin{proof}[Proof of \cref{lem:reflect}]
-The map $v \mapsto (2,\dots,2)-v$ is an involution of $\{0,1,2\}^D$ that preserves the number of coordinates equal to $1$, so it permutes $F_D$, and it sends digit sum $s$ to $2D-s$. Hence $B_D(s) = B_D(2D-s)$ for all $s$. Now
+The involution $v \mapsto (2,\dots,2)-v$ of $\{0,1,2\}^D$ preserves the number of coordinates equal to $1$, so it permutes $F_D$ and sends digit sum $s$ to $2D-s$. Hence $B_D(s) = B_D(2D-s)$ for all $s$. Now
 \begin{multline*}
 M^{(D)}_{-c',-c} = B_D(-c+D+3c') = B_D\bigl(2D - (c+D-3c')\bigr) \\
 = B_D(c+D-3c') = M^{(D)}_{c'c},
@@ -436,7 +436,7 @@ For odd $D$ the power $D-1$ is even, so $(2\cos\psi)^{D-1} \ge 0$, and $D + 2\co
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:product}]
-\emph{Step 1: the sheaf census is the free-end census.} Write $N_p = D(3^p-1)/2$, an integer for every $D$ because $3^p - 1$ is even. The coordinate sums $T \equiv N_L \pmod{3^L}$ are exactly $T = N_L - 3^L c'$ over $c' \in \mathbb{Z}$, where terms with $T$ outside $[0, D(3^L-1)]$ contribute nothing, so by Step 1 of the proof of \cref{thm:order},
+\emph{Step 1: the sheaf census is the free-end census.} Set $N_p = D(3^p-1)/2$, an integer for every $D$ because $3^p - 1$ is even. The coordinate sums $T \equiv N_L \pmod{3^L}$ are exactly $T = N_L - 3^L c'$ over $c' \in \mathbb{Z}$, where terms with $T$ outside $[0, D(3^L-1)]$ vanish, so by Step 1 of the proof of \cref{thm:order},
 \[
 b_D(L) = \sum_{c' \in \mathbb{Z}} \bigl[t^{\,N_L - 3^L c'}\bigr] \prod_{j=0}^{L-1} P_D\bigl(t^{3^j}\bigr).
 \]
@@ -448,7 +448,7 @@ b_D(L) = \sum_{T \equiv N_L (3^L)} \bigl[t^T\bigr] \prod_{j<L} P_D\bigl(t^{3^j}\
 = \frac{1}{3^L}\sum_{m=0}^{3^L-1} \zeta^{-N_L m} \prod_{j=0}^{L-1} P_D\bigl(\zeta^{m 3^j}\bigr).
 \]
 
-\emph{Step 3: the phases cancel.} By \cref{lem:circle}, $P_D(\zeta^{m3^j}) = e^{iD \cdot 2\pi m 3^j/3^L}\, \Phi_D\bigl(2\pi m 3^j/3^L\bigr)$, and
+\emph{Step 3: the phases cancel.} Write $\psi_j = 2\pi m 3^j/3^L$. By \cref{lem:circle}, $P_D(\zeta^{m3^j}) = e^{iD\psi_j}\,\Phi_D(\psi_j)$, and
 \[
 \prod_{j=0}^{L-1} e^{iD\, 2\pi m 3^j/3^L} = \exp\Bigl( 2\pi i\, m D \tfrac{3^L-1}{2 \cdot 3^L} \Bigr) = \zeta^{\,m N_L},
 \]
@@ -468,7 +468,11 @@ Sort the summation index $m$ of \cref{thm:product} by its $3$-adic valuation: $m
 
 \emph{Step 3: the core radius is $\rho_D$.} By Perron--Frobenius again there is $v \ge 0$, $v \ne 0$, with $M_C v = \rho(M_C)\, v$. Its even part $w = (v + Rv)/2$ is nonnegative, and nonzero: $w = 0$ would force $Rv = -v$ with both sides nonnegative, hence $v = 0$. Since $R$ commutes with $M_C$ (\cref{lem:reflect}), $w$ is an eigenvector of $M_C$ at $\rho(M_C)$ lying in the $+1$ eigenspace $E$, so $\rho(M_C)$ is an eigenvalue of $M_{\mathrm{even}}^{(D)} = M_C|_E$ and $\rho_D \ge \rho(M_C)$. Conversely every eigenvalue of $M_C|_E$ is an eigenvalue of $M_C$, so $\rho_D \le \rho(M_C)$. Hence $\rho_D = \rho(M_C) \ge f_D/3$.
 
-\emph{Step 4: strictness off the residue class $D \equiv 1$.} The matrix $J = f_D I - 3 M_{\mathrm{even}}^{(D)}$ has integer entries, and $\chi_D(f_D/3) = \det\bigl( (f_D/3) I - M_{\mathrm{even}}^{(D)} \bigr) = 3^{-n_D} \det J$. Mod $3$ the term $3 M_{\mathrm{even}}^{(D)}$ vanishes, so $\det J \equiv f_D^{\,n_D} \pmod 3$. Since $f_D = 2^{D-1}(D+2)$, $3 \mid f_D$ exactly when $D \equiv 1 \pmod 3$; for $D \not\equiv 1 \pmod 3$, $\det J \not\equiv 0 \pmod 3$, so $\chi_D(f_D/3) \ne 0$ and $f_D/3$ is not an eigenvalue. Combined with $\rho_D \ge f_D/3$ and the fact that $\rho_D$ is an eigenvalue, $\rho_D > f_D/3$.
+\emph{Step 4: strictness off the residue class $D \equiv 1$.} The matrix $J = f_D I - 3 M_{\mathrm{even}}^{(D)}$ has integer entries, and
+\[
+\chi_D(f_D/3) = \det\bigl( (f_D/3) I - M_{\mathrm{even}}^{(D)} \bigr) = 3^{-n_D} \det J .
+\]
+Mod $3$ the term $3 M_{\mathrm{even}}^{(D)}$ vanishes, so $\det J \equiv f_D^{\,n_D} \pmod 3$. Since $f_D = 2^{D-1}(D+2)$, $3 \mid f_D$ exactly when $D \equiv 1 \pmod 3$; for $D \not\equiv 1 \pmod 3$ we get $\det J \not\equiv 0 \pmod 3$, so $\chi_D(f_D/3) \ne 0$ and $f_D/3$ is not an eigenvalue. Since $\rho_D \ge f_D/3$ and $\rho_D$ is an eigenvalue, $\rho_D > f_D/3$.
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:pin}]

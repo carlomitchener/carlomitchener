@@ -442,7 +442,7 @@ In $\sum_{w}f_{w}k^{D-w}(k-1)^{w}$ set $k=1$: every term with $w \ge 1$ vanishes
 \end{proof}
 
 \begin{proof}[Proof of \cref{prop:mirror}]
-Substituting $1-k$ for $k$ turns $k^{D-w}(k-1)^{w}$ into $(1-k)^{D-w}(-k)^{w}$, which is $(-1)^{D}k^{w}(k-1)^{D-w}$. Hence
+Substitute $1-k$ for $k$. Then $k^{D-w}(k-1)^{w}$ becomes $(1-k)^{D-w}(-k)^{w}$, which is $(-1)^{D}k^{w}(k-1)^{D-w}$. Hence
 \[
   P_{F}(1-k) = (-1)^{D}\sum_{w}f_{w}q_{D-w}(k) = (-1)^{D}P_{F^{\ast}}(k),
 \]
@@ -467,7 +467,8 @@ Finally the eleven nonzero signatures are exhausted: three have $f_{0}=1,f_{2}=0
 With $P_{F}(k) = pk^{2}-(f_{1}+2f_{2})k+f_{2}$ as above,
 \begin{align*}
   P_{F}(k)-P_{F}(k-1) &= p(2k-1)-(f_{1}+2f_{2})\\
-  &= 2pk - (f_{0}+f_{1}+f_{2}) - f_{1}-2f_{2} = 2p(k-1)+f_{0}-f_{2},
+  &= 2pk - (f_{0}+f_{1}+f_{2}) - f_{1}-2f_{2}\\
+  &= 2p(k-1)+f_{0}-f_{2},
 \end{align*}
 using $p = f_{0}+f_{1}+f_{2}$ twice.
 \end{proof}
@@ -547,7 +548,7 @@ One script, \texttt{scripts/\allowbreak verify.py}, checks every number in this 
 \item \emph{Shape census} (\cref{prop:burnside,fact:shapes,thm:crossover}). The Burnside average over the full group at $D = 1,\dots,6$ against the stored terms of A000616; an independent orbit walk at $D \le 3$; and the six comparisons of $N(D)$ with $S(D)$ that give the crossover, including the ratio at $D=6$.
 \item \emph{Toroidal census} (\cref{fact:torus}). The Burnside average over all $48n^{3}$ group elements at $n = 1,\dots,5$, each element carried as an affine map, against the stored terms of A398348.
 \item \emph{Level axis} (\cref{prop:level,thm:surface,fact:surface}). The carpet built by literal Kronecker substitution to $L=4$ and the sponge to $L=3$: cells, voids and exposed faces counted one at a time on grids up to $81^{2}$ and $27^{3}$, against the closed forms and the stored terms of A001018, A016185, A381517, A009964 and A332705, plus the two recurrences on the stored terms.
-\item \emph{The surface law in general} (\cref{lem:slab,thm:surface,fact:sharp}). Every one of the $15$ nonempty designs of dimension two at $L = 0,\dots,4$ and every one of the $255$ nonempty designs of dimension three at $L = 0,\dots,3$: the numbers $c$, $l_{a}$ and $W_{a}$ are read off the tile, every exposed face of every level is counted literally on the grid, and the recurrence, the closed form in exact rational arithmetic, and $l_{a} < c$ are asserted at every level. The script also counts the designs with two or more distinct face fills on their adjacency-carrying axes, asserts that count is $141$ of $255$, and asserts for code $11$ that the order-three recurrence from $(x-7)(x-3)(x-2)$ holds while the unique order-two candidate fitted to its first four terms fails at the fifth.
+\item \emph{The general surface law} (\cref{lem:slab,thm:surface,fact:sharp}). Every one of the $15$ nonempty designs of dimension two at $L = 0,\dots,4$ and every one of the $255$ nonempty designs of dimension three at $L = 0,\dots,3$: the numbers $c$, $l_{a}$ and $W_{a}$ are read off the tile, every exposed face of every level is counted literally on the grid, and the recurrence, the closed form in exact rational arithmetic, and $l_{a} < c$ are asserted at every level. The script also counts the designs with two or more distinct face fills on their adjacency-carrying axes, asserts that count is $141$ of $255$, and asserts for code $11$ that the order-three recurrence from $(x-7)(x-3)(x-2)$ holds while the unique order-two candidate fitted to its first four terms fails at the fifth.
 \item \emph{Gasket coprimality} (\cref{fact:gasket}). All pairs with $i \mathbin{\&} j = 0$ enumerated by submask at $n = 0,\dots,11$, the coprime ones counted, against the stored terms of A396934; the support is checked to be $3^{n}$.
 \item \emph{Slice mesh} (\cref{fact:mesh}). The lattice points of the hexagon enumerated in cube coordinates at $k = 1,\dots,20$ against $12k^{2}-6k+1$, $C_{6}(2k)$ and $3n^{2}+3n+1$, the residue $1 \bmod 3$, the ten primes, and $C_{6}(m) = m^{3}-(m-1)^{3}$ for $m \le 59$.
 \item \emph{The diagonal ladder} (\cref{fact:ladder,prop:ladder,prop:level1}). A carry recursion over digit sums at $D = 3, 4$ and $L = 0,\dots,8$, against the stored terms of A299916 and the two recurrences; the dominant root $(11+\sqrt{385})/2$ checked exactly against $x^{2}-11x-66$ and numerically to ten significant figures along with the exponent $\log_{3}$ of it; and the level-one count by direct enumeration of $\{0,1,2\}^{D}$ at $D = 2,\dots,10$ against the closed form of \cref{prop:level1}, against the swinging factorial of \cref{cor:swing} and against the stored terms of A056040 to $D = 16$.

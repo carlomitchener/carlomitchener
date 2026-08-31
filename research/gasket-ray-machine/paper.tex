@@ -150,7 +150,7 @@ Fix coprime $1\le s<t$. The automaton $\mathcal{B}(s,t)$ is built exactly as $\m
 
 \begin{lemma}[The two automata coincide when a multiplier is one]
 \label{lem:free}
-$\mathcal{B}(1,t)=\mathcal{A}(1,t)$ for every $t$, with the same states and the same edges.
+For every $t$ one has $\mathcal{B}(1,t)=\mathcal{A}(1,t)$, with the same states and the same edges.
 \end{lemma}
 
 \begin{definition}[Collinear pair count]
@@ -254,7 +254,7 @@ Let $F(1)=F(2)=1$ be the Fibonacci numbers \cite{oeisA000045}, let $a(0)=a(1)=a(
 \end{enumerate}
 \end{theorem}
 
-The three named recurrences are exactly the characteristic polynomials of three small live automata, and the shift family is a run-length count in disguise; both routes are written out in \cref{sec:proofs}. Independently, \texttt{scripts/verify.py} cross-checks the automaton against enumeration of the gasket points themselves: directly over all $3^n$ points for $1\le n\le 10$, and for $1\le n\le 14$ by splitting each point as $u+3^{\lfloor n/2\rfloor}v$ with $u,v$ in gasket sets of half the level, which counts the same $3^n$ points without listing them.
+The three named recurrences are exactly the characteristic polynomials of three small live automata, and the shift family is a run-length count in disguise; both routes appear in \cref{sec:proofs}. Independently, \texttt{scripts/verify.py} cross-checks the automaton against enumeration of the gasket points themselves: directly over all $3^n$ points for $1\le n\le 10$, and for $1\le n\le 14$ by splitting each point as $u+3^{\lfloor n/2\rfloor}v$ with $u,v$ in gasket sets of half the level, which counts the same $3^n$ points without listing them.
 
 \begin{theorem}[The shift family carries $\varphi^{2n}$ and no more]
 \label{thm:shift}
@@ -312,7 +312,10 @@ and $232=F(13)-1$. Checked by \texttt{scripts/verify.py} by literal enumeration 
 \label{fact:second}
 For $1\le n\le 12$ the collinear pair count of \cref{def:pairs} reads
 \[
-E(n)=0,\ 2,\ 16,\ 98,\ 396,\ 1522,\ 5248,\ 17118,\ 52212,\ 158042,\ 466960,\ 1374038 ,
+\begin{aligned}
+E(n)=\ &0,\ 2,\ 16,\ 98,\ 396,\ 1522,\ 5248,\\
+&17118,\ 52212,\ 158042,\ 466960,\ 1374038 ,
+\end{aligned}
 \]
 and the residual $R(n)=E(n)-D(n)-\Sigma(n)$ reads
 \[
@@ -485,7 +488,7 @@ The condition is a congruence on the pair, tested without building an automaton.
 Let $(a,b)$ be primitive with $a,b\ge 1$. Then $M_n(a,b)\le F(n+1)-1$ for every $n\ge 0$ in each of these cases.
 \begin{enumerate}
 \item $3\nmid ab$, where in fact $M_n(a,b)=0$.
-\item No branch state of $\mathcal{C}(a,b)$ has both successors branching. By \cref{lem:branch}(3) this holds whenever $k=v_3(q)=1$.
+\item No branch state of $\mathcal{C}(a,b)$ has both successors branching, which by \cref{lem:branch}(3) holds whenever $k=v_3(q)=1$.
 \item $\{a,b\}=\{1,3^{\,j}\}$, and there the bound is strict for $j\ge 2$ and $n\ge 2$.
 \item $\mathcal{C}(a,b)$ carries a \emph{Fibonacci certificate}: rationals $\alpha(c)\ge 0$ and $\beta(c)$ on the live states, with $\alpha(0)=1$, $\beta(0)=0$ and
 \[
@@ -647,7 +650,7 @@ the sum running over the $2^{\,k-1}$ distinct burst-floor states $q_1m$ with $m<
 
 \begin{conjecture}[The residual is $o(3^n)$]
 \label{con:residual}
-$R(n)/3^n\to 0$; equivalently $E(n)=2\cdot 3^n+o(3^n)$ by \cref{prop:sigma}. This is the weak form: \cref{con:witness} below asserts the sharp rate $R(n)=O(\varphi^{2n})$ and implies this statement, since $\varphi^2<3$, but the weak form is all that the second-moment application needs.
+$R(n)/3^n\to 0$, that is, $E(n)=2\cdot 3^n+o(3^n)$ by \cref{prop:sigma}. This is the weak form: \cref{con:witness} below asserts the sharp rate $R(n)=O(\varphi^{2n})$ and implies this statement, since $\varphi^2<3$, but the weak form is all that the second-moment application needs.
 \smallskip
 
 \noindent\emph{Evidence.} \Cref{thm:shift} settles the dominant part outright: the shift rays contribute $(2.1982\ldots+o(1))\varphi^{2n}$ to $E$, and $\varphi^2=2.618\ldots<3$. \Cref{fact:second} measures $R$ to level $17$: $R(n)/3^n$ falls at every level from $n=8$ onward, and $R(n)/\varphi^{2n}$ peaks at $3.2378$ at $n=12$ and then falls at five consecutive levels to $2.7724831\ldots$. \Cref{thm:weightfour} closes the weight-four orbit outright, $194096$ of $R(13)=863848$, by the same Fibonacci mechanism as \cref{thm:shift}.
@@ -757,7 +760,7 @@ For $(7,3)$ the increment is $c\mapsto c+3d_1-7d_2$. From $0$ the digit $(0,0)$ 
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:mass}(2)]
-Multiplication by $3^j$ shifts base-$3$ digits, so the point $z\,(3^j,1)=(3^jz,\,z)$ has digit pair $(z_{i-j},\,z_i)$ at position $i$, with $z_{i-j}$ read as $0$ for $i<j$. That pair lies in $G=\{(0,0),(1,0),(0,1)\}$ exactly when both entries lie in $\{0,1\}$ and they are not both $1$. Also $3^jz<3^n$ exactly when $z<3^{\,n-j}$. So the multipliers $z$ with $z\,(3^j,1)\in G_n$ are exactly the strings $z_0,\dots,z_{n-j-1}$ over $\{0,1\}$ with no two ones at distance $j$.
+Multiplication by $3^j$ shifts base-$3$ digits, so at position $i$ the point $z\,(3^j,1)=(3^jz,\,z)$ has digit pair $(z_{i-j},\,z_i)$, with $z_{i-j}$ read as $0$ for $i<j$. That pair lies in $G=\{(0,0),(1,0),(0,1)\}$ exactly when both entries lie in $\{0,1\}$ and they are not both $1$. Also $3^jz<3^n$ exactly when $z<3^{\,n-j}$. So the multipliers $z$ with $z\,(3^j,1)\in G_n$ are exactly the strings $z_0,\dots,z_{n-j-1}$ over $\{0,1\}$ with no two ones at distance $j$.
 
 Sort the positions $0,\dots,n-j-1$ by residue modulo $j$. The constraint links two positions only when they are congruent modulo $j$ and adjacent inside their class, so the string factors as $j$ independent binary strings with no two adjacent ones, of lengths $m_r=\#\{i\in[0,n-j): i\equiv r\bmod j\}$. Binary strings of length $m$ with no two adjacent ones number $F(m+2)$, so the count is $\prod_{r<j}F(m_r+2)$, and removing $z=0$ gives the stated mass. Writing $n-j=qj+\rho$ with $0\le\rho<j$ gives $m_r=q+1$ for $r<\rho$ and $m_r=q$ otherwise, which is the block form. The mirror identity $M_n(1,3^j)=M_n(3^j,1)$ holds because $G$ is stable under swapping the two coordinates.
 \end{proof}
@@ -765,7 +768,10 @@ Sort the positions $0,\dots,n-j-1$ by residue modulo $j$. The constraint links t
 \begin{proof}[Proof of \cref{thm:shift}]
 First, $F(k)\le 2\varphi^{\,k-3}$ for every $k\ge 2$, by induction on two steps. The bases are $F(2)=1\le 2\varphi^{-1}=1.236\ldots$ and $F(3)=2=2\varphi^{0}$, the latter with equality. For $k\ge 4$, assuming the bound at $k-1$ and $k-2$,
 \[
-F(k)=F(k-1)+F(k-2)\le 2\varphi^{\,k-4}+2\varphi^{\,k-5}=2\varphi^{\,k-5}(\varphi+1)=2\varphi^{\,k-5}\varphi^2=2\varphi^{\,k-3},
+\begin{aligned}
+F(k)=F(k-1)+F(k-2)&\le 2\varphi^{\,k-4}+2\varphi^{\,k-5}\\
+&=2\varphi^{\,k-5}(\varphi+1)=2\varphi^{\,k-5}\varphi^2=2\varphi^{\,k-3},
+\end{aligned}
 \]
 using $\varphi^2=\varphi+1$. That is $F(k)\le (2/\varphi^3)\varphi^k$, with equality exactly at $k=3$. Applying it to each factor of \cref{thm:mass}(2), and using $\sum_{r<j}(m_r+2)=(n-j)+2j=n+j$,
 \[

@@ -23,5 +23,5 @@
 <text x="456.0" y="214.0" font-family="Helvetica,Arial,sans-serif" font-size="12" text-anchor="start" fill="#555555" font-weight="normal">1/2  per-ray wall</text>
 <line x1="532.1" y1="108.0" x2="532.1" y2="224.0" stroke="#9a9a9a" stroke-width="1" stroke-dasharray="4 4"/>
 <text x="526.1" y="236.0" font-family="Helvetica,Arial,sans-serif" font-size="12" text-anchor="end" fill="#555555" font-weight="normal">0.605303  supergolden target</text>
-<text x="450.0" y="30.0" font-family="Helvetica,Arial,sans-serif" font-size="16" text-anchor="middle" fill="#1b1b1b" font-weight="bold">Lemma B at dimension one: the prime exponent beta = log_3 p / n</text>
+<text x="450.0" y="30.0" font-family="Helvetica,Arial,sans-serif" font-size="16" text-anchor="middle" fill="#1b1b1b" font-weight="bold">Lemma G, the gasket case: the prime exponent beta = log_3 p / n</text>
 </svg>

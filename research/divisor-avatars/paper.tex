@@ -292,9 +292,10 @@ Over the exact finite domain consisting of the $140$ powers $N = x^{n}$ with $x 
 \begin{fact}[the first colossally abundant number with no avatar]
 \label{fact:ca}
 Over the exact finite domain consisting of the first $13$ colossally abundant numbers A004490 \cite{a004490}, namely
-\[
-  2,\; 6,\; 12,\; 60,\; 120,\; 360,\; 2520,\; 5040,\; 55440,\; 720720,\; 1441440,\; 4324320,\; 21621600,
-\]
+\begin{gather*}
+  2,\; 6,\; 12,\; 60,\; 120,\; 360,\; 2520,\; 5040,\\
+  55440,\; 720720,\; 1441440,\; 4324320,\; 21621600,
+\end{gather*}
 the first twelve satisfy $\Omega \le 2\omega$ and therefore have divisor avatars by \cref{thm:criterion}, while the thirteenth,
 \[
   21621600 = 2^{5}\cdot 3^{3}\cdot 5^{2}\cdot 7 \cdot 11 \cdot 13, \qquad \Omega = 13, \quad \omega = 6,
@@ -376,7 +377,7 @@ There are exactly $\binom{D}{w}$ corners of weight $w$, so any signature must sa
 \end{proof}
 
 \begin{proof}[Proof of \cref{lem:dom}]
-Say that $A = \sum_{w}A_{w}t^{w}$ is dominated by $B=\sum_{w}B_{w}t^{w}$, written $A \preceq B$, when $0 \le A_{w} \le B_{w}$ for every $w$. Domination is preserved by products of polynomials with nonnegative coefficients: if $A \preceq A'$ and $B \preceq B'$ then the coefficient of $t^{w}$ in $AB$ is $\sum_{j}A_{j}B_{w-j} \le \sum_{j}A'_{j}B'_{w-j}$, the coefficient of $t^{w}$ in $A'B'$.
+For $A = \sum_{w}A_{w}t^{w}$ and $B=\sum_{w}B_{w}t^{w}$, say that $A$ is dominated by $B$, written $A \preceq B$, when $0 \le A_{w} \le B_{w}$ for every $w$. Domination is preserved by products of polynomials with nonnegative coefficients: if $A \preceq A'$ and $B \preceq B'$ then the coefficient of $t^{w}$ in $AB$ is $\sum_{j}A_{j}B_{w-j} \le \sum_{j}A'_{j}B'_{w-j}$, the coefficient of $t^{w}$ in $A'B'$.
 
 For a nonnegative integer $b$ we have $1+bt \preceq (1+t)^{b}$, since the coefficients on the left are $1, b, 0, 0, \dots$ and those on the right are $1, b, \binom{b}{2}, \dots$, all nonnegative. Multiplying these $D$ dominations together,
 \[
@@ -386,16 +387,17 @@ which is exactly $0 \le e_{w}(b) \le \binom{m}{w}$ for every $w$. If moreover $m
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:criterion}]
-(i) Since $x^{n} = \prod_{i}q_{i}^{a_{i}n}$ and the $q_{i}$ are distinct, $d(x^{n}) = \prod_{i=1}^{D}(a_{i}n+1)$. Write $b_{i}=a_{i}-1 \ge 0$. Then
+(i) Since $x^{n} = \prod_{i}q_{i}^{a_{i}n}$ with the $q_{i}$ distinct, $d(x^{n}) = \prod_{i=1}^{D}(a_{i}n+1)$. Write $b_{i}=a_{i}-1 \ge 0$. Then
 \[
   a_{i}n+1 = (a_{i}-1)n + (n+1) = b_{i}n + (n+1),
 \]
 so, expanding the product by choosing from each factor either the term $b_{i}n$ or the term $(n+1)$,
-\[
-  \prod_{i=1}^{D}(a_{i}n+1) = \prod_{i=1}^{D}\bigl(b_{i}n+(n+1)\bigr)
-  = \sum_{S \subseteq \{1,\dots,D\}} \Bigl(\prod_{i \in S}b_{i}\Bigr) n^{|S|}(n+1)^{D-|S|}
-  = \sum_{w=0}^{D} e_{w}(b)\,n^{w}(n+1)^{D-w},
-\]
+\begin{align*}
+  \prod_{i=1}^{D}(a_{i}n+1)
+  &= \prod_{i=1}^{D}\bigl(b_{i}n+(n+1)\bigr)\\
+  &= \sum_{S \subseteq \{1,\dots,D\}} \Bigl(\prod_{i \in S}b_{i}\Bigr) n^{|S|}(n+1)^{D-|S|}\\
+  &= \sum_{w=0}^{D} e_{w}(b)\,n^{w}(n+1)^{D-w},
+\end{align*}
 the last step grouping the subsets by their size. This is an identity in $\mathbb{Z}[n]$. (It is the generating-function identity $\prod_{i}(b_{i}t+1)=\sum_{w}e_{w}(b)t^{w}$ evaluated at $t=n/(n+1)$ and multiplied by $(n+1)^{D}$; the expansion above avoids the division and is valid at $n=-1$ as well.)
 
 (ii) By \cref{lem:fill}, $P_{F} = \sum_{w}f_{w}q_{w}$; by (i), $d(x^{n}) = \sum_{w}e_{w}(b)q_{w}(n)$. Two polynomials agreeing at all integers $n \ge 0$ are equal, so $P_{F}(n)=d(x^{n})$ for all $n \ge 0$ is equivalent to $\sum_{w}\bigl(f_{w}-e_{w}(b)\bigr)q_{w}=0$, and by \cref{lem:basis} that forces $f_{w}=e_{w}(b)$ for every $w$. The converse is immediate from the same two displays.
@@ -438,7 +440,7 @@ At $n=1$ this is $7$, namely the central cell $(2,2,2)$ and the six face centres
 \end{proof}
 
 \begin{proof}[Proof of \cref{cor:bridge}]
-The Menger design has signature $(1,3,0,0)$, so \cref{lem:fill} gives
+The Menger design has signature $(1,3,0,0)$, so the fill law of \cref{lem:fill} gives
 \[
   P_{F_{M}}(n) = (n+1)^{3} + 3(n+1)^{2}n = (n+1)^{2}\bigl((n+1)+3n\bigr) = (n+1)^{2}(4n+1).
 \]
@@ -458,7 +460,7 @@ At $x=1$, $\sigma_{k}(1)=1$ and $\sigma(1)/1=1$ for every $n$, so both expressio
 \end{proof}
 
 \begin{proof}[Proof of \cref{prop:robin}]
-Write $x = 2^{\alpha}3^{\beta}5^{\gamma}$ with $\alpha,\beta,\gamma \ge 1$; each of $30,60,120,180,240,360,900$ has this form. Then
+Write $x = 2^{\alpha}3^{\beta}5^{\gamma}$ with $\alpha,\beta,\gamma \ge 1$; each of $30,\allowbreak 60,\allowbreak 120,\allowbreak 180,\allowbreak 240,\allowbreak 360,\allowbreak 900$ has this form. Then
 \[
   \frac{\sigma(x^{n})}{x^{n}} = \prod_{p \in \{2,3,5\}}\bigl(1+p^{-1}+\cdots+p^{-e_{p}n}\bigr),
   \qquad (e_{2},e_{3},e_{5}) = (\alpha,\beta,\gamma).
@@ -505,12 +507,12 @@ One script, \texttt{scripts/verify.py}, checks every number in this paper. It is
 \item \emph{Counterexamples} (\cref{rem:sharp}). $x=8$ in dimension one and $x=72$ in dimension two: the script enumerates the $4$ and $16$ designs respectively and asserts that $d(x^{n})$ is absent from the fill polynomials, reporting the $12$ distinct fill polynomials of dimension two.
 \item \emph{Census} (\cref{cor:census}). Dimensions $D=0,\dots,8$: the number of distinct qualifying polynomials is enumerated directly from multisets and asserted equal to $\sum_{m \le D}p(m)$, giving $1,2,4,7,12,19,30,45,67$.
 \item \emph{Sponge and void} (\cref{prop:void}, \cref{cor:bridge}). Sides $2n+1$ for $n=0,\dots,10$: the removed cells are counted literally and compared with $n^{2}(4n+3)$, the kept cells with $d(240^{n})$, and their sum with $(2n+1)^{3}$.
-\item \emph{Robin corridors} (\cref{fact:robin}). The $140$ powers $x^{n}$ with $x \in \{30,60,120,180,240,360,900\}$ and $1 \le n \le 20$: $\sigma$ is computed exactly as an integer from the factorisation, the ratio in $40$-digit decimal arithmetic. The script asserts that the $140$ powers are $130$ distinct integers, that $131$ of the $140$ exceed $5040$ and are $122$ distinct integers, that all $131$ satisfy Robin's inequality, and that the maximum ratio is attained at $N=14400$ with value $1.573259905933$ to twelve places. It also checks the threshold constant $\exp\exp(15/(4e^{\gamma})) = 3681.17\ldots < 5040$.
+\item \emph{Robin corridors} (\cref{fact:robin}). The $140$ powers $x^{n}$ with $x \in \{30,\allowbreak 60,\allowbreak 120,\allowbreak 180,\allowbreak 240,\allowbreak 360,\allowbreak 900\}$ and $1 \le n \le 20$: $\sigma$ is computed exactly as an integer from the factorisation, the ratio in $40$-digit decimal arithmetic. The script asserts that the $140$ powers are $130$ distinct integers, that $131$ of the $140$ exceed $5040$ and are $122$ distinct integers, that all $131$ satisfy Robin's inequality, and that the maximum ratio is attained at $N=14400$ with value $1.573259905933$ to twelve places. It also checks the threshold constant $\exp\exp(15/(4e^{\gamma})) = 3681.17\ldots < 5040$.
 \item \emph{Colossally abundant} (\cref{fact:ca}). The first $13$ terms of A004490: the criterion $\Omega \le 2\omega$ holds for the first twelve and fails at $21621600$.
 \item \emph{Extended scan} (\cref{fact:scan}). The $22$ least-mask orbit representatives of dimension three, nine observables, $n=0,\dots,10$: every observable is recomputed cell by cell from the grid (components by union-find on face adjacency, cycle rank as graph edges minus fill plus components, Euler characteristic as touched vertices minus touched edges plus touched faces minus fill), each law is recovered by exact rational Lagrange interpolation and asserted to be a polynomial of degree at most three over the full range or over $n \ge 1$, and the splitting test of \cref{cor:split} is applied to every one of the $198$ sequences, the four late-starting ones included, over the full range $n=0,\dots,10$. The script asserts exactly the eight non-fill rows, exactly the nine constant identities, and exactly the eight fill avatars with their minimal avatars.
 \end{itemize}
 
-The figure in the lane README is regenerated by \texttt{scripts/figure.py}, also plain \texttt{python3}, run as \texttt{python3 scripts/figure.py}; it writes \texttt{figures/sponge.svg} in well under a second and takes no input.
+The figure in the lane README is regenerated by \texttt{scripts/figure.py}, also plain \texttt{python3}, run as \texttt{python3 scripts/figure.py}. It takes no input and writes \texttt{figures/sponge.svg} in well under a second.
 
 \section*{Acknowledgments}
 

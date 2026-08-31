@@ -357,10 +357,10 @@ The first term does not depend on $L$; the second tends to $0$ as $L\to\infty$.
 Split the points into two classes. First, those with $x_{i_1}=x_{i_2}=0$ for some pair $I=\{i_1,i_2\}$. Every digit vector $v_j$ of such a point satisfies $v_j|_I=(0,0)$, so there are at most $\kappa_I^{\,L}$ of them for each pair, giving the second term after division by $k^L$ and summation over the three pairs.
 
 Second, take a point not of that kind and a prime $p>z$ spoiling it, say $p\mid x_{i_1}$ and $p\mid x_{i_2}$ with $I=\{i_1,i_2\}$. Then not both coordinates vanish, say $x_{i_2}\ne0$, and $p\le x_{i_2}<q^L$, so $p$ lies in the range where \cref{lem:box} applies with $m=p$. Hence, for each pair $I$,
-\[
-\frac1{k^L}\#\bigl\{x\in S_L:\ p\mid x_i\ \text{for } i\in I,\ \text{some prime } z<p<q^L\bigr\}
+\begin{multline*}
+\frac1{k^L}\#\bigl\{x\in S_L:\ p\mid x_i\ \text{for } i\in I,\ \text{some prime } z<p<q^L\bigr\}\\
 \le(q+1)^2\!\!\sum_{z<p<q^L}\!\!p^{-\alpha_I},
-\]
+\end{multline*}
 a union bound over the primes in range, and the right side is at most $(q+1)^2\sum_{m>z}m^{-\alpha}$. Summing over the three pairs and using $\sum_{m>z}m^{-\alpha}\le\int_z^\infty t^{-\alpha}\,dt=z^{1-\alpha}/(\alpha-1)$ gives the first term. \qedhere
 \end{proof}
 
@@ -429,7 +429,7 @@ For $t\in\{0,1\}^3$ of Hamming weight $w$,
 \]
 so $\mathbb E[(-1)^{t\cdot s}]=\lambda_{w}^{\,L}$. A coordinate is even exactly when $s_i=0$, so taking $t=e_i$ gives $\mathbb P(x_i\text{ even})=\frac12(1+\lambda_1^L)=\frac12(1+(3/5)^L)$.
 
-For the joint statement, let $\mathcal S=\{s:\text{at most one }s_i=0\}=\{s:\text{weight}(s)\ge2\}$. By Fourier inversion,
+For the joint statement, let $\mathcal S=\{s:\text{weight}(s)\ge2\}$, the set of $s$ with at most one $s_i=0$. By Fourier inversion,
 \[
 \beta_L=\mathbb P(s\in\mathcal S)=\frac18\sum_{t}g(t)\,\lambda_{w(t)}^{\,L},
 \qquad

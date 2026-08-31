@@ -255,10 +255,10 @@ The correlation laws above are diagonal statistics; this section records the who
 \begin{theorem}[spectral measure of the stack]
 \label{thm:spectrum}
 Let $G_L$ be the stack of \cref{def:corr} and write $\sigma_k^S(a) = \sum_{n \in S,\ n \mid a} n^k$ for the divisor sums restricted to the stack's scales. For odd $a, b \ge 1$,
-\[
-\int_0^1\!\!\int_0^1 G_L(u,v)\, \sin(\pi a u)\sin(\pi b v)\, du\, dv
+\begin{multline*}
+\int_0^1\!\!\int_0^1 G_L(u,v)\, \sin(\pi a u)\sin(\pi b v)\, du\, dv \\
 = \frac{1}{\pi^2 ab} \Bigl[ 1 - \frac{\sigma_1^S(a)}{L} - \frac{\sigma_1^S(b)}{L} + \frac{\sigma_2^S\bigl(\gcd(a,b)\bigr)}{L} \Bigr],
-\]
+\end{multline*}
 and the integral vanishes whenever $a$ or $b$ is even. For $\gcd(a,b) \le 2L-1$ the divisor sums are complete: $\sigma_2^S(\gcd(a,b)) = \sigma_2(\gcd(a,b))$, the full sum of squared divisors. In particular the doubly-oscillatory component of the stack carries the coefficient field $\sigma_2(\gcd(a,b))/(ab)$ on odd frequency pairs: a pure point spectrum whose weights are squared-divisor sums of the frequency gcd.
 \end{theorem}
 
@@ -427,14 +427,20 @@ $\operatorname{Var}(G_L)=\frac1{L^2}\sum_{m,n\in S}\operatorname{Cov}(\mathrm{C}
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:spectrum}]
-Two one-dimensional integrals do all the work. First, $\int_0^1 \sin(\pi a u)\, du = (1 - \cos \pi a)/(\pi a)$, which is $2/(\pi a)$ for odd $a$ and $0$ for even $a$. Second, expanding the square wave in its odd-harmonic series $s(x) = \frac4\pi \sum_{j \text{ odd}} \sin(\pi j x)/j$ (valid in $L^2$) and using $\int_0^1 \sin(\pi j n u)\sin(\pi a u)\, du = \tfrac12 \mathbf 1[jn = a]$ for positive integers $jn, a$,
+Two one-dimensional integrals do all the work:
+\begin{gather*}
+\int_0^1 \sin(\pi a u)\, du = \frac{1 - \cos \pi a}{\pi a},\\
+\int_0^1 \sin(\pi j n u)\sin(\pi a u)\, du = \tfrac12 \mathbf 1[jn = a].
+\end{gather*}
+The first is $2/(\pi a)$ for odd $a$ and $0$ for even $a$; the second holds for positive integers $jn$ and $a$. Expanding the square wave in its odd-harmonic series $s(x) = \frac4\pi \sum_{j \text{ odd}} \sin(\pi j x)/j$, valid in $L^2$, and applying the second integral to each term,
 \[
 \int_0^1 s(nu)\,\sin(\pi a u)\, du = \frac{2}{\pi}\,\frac{n}{a}\,\mathbf 1\bigl[\,n \mid a \text{ and } a/n \text{ odd}\,\bigr].
 \]
-For odd $a$ and odd $n$ the cofactor condition is automatic. Now $\mathrm{C}_n = \tfrac14\bigl(1 - s_n(u)\bigr)\bigl(1 - s_n(v)\bigr)$ splits the double integral into four products of the two displays: for odd $a, b$,
-\[
-\int_0^1\!\!\int_0^1 \mathrm{C}_n \sin(\pi a u)\sin(\pi b v)\, du\, dv = \frac{1}{\pi^2 ab}\Bigl[ 1 - n\,\mathbf 1[n \mid a] - n\,\mathbf 1[n \mid b] + n^2\,\mathbf 1[n \mid \gcd(a,b)] \Bigr].
-\]
+For odd $a$ and odd $n$ the cofactor condition is automatic. Now $\mathrm{C}_n = \tfrac14\bigl(1 - s_n(u)\bigr)\bigl(1 - s_n(v)\bigr)$ splits the double integral into four products of the one-dimensional integrals just computed: for odd $a, b$,
+\begin{multline*}
+\int_0^1\!\!\int_0^1 \mathrm{C}_n \sin(\pi a u)\sin(\pi b v)\, du\, dv \\
+= \frac{1}{\pi^2 ab}\Bigl[ 1 - n\,\mathbf 1[n \mid a] - n\,\mathbf 1[n \mid b] + n^2\,\mathbf 1[n \mid \gcd(a,b)] \Bigr].
+\end{multline*}
 Averaging over $n \in S$ assembles the bracket of the theorem with $\sigma_1^S$ and $\sigma_2^S$. For even $a$ every term vanishes: the constant and the pure-$v$ terms because $\int_0^1 \sin(\pi a u)\, du = 0$, the others because $jn = a$ is impossible with $j, n$ odd. When $\gcd(a,b) \le 2L-1$ every divisor of the odd number $\gcd(a,b)$ is odd and at most $2L-1$, hence lies in $S$.
 \end{proof}
 
@@ -448,15 +454,16 @@ and $\alpha_m \alpha_n / (mn) = (m-1)(n-1)/(m^2n^2)$ gives the display. Adding t
 
 \begin{proof}[Proof of \cref{thm:zetaquot}]
 For the first identity, write $\sigma_2(g) = \sum_{d \mid g} d^2$ and exchange sums: with all variables odd,
-\[
-\sum_{a,b} \frac{\sigma_2(\gcd(a,b))}{(ab)^w} = \sum_{d} d^2 \sum_{d \mid a,\ d \mid b} (ab)^{-w} = \sum_d d^{2-2w} \Bigl( \sum_{a'} a'^{-w} \Bigr)^{\!2} = \lambda(2w-2)\, \lambda(w)^2,
-\]
+\begin{multline*}
+\sum_{a,b} \frac{\sigma_2(\gcd(a,b))}{(ab)^w} = \sum_{d} d^2 \sum_{d \mid a,\ d \mid b} (ab)^{-w} \\
+= \sum_d d^{2-2w} \Bigl( \sum_{a'} a'^{-w} \Bigr)^{\!2} = \lambda(2w-2)\, \lambda(w)^2,
+\end{multline*}
 using that $a = da'$ ranges over odd multiples exactly when $d$ and $a'$ are odd. Convergence needs $\operatorname{Re} w > 1$ and $\operatorname{Re}(2w-2) > 1$, i.e.\ $\operatorname{Re} w > 3/2$.
 For the second, two classical steps. Step 1: $E(s) := \sum_{n \text{ odd}} \sigma_2(n)^2 n^{-s} = \lambda(s)\lambda(s-2)^2\lambda(s-4)/\lambda(2s-4)$. This is Ramanujan's identity $\sum_n \sigma_a(n)\sigma_b(n) n^{-s} = \zeta(s)\zeta(s-a)\zeta(s-b)\zeta(s-a-b)/\zeta(2s-a-b)$ at $a = b = 2$ \cite{ramanujan,titchmarsh}, restricted to odd $n$: both sides are Euler products over primes, the local factor at $p$ being $(1 - p^{4-2s})\bigl[(1-p^{-s})(1-p^{2-s})^2(1-p^{4-s})\bigr]^{-1}$, so deleting the $p = 2$ factor replaces each $\zeta$ by $\lambda$. Step 2: for any multiplicative $f$ on the odd integers, $\sum_{a,b \text{ odd}} f(\gcd(a,b))(ab)^{-w} = \lambda(w)^2 \sum_{g \text{ odd}} (f * \mu)(g)\, g^{-2w} = \lambda(w)^2\, D_f(2w)/\lambda(2w)$, where $D_f$ is the Dirichlet series of $f$ over odd integers, by M\"obius inversion of the divisor-sum exchange in the first display. Taking $f = \sigma_2^2$, $D_f = E$, gives $\lambda(w)^2 E(2w)/\lambda(2w) = \lambda(w)^2 \lambda(2w-2)^2 \lambda(2w-4)/\lambda(4w-4)$. Convergence needs $\operatorname{Re}(2w-4) > 1$, i.e.\ $\operatorname{Re} w > 5/2$.
 \end{proof}
 
 \begin{proof}[Proof of \cref{cor:weighted}]
-For $\operatorname{Re} s > 1$ the layer sum converges absolutely: $0 \le \mathrm{C}_n \le 1$. The interior coefficient of layer $n$ is $(\pi^2 ab)^{-1} n^2 \mathbf 1[n \mid \gcd(a,b)]$ exactly as in the proof of \cref{thm:spectrum}, so weighting by $n^{-s}$ and summing gives $(\pi^2 ab)^{-1} \sum_{n \mid \gcd(a,b)} n^{2-s}$ over odd $n$; for odd $a, b$ every divisor qualifies and the sum is finite, entire in $s$. The Dirichlet identity is the first display of the proof of \cref{thm:zetaquot} with $d^2$ replaced by $d^{2-s}$.
+For $\operatorname{Re} s > 1$ the layer sum converges absolutely, since $0 \le \mathrm{C}_n \le 1$. Exactly as in the proof of \cref{thm:spectrum}, the interior coefficient of layer $n$ is $(\pi^2 ab)^{-1} n^2 \mathbf 1[n \mid \gcd(a,b)]$, so weighting by $n^{-s}$ and summing over odd $n$ gives $(\pi^2 ab)^{-1} \sum_{n \mid \gcd(a,b)} n^{2-s}$; for odd $a$ and $b$ every divisor qualifies, and the sum is finite, entire in $s$. The Dirichlet identity is the first display of the proof of \cref{thm:zetaquot} with $d^2$ replaced by $d^{2-s}$.
 \end{proof}
 
 \begin{proof}[Proof of \cref{prop:space}]
