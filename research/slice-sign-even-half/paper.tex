@@ -27,13 +27,13 @@
 \title{The Even Half of the Slice Sign Law}
 \author{Carlo Mitchener}
 \email{carlo.mitchener@gmail.com}
-\date{2026-08-24}
+\date{2026-08-31}
 
 % PAPER
 \begin{document}
 
 \begin{abstract}
-Slice a sponge along its longest diagonal, count the cells the cut meets, and watch how fast that count grows as the sponge is refined; the growth rate lands just above or just below the value a generic slice would give, and which side it lands on is decided by nothing but whether the dimension is even or odd. That is the sign law. Its odd half was proved in the companion paper of this program. This paper proves the even half at the two smallest odd bases: on the middle-digit design in base $3$ and in base $5$, the Perron root $\rho_D$ of the carry matrix satisfies $\rho_D < f_D/q$ for every even $D \ge 2$, where $f_D$ is the fill of the digit polynomial, so the diagonal slice exponent sits strictly below the generic value in every even dimension. Both proofs run on one machine: an exact Fourier form of the Collatz--Wielandt test vector, an exact telescoping in which the leading fill-powers cancel identically, and a frequency-separation estimate. The two bases differ only in how deep the certificate must go. Base $5$ needs depth $\Theta(\log D)$; base $3$ needs depth $\Theta(D^2)$, and the quadratic transient is identified: its length is $\tfrac14 (\log R)\, D^2 + O(D)$ with $R = \prod_{i \ge 2} \cos(\pi/3^i)/\cos(2\pi/3^i)$ and $\tfrac14\log R = 0.0568486146\ldots$, the crossing of the half-point frequency. A one-line lemma explains why base $3$ alone is hard: it is the unique odd base at which the design's digit-generating polynomial has the same modulus at $-1$ as at $1$. Exact integer certificates settle bases $7$, $9$ and $11$ on stated finite ranges with depth at most two and no transient at all. The second half of the paper turns to what the sign law still lacks -- strictness at odd $D \equiv 1 \pmod 3$ -- and reduces it to a $2$-adic bound whose first layer is a proved tent law built from the Jacobsthal numbers.
+Slice a sponge along its longest diagonal, count the cells the cut meets, and watch how fast that count grows as the sponge is refined; the growth rate lands just above or just below the value a generic slice would give, and which side it lands on is decided by nothing but whether the dimension is even or odd. That is the sign law. Its odd half was proved in a companion paper. This paper proves the even half at the two smallest odd bases: on the middle-digit design in base $3$ and in base $5$, the Perron root $\rho_D$ of the carry matrix satisfies $\rho_D < f_D/q$ for every even $D \ge 2$, where $f_D$ is the fill of the digit polynomial, so the diagonal slice exponent sits strictly below the generic value in every even dimension. Both proofs run on one machine: an exact Fourier form of the Collatz--Wielandt test vector, an exact telescoping in which the leading fill-powers cancel identically, and a frequency-separation estimate. The two bases differ only in how deep the certificate must go. Base $5$ needs depth $\Theta(\log D)$; base $3$ needs depth $\Theta(D^2)$, and the quadratic transient is identified: its length is $\tfrac14 (\log R)\, D^2 + O(D)$ with $R = \prod_{i \ge 2} \cos(\pi/3^i)/\cos(2\pi/3^i)$ and $\tfrac14\log R = 0.0568486146\ldots$, the crossing of the half-point frequency. A one-line lemma explains why base $3$ alone is hard: it is the unique odd base at which the design's digit-generating polynomial has the same modulus at $-1$ as at $1$. Exact integer certificates settle bases $7$, $9$ and $11$ on stated finite ranges with depth at most two and no transient at all. The second half of the paper turns to what the sign law still lacks -- strictness at odd $D \equiv 1 \pmod 3$ -- and reduces it to a $2$-adic bound whose first layer is a proved tent law built from the Jacobsthal numbers.
 \end{abstract}
 
 \maketitle
@@ -53,7 +53,7 @@ There is an obvious guess for $\rho_D$. The whole solid at level $L$ has $f_D^{\
 \emph{$\rho_D > f_D/q$ at odd $D$, and $\rho_D < f_D/q$ at even $D$.}
 \end{center}
 
-The diagonal slice is not generic in any dimension, and the side it misses on is decided by the parity of $D$ alone. We call this the \emph{sign law}. The odd half of it -- $\rho_D > f_D/3$ for every odd $D$, strictly whenever $D \not\equiv 1 \pmod 3$ -- was proved in the companion paper of this program \cite{slice-order}, where it falls out of a single pointwise inequality: at odd $D$ the design symbol is raised to an even power, so a certain trigonometric sum is nonnegative term by term and the census can only run ahead of $(f_D/q)^L$.
+The diagonal slice is not generic in any dimension, and the side it misses on is decided by the parity of $D$ alone. We call this the \emph{sign law}. The odd half of it -- $\rho_D > f_D/3$ for every odd $D$, strictly whenever $D \not\equiv 1 \pmod 3$ -- was proved in the companion paper \cite{slice-order}, where it falls out of a single pointwise inequality: at odd $D$ the design symbol is raised to an even power, so a certain trigonometric sum is nonnegative term by term and the census can only run ahead of $(f_D/q)^L$.
 
 At even $D$ that argument inverts and dies. The symbol acquires an odd power, the trigonometric sum changes sign, and no pointwise estimate survives; \cref{sec:certs} records the precise obstruction. This paper proves the even half anyway, at the two smallest odd bases.
 
@@ -88,7 +88,7 @@ At even $D$ that argument inverts and dies. The symbol acquires an odd power, th
 \end{figure}
 
 \medskip
-\noindent\textbf{The results.} \Cref{thm:base5}: on the base-$5$ middle-digit design, $\rho_D < f_D/5$ for \emph{every} even $D \ge 2$. \Cref{thm:base3}: on the base-$3$ middle-digit design, $\rho_D < f_D/3$ for \emph{every} even $D \ge 2$. Combined with the odd half of \cite{slice-order}, the sign law now holds in sign at every dimension at base $3$ and at base $5$, with only one gap left anywhere: strictness in the exceptional odd residue classes.
+\noindent\textbf{The results.} \Cref{thm:base5}: on the base-$5$ middle-digit design, $\rho_D < f_D/5$ for \emph{every} even $D \ge 2$. \Cref{thm:base3}: on the base-$3$ middle-digit design, $\rho_D < f_D/3$ for \emph{every} even $D \ge 2$. The odd half at base $3$ is \cite{slice-order}; \cref{prop:oddhalf} below records the same argument base-free, which supplies the odd half at base $5$ as well. So the sign law now holds in sign at every dimension at base $3$ and at base $5$, with only one gap left anywhere: strictness in the exceptional odd residue classes.
 
 \medskip
 \noindent\textbf{How.} Both theorems run on one machine, and it is a small one. A Collatz--Wielandt test vector $\beta_K$, obtained by pushing the all-ones vector $K$ steps through the transposed carry matrix, certifies $\rho_D < f_D/q$ the moment $q\beta_{K+1} < f_D \beta_K$ holds componentwise. That is a finite, exact, integer test, and it gives strictness for free -- no determinant lemma, no exceptional class. The work is showing that some $K$ always exists, and \cref{fig:depth} is the shape of that work. In an exact Fourier form $\beta_K$ becomes a sum over frequencies $n$ modulo $q^{K}$, the leading fill-powers cancel identically, and the certificate reduces to positivity of a single explicit trigonometric sum $\Sigma_K$ on a window of carries. At base $5$ one frequency dominates all others by a uniform factor $0.768$ per unit of $D$, and depth $K(D) = \Theta(\log D)$ closes everything. At base $3$ a second frequency -- the one riding the fixed point $\pi$ of angle tripling -- fights the first at comparable strength, wins for a while, and only loses at depth $\Theta(D^2)$. That fight is the transient, and \cref{thm:transient} pins its length to within one odd step of a closed form.
@@ -185,7 +185,7 @@ $M$ restricted to $S$ is irreducible and aperiodic; its Perron root is $\rho_D =
 Aperiodicity is immediate: $M[0,c] = P_D[c + Dm] > 0$ for every $c \in S$ by \cref{lem:palin}, since $0 < c + Dm < 2Dm$; in particular $M[0,0] > 0$ is a self-loop at the state $0$, which every state reaches in one step. Irreducibility takes one line at every odd $q$: for $0 \le c \le \lfloor(D-1)/2\rfloor - 1$ one has $Dm - (q-1)c \ge \tfrac32(q-1) \ge q$, so $0 \le c + Dm - q(c+1) \le 2Dm$ and $M[c+1,c] > 0$ by \cref{lem:palin} -- the carry climbs from $0$ one step at a time to the window edge, the negative states follow by the reflection symmetry of \cref{lem:core}, and every state returns to $0$ in one step. With the self-loop, $M$ on $S$ is primitive. For the spectral statement, $M$ has a nonnegative Perron eigenvector $v$; its even part $(v + Rv)/2$ is nonnegative and nonzero, hence an eigenvector of $M_{\mathrm{even}}$ at $\rho(M)$, so $\rho(M_{\mathrm{even}}) = \rho(M) =: \rho_D$; and by primitivity every other eigenvalue of $M$ has modulus strictly below $\rho_D$, so $\rho(M_{\mathrm{odd}}) < \rho_D$.
 \end{proof}
 
-We use \cref{prop:core} only in \cref{thm:reduction}(iii). The certificate theorems of \cref{sec:certs}, and therefore \cref{thm:base5} and \cref{thm:base3}, need none of it.
+We use \cref{prop:core} only where a growth rate has to be read off the census, namely \cref{thm:reduction}(iii) and \cref{prop:oddhalf}. The certificate theorems of \cref{sec:certs}, and therefore \cref{thm:base5} and \cref{thm:base3}, need none of it.
 
 \begin{definition}[symbol and circle form]
 \label{def:symbol}
@@ -277,6 +277,17 @@ The step identity of \cref{thm:reduction}(ii) holds in exact integer arithmetic 
 \label{rem:obstruction}
 At odd $D$ the exponent $D-1$ is even, so $\Phi_D \ge 0$ pointwise and every $W_k \ge 0$ term by term; that is the whole odd-half proof of \cite{slice-order}. At even $D$ the sign of $\Phi_D$ follows the sign of $g_q$, and the needed inequality is false pointwise: already at $q = 3$ and $k = 2$, the quantity $W_2/\bigl((-1)^{D-1}(D-1)\bigr)$ is negative for every even $D \ge 6$, because the term at angle $8\pi/9$ outweighs the two positive ones. No pointwise-positivity certificate and no magnitude-only certificate can work at even $D$. What follows is built to survive that.
 \end{remark}
+
+The odd half is the other side of that same remark, and \cref{thm:reduction} states it base-free. We record it because \cref{b:sec:strict} needs the odd half at base $5$ and \cite{slice-order} proves it only at base $3$. The argument is that paper's and is not new here.
+
+\begin{proposition}[the odd half, non-strict, at any odd base]
+\label{prop:oddhalf}
+Let $q \ge 3$ be odd and let $D \ge 3$ be odd with $D + g_q(\psi) > 0$ for every real $\psi$. Then $\rho_D \ge f_D/q$. The hypothesis holds for every odd $D \ge q$, since $g_q(\psi) = 2\sum_{j \le m}\cos(j\psi) \ge -2m = -(q-1)$; at $q = 3$ it holds for every odd $D \ge 3$, since $g_3 \ge -2$; and at $q = 5$ it holds for every odd $D \ge 3$, since $g_5(\psi) = 4\cos^2\psi + 2\cos\psi - 2 \ge -9/4$, the minimum at $\cos\psi = -1/4$.
+\end{proposition}
+
+\begin{proof}
+At odd $D$ the exponent $D-1$ is even, so $g_q^{D-1} \ge 0$ and $\Phi_D = g_q^{D-1}(D + g_q) \ge 0$ pointwise. Now $\hat u_0 \equiv 1 \ge 0$, and \cref{thm:reduction}(i) writes $\hat u_{L+1}(\psi)$ as a nonnegative combination of values of $\hat u_L$, so $\hat u_L \ge 0$ on all of $\mathbb R$ for every $L$ by induction. In particular $V(L) = \sum_{r \ne 0}\hat u_L(2\pi r/q) \ge 0$, computed in the proof of \cref{thm:reduction}(ii). That same identity at odd $D$ reads $q\,b_D(L+1) - f_D\,b_D(L) = (D-1)V(L) \ge 0$, so $b_D(L) \ge (f_D/q)^L$ for every $L$, and $b_D(L)^{1/L} \to \rho_D$ by \cref{prop:core}.
+\end{proof}
 
 \begin{theorem}[the row certificate]
 \label{thm:row}
@@ -376,6 +387,8 @@ Let $j = \min\{i \ge 2 : n \not\equiv \pm 1 \bmod 5^i\}$, finite by hypothesis. 
 The maximum of the three branches is $0.7679580 < 0.768$.
 \end{proof}
 
+Every numerical constant in that proof, and in \cref{prop:crit5,lem:exit3,lem:subtree3,lem:cross3} and the proofs of \cref{thm:base5,thm:base3} below, is a rigorous rational-interval evaluation with outward rounding on every operation, re-certified by \texttt{scripts/certify.py}; \cref{sec:repro} names the block that carries each one. Nothing in this paper rests on a floating-point evaluation.
+
 The bound is uniform in $K$ and within $1.3\%$ of the truth: the exact maxima are $0.75818$ at $K = 2$, $0.75789$ at $K = 3$ and $0.75788$ at $K = 4$, all attained at $n \equiv \pm 2$.
 
 \begin{proposition}[the criterion]
@@ -400,7 +413,7 @@ Take $K(D) = \min\{K \ge 1 : 5^{K+1} \ge 4(D-2)\}$, and split.
 \[
   \kappa(D,K) \le B(D) := \Bigl(1 + \tfrac{4-\hat g_2}{D + \hat g_2}\Bigr)\exp\Bigl(\tfrac{(4-\hat g_3)(\log_5(4D)-1)}{D+\hat g_3}\Bigr),
 \]
-and $B$ is decreasing on $D \ge 34$: the first factor visibly is, and the derivative of $(\log_5(4D)-1)/(D+\hat g_3)$ has the sign of $(D+\hat g_3)/(D\ln 5) - (\log_5(4D)-1)$, whose first term decreases to $1/\ln 5$ while the second increases, and which is $0.6943 - 2.0525 < 0$ at $D = 34$. With $B(34) \le 1.0089188$ it suffices that $h(D) = D\,r^{D-1} < \cos(\pi/4)/(8B(34)) = 0.0876070$; and $h$ decreases for $D > 1/\lvert\ln r\rvert = 3.7884$ with $h(34) \le 0.0056027$.
+and $B$ is decreasing on $D \ge 34$: the first factor visibly is, and the derivative of $(\log_5(4D)-1)/(D+\hat g_3)$ has the sign of $(D+\hat g_3)/(D\ln 5) - (\log_5(4D)-1)$, whose first term decreases to $1/\ln 5$ while the second increases, and which is at most $0.6943 - 2.0524 < 0$ at $D = 34$. With $B(34) \le 1.0089188$ it suffices that $h(D) = D\,r^{D-1} < \cos(\pi/4)/(8B(34))$, and $\cos(\pi/4)/(8B(34)) \ge 0.0876069$; and $h$ decreases for $D > 1/\lvert\ln r\rvert = 3.7884$ with $h(34) \le 0.0056028$.
 
 \emph{Even $D \le 16$.} Exact integer Collatz--Wielandt certificates: $K = 0$ at $D = 2$, $K = 1$ at $D = 4,6,8,10,12,14$, and $K = 2$ at $D = 16$. Each is the componentwise integer inequality of \cref{thm:column} at the stated depth, with no floating point anywhere.
 
@@ -543,7 +556,7 @@ is doubly exponentially small in $D$: at $D = 38$ already $\delta \le 4.1\cdot10
 \[
   (\star) \qquad E_{K_1}(D) \;<\; \frac{4}{D+2} - \delta(D).
 \]
-This is a finite check for $38 \le D \le 400$: $182$ inequalities, each certified in interval arithmetic, with slack a factor $4.3\cdot 10^{42}$ at $D = 400$. Beyond $D = 400$, monotone domination closes it: $K_1(D+2) - 1 \le \tfrac{(D+2)(D+1)}{D(D-1)}\bigl(K_1(D)-1\bigr) + 2 \le 1.0104\,(K_1(D)-1)$, so the bound of \cref{prop:envelope3} has per-step ratio at most $1.0104 \cdot 0.7528157^2 \cdot 1.001 \le 0.573$, while the margin's per-step ratio is at least $\tfrac{D+2}{D+4}\bigl(1 - 3^{-K_1}\bigr) \ge 0.9950$; the pass at $D = 400$ with slack above $2$ therefore propagates to every larger even $D$, the accumulated $(1-3^{-K_1})$ factors multiplying to more than $1 - 10^{-29}$. Hence $(C_{K_1})$ holds and \cref{thm:column} gives $\rho_D < f_D/3$ for every even $D \ge 38$.
+This is a finite check for $38 \le D \le 400$: $182$ inequalities, each certified in rational-interval arithmetic by \texttt{certify\_star} in \texttt{scripts/certify.py}. The scan is tight only at its left endpoint, and that is where the rigour is needed: the slack is a factor $1.1153$ at $D = 38$, past $10^{3}$ by $D = 60$, and $4.3\cdot 10^{42}$ at $D = 400$, while the widest interval anywhere in the scan is $8.4 \cdot 10^{-56}$ relative. Beyond $D = 400$, monotone domination closes it: $K_1(D+2) - 1 \le \tfrac{(D+2)(D+1)}{D(D-1)}\bigl(K_1(D)-1\bigr) + 2 \le 1.0104\,(K_1(D)-1)$, so the bound of \cref{prop:envelope3} has per-step ratio at most $1.0104 \cdot 0.7528157^2 \cdot 1.001 \le 0.573$, while the margin's per-step ratio is at least $\tfrac{D+2}{D+4}\bigl(1 - 3^{-K_1}\bigr) \ge 0.9950$; the pass at $D = 400$ with slack above $2$ therefore propagates to every larger even $D$, the accumulated $(1-3^{-K_1})$ factors multiplying to more than $1 - 10^{-29}$. Hence $(C_{K_1})$ holds and \cref{thm:column} gives $\rho_D < f_D/3$ for every even $D \ge 38$.
 
 Even $2 \le D \le 36$ is covered by exact integer Collatz--Wielandt certificates at depth $K_{\min}(D)$, componentwise over the integers, no floating point.
 \end{proof}
@@ -580,12 +593,12 @@ The argument leaves exactly one step open: whether the undecided odd level ever 
 
 \begin{fact}
 \label{fact:lstar}
-$L^{*}(D) = L_0(D)$, the greatest odd integer $\le K^{*}(D)$, at all $24$ dimensions where $L^{*}$ is exactly known -- every even $D \le 120$ with the transient computed to exhaustion, plus $D = 38, 42, 44$ with interval enclosures of $K^{*}$ -- zero misses. This is a research-side computation; the bundled \texttt{check\_transient} pins $L^{*}$ itself at even $6 \le D \le 36$.
+$L^{*}(D) = L_0(D)$, the greatest odd integer $\le K^{*}(D)$, at every even $6 \le D \le 120$: $58$ dimensions, zero misses. The exhaustion is proved, not assumed. Sweep the row vector $r_k = (M^{\top})^k v$ of \cref{thm:row}, with $v_c = 3\,\mathbf 1[3 \mid c] - 1$, until the first level $t$ at which $r_t \ge 0$ entrywise; since $M \ge 0$ and $u_m \ge 0$, \cref{thm:row} makes $V(L) = r_t^{\top}u_{L-t} \ge 0$ for every $L \ge t$, so $L^{*}(D) = \max\{L \le t : V(L) < 0\}$ with no window assumption at all, and $V(L) = r_L(0)$ reads the whole sign sequence off the same sweep. \texttt{check\_transient} in \texttt{scripts/verify.py} runs that sweep at every even $6 \le D \le 74$, on the folded core, comparing the exact integer $L^{*}$ against $L_0$ read off a double-precision evaluation of $K^{*}$ and guarded by the assertion that $K^{*}$ misses every integer by more than $10^{-6}$; even $76 \le D \le 120$ is the same sweep run further \cite{lab-transient}, at $60$ digits of $K^{*}$, with the least observed distance to an integer $0.017138$ at $D = 38$. The distinction matters: $L^{*}$ is quadratic in $D$, so a census carried to a window $4D + O(1)$ silently reports the largest odd level inside the window instead of $L^{*}$ once $D$ passes about $70$, and every row here is beyond the reach of that error by construction.
 \end{fact}
 
 \begin{fact}
 \label{fact:transient}
-At base $3$ and every even $6 \le D \le 36$, the minimal certificate depth is $K_{\min}(D) \in \{L^{*}(D)+1,\; L^{*}(D)+2\}$. Verified by \texttt{check\_transient} in \texttt{scripts/verify.py}. The same was checked by the same method at every exactly known $L^{*}$ through $D = 120$.
+At base $3$ and every even $6 \le D \le 120$, the minimal certificate depth is $K_{\min}(D) \in \{L^{*}(D)+1,\; L^{*}(D)+2\}$, with $K_{\min} = L^{*}+1$ on $36$ of the $58$ rows and $L^{*}+2$ on the other $22$. The sweep of \cref{fact:lstar} delivers $K_{\min}$ itself, not a bracket for it: applying $(M^{\top})^K$ to the column-sum identity of \cref{prop:mass}, which at even $D$ reads $f_D - 3\sum_{c'}M[c',c] = (D-1)v_c$, gives $f_D\beta_K - 3\beta_{K+1} = (D-1)r_K$, so the Collatz--Wielandt test of \cref{thm:column} holds at depth $K$ exactly when $r_K > 0$ entrywise. The sweep's stopping level is therefore $K_{\min}$ whenever it closes strictly, which every row does. Verified by \texttt{check\_transient} in \texttt{scripts/verify.py} at even $6 \le D \le 74$, where it also agrees with the independent column certificate of \texttt{check\_even\_certificates} on the overlap $D \le 36$; even $76 \le D \le 120$ is \cite{lab-transient}.
 \end{fact}
 
 \begin{conjecture}
@@ -593,11 +606,11 @@ At base $3$ and every even $6 \le D \le 36$, the minimal certificate depth is $K
 $K_{\min}(D) = L^{*}(D) + 1$ or $L^{*}(D)+2$ at every even $D$.
 \end{conjecture}
 
-The evidence is \cref{fact:transient} together with the proved bracket of \cref{thm:transient}, which already gives $K_{\min} \in [L^{*}+1, \lceil K^{*}\rceil + 2]$ for $D \ge 38$. The way it could fail is visible: the upper end of the proved bracket sits two steps above $\lceil K^{*}\rceil$ while $L^{*}$ sits at the greatest odd integer below $K^{*}$, so a dimension where $K^{*}$ falls just above an even integer could in principle need $L^{*}+3$. Nothing in the computed range does, and the two-leader model says nothing that forbids it.
+The evidence is \cref{fact:transient}, $58$ consecutive even dimensions with $K_{\min}$ pinned exactly and not bracketed, together with the proved bracket of \cref{thm:transient}, which already gives $K_{\min} \in [L^{*}+1, \lceil K^{*}\rceil + 2]$ for $D \ge 38$. The way it could fail is visible: the upper end of the proved bracket sits two steps above $\lceil K^{*}\rceil$ while $L^{*}$ sits at the greatest odd integer below $K^{*}$, so a dimension where $K^{*}$ falls just above an even integer could in principle need $L^{*}+3$. Nothing through $D = 120$ does, and the two-leader model says nothing that forbids it.
 
 \begin{remark}
 \label{rem:notafit}
-An earlier reading of the same data proposed $K_{\min} \approx (9/160)D^2$. That is refuted as an exact law -- the residual reaches $+9.78$ by $D = 178$ -- and the reason is now plain: $9/160 = 0.05625$ is the first two digits of $\tfrac14\log R = 0.0568486\ldots$. A numerical fit that agrees with a constant to two places is not a law.
+The small-$D$ table invites the fit $K_{\min} \approx (9/160)D^2$, and it is worth saying why that fit is not a law. It is refuted as an exact law -- the residual reaches $+9.78$ by $D = 178$ -- and the reason is plain: $9/160 = 0.05625$ is the first two digits of $\tfrac14\log R = 0.0568486\ldots$. A numerical fit that agrees with a constant to two places is not a law.
 \end{remark}
 
 \subsection*{Why base 3 is alone}
@@ -688,7 +701,7 @@ Here is the picture. Fix the base $q$ and the dimension $D$, and put $f_D = P_D(
 \[
   \Delta_D \;:=\; \det\bigl(f_D I - q\,M_{\mathrm{even}}\bigr)
 \]
-is positive, negative, or zero, where $M_{\mathrm{even}}$ is the even core, of size $n = \lceil D/2 \rceil$. The sign of $\Delta_D$ is settled in \cref{thm:base3,thm:base5}. Whether $\Delta_D$ can be \emph{zero} is a different question, and it is a question about divisibility, not about size.
+is positive, negative, or zero, where $M_{\mathrm{even}}$ is the even core, of size $n = \lceil D/2 \rceil$. Which side of $f_D/q$ the Perron root lies on is settled at even $D$ by \cref{thm:base3,thm:base5} and at odd $D$ by \cref{prop:oddhalf}. Whether $\Delta_D$ can be \emph{zero} is a different question, and it is a question about divisibility, not about size.
 
 That is a piece of luck, because divisibility is cheap to test. Reduce the whole matrix modulo a divisor of the base and the carry term disappears.
 
@@ -749,7 +762,7 @@ For the base-$5$ design, at every $D \equiv 1 \pmod 5$ with $D \le 511$, of eith
 
 \begin{fact}[base-$3$ exceptional class]
 \label{b:fact:b3strict}
-For the base-$3$ design, at every odd $D \equiv 1 \pmod 3$ with $13 \le D \le 583$, and additionally at $D = 685,\,703,\,769,\,1021$, the exact integer inequality $v_2(\det M_{\mathrm{even}}^{(D)}) < D - 1$ holds, hence $\Delta_D \ne 0$. Moreover the stronger inequality $v_2(\det M_{\mathrm{even}}^{(D)}) \le n$ holds at every odd $D$ with $9 \le D \le 583$, in the class and out of it, with equality exactly at $D = 9$ and $D = 15$; it also holds at every scanned row beyond, the deep scans reaching isolated dimensions up to $2047$, where the worst ratio $v_2/n$ over the octave $[512, 2048)$ is $0.37$. The first class member $D = 7$ is a genuine boundary case: there $v_2(\det M_{\mathrm{even}}) = 7 \ge 6 = D-1$, the valuation route is silent, and strictness holds instead by direct evaluation, $\Delta_7 = -148506048 = -2^6 \cdot 2320407 \ne 0$, with $v_2(\Delta_7) = 6 = v_2(f_7)$: the hypothesis of \cref{b:prop:2adic} fails and its conclusion survives anyway. Verified in exact integer arithmetic by \texttt{check\_strictness} in \texttt{scripts/verify.py}, which re-checks the class members $13 \le D \le 151$ together with the $D = 7$ evaluation; the full ranges were checked by the same method, by two implementations sharing no matrix builder.
+For the base-$3$ design, at every odd $D \equiv 1 \pmod 3$ with $13 \le D \le 583$, and additionally at $D = 685,\,703,\,769,\,1021$, the exact integer inequality $v_2(\det M_{\mathrm{even}}^{(D)}) < D - 1$ holds, hence $\Delta_D \ne 0$. Moreover the stronger inequality $v_2(\det M_{\mathrm{even}}^{(D)}) \le n$ holds at every odd $D$ with $9 \le D \le 583$, in the class and out of it, with equality exactly at $D = 9$ and $D = 15$; it also holds at every scanned row beyond, the deep scans reaching isolated dimensions up to $2047$, where the worst ratio $v_2/n$ over the octave $[512, 2048)$ is $0.37$. The first class member $D = 7$ is a genuine boundary case: there $v_2(\det M_{\mathrm{even}}) = 7 \ge 6 = D-1$, the valuation route is silent, and strictness holds instead by direct evaluation, $\Delta_7 = -148506048 = -2^6 \cdot 2320407 \ne 0$, with $v_2(\Delta_7) = 6 = v_2(f_7)$: the hypothesis of \cref{b:prop:2adic} fails and its conclusion survives anyway. Verified in exact integer arithmetic by \texttt{check\_strictness} in \texttt{scripts/verify.py}, which re-checks the class members $13 \le D \le 151$, the bound $v_2 \le n$ with its equality set at every odd $9 \le D \le 115$, and the $D = 7$ evaluation; the full ranges were checked by the same method, by two implementations sharing no matrix builder.
 \end{fact}
 
 \begin{corollary}[strictness on a range]
@@ -758,7 +771,7 @@ For the base-$3$ design, $\rho_D > f_D/3$ strictly at every odd $D \le 583$. For
 \end{corollary}
 
 \begin{proof}
-Combine \cref{b:cor:offclass} with \cref{b:fact:b3strict,b:fact:b5strict} through \cref{b:prop:2adic}, and use the non-strict inequality of \cref{thm:base3} on the odd side.
+Combine \cref{b:cor:offclass} with \cref{b:fact:b3strict,b:fact:b5strict} through \cref{b:prop:2adic}: that makes $\Delta_D \ne 0$, so $f_D/q$ is not an eigenvalue of $M_{\mathrm{even}}$ and $\rho_D \ne f_D/q$. At base $3$ and odd $D$, pair that with the non-strict $\rho_D \ge f_D/3$ of \cite{slice-order}, equally \cref{prop:oddhalf}, to get $\rho_D > f_D/3$.
 \end{proof}
 
 What is missing is a uniform bound. Here it is, stated as sharply as the evidence allows and no more.
@@ -814,7 +827,7 @@ Five lines. (1) With $m = (q-1)/2$, the symbol $P = P_D$ is palindromic of degre
 
 \begin{fact}[the fold, checked]
 \label{b:fact:fold}
-The identity of \cref{b:prop:fold} holds as an exact integer identity, computed by fraction-free elimination, for the base-$3$ and base-$5$ designs at every $D \le 25$. Verified by \texttt{check\_fold} in \texttt{scripts/verify.py}; the same check was run to $D = 101$ at base $3$ during the research.
+The identity of \cref{b:prop:fold} holds as an exact integer identity, computed by fraction-free elimination, for the base-$3$ and base-$5$ designs at every $D \le 25$. Verified by \texttt{check\_fold} in \texttt{scripts/verify.py}; the same check was run research-side to $D = 101$ at base $3$.
 \end{fact}
 
 The identity is a determinant identity only. At base $3$ the full Smith profile also folds as a multiset union of the even and odd profiles for odd $D \le 91$, but that is false in general: $D = 31$ at base $5$ is a witness. Only \cref{b:prop:fold} is a theorem. The classical shadow of the argument is the flip-invariant fundamental system of kernels of Hankel and Toeplitz mosaic matrices \cite{heinig}; the operator-level statement above is stronger and does not need it.
@@ -1010,7 +1023,7 @@ The identity is \cref{b:lem:dict}, \cref{b:lem:window}, \cref{b:lem:closed} and 
 
 \begin{fact}[the tent, checked]
 \label{b:fact:tent}
-$\operatorname{nullity}_2(M_{\mathrm{even}}^{(D)}) = \operatorname{tent}(D)$ at every odd $D \le 301$, computed from the matrix built directly from $P_D$ and not from any closed form. Verified by \texttt{check\_tent} in \texttt{scripts/verify.py}, which also runs the two finite windows of \cref{b:lem:M}; with the \texttt{--deep} flag the same check runs to $D \le 583$. The identity was checked to $D = 1401$ by the same method during the research, and the closed forms of \cref{b:lem:closed,b:lem:stepE} were checked against matrix-built brute force for odd $D \le 1401$ and against an independent minimisation of the generator-degree function for $R \le 2\cdot 10^{6}$.
+$\operatorname{nullity}_2(M_{\mathrm{even}}^{(D)}) = \operatorname{tent}(D)$ at every odd $D \le 301$, computed from the matrix built directly from $P_D$ and not from any closed form. Verified by \texttt{check\_tent} in \texttt{scripts/verify.py}, which also runs the two finite windows of \cref{b:lem:M}; with the \texttt{--deep} flag the same check runs to $D \le 583$. The identity was checked research-side to $D = 1401$ by the same method, and the closed forms of \cref{b:lem:closed,b:lem:stepE} were checked against matrix-built brute force for odd $D \le 1401$ and against an independent minimisation of the generator-degree function for $R \le 2\cdot 10^{6}$.
 \end{fact}
 
 \begin{remark}
@@ -1072,10 +1085,10 @@ For the base-$3$ design, in the octave $D \in [2^k, 2^{k+1})$,
 \[
   \max_D L_j(D) \;=\; J(k + 2 - 2j),
 \]
-attained at $D = 2J(k+1) + 3 + 2\bigl(J(k+2-2j) - 1\bigr)$, where the Smith profile is a flat block $a_i = j$ of large multiplicity plus a single spike of height $a_{\max}$. Verified at all $13$ pairs $(k,j)$ with $6 \le k \le 10$ and $1 \le j \le 4$ for which the maximiser lies in the scanned range. In addition, write $\mathcal{J} = J(k+2-2j)$ for that maximum. At the $i$-th dimension above such a site the profile is $\bigl[(j-1)^{p(i)},\, j^{\,q(i)},\, \text{spike}\bigr]$ with $p(i) = 2i-1$ (and $p(0) = 0$) and $q(i) = \mathcal{J} - i$, so $L_j = q(i)+1$: a plateau of length $2$ at $L_j = \mathcal{J}$, then unit decay, and the plateau lives in the site's own layer $j$. Verified on $5$ sites and $23$ rows. The maxima and the flank shape were checked by two implementations sharing no Smith routine; the $j = 2$ layer that anchors them is re-checked at every odd $D \le 151$ by \texttt{check\_layer2} in \texttt{scripts/verify.py}, and the deep rows are research-side computations by the same method.
+attained at $D = 2J(k+1) + 3 + 2\bigl(J(k+2-2j) - 1\bigr)$, where the Smith profile is a flat block $a_i = j$ of large multiplicity plus a single spike of height $a_{\max}$. Verified at the $13$ pairs $(k,j)$ with $6 \le k \le 10$ and $1 \le j \le 4$ whose maximiser is at most $D = 689$; the seven remaining maximisers in that box, from $D = 705$ to $D = 2049$, lie above the scan. In addition, write $\mathcal{J} = J(k+2-2j)$ for that maximum. At the $i$-th dimension above such a site the profile is $\bigl[(j-1)^{p(i)},\, j^{\,q(i)},\, \text{spike}\bigr]$ with $p(i) = 2i-1$ (and $p(0) = 0$) and $q(i) = \mathcal{J} - i$, so $L_j = q(i)+1$: a plateau of length $2$ at $L_j = \mathcal{J}$, then unit decay, and the plateau lives in the site's own layer $j$. Verified on $5$ sites and $23$ rows. The maxima and the flank shape were checked by two implementations sharing no Smith routine; the $j = 2$ layer that anchors them is re-checked at every odd $D \le 151$ by \texttt{check\_layer2} in \texttt{scripts/verify.py}, and the deep rows are research-side computations by the same method.
 \end{fact}
 
-An earlier reading of the same data fitted the exponent $k - 1 - T(j-1)$ with $T$ the triangular numbers. That reading is false: it was fitted where $j = 2, 3$ makes the two formulas agree, and it dies at $j = 1$ and at $j = 4$, with explicit witnesses in octaves $9$ and $10$. The arithmetic exponent $k+2-2j$ is the correct one. Two rows in the corpus remain outliers: one spikeless maximiser and one two-tier profile whose middle tier sits one unit high; each has been re-derived by two independent routes and both stand as recorded data, not as counterexamples.
+A second exponent, $k - 1 - T(j-1)$ with $T$ the triangular numbers, fits the middle of this table and is false: it agrees with $k+2-2j$ exactly at $j = 2, 3$, and dies at $j = 1$ and at $j = 4$, with explicit witnesses in octaves $9$ and $10$. The arithmetic exponent $k+2-2j$ is the correct one. Two rows in the corpus remain outliers: one spikeless maximiser and one two-tier profile whose middle tier sits one unit high; each has been re-derived by two independent routes and both stand as recorded data, not as counterexamples.
 
 \begin{conjecture}[the cascade recursion]
 \label{b:con:cascade}
@@ -1117,7 +1130,7 @@ against the threshold $2n-2 = D-1$ of \cref{b:prop:2adic}. That is a factor of a
 \section{Open problems}
 \label{b:sec:open}
 
-Six problems, in rough order of how much would fall. None of them is adjacent to any famous conjecture, and none of the mismatch or dimension-one machinery of the program's other lanes is used here or claimed here.
+Six problems, in rough order of how much would fall. None of them is adjacent to any famous conjecture, and everything used to state them is defined in this paper or in its companion \cite{slice-order}.
 
 \textbf{1. The valuation gap.} Prove \cref{b:con:V}: $v_2(\det M_{\mathrm{even}}^{(D)}) < D-1$ for the base-$3$ design at every odd $D \equiv 1 \pmod 3$ with $D \ge 13$; the lone case $D = 7$ is settled directly. First move: prove the two pointwise laws of \cref{b:rem:assembly}, which is enough with a factor of $3.7$ to spare; the cleaner target is the observed $v_2 \le n$. What falls with it: the base-$3$ sign law becomes strict in every dimension, so the slice's counting exponent misses the generic comparison value everywhere, alternately above and below, with no exceptional residue class left. It matters because the sign law is currently a theorem in sign and a conjecture in strictness, and strictness is the whole content at the dimensions where the two sides are closest.
 
@@ -1135,7 +1148,7 @@ Six problems, in rough order of how much would fall. None of them is adjacent to
 \section{Reproducibility}
 \label{sec:repro}
 
-Every computational claim in this paper regenerates from two scripts in \texttt{scripts/}, run with plain \texttt{python3} from the paper's directory, standard library only, no dependencies. \texttt{verify.py} runs nine checks in about nine seconds and dies loudly on any mismatch; \texttt{verify.py --deep} extends the two largest domains and finishes in about twelve seconds; \texttt{figure.py} redraws both figures of this paper, as the SVG copies used by the README, in under a second.
+Every computational claim in this paper regenerates from three scripts in \texttt{scripts/}, run with plain \texttt{python3} from the paper's directory, standard library only, no dependencies. \texttt{verify.py} runs ten checks in about twenty-one seconds and dies loudly on any mismatch; \texttt{verify.py --deep} extends the two largest domains and finishes in about twenty-four seconds; \texttt{certify.py} carries every interval constant in the paper, in six blocks, in about six seconds, and is re-run as the tenth check of \texttt{verify.py}; \texttt{figure.py} redraws both figures of this paper, as SVG copies for the README, in under a second, and is itself a check: it recomputes the certificate depth of \cref{thm:column} at bases $3, 5, 7, 9, 11$ and every even $D \le 40$ -- which is where the base-$3$ points at $D = 38$ and $D = 40$ in \cref{fig:depth} come from, beyond the range \texttt{check\_even\_certificates} bundles -- and re-derives every plotted nullity of \cref{fig:tent} against \cref{b:thm:tent} at odd $D \le 301$.
 
 The checks, their exact domains, and what each covers:
 
@@ -1145,13 +1158,25 @@ The checks, their exact domains, and what each covers:
 \item \texttt{check\_fold}: bases $3$ and $5$, both parities, $D \le 25$ - the fold identity of \cref{b:prop:fold} by fraction-free (Bareiss) elimination, cross-checked against rational elimination at $D \le 9$.
 \item \texttt{check\_even\_certificates}: base $5$ even $D \le 40$ plus $D = 64, 66, 314, 316$; base $3$ even $D \le 36$; base $7$ even $D \le 26$ plus $D = 172, 174$; base $9$ even $D \le 42$; base $11$ even $D \le 60$ - the exact integer Collatz--Wielandt certificate of \cref{thm:column} at every listed dimension, with the full depth staircase asserted at each base; this is the finite part of \cref{thm:base5} ($D \le 16$) and of \cref{thm:base3} ($D \le 36$), the death dimensions of \cref{fact:death5}, and every measured value in \cref{fact:early}.
 \item \texttt{check\_notransient}: bases $7, 9, 11$, even $D \le 24$, $L \le 12$ - $V(L) > 0$ throughout, with the carry window asserted closed: the bundled domain of \cref{fact:notransient}.
-\item \texttt{check\_transient}: base $3$, even $D = 6..36$ - $L^{*}(D)$ from the exact census and $K_{\min} \in \{L^{*}+1, L^{*}+2\}$, the shipped domain of \cref{fact:transient}; the run prints the full $(D, L^{*}, K_{\min})$ table.
+\item \texttt{check\_transient}: base $3$, even $D = 6..74$ - the row sweep of \cref{fact:lstar} on the folded core, with nonnegativity, palindromy and carry-window closure of the digit polynomial asserted first, since the fold and the exhaustion rest on them; it returns $L^{*}(D)$ with the exhaustion proved by \cref{thm:row} rather than assumed, and $K_{\min}(D)$ as the strict stopping level, then asserts $L^{*} = L_0$, $K_{\min} \in \{L^{*}+1, L^{*}+2\}$, the exact list of $11$ rows where the gap is $2$, and agreement with \texttt{check\_even\_certificates} on $D \le 36$: the shipped domains of \cref{fact:lstar,fact:transient}. This is the only place in either script where a floating-point value enters a check, namely $K^{*}(D)$ of \cref{lem:cross3}, and it is guarded by an assertion that $K^{*}$ misses every integer by more than $10^{-6}$; everything else is exact integer or exact $\mathbb{F}_2$ arithmetic. The run prints the full $(D, L^{*}, K_{\min})$ table.
 \item \texttt{check\_tent}: base $3$, odd $D \le 301$ ($583$ under \texttt{--deep}) - the tent law of \cref{b:thm:tent} with the mod-$2$ even core built from the digit polynomial, the cap $\lceil n/3 \rceil$ with its exact equality set, and the two finite windows of \cref{b:lem:M} ($9$ base evaluations and $24$ residual evaluations over $r \in \{0,1,2\}$) by brute force over all admissible $\mathbb{F}_2$ polynomials.
 \item \texttt{check\_layer2}: base $3$, odd $D \le 151$ ($401$ under \texttt{--deep}) - $L_1$ and $L_2$ computed from the mod-$4$ even core with no Smith machinery, against the closed forms of Law E and the ceiling law of \cref{b:fact:layer2}.
-\item \texttt{check\_strictness}: base $3$ class members $D \equiv 1 \pmod 3$, $13 \le D \le 151$, and base $5$ class members $D \equiv 1 \pmod 5$, $6 \le D \le 156$ - the valuation inequality of \cref{b:prop:2adic} by $2$-adic elimination at working precision $2^{1024}$ with a loud exactness guard, plus $v_2 \le n$ on the base-$3$ rows and, at the boundary case $D = 7$, the exact assertions $\Delta_7 = -148506048 = -2^6 \cdot 2320407$, $v_2(\Delta_7) = 6$, and $v_2(\det M_{\mathrm{even}}^{(7)}) = 7$.
+\item \texttt{check\_strictness}: base $3$ class members $D \equiv 1 \pmod 3$, $13 \le D \le 151$, every odd $9 \le D \le 115$ at base $3$, and base $5$ class members $D \equiv 1 \pmod 5$, $6 \le D \le 156$ - the valuation inequality of \cref{b:prop:2adic} by $2$-adic elimination at working precision $2^{1024}$ with a loud exactness guard, plus $v_2 \le n$ on every base-$3$ row with its equality set asserted to be exactly $\{9, 15\}$ and, at the boundary case $D = 7$, the exact assertions $\Delta_7 = -148506048 = -2^6 \cdot 2320407$, $v_2(\Delta_7) = 6$, and $v_2(\det M_{\mathrm{even}}^{(7)}) = 7$.
+\item \texttt{check\_intervals}: the six blocks of \texttt{certify.py}, described next.
 \end{itemize}
 
-One computation quoted in this paper is not bundled: the finite interval-arithmetic scan $(\star)$ in the proof of \cref{thm:base3}, $182$ inequalities at even $38 \le D \le 400$, together with the interval enclosures behind the constants of \cref{lem:sep5,lem:exit3,lem:subtree3,lem:cross3}. Those were carried out with rigorous outward-rounded interval arithmetic during the research; the proof states each constant and each domain exactly, so the scan is reproducible from the statements, but rerunning it needs an interval library and is not a standard-library computation. Beyond it, every number attributed to a named check regenerates from the two scripts above; the ranges each Fact declares research-side -- the sampled base-$5$ certificates to $D = 200$, the base-$3$ certificates to $D = 178$, the no-transient scan to $D \le 40$, the strictness and valuation scans to $D = 583$ and the deep isolated rows beyond, the layer-two and ceiling scans to $D = 4779$, and the octave scans of the cascade -- do not, and each is marked as research-side at its point of use.
+\texttt{certify.py} is a self-contained rational-interval arithmetic built on the exact \texttt{Fraction} of the standard library: every endpoint is exact, every operation rounds outward to a fixed $192$-bit relative grid, and $\pi$, $\sqrt2$, $\sqrt3$, $\log$, $\exp$, $1-\cos$ and $\log(1+x)$ each carry an explicit truncation bound proved from an alternating or geometric tail. Floating point appears nowhere in a bound; it is used only to choose how many series terms to take, after which the tail is bounded exactly. The blocks and their exact domains:
+
+\begin{itemize}
+\item \texttt{certify\_sep5}: \cref{lem:sep5} -- $\hat g_2$, the constants $C_2$ and $C_3$, the enumeration of all $18$ residues $n \bmod 25$ with $5 \nmid n$, $n \not\equiv \pm1$, the three branch bounds $0.7679580$, $0.3264722$, $0.2651481$, and $r = 0.768$.
+\item \texttt{certify\_exit3}: \cref{lem:exit3} -- the four exit constants $0.7052518$, $0.6137010$, $0.2266816$, $0.7528157$, the branch constants at $j = 4$ and $j \ge 5$, and the constant $0.8900159$ of \cref{lem:subtree3}.
+\item \texttt{certify\_cross3}: \cref{lem:cross3} -- the tail bounds, at $1 \le K \le 7$, in the sharper forms $\mathrm{LT}(K) \le 0.3579\cdot 9^{-K}$ and $\mathrm{ST}(D,K) \le 0.6919\cdot 9^{-K}/(D-2)$, both inside the stated $1.9$ and $7$.
+\item \texttt{certify\_crit5}: \cref{prop:crit5} -- the eight rows of the table at even $18 \le D \le 32$ with the window condition, the failure at $D = 16$ that forces the case split, and the $D \ge 34$ chain $B(34)$, $\cos(\pi/4)/(8B(34))$, $h(34)$, $1/\lvert\ln r\rvert$ and the monotonicity slope.
+\item \texttt{certify\_star}: the $182$ inequalities $(\star)$ at even $38 \le D \le 400$ in the proof of \cref{thm:base3}, each with $K_1(D)$ built from certified enclosures of $\log R$, $s_D$ and $A$, asserted to satisfy $K_1 \ge K^{*}+1$; also the bound $2E < 1 - ((D-2)/(D+2))^2$ that \cref{thm:transient} needs. Worst slack $1.1153$ at $D = 38$, worst relative interval width $8.4\cdot10^{-56}$, and the run asserts at $D = 38$ that the width is below the slack by more than forty orders of magnitude.
+\item \texttt{certify\_domination}: the three constants $1.0104$, $0.573$ and $0.9950$ of the monotone-domination step that carries \cref{thm:base3} past $D = 400$.
+\end{itemize}
+
+Every proof in this paper is therefore reproducible from the three scripts above, with no dependency and no unbundled computation. What does not regenerate from them is the extra evidence, and only the extra evidence: the ranges each Fact declares research-side -- the sampled base-$5$ certificates to $D = 200$, the base-$3$ certificates to $D = 178$, the no-transient scan to $D \le 40$, the exhausted transients at even $76 \le D \le 120$, the strictness and valuation scans to $D = 583$ and the deep isolated rows beyond, the layer-two and ceiling scans to $D = 4779$, and the octave scans of the cascade. Each is marked as research-side at its point of use, and no theorem depends on any of them.
 
 % ACKNOWLEDGMENTS
 
@@ -1189,6 +1214,9 @@ G.~Heinig and K.~Rost, \emph{Algebraic Methods for Toeplitz-like Matrices and Op
 
 \bibitem{holte}
 J.~M. Holte, \emph{Carries, combinatorics, and an amazing matrix}, Amer. Math. Monthly \textbf{104} (1997), no.~2, 138--149. \url{https://doi.org/10.2307/2974981}
+
+\bibitem{lab-transient}
+C.~Mitchener, \emph{Base-3 transient exhaustion}, open notes and generator. The row-certificate sweep behind \cref{fact:lstar,fact:transient}: $L^{*}(D)$ and $K_{\min}(D)$ at every even $D = 6..120$, exhaustion proved rather than assumed, cross-checked against an unfolded census sweep sharing no code path. \url{https://github.com/mrlyprod/mrlyprod/tree/main/research/lab/base3-transient-exhaustion}
 
 \bibitem{lindy}
 E.~Lindy and V.~Noferini, \emph{The Smith form of Sylvester and B\'ezout matrices for zero-dimensional ideals}, 2025. Smith forms over $\mathbb{F}[y]$ for algebraically closed $\mathbb{F}$; no modular or $p$-adic treatment. \url{https://arxiv.org/abs/2512.08550}

@@ -25,13 +25,13 @@
 \title[Base-3 Digit Designs]{Base-3 Digit Designs: Diagonality, Ray Masses, and a Spectral Gap at Two}
 \author{Carlo Mitchener}
 \email{carlo.mitchener@gmail.com}
-\date{2026-08-23}
+\date{2026-08-31}
 
 % PAPER
 \begin{document}
 
 \begin{abstract}
-Draw a picture by writing numbers in base three and allowing only three of the nine possible digit pairs at each position; then ask which straight lines through the origin hit the picture, and how often. This paper answers three such questions for two families of base-three digit designs in the plane. First, a permutation design $F_\phi=\{(j,\phi(j))\}$ is \emph{diagonal}, meaning no two distinct points of any level share a ray through the origin, exactly when $\phi(0)\neq 0$; this holds for four of the six permutations of $\{0,1,2\}$, at every level, and is proved here. Second, for the Sierpi\'nski gasket design $G=\{(0,0),(1,0),(0,1)\}$ the number of points on a fixed ray obeys an exact linear recurrence: Fibonacci on $(3,1)$, Narayana's cows on $(1,12)$, and $c(m)=c(m-1)+c(m-4)$ on $(7,3)$, verified for all levels $n\le 30$. Third, for a coprime pair $(s,t)$ the growth rate of $\{z: z, sz, tz \in G_n\}$ is the spectral radius of an explicit carry automaton, trimmed to the states that can return to where they started, and over all $829$ coprime unordered pairs with $\max(s,t)\le 52$ that radius equals $3$ on the three shift pairs, equals $2$ on exactly twenty pairs, and never lands in the open interval $(2,3)$. Every number reported here is recomputed by a stdlib-only script that ships with the paper.
+Draw a picture by writing numbers in base three and allowing only three of the nine possible digit pairs at each position; then ask which straight lines through the origin hit the picture, and how often. This paper answers three such questions for two families of base-three digit designs in the plane. First, a permutation design $F_\phi=\{(j,\phi(j))\}$ is \emph{diagonal}, meaning no two distinct points of any level share a ray through the origin, exactly when $\phi(0)\neq 0$; this holds for four of the six permutations of $\{0,1,2\}$, at every level, and is proved here. Second, for the Sierpi\'nski gasket design $G=\{(0,0),(1,0),(0,1)\}$ the number of points on a fixed ray obeys an exact linear recurrence at every level: Fibonacci on $(3,1)$, Narayana's cows on $(1,12)$, and $c(m)=c(m-1)+c(m-4)$ on $(7,3)$, each the characteristic polynomial of a live carry automaton with at most four states; on the shift ray $(3^j,1)$ the mass is a product of $j$ Fibonacci numbers, because the admissible multipliers are the binary strings with no two ones at distance $j$. That product bound is sharp enough to settle the whole shift family: the shift rays contribute $\bigl((13+5\sqrt5)/11+o(1)\bigr)\varphi^{2n}$ to the second moment $\sum_{(a,b)}M_n(a,b)^2$, never more than $2.803\,\varphi^{2n}$, so the dominant carrier of that moment grows like $\varphi^{2n}=2.618\ldots^{\,n}$ and not like $3^n$. Third, for a coprime pair $(s,t)$ the growth rate of $\{z: z, sz, tz \in G_n\}$ is the spectral radius of an explicit carry automaton, trimmed to the states that can return to where they started, and over all $829$ coprime unordered pairs with $\max(s,t)\le 52$ that radius equals $3$ on the three shift pairs, equals $2$ on exactly twenty pairs, and never lands in the open interval $(2,3)$; for the variant automaton that drops the requirement that $z$ itself lie in the gasket, the first three of those statements hold verbatim and the ceiling below $2$ rises to $1.8488475886$. Fourth, that variant automaton is a constrained tensor square of a single-coordinate carry automaton, and the collinear pair count is reorganised by the \emph{witness} of a pair rather than by its multipliers: every witness has weight at least four, which pins the largest multiplier at level $n$ to $\lfloor 3^n/8\rfloor$; every multiplier pair above $(3^n-1)/10$ carries exactly four collinear pairs; the weight layers scale exactly by three; and the weight-four layer is closed in Fibonacci, contributing less than $1.6945\,\varphi^{2n}$, the same golden law as the shift family. Fifth, the golden ceiling $M_n(z)\le F(n+1)-1$ on ray mass, which says the shift ray $(1,3)$ is the heaviest ray of the gasket at every level, is proved rather than enumerated on a box of $13158$ directions and at every level: a ray automaton has out-degree at most two with its branch states in one residue class modulo three, which forces a Fibonacci recursion whenever no branch state has two branching successors, and that settles all but twelve directions of the box, three shift rays closed by a Fibonacci product identity and nine by explicit rational certificates. Sixth, that whole case analysis collapses into one criterion: weighting the first returns of a ray automaton by $\varphi^{-1}$ per step gives a single number $U(a,b)$ in $\mathbf{Q}(\sqrt5)$, and $U(a,b)\le\varphi^{-2}$ implies the ceiling for that direction at every level. It holds on $858$ of the $865$ occupied directions of the box and of six adversarial families, the seven exceptions being exactly the shift rays, where $U=\varphi^{-1}$ and the Fibonacci product argument applies instead. Seventh, that criterion is proved outright on an infinite arithmetic family: with $q=3^{\,k}q_1$ the coordinate divisible by three and $p$ the other, mass forces $q_1\equiv p$ modulo three, and $k=1$ with $v_3(q_1-p)\le 2$ gives $U\le\varphi^{-2}$. A stdlib-only script that ships with the paper recomputes every number reported here, with one flagged exception: the second moment at levels $15$, $16$ and $17$ runs the identical direction-grouping pass on a machine-integer array sort, because $3^{17}$ points do not fit the script's time budget.
 \end{abstract}
 
 \maketitle
@@ -68,7 +68,9 @@ Write a nonnegative integer in base three. Now write two at once, stacked, so th
 
 On the right of \cref{fig:rays} is a \emph{diagonal} design: no two of its $27$ points share a line through the origin, so the cloud meets $27$ distinct rays. This is not an accident of level three. \Cref{thm:diagonal} says that among the six designs of the form $F_\phi=\{(0,\phi(0)),(1,\phi(1)),(2,\phi(2))\}$, where $\phi$ permutes $\{0,1,2\}$, exactly four are diagonal at every level, and the test is as short as a test can be: $\phi(0)\neq 0$. The proof is elementary and complete. It rests on one observation, that every permutation of $\{0,1,2\}$ is an affine map $x\mapsto \alpha x+\beta$ over the field of three elements, and that after a cancellation the entire question collapses to whether $\beta=\phi(0)$ is zero.
 
-On the left is the opposite extreme, the base-3 Sierpi\'nski gasket $G=\{(0,0),(1,0),(0,1)\}$. Here the points crowd onto lines, and the counting becomes interesting. Call $M_n(a,b)$ the number of nonzero level-$n$ gasket points on the ray through a primitive $(a,b)$. Then $M_n(3,1)$ runs $0$, $1$, $2$, $4$, $7$, $12$, $20$, $33$, one less than a Fibonacci number each time, and $M_n(1,12)$ runs $0$, $0$, $1$, $2$, $3$, $5$, $8$, $12$, $18$, one less than Narayana's cows \cite{oeisA000930}. These are exact identities for every level we have checked, not fits. The mechanism is not deep, and we say so plainly in \cref{sec:results}: an admissible digit string on a fixed ray is a word in a small carry automaton, and for these rays the automaton is a run-length constraint, so the counting sequences are the classical composition counts. What is new is the dictionary, not the arithmetic behind it.
+On the left is the opposite extreme, the base-3 Sierpi\'nski gasket $G=\{(0,0),(1,0),(0,1)\}$. Here the points crowd onto lines, and the counting becomes interesting. Call $M_n(a,b)$ the number of nonzero level-$n$ gasket points on the ray through a primitive $(a,b)$. Then $M_n(3,1)$ runs $0$, $1$, $2$, $4$, $7$, $12$, $20$, $33$, one less than a Fibonacci number each time, and $M_n(1,12)$ runs $0$, $0$, $1$, $2$, $3$, $5$, $8$, $12$, $18$, one less than Narayana's cows \cite{oeisA000930}. These are exact identities at every level, not fits. The mechanism is not deep, and we say so plainly in \cref{sec:results}: an admissible digit string on a fixed ray is a word in a small carry automaton, and for these rays the automaton is a run-length constraint, so the counting sequences are the classical composition counts. What is new is the dictionary, not the arithmetic behind it.
+
+The shift rays $(3^j,1)$ are the reason to care. Their masses are products of $j$ Fibonacci numbers, and \cref{thm:shift} turns that into a bound on the whole family at once: the second moment $\sum_{(a,b)}M_n(a,b)^2$ receives $\bigl((13+5\sqrt5)/11+o(1)\bigr)\varphi^{2n}$ from the shift rays and never more than $2.803\,\varphi^{2n}$. Since $\varphi^2=2.618\ldots$ is below $3$, the heaviest rays in the gasket are not heavy enough to make that moment grow like $3^{n}\cdot 3^{n}$, or even like $3^{n}\cdot\varphi^{n}$. \Cref{fact:second} measures what is left over.
 
 The third question is about growth rather than counting. Fix coprime $(s,t)$ and ask how many gasket points $z$ have $sz$ and $tz$ also in the gasket. That set is again read by a carry automaton, and its growth rate is the spectral radius $\lambda(s,t)$ of the automaton once it is trimmed to the states that can get back to where they started (\cref{prop:growth}; the trimming is not optional, see \cref{rem:trim}). The answer has a hole in it. Over all $829$ coprime unordered pairs with $\max(s,t)\le 52$, the radius is $3$ on the three shift pairs $(1,3)$, $(1,9)$, $(1,27)$, is exactly $2$ on twenty further pairs, and otherwise sits at $1.6956\ldots$ or below. Nothing lands strictly between $2$ and $3$. The automaton is standard equipment; the hole is not.
 
@@ -78,7 +80,7 @@ The paper is short and self-contained. \Cref{sec:defs} fixes the objects. \Cref{
 
 The tool is textbook. A set defined by a digit restriction in base $k$ is $k$-automatic, and reading it with a finite automaton whose states are carries is the standard method for such sets \cite{allouche}; the growth exponent of the accepted language is the Perron root of the transition matrix \cite{seneta}. The same device computes box dimensions of closed $k$-automatic sets, and base-$3$ multiplication automata are one of its stock examples \cite{kauto}. Nothing in \cref{sec:results} claims the machine as new. What the paper contributes is arithmetic output: an exact classification of the diagonal permutation designs, an exact dictionary between three gasket rays and three classical composition counts, and the observation that these particular automata have no Perron root in $(2,3)$, with an explicit largest value below $2$ and the pairs that attain it.
 
-The mass laws deserve the same honesty. Narayana's cows counts compositions of $n$ into parts $1$ and $3$, and the Fibonacci numbers count binary strings with no two adjacent ones; the recurrence $c(m)=c(m-1)+c(m-4)$ counts compositions into parts $1$ and $4$. These are the most classical run-length counts there are. The content of \cref{fact:mass} is that particular gasket rays realise them, not that the sequences are surprising.
+The mass laws deserve the same honesty. Narayana's cows counts compositions of $n$ into parts $1$ and $3$, and the Fibonacci numbers count binary strings with no two adjacent ones; the recurrence $c(m)=c(m-1)+c(m-4)$ counts compositions into parts $1$ and $4$. These are the most classical run-length counts there are. The content of \cref{thm:mass} is that particular gasket rays realise them, not that the sequences are surprising; the same goes for the Fibonacci product on the shift rays, which is the no-two-ones constraint read along $j$ interleaved subsequences. What is not routine is \cref{thm:shift}, where those products are summed against each other across all $j$ at once and the total is pinned to a constant times $\varphi^{2n}$.
 
 For the diagonality question we found no prior statement. The nearest literature is on radial projections and visible points of self-similar sets. A finite classification of the six base-$3$ permutation designs by a collinearity test is small enough that it is more likely unrecorded than known and forgotten; we state it, prove it, and make no priority claim.
 
@@ -100,7 +102,7 @@ Two families matter here, and they are different objects. Confusing them is the 
 
 \begin{definition}[The gasket, and the permutation designs]
 \label{def:two}
-The \emph{gasket design} is $G=\{(0,0),(1,0),(0,1)\}$, and we write $G_n=S_n(G)$; it is the base-$3$ Sierpi\'nski gasket truncated at level $n$. For a permutation $\phi$ of $\mathbf{F}_3$, the \emph{permutation design} is $F_\phi=\{(0,\phi(0)),(1,\phi(1)),(2,\phi(2))\}$. The gasket is not a permutation design and no permutation design is the gasket. \Cref{thm:diagonal} is about the $F_\phi$; \cref{fact:mass,fact:spectrum} are about $G$.
+The \emph{gasket design} is $G=\{(0,0),(1,0),(0,1)\}$, and we write $G_n=S_n(G)$; it is the base-$3$ Sierpi\'nski gasket truncated at level $n$. For a permutation $\phi$ of $\mathbf{F}_3$, the \emph{permutation design} is $F_\phi=\{(0,\phi(0)),(1,\phi(1)),(2,\phi(2))\}$. The gasket is not a permutation design and no permutation design is the gasket. \Cref{thm:diagonal} is about the $F_\phi$; \cref{thm:mass,fact:spectrum} are about $G$.
 \end{definition}
 
 \begin{definition}[Code of a design]
@@ -140,6 +142,41 @@ with the reductions taken componentwise; the successor state is then $\bigl(\lfl
 \label{rem:trim}
 Take $(s,t)=(1,16)$. The automaton reaches eleven states, but only the start state is live: every other reachable state leads away and never comes back. So $T(1,16)$ is the $1\times 1$ matrix $(1)$, carrying the loop on the digit $(0,0)$, and $\lambda(1,16)=1$. By \cref{prop:growth} this says $\#\{z: z, 16z\in G_n\}=1$ for every $n$, that is, only $z=0$ qualifies, which is correct. Had we taken the spectral radius of the whole reachable set we would have got the plastic number $1.3247\ldots$, which measures how fast admissible digit strings accumulate, not how many of them close up into a point. Thirteen of the $829$ pairs of \cref{fact:spectrum} are affected by the trimming, and all thirteen drop to $\lambda=1$.
 \end{remark}
+
+\begin{definition}[The free-digit automaton]
+\label{def:free}
+Fix coprime $1\le s<t$. The automaton $\mathcal{B}(s,t)$ is built exactly as $\mathcal{A}(s,t)$ in \cref{def:auto}, with the same states, the same admissibility test and the same successor rule, except that the digit $d$ ranges over all of $\{0,1,2\}^2$ and not only over $G$. Write $T^\flat(s,t)$ for its live transition matrix and $\lambda^\flat(s,t)$ for the spectral radius. Reading the base-$3$ digits of $z$ from least significant, a closed path of length $n$ at the start state records exactly a $z\in[0,3^n)^2$ with $sz,tz\in G_n$; the vector $z$ itself is no longer required to lie in $G_n$. The proof of \cref{prop:growth} applies verbatim, so $\#\{z: sz,tz\in G_n\}=((T^\flat)^n)_{00}$.
+\end{definition}
+
+\begin{lemma}[The two automata coincide when a multiplier is one]
+\label{lem:free}
+$\mathcal{B}(1,t)=\mathcal{A}(1,t)$ for every $t$, with the same states and the same edges.
+\end{lemma}
+
+\begin{definition}[Collinear pair count]
+\label{def:pairs}
+For the gasket put
+\[
+E(n)=\sum_{(a,b)\ \mathrm{non\text{-}fibre}} M_n(a,b)^2 ,
+\]
+the number of ordered pairs of nonzero non-fibre points of $G_n$ lying on a common ray. This is a second moment, not the ray count $Z_F(n)$ of \cref{def:diag}; \cref{rem:Z} is the warning, and the two are different numbers for the gasket. Split $E(n)=D(n)+\Sigma(n)+R(n)$: the \emph{diagonal} part $D(n)$ counts the pairs with both entries equal, the \emph{shift-multiplier} part $\Sigma(n)$ counts the ordered pairs $(x,y)$ with $x\neq y$ whose reduced multiplier ratio is $3^{\pm j}$, and the \emph{residual} $R(n)$ is everything else.
+\end{definition}
+
+\begin{definition}[The witness of a collinear pair]
+\label{def:witness}
+Let $x\neq y$ be nonzero non-fibre points of $G_n$ on a common ray, with primitive direction $r$ and $x=g_1r$, $y=g_2r$. Put $d=\gcd(g_1,g_2)$, $s=g_1/d$, $t=g_2/d$ and $z=dr$. Then $\gcd(s,t)=1$, $z\in\mathbf{Z}_{\ge 1}^2$, and $(x,y)=(sz,tz)$. Conversely every triple $(s,t,z)$ with $\gcd(s,t)=1$ and $sz,tz\in G_n$ arises from exactly one such pair, so the assignment is a bijection. Call $z$ the \emph{witness} and $w=z_1+z_2$ its \emph{weight}, and write
+\[
+M_n(z)=\#\{m\ge 1: mz\in G_n\},
+\]
+which for primitive $z$ is the ray mass $M_n(z_1,z_2)$ of \cref{def:ray}. Grouping the residual by its witness gives
+\[
+\begin{aligned}
+R(n)&=\sum_{z\in\mathbf{Z}_{\ge 1}^2}P_n(z),\\
+P_n(z)&=\#\{(s,t):\gcd(s,t)=1,\ s\neq t,\ t/s\neq 3^{\pm j},\ sz,tz\in G_n\},
+\end{aligned}
+\]
+and $P_n(z)\le M_n(z)^2-M_n(z)$. Write $R_w(n)$ for the part of $R(n)$ carried by witnesses of weight $w$.
+\end{definition}
 
 \section{Results}
 \label{sec:results}
@@ -196,21 +233,59 @@ For every $n\ge 0$, the number of nonzero level-$n$ gasket points lying off both
 At $n=12$ this is $531441-8192+1=523250$.
 \end{proposition}
 
-\begin{fact}[Ray mass laws]
-\label{fact:mass}
-Let $F(1)=F(2)=1$ be the Fibonacci numbers \cite{oeisA000045}, let $a(0)=a(1)=a(2)=1$ and $a(m)=a(m-1)+a(m-3)$ be Narayana's cows \cite{oeisA000930}, and let $c(0),c(1),c(2),c(3)=1,2,3,4$ with $c(m)=c(m-1)+c(m-4)$ for $m\ge 4$. Then for every level $n$ in the stated range:
+\begin{definition}[Ray carry automaton]
+\label{def:raycarry}
+For a primitive ray $(a,b)$ let $\mathcal{C}(a,b)$ have states in $\mathbf{Z}$, start state $0$, and from a state $c$ a digit $d=(d_1,d_2)\in G$ admissible when $3\mid c+b\,d_1-a\,d_2$, with successor $(c+b\,d_1-a\,d_2)/3$. Write $T(a,b)$ for the live transition matrix.
+\end{definition}
+
+\begin{proposition}[The carry automaton counts the ray]
+\label{prop:raycarry}
+For every primitive ray $(a,b)$ and every $n\ge 0$, $M_n(a,b)=(T(a,b)^n)_{00}-1$, where $T(a,b)$ is as in \cref{def:raycarry} and the start state carries index $0$; the path removed is the all-$(0,0)$ one, which is the origin. Every reachable state satisfies $-a/2\le c\le b/2$, so the live set has at most $\lfloor a/2\rfloor+\lfloor b/2\rfloor+1$ elements, half the weight $a+b$ and one more.
+\end{proposition}
+
+\begin{theorem}[Ray mass laws]
+\label{thm:mass}
+Let $F(1)=F(2)=1$ be the Fibonacci numbers \cite{oeisA000045}, let $a(0)=a(1)=a(2)=1$ and $a(m)=a(m-1)+a(m-3)$ be Narayana's cows \cite{oeisA000930}, and let $c(0),c(1),c(2),c(3)=1,2,3,4$ with $c(m)=c(m-1)+c(m-4)$ for $m\ge 4$. Then for every level:
 \begin{enumerate}
-\item $M_n(3,1)=F(n+1)-1$ for $1\le n\le 30$;
-\item $M_n(3^j,1)=\bigl(\prod_{r=0}^{j-1} F(m_r+2)\bigr)-1$ for $1\le j\le 13$ and $1\le n\le 30$, where $m_r=\#\{i\in[0,n-j): i\equiv r \bmod j\}$;
-\item $M_n(1,12)=a(n)-1$ for $1\le n\le 30$;
-\item $M_n(7,3)=c(n-3)-1$ for $3\le n\le 30$.
+\item $M_n(3,1)=F(n+1)-1$ for $n\ge 1$;
+\item $M_n(3^j,1)=M_n(1,3^j)=\bigl(\prod_{r=0}^{j-1} F(m_r+2)\bigr)-1$ for all $j\ge 1$ and $n\ge 1$, where $m_r=\#\{i\in[0,n-j): i\equiv r \bmod j\}$; equivalently, writing $n-j=qj+\rho$ with $0\le\rho<j$, the product is $F(q+3)^{\rho}F(q+2)^{\,j-\rho}$;
+\item $M_n(1,12)=a(n)-1$ for $n\ge 1$;
+\item $M_n(7,3)=c(n-3)-1$ for $n\ge 3$.
 \end{enumerate}
-Checked by \texttt{scripts/verify.py}, which builds a bounded-carry automaton for each ray and cross-checks it against enumeration of the gasket points themselves: directly over all $3^n$ points for $1\le n\le 10$, and for $1\le n\le 14$ by splitting each point as $u+3^{\lfloor n/2\rfloor}v$ with $u,v$ in gasket sets of half the level, which counts the same $3^n$ points without listing them.
-\end{fact}
+\end{theorem}
+
+The three named recurrences are exactly the characteristic polynomials of three small live automata, and the shift family is a run-length count in disguise; both routes are written out in \cref{sec:proofs}. Independently, \texttt{scripts/verify.py} cross-checks the automaton against enumeration of the gasket points themselves: directly over all $3^n$ points for $1\le n\le 10$, and for $1\le n\le 14$ by splitting each point as $u+3^{\lfloor n/2\rfloor}v$ with $u,v$ in gasket sets of half the level, which counts the same $3^n$ points without listing them.
+
+\begin{theorem}[The shift family carries $\varphi^{2n}$ and no more]
+\label{thm:shift}
+Let $\varphi=(1+\sqrt5)/2$ and put
+\[
+\mathrm{Sh}(n)=\sum_{j\ge 1}\bigl(M_n(3^j,1)^2+M_n(1,3^j)^2\bigr),
+\]
+the part of $E(n)$ carried by the shift rays. Then for every $n\ge 1$ and every $j\ge 1$,
+\[
+M_n(3^j,1) < (3-\sqrt5)^j\,\varphi^n , \qquad
+\mathrm{Sh}(n) < \frac{4+12\sqrt5}{11}\,\varphi^{2n} < 2.803\,\varphi^{2n} ,
+\]
+and
+\[
+\lim_{n\to\infty}\frac{\mathrm{Sh}(n)}{\varphi^{2n}}=\frac{13+5\sqrt5}{11}=2.198212717\ldots
+\]
+The sum over $j$ is finite at each level, since $M_n(3^j,1)=0$ for $j\ge n$.
+\end{theorem}
+
+\begin{proposition}[The shift-multiplier part in closed form]
+\label{prop:sigma}
+For $1\le j\le n-1$ the number of nonzero non-fibre $z$ with $z,3^jz\in G_n$ is $3^{\,n-j}-2^{\,n-j+1}+1$, and therefore
+\[
+\Sigma(n)=2\sum_{j=1}^{n-1}\bigl(3^{\,n-j}-2^{\,n-j+1}+1\bigr)=3^n-4\cdot 2^n+2n+3 .
+\]
+With \cref{prop:total} this gives $D(n)+\Sigma(n)=2\cdot 3^n-6\cdot 2^n+2n+4$ exactly, so the whole question of whether $E(n)/3^n$ converges, and to what, is the question of how $R(n)$ grows.
+\end{proposition}
 
 \begin{remark}[The seeds are $1,2,3,4$, not $1,1,1,1$]
 \label{rem:seeds}
-The $(7,3)$ recurrence must be started at $c(0),c(1),c(2),c(3)=1,2,3,4$. Starting it at $1,1,1,1$ produces a different sequence and the identity in \cref{fact:mass}(4) fails immediately.
+The $(7,3)$ recurrence must be started at $c(0),c(1),c(2),c(3)=1,2,3,4$. Starting it at $1,1,1,1$ produces a different sequence and the identity in \cref{thm:mass}(4) fails immediately.
 \end{remark}
 
 \begin{remark}[Squares on the ray $(7,3)$]
@@ -231,6 +306,39 @@ mass & $232$ & $168$ & $124$ & $80$ & $71$ \\
 \end{tabular}
 \end{center}
 and $232=F(13)-1$. Checked by \texttt{scripts/verify.py} by literal enumeration of all $531441$ points, with the total mass identity of \cref{prop:total} rechecked at every level $1\le n\le 12$.
+\end{fact}
+
+\begin{fact}[The second moment to level 17]
+\label{fact:second}
+For $1\le n\le 12$ the collinear pair count of \cref{def:pairs} reads
+\[
+E(n)=0,\ 2,\ 16,\ 98,\ 396,\ 1522,\ 5248,\ 17118,\ 52212,\ 158042,\ 466960,\ 1374038 ,
+\]
+and the residual $R(n)=E(n)-D(n)-\Sigma(n)$ reads
+\[
+R(n)=0,\ 0,\ 0,\ 20,\ 88,\ 432,\ 1624,\ 5512,\ 15896,\ 46064,\ 124928,\ 335704 .
+\]
+At every one of those levels the shift-ray share $\mathrm{Sh}(n)$ agrees with the closed form of \cref{thm:mass}(2), and it is the dominant part of $R$: the ordered off-diagonal pairs carried by shift rays but not by shift multipliers number $360$, $1204$, $3816$, $10656$, $30132$, $81960$, $221980$ at $n=6,\dots,12$, a share of $R(n)$ that stays between $0.65$ and $0.84$ and reads $0.661$ at $n=12$. Checked by \texttt{scripts/verify.py} by literal enumeration of all $3^n$ points.
+
+Five further levels, computed by grouping all $3^n$ points by primitive direction and taking $E(n)=\sum_r M_n(r)^2$, then subtracting $D(n)=3^n-2^{n+1}+1$ and \cref{prop:sigma}, continue for $n=13,\dots,17$ with
+\[
+\begin{aligned}
+E(n)&=4003372,\ 11679626,\ 34050692,\ 99800950,\ 292848756,\\
+R(n)&=863848,\ 2211960,\ 5549452,\ 14100688,\ 35354824 .
+\end{aligned}
+\]
+Two ratios matter. $R(n)/3^n$ peaks at $0.84012$ at $n=8$ and then falls at every level to $0.2737709\ldots$ at $n=17$. $R(n)/\varphi^{2n}$ peaks at $3.2378$ at $n=12$ and then falls at every level to $2.7724831\ldots$ at $n=17$, and the level ratio $R(n+1)/R(n)$ has settled to $2.5073119\ldots$ at $n=17$, below $\varphi^2=2.6180\ldots$ So the residual now looks like a $\varphi^{2n}$ quantity with a constant below $3.24$, not like a $3^n$ quantity.
+\end{fact}
+
+\begin{fact}[The level-9 multiplier census]
+\label{fact:pairs9}
+At level $n=9$ the gasket occupies $12170$ non-fibre primitive rays carrying $18660$ points, and
+\[
+E(9)=52212,\quad D(9)=18660,\quad \Sigma(9)=17656,\quad R(9)=15896 .
+\]
+The $33552$ ordered off-diagonal collinear pairs are carried by exactly $2656$ ordered coprime multiplier pairs $(s,t)$, that is $1328$ unordered ones, of which $14$ are shift pairs, namely $(1,3^j)$ and $(3^j,1)$ for $1\le j\le 7$; the largest multiplier occurring is $2460$. For each of the $1328$ unordered pairs the return counts of $\mathcal{A}(s,t)$ agree with brute-force enumeration.
+
+They agree with a count that is not the census summand. Writing each off-diagonal collinear pair as $(sz,tz)$ with $\gcd(s,t)=1$, the automaton $\mathcal{A}(s,t)$ counts only those witnesses with $z\in G_n$, whereas the pair exists for every integer $z$. Of the $2656$ ordered pairs, $482$ have a witness off the gasket, and $2540$ of the $33552$ ordered pairs, that is $7.57\%$, are missed. Every one of the $482$ has $\min(s,t)\ge 2$, in agreement with \cref{lem:free}; the extreme cases are $(41,122)$, $(122,41)$, $(122,123)$ and $(123,122)$, each with $50$ census witnesses and none of them in $G_9$. The free-digit automaton $\mathcal{B}(s,t)$ of \cref{def:free} counts the census summand itself, and its return counts agree with brute force on all $103$ unordered pairs with $\max(s,t)\le 52$, which carry $11330$ of the $16776$ unordered off-diagonal pairs.
 \end{fact}
 
 \subsection{Law 3: how fast a pair of multiples can grow}
@@ -274,6 +382,15 @@ $(10,27)$ & $(27,28)$ & & & & \\
 \label{tab:two}
 \end{table}
 
+\begin{fact}[The free-digit automaton keeps the gap but not the ceiling]
+\label{fact:freespectrum}
+Over the same $829$ pairs, $\lambda^\flat(s,t)$ obeys the first three items of \cref{fact:spectrum} exactly: it equals $3$ on exactly the three shift pairs $(1,3)$, $(1,9)$, $(1,27)$; it never lies in the open interval $(2,3)$; and it equals $2$ on exactly the twenty pairs of \cref{tab:two}. Item (4) does \emph{not} transfer. The largest value of $\lambda^\flat$ strictly below $2$ is
+\[
+1.8488475886485\ldots ,
+\]
+attained by exactly four pairs, $(4,13)$, $(4,39)$, $(12,13)$ and $(13,36)$. Below $2$ the gasket-digit ceiling $\theta=1.6956207695598\ldots$ of \cref{fact:spectrum}(4), the real root of $x^3-x^2-2$, is reached or beaten by $44$ pairs, split sharply: exactly $19$ have $\lambda^\flat$ strictly above $\theta$, and exactly $25$ more have $\lambda^\flat=\theta$ exactly, their characteristic polynomials carrying $x^3-x^2-2$ as a factor while none of the $19$ does. A witness that needs no eigenvalue: $\mathcal{B}(4,13)$ has $4583352807133551$ closed paths of length $60$ at the start state, against $1.6956207695598\ldots^{60}<5.76\cdot 10^{13}$. The automata are larger too, up to $167$ live states, attained at both $(25,52)$ and $(31,40)$, against $33$ for $\mathcal{A}$, though $\mathcal{B}(1,16)$ still trims to the start state alone. Checked by the same exact integer certificates as \cref{fact:spectrum}. So what survives the correction of \cref{fact:pairs9} is the gap itself, on the quantity the pair census actually needs; the sharp constant below $2$ does not.
+\end{fact}
+
 The simplest attainer can be checked by hand, so we prove it.
 
 \begin{proposition}[The pair $(1,4)$]
@@ -289,17 +406,271 @@ whence $G_m=\bigl(2^{m+2}-(-1)^m\bigr)/3$, giving $1$, $3$, $5$, $11$, $21$, $43
 giving $1$, $1$, $3$, $5$, $11$, $21$, $43$, $85$, $171$, and $R_{15}=21845$. Both grow like $2^m$, but only $R_m$ counts points.
 \end{proposition}
 
+\subsection{Law 4: what a witness can weigh}
+
+The multiplier pair is the wrong coordinate on the residual. \Cref{rem:open} explains why: the active pairs already number about $2.77^{\,n}$, so a per-pair bound is useless without control of a sum of constants over that set. The witness of \cref{def:witness} is the right coordinate, because the sum over witnesses is indexed by a set on which the ray mass law of \cref{thm:mass} already speaks.
+
+\begin{lemma}[No witness weighs less than four]
+\label{lem:weight}
+Let $z\in\mathbf{Z}_{\ge 1}^2$ and $m\ge 1$ with $mz\in G_n$. Then $z_1+z_2\ge 4$. Consequently every multiplier pair active at level $n$ satisfies
+\[
+\max(s,t)\ \le\ \frac{3^n-1}{8},
+\]
+whose floor is $\lfloor 3^n/8\rfloor$, and that is exactly the largest multiplier occurring, at every level $4\le n\le 13$. The bound is therefore sharp.
+\end{lemma}
+
+\begin{proposition}[Large multipliers contribute exactly four]
+\label{prop:topband}
+Let $\{s,t\}$ be a coprime non-shift pair with $\max(s,t)>(3^n-1)/10$. Then every witness of the pair has weight exactly $4$ and lies in $\{(1,3),(3,1)\}$, both occur or neither, and the pair carries exactly $4$ ordered off-diagonal collinear pairs of $G_n$, or none. At $n=6,\dots,13$ the pairs above that threshold number $18$, $57$, $163$, $402$, $1019$, $2702$, $7060$, $18607$, and every one of them carries exactly $4$.
+\end{proposition}
+
+\begin{proposition}[$\mathcal{B}$ is a constrained tensor square]
+\label{prop:tensor}
+Fix coprime $s<t$. Let $\mathcal{C}(s,t)$ be the \emph{carry automaton} on states $(a,b)\in\mathbf{Z}_{\ge 0}^2$, start $(0,0)$, carrying for each digit $d\in\{0,1,2\}$ with $u=(sd+a)\bmod 3\le 1$ and $v=(td+b)\bmod 3\le 1$ an edge to $(\lfloor (sd+a)/3\rfloor,\lfloor (td+b)/3\rfloor)$ labelled $(u,v)$. Let $S$ be its transition matrix, and $U$, $V$, $W$ the matrices of the edges with $u=1$, with $v=1$, and with $u=v=1$. Identify a state $(\mathbf{a};\mathbf{b})$ of $\mathcal{B}(s,t)$ with the pair of $\mathcal{C}$-states $\bigl((a_1,b_1),(a_2,b_2)\bigr)$. Then
+\[
+T^\flat(s,t)\;=\;S\otimes S-U\otimes U-V\otimes V+W\otimes W .
+\]
+Hence $\mathcal{C}$ has at most $(s+1)(t+1)$ reachable states, and the return counts of \cref{def:free} are produced by $n$ steps of $X\mapsto SXS^{\top}-UXU^{\top}-VXV^{\top}+WXW^{\top}$ from $X=e_0e_0^{\top}$, reading $X_{00}$, with no four-tuple state graph built. On all $473$ coprime pairs below $40$ the two agree at every level to $9$. The carry automaton is the smaller object: $729$ live carry states against $26931$ reachable states of $\mathcal{B}$ at $(365,1094)$, and $81$ against $835$ at $(41,122)$.
+\end{proposition}
+
+\begin{proposition}[The box construction]
+\label{prop:box}
+Fix coprime $s<t$ and put $W_n(t)=\lfloor (3^n-1)/(2t)\rfloor$. Then
+\[
+\begin{aligned}
+N_n(s,t):=\#\{z\in\mathbf{Z}_{\ge 1}^2:\ &sz,tz\in G_n\}\\
+=\#\{z\in\mathbf{Z}_{\ge 1}^2:\ &z_1+z_2\le W_n(t),\ sz,tz\in G_n\},
+\end{aligned}
+\]
+The two symbols are duals and must not be confused: $N_n(s,t)$ counts the witnesses of one pair, while $P_n(z)$ of \cref{def:witness} counts the pairs of one witness. So $N_n(s,t)$ is computed by $O(W_n(t)^2\,n)$ digit tests and no automaton at all. It agrees with $\mathcal{B}(s,t)$ on all $812$ coprime pairs with $s<30$, $t<60$ at $n=9$, and with \cref{prop:tensor} at $(365,1094)$, $(41,122)$, $(122,123)$, $(1,2460)$ and $(2431,2458)$ at $n=9$ and $n=12$. The construction is exactly complementary to the automaton: it is cheapest where a forward build of $\mathcal{B}$ is most expensive.
+\end{proposition}
+
+\begin{theorem}[The weight-four layer is Fibonacci and closed]
+\label{thm:weightfour}
+Let $F_n=\{m\ge 1:(m,3m)\in G_n\}$, which is the set of $m<3^{n-1}$ whose base-$3$ expansion is binary with no two adjacent ones, so $\#F_n=F(n+1)-1$. Then
+\[
+\begin{aligned}
+R_4(n)&=2\,\#\{(a,b)\in F_n^2: a\neq b,\ \gcd(a,b)=1,\ b/a\neq 3^{\pm j}\}\\
+&<\;2\bigl(F(n+1)-1\bigr)^2\;<\;1.0473\,\varphi^{2n},
+\end{aligned}
+\]
+and the weight layers scale exactly as $R_{3w}(n)=R_w(n-1)$, so the whole $3$-power orbit of weight four obeys $\sum_{j\ge 0}R_4(n-j)<1.6945\,\varphi^{2n}$. The identity is checked at $n=4,\dots,12$, where $R_4(n)=12$, $36$, $108$, $336$, $988$, $2596$, $6672$, $17480$, $45720$; the scaling law is checked on all $1869$ layers of weight divisible by $3$ at $n=5,\dots,13$. At $n=13$ the weight-four orbit carries $194096$ of $R(13)=863848$.
+\end{theorem}
+
+\begin{lemma}[Branch structure of a ray automaton]
+\label{lem:branch}
+Fix a primitive ray $(a,b)$ with $a,b\ge 1$, so that $0$, $b$, $-a$ are three distinct values. As $d$ runs over $G$ the increment of \cref{def:raycarry} takes exactly those values, so a state $c$ of $\mathcal{C}(a,b)$ has one outgoing edge for each $\varepsilon\equiv-c\pmod 3$. Then:
+\begin{enumerate}
+\item at most one of $a$, $b$, $a+b$ is divisible by $3$;
+\item if $3\nmid ab$ then the only closed path at $0$ is the all-$(0,0)$ one and $M_n(a,b)=0$ for every $n$, whether or not $3$ divides $a+b$; so $3$ divides a coordinate of every occupied direction;
+\item otherwise let $q\in\{a,b\}$ be the coordinate divisible by $3$ and $k=v_3(q)\ge 1$. The congruent pair of increments is $\{0,b\}$ or $\{0,-a\}$ and its two members differ by $\pm q$, so every state has out-degree at most two, and in the untrimmed automaton the states of out-degree two, the \emph{branch} states, are exactly the states divisible by $3$. The two successors of a branch state differ by $\pm q/3$, so they lie in different classes modulo $3$ when $k=1$ and in the same class when $k\ge 2$. Trimming to the live set only deletes successors, never adds them, and a deleted successor is one that cannot reach the start state, so it contributes $0$ to every path count below; every bound proved for the untrimmed automaton therefore holds for the trimmed one, while a state's out-degree may drop.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}[Occupancy needs a residue match]
+\label{lem:occupancy}
+Let $z$ be primitive with $z_1,z_2\ge 1$ and $3\mid z_1z_2$. Write $\{z_1,z_2\}=\{p,q\}$ with $3\mid q$, and $q=3^{\,k}q_1$ with $k=v_3(q)$ and $3\nmid q_1$. If $M_n(z)>0$ for some $n$ then
+\[
+q_1\equiv p\pmod 3 .
+\]
+\end{lemma}
+
+\begin{remark}[What the residue match removes]
+\label{rem:occupancy}
+The condition is a congruence on the pair, tested without building an automaton. Of the $11691$ primitive $z$ with $3\mid z_1z_2$ in the box and the six families of \cref{fact:ceiling}, exactly $7103$ match and $4588$ do not, and every one of the $865$ occupied directions matches. It is only necessary: just $865$ of the $7103$ matching directions carry any mass. \Cref{lem:branch}(2) removes the directions with $3\nmid z_1z_2$ and \cref{lem:occupancy} removes $4588$ of the $11691$ left, both by arithmetic alone and neither needing an automaton.
+\end{remark}
+
+\begin{theorem}[The golden ceiling, proved cases]
+\label{thm:ceilingproved}
+Let $(a,b)$ be primitive with $a,b\ge 1$. Then $M_n(a,b)\le F(n+1)-1$ for every $n\ge 0$ in each of these cases.
+\begin{enumerate}
+\item $3\nmid ab$, where in fact $M_n(a,b)=0$.
+\item No branch state of $\mathcal{C}(a,b)$ has both successors branching. By \cref{lem:branch}(3) this holds whenever $k=v_3(q)=1$.
+\item $\{a,b\}=\{1,3^{\,j}\}$, and there the bound is strict for $j\ge 2$ and $n\ge 2$.
+\item $\mathcal{C}(a,b)$ carries a \emph{Fibonacci certificate}: rationals $\alpha(c)\ge 0$ and $\beta(c)$ on the live states, with $\alpha(0)=1$, $\beta(0)=0$ and
+\[
+\sum_{c'}\alpha(c')\le\alpha(c)+\beta(c),
+\qquad
+\sum_{c'}\beta(c')\le\alpha(c)
+\]
+at every state $c$, both sums running over the successors of $c$ with multiplicity.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Both hypotheses are load-bearing]
+\label{rem:fibre}
+The restriction $a,b\ge 1$ in \cref{lem:branch} is not decorative, and neither is counting edges with multiplicity. On the fibre ray $(a,b)=(0,1)$ the increments $0$, $b$, $-a$ are $0$, $1$, $0$: the digits $(0,0)$ and $(0,1)$ give the same increment, so the start state carries two edges, both to itself, and $(T^n)_{00}=2^n$. Read as a set of successor states the automaton would show no branch state at all, and \cref{thm:ceilingproved}(2) would return the ceiling; but $M_n(0,1)=2^n-1$, which is $63$ against $F(7)-1=12$ at $n=6$. For $a,b\ge 1$ the three increments are distinct and the reading is unambiguous.
+\end{remark}
+
+\begin{remark}[Why case (2) does not extend]
+\label{rem:statemax}
+Case (2) is proved by bounding $G(n)=\max_c N(c,n)$, where $N(c,n)$ counts the paths of length $n$ from $c$ to the start state, and the proof needs $G(n)\le G(n-1)+G(n-2)$. That inequality is false in general. At $z=(1,9)$ the profile runs $G(0),\dots,G(6)=1$, $1$, $1$, $2$, $4$, $6$, $9$ and already $G(4)=4>G(3)+G(2)=3$; over the box of \cref{prop:boxsettled} it fails for eight directions, all with $k\ge 2$. So $k\ge 2$ needs a different mechanism, and cases (3) and (4) are two of them.
+\end{remark}
+
+\begin{definition}[First returns and the golden potential]
+\label{def:golden}
+Let $(a,b)$ be primitive with $a,b\ge 1$. For a live state $c$ of $\mathcal{C}(a,b)$ let $g(c,m)$ count the paths of length $m$ from $c$ to the start state that meet the start state only at their last step, with $g(0,0)=1$ and $g(0,m)=0$ for $m\ge 1$, and set
+\[
+u(c)=\sum_{m\ge 0}g(c,m)\varphi^{-m}\in[0,\infty],
+\qquad
+U(a,b)=\sum_{c'\neq 0}u(c') ,
+\]
+the second sum running over the successors of the start state other than the start state, with multiplicity. Write $f_j$ for the number of closed paths of length $j$ at the start state that meet it only at their two ends, so $f_1=1$, $f_j=\sum_{c'\neq 0}g(c',j-1)$ for $j\ge 2$, and $\sum_{j\ge 2}f_j\varphi^{-j}=\varphi^{-1}U(a,b)$.
+\end{definition}
+
+\begin{theorem}[The golden ceiling from a potential]
+\label{thm:potential}
+Let $(a,b)$ be primitive with $a,b\ge 1$, and suppose there is $\pi>0$ on the live states of $\mathcal{C}(a,b)$ with
+\[
+\sum_{c'}\pi(c')\le\varphi\,\pi(c)\ \ \text{for every live }c\neq 0,
+\qquad
+\sum_{c'\neq 0}\pi(c')\le\varphi^{-2}\pi(0),
+\]
+both sums over successors with multiplicity, the second over the successors of the start state other than the start state. Then $U(a,b)\le\varphi^{-2}$ and $M_n(a,b)\le F(n+1)-1$ for every $n\ge 0$. Conversely $\pi=u$ is such a potential as soon as $U(a,b)\le\varphi^{-2}$, so the hypothesis says exactly that.
+\end{theorem}
+
+\begin{remark}[What the criterion misses, and why $(1,3)$ is extremal]
+\label{rem:golden}
+On the shift ray $\{a,b\}=\{1,3^{\,j}\}$, \cref{thm:mass}(2) writes $N(0,n)=M_n+1$ as $\prod_{r<j}F(m_r+2)$ with $m_r\ge 0$ and $\sum_rm_r=n-j$, so $N(0,n)\ge\varphi^{\,n-j}$ for $n>j$ by the envelope $F(m)\ge\varphi^{m-2}$ in the proof of \cref{thm:potential}, and $\sum_nN(0,n)x^n=1/(1-\Phi(x))$, with $\Phi(x)=\sum_{j\ge1}f_jx^j$, blows up as $x$ rises to $\varphi^{-1}$; since $\Phi$ has nonnegative coefficients, monotone convergence gives $\Phi(\varphi^{-1})=1$, that is $U(1,3^{\,j})=\varphi(1-\varphi^{-1})=\varphi^{-1}$ exactly. So \cref{thm:potential} misses every shift ray, and \cref{thm:ceilingproved}(3) is exactly the complementary tool. Length-two first returns say why $(1,3)$ is the heaviest ray: $f_2$ counts the pairs of increments $\varepsilon_0\neq 0$ with $3\mid\varepsilon_0$ and $\varepsilon_1=-\varepsilon_0/3$, and $\varepsilon_0=b$ forces $b=3a$ while $\varepsilon_0=-a$ forces $a=3b$, so $f_2=1$ when $\{a,b\}=\{1,3\}$ and $f_2=0$ at every other direction.
+\end{remark}
+
+\begin{lemma}[Short first returns]
+\label{lem:short}
+Let $z$ be primitive with $z_1,z_2\ge 1$ and $3\mid z_1z_2$, and let $p$, $q=3^{\,k}q_1$ be as in \cref{lem:occupancy}. Then:
+\begin{enumerate}
+\item $f_j=0$ for $2\le j\le k$, so the shortest first return through a state other than the start state has length more than $v_3(q)$;
+\item $f_2=1$ if $\{z_1,z_2\}=\{1,3\}$ and $f_2=0$ at every other direction;
+\item $f_3=1$ if $\{z_1,z_2\}$ is one of $\{1,9\}$, $\{1,12\}$, $\{3,10\}$, $\{4,9\}$, and $f_3=0$ at every other direction;
+\item away from $\{1,3\}$,
+\[
+U(z)=\varphi^{-2}\sum_{j\ge 3}f_j\varphi^{\,3-j},
+\]
+so $U(z)\le\varphi^{-2}$ says exactly $\sum_{j\ge 3}f_j\varphi^{\,3-j}\le 1$. Away from the four directions of (3) this forces $f_4\le 1$, and $f_4=1$ forces $\sum_{j\ge 5}f_j\varphi^{\,5-j}\le 1$ in turn.
+\end{enumerate}
+\end{lemma}
+
+\begin{theorem}[The degree potential and its sweep]
+\label{thm:degree}
+Let $(a,b)$ be primitive with $a,b\ge 1$ and occupied. Put $\pi_0(0)=1$ and, at a live state $c\neq 0$, put $\pi_0(c)=1$ if its live out-degree is two and $\pi_0(c)=\varphi^{-1}$ if it is one. Define $\pi_{d+1}(0)=1$ and $\pi_{d+1}(c)=\varphi^{-1}\sum_{c'}\pi_d(c')$ at live $c\neq 0$, the sum over successors with multiplicity. If $\pi_0$ satisfies the first inequality of \cref{thm:potential}, which happens whenever no branch state of the live automaton has both successors of out-degree two and is in any case a finite check, then
+\[
+u\le\pi_{d+1}\le\pi_d\le\pi_0
+\quad\text{pointwise, so}\quad
+U(a,b)\le\sum_{c'\neq 0}\pi_d(c')\ \ \text{for every }d\ge 0,
+\]
+a decreasing sequence of bounds in $\mathbf{Q}(\sqrt5)$; if one of them is at most $\varphi^{-2}$ then so is $U(a,b)$, and \cref{con:potential} holds at that direction.
+\end{theorem}
+
+\begin{theorem}[The golden partition bound where $3$ divides a coordinate exactly once]
+\label{thm:golden1}
+Let $z$ be primitive and occupied with $z_1,z_2\ge 1$, let $p$ and $q=3q_1$ be as in \cref{lem:occupancy} with $v_3(q)=1$, and suppose $\{z_1,z_2\}\neq\{1,3\}$. Then $t:=v_3(q_1-p)$ is finite and at least $1$, and
+\[
+U(z)\ \le\ \varphi^{-1}\bigl(1-\varphi^{-\max(t,2)}\bigr)\ <\ \varphi^{-1} .
+\]
+In particular $U(z)\le\varphi^{-2}$ whenever $t\le 2$, so \cref{con:potential} and with it the golden ceiling at every level hold for every primitive direction in the arithmetically defined class
+\[
+v_3(q)=1,\qquad v_3\bigl(q/3-p\bigr)\le 2,\qquad \{z_1,z_2\}\neq\{1,3\} ,
+\]
+an infinite family, in which the members with $t=0$ are covered too: they fail the residue match of \cref{lem:occupancy}, so they carry no mass at any level and have $U(z)=0$. For every direction with $v_3(q)=1$ other than $\{1,3\}$ the growth rate of $M_n(z)$ is therefore strictly below $\varphi$. The bound is attained at $(1,12)$, where $t=1$, and at $(3,10)$, where $t=2$.
+\end{theorem}
+
+\begin{remark}[Two forms of the bound with no automaton in them]
+\label{rem:reform}
+Cutting a closed path at its first return to the start state gives $\sum_n N(0,n)x^n=1/(1-\Phi(x))$ with $\Phi(\varphi^{-1})=\varphi^{-1}\bigl(1+U(z)\bigr)$, so for a direction with $U(z)<\varphi^{-1}$
+\[
+\sum_{n\ge 0}\bigl(M_n(z)+1\bigr)\varphi^{-n}=\frac{1}{\varphi^{-2}-\varphi^{-1}U(z)} ,
+\]
+and $U(z)\le\varphi^{-2}$ says exactly that this golden series is at most $\varphi^{4}=3\varphi+2$. Grouping by multiplier instead of by level: let $\mathcal{M}(z)$ be the set of $m\ge 1$ with $mz\in G_n$ for some $n$, and for $m\in\mathcal{M}(z)$ let $\ell(m)$ be the number of base-$3$ digits of $(z_1+z_2)m$. Since $mz_1$ and $mz_2$ are then binary with disjoint supports, $(z_1+z_2)m$ is their carry-free sum, so $mz\in G_n$ holds for $n\ge\ell(m)$ and for no smaller $n$. Hence $\sum_nM_n(z)\varphi^{-n}=\varphi^2\sum_{m}\varphi^{-\ell(m)}$, and \cref{con:potential} reads
+\[
+\sum_{m\in\mathcal{M}(z)}\varphi^{-\ell(m)}\ \le\ \varphi
+\]
+at every non-shift direction: a weighted count of the multipliers of $z$, with no carry automaton in it, in which the weight of a multiplier is $\varphi$ to the minus its level.
+\end{remark}
+
+\begin{proposition}[The box is settled at every level]
+\label{prop:boxsettled}
+Among the $13158$ primitive $z$ with $z_1\le 120$ and $z_1\le z_2\le 240$, exactly $6566$ have $3\nmid z_1z_2$ and are settled outright by \cref{thm:ceilingproved}(1); of the other $6592$, exactly $218$ have a live automaton larger than the start state and the remaining $6374$ have $M_n(z)=0$ at every level, so they need nothing. Every one of the $218$ has out-degree at most two with its branch states in a single class modulo $3$ and all its carries inside $[-z_1/2,\,z_2/2]$, the largest live set having $37$ states. Of the $218$, case (2) settles $206$, of which $107$ have $k=1$, and the twelve left over are
+\[
+\begin{aligned}
+&(1,9),\ (1,27),\ (1,81),\ (1,90),\ (4,117),\ (9,73),\\
+&(9,82),\ (9,235),\ (10,81),\ (13,108),\ (27,217),\ (27,226).
+\end{aligned}
+\]
+The first three are shift rays and fall to case (3); the other nine carry explicit Fibonacci certificates, of denominators $18$, $40$, $381$, $18$, $2013$, $18$, $40$, $2013$ and $34$, verified in exact integer arithmetic. So the golden ceiling holds on the whole box at every level, not only at the levels enumerated in \cref{fact:ceiling}.
+
+The box is settled a second time by one criterion rather than twelve special cases. The golden potential of \cref{def:golden} is finite, strictly positive and in $\mathbf{Q}(\sqrt5)$ on all $218$ directions, and $U(z)\le\varphi^{-2}$ on exactly $214$ of them; the four failures are the shift rays $(1,3)$, $(1,9)$, $(1,27)$ and $(1,81)$, each with $U=\varphi^{-1}$ exactly, as \cref{rem:golden} requires. So \cref{thm:potential} settles every non-shift direction of the box and \cref{thm:ceilingproved}(3) settles the four shift rays. Over the $218$, $U$ takes $57$ distinct values: $\varphi^{-1}$ on the four shift rays, then $\varphi^{-2}=2-\varphi$ at $(1,12)$, $(3,10)$ and $(4,9)$, then $(9\varphi-14)/2$ at $(1,90)$, $(9,82)$ and $(10,81)$, and nothing in between $\varphi^{-2}$ and $\varphi^{-1}$.
+\end{proposition}
+
+\begin{proposition}[Ray mass is carried by the weight]
+\label{prop:weightmass}
+Let $z$ be primitive of weight $w=z_1+z_2$ and let $D_n(w)$ count the $K$ with $0<K<3^n$, $K$ binary in base $3$ and $w\mid K$. If $mz\in G_n$ then $mz_1$ and $mz_2$ are binary with disjoint support, so $mw=mz_1+mz_2$ is binary and $mw<3^n$, and the supports of $mz_1$ and $mz_2$ partition that of $mw$. Since $\gcd(z_1,w)=1$ the map $m\mapsto mw$ is injective with $mz_1=z_1(mw)/w$, so, writing $\operatorname{supp}$ for the set of positions carrying a nonzero base-$3$ digit,
+\[
+\begin{aligned}
+M_n(z)&=\#\bigl\{K:\ 0<K<3^n,\ K\ \text{and}\ z_1K/w\ \text{binary},\ w\mid K,\\
+&\qquad\quad \operatorname{supp}(z_1K/w)\subseteq\operatorname{supp}(K)\bigr\}\ \le\ D_n(w).
+\end{aligned}
+\]
+\end{proposition}
+
+\begin{fact}[The golden ceiling on ray mass]
+\label{fact:ceiling}
+The claim is that $M_n(z)\le M_n(1,3)=F(n+1)-1$ for every $z\in\mathbf{Z}_{\ge 1}^2$ and every $n$: the shift ray $(1,3)$ is the heaviest ray of the gasket at every level. It is \emph{proved} for every $z$ in the box $z_1\le 120$, $z_1\le z_2\le 240$ and every $n$, by \cref{prop:boxsettled}, and for every $z$ in the six adversarial families named below, by \cref{thm:potential}; the enumerations reported next are an independent \emph{verification} of the same range, and in general the claim is open. The $13158$ coprime directions of the box are enumerated at every $n\le 40$, with $(1,3)$ the sole attainer at $n=40$. Six adversarial families chosen to favour a breach are enumerated at every $n\le 45$: all binary base-$3$ pairs below $3^7$ ($4221$ coprime), all no-adjacent-ones pairs below $3^7$ ($253$), all $(1,t)$ with $t<3000$ ($2998$), all consecutive pairs below $1500$ ($1499$), all $(s,3s-1)$ with $s<1200$ ($1199$), and all $(s,3s+1)$ with $s<1200$ ($1199$). No breach. Those six overlap, the second family lying inside the first, so their $11369$ coprime members are only $10862$ distinct directions, of which $717$ already lie in the box and $10145$ are new. Of the $10145$, $9498$ carry no mass at any level, $608$ fall under \cref{thm:ceilingproved}(2) and $3$ under case (3), so exactly $36$ rest on the enumeration alone. The criterion of \cref{thm:potential} is stronger on that list than the enumeration is: of the $647$ occupied directions outside the box, $644$ satisfy $U(z)\le\varphi^{-2}$ and so are proved at every level, and the three that do not are the shift rays $(1,243)$, $(1,729)$ and $(1,2187)$, again with $U=\varphi^{-1}$. Together with \cref{prop:boxsettled} that is $865$ occupied directions of which $858$ are proved by the potential and the remaining seven, all shift rays, by \cref{thm:ceilingproved}(3); nothing rests on the enumeration alone once \cref{thm:potential} is applied. Non-coprime $z$ need no separate check: $M_n(er)\le M_n(r)$ for every $e\ge 1$. The shift rays $(1,3^j)$ all grow at $\varphi$ itself; the next rate down is the supergolden $1.4655\ldots$, the root of $x^3=x^2+1$, attained at $(1,12)$, $(3,10)$, $(4,9)$ and their relatives. So the spectrum of ray growth is $\varphi$ on the shift rays, then a gap, then $1.4655\ldots$
+\end{fact}
+
 \subsection{What is not proved}
 
-\begin{conjecture}[The mass laws hold at every level]
-\label{con:mass}
-The four identities of \cref{fact:mass} hold for every $n$, not only for $n\le 30$.
+\begin{conjecture}[The golden partition bound]
+\label{con:potential}
+$U(a,b)\le\varphi^{-2}$ for every primitive $(a,b)$ with $a,b\ge 1$ that is not a shift ray.
 \smallskip
 
-\noindent\emph{Evidence.} Each identity is an equality of two linear recurrences with the same order; agreement over $30$ consecutive levels is far more than the order of either recurrence. The counting side is generated by a finite bounded-carry automaton, which strongly suggests eventual linearity. Two independent implementations agree, and enumeration of the gasket points themselves, split into halves as in \cref{fact:mass}, agrees for $n\le 14$.
+\noindent\emph{What it would give.} \Cref{fact:ceiling} as a theorem. By \cref{thm:potential} the bound gives the golden ceiling at every level for every non-shift direction, and \cref{thm:ceilingproved}(3) already gives it on the shift rays. It is a genuine reduction of shape: one inequality for each direction in place of one for each pair $(z,n)$, and the quantity being bounded is a single algebraic number, computed by one exact linear solve on the live states and lying in $\mathbf{Q}(\sqrt5)$.
 \smallskip
 
-\noindent\emph{Failure mode.} A carry state reachable only at large $n$ would add a term to the recurrence and break the identity at a level beyond the checked range. This is exactly what a written bijection between admissible digit strings and compositions would rule out; no such bijection is written here, and until one is, the identities are checked, not proved.
+\noindent\emph{Evidence.} Over the box and the six adversarial families, $865$ directions are occupied and $858$ obey the bound; the seven that do not are exactly the shift rays $(1,3^{\,j})$ for $1\le j\le 7$, each with $U=\varphi^{-1}$ exactly, as \cref{rem:golden} proves it must be. The bound is attained, at $\varphi^{-2}$, only on the supergolden directions $(1,12)$, $(3,10)$ and $(4,9)$, and $U$ takes no value in the open interval $(\varphi^{-2},\varphi^{-1})$ anywhere in that range. Each check is exact in $\mathbf{Q}(\sqrt5)$, and each solution is confirmed to satisfy the two inequalities of \cref{thm:potential} rather than merely to solve the system.
+
+More than evidence is now available. \Cref{thm:golden1} proves the conjecture outright on an infinite class cut out by two $3$-adic conditions, which holds at $261$ of the $360$ occupied directions of that census with $v_3(q)=1$; and \cref{thm:degree} proves it, direction by direction and without solving a linear system, wherever a sweep of the degree potential falls to $\varphi^{-2}$. On the same $865$ occupied directions the degree potential is a super-solution at $851$, of which $37$ have a branch state with two branching successors and so lie outside \cref{thm:ceilingproved}(2); sweeping settles $849$ of them, at sweep depth $1$ for $760$, depth $3$ for $48$, depth $4$ for $31$, depth $5$ for $7$ and depth $6$ for $3$, the depth being the least one that works. What is left is $16$ directions: the seven shift rays, which \cref{thm:ceilingproved}(3) closes, and
+\[
+\begin{aligned}
+&(1,756),\ (1,2196),\ (1,2214),\ (1,2268),\ (1,2430),\\
+&(13,1080),\ (27,730),\ (28,729),\ (40,1053),
+\end{aligned}
+\]
+at each of which the exact solve still gives $U\le\varphi^{-2}$ but no certificate of this shape does. Over the wider lab census of $36037$ directions the same two tools leave $8$ shift rays and $21$ named directions.
+\smallskip
+
+\noindent\emph{Failure mode.} The bound is strictly stronger than the ceiling it implies, since it also pins the growth rate at or below the supergolden number: it is the rate gap of \cref{fact:ceiling} and the ceiling folded into one statement. So no argument that tolerates rate $\varphi$ can prove it, and in particular \cref{thm:ceilingproved}(2) does not, since $(1,3)$ satisfies the no-double-branching hypothesis and has $U=\varphi^{-1}$. \Cref{thm:degree} obeys that constraint in the only way available: its potential $\pi_0$ is a super-solution at $(1,3)$ as well, and the gain comes not from the potential but from the sweep, which at $(1,3)$ never falls below $\varphi^{-1}$ because the start state is a successor of the state $c_0$. The open ground has narrowed. \Cref{thm:golden1} closes $v_3(q)=1$ except where $27\mid q/3-p$; there the spine of branch states above $c_0$ is long, the estimate $\theta_i=1-\varphi^{-(i+2)}$ rises to $1$, and the missing input is a bound below $\varphi^{-1}$ at the non-branch siblings along that spine. For $v_3(q)\ge 2$ the burst of \cref{lem:short}(1) is the obstruction in its sharpest form, and it constrains every potential, not a chosen class of them. Each state at burst depth $j\le k-2$ has out-degree two with neither successor the start state, so any $\pi$ satisfying the first inequality of \cref{thm:potential} obeys $\pi(c)\ge\varphi^{-1}\sum_{c'}\pi(c')$ there, and iterating down the burst gives
+\[
+\varphi^{-2}\ \ge\ \pi(c_0)\ \ge\ \varphi^{-(k-1)}\sum_{m}\pi(q_1m),
+\]
+the sum running over the $2^{\,k-1}$ distinct burst-floor states $q_1m$ with $m<3^{\,k}$ binary in base $3$ and $m\equiv 1\pmod 3$, all of them of valuation $0$. So $\pi$ averages at most $\varphi^{\,k-3}2^{-(k-1)}$ across the burst floor. When $2p\le q$ the state $p$ is live with the start state as its only successor, forcing $\pi(p)\ge\varphi^{-1}$ although $v_3(p)=0$ as well; the ratio of the two demands is $\varphi^{2}(2/\varphi)^{\,k-1}$, which grows without bound. A valid potential must therefore separate states of equal valuation by an exponentially large factor: no $\pi$ constant on the level sets of $v_3$ can work once $k\ge 2$, and neither can $\pi_0$ of \cref{thm:degree}, which is constant on the out-degree classes. What could grade finely enough is exactly what is open. The identity above is checked in exact $\mathbf{Q}(\sqrt5)$ arithmetic against $\pi=u$, together with $u(p)=\varphi^{-1}$ whenever $2p\le q$, on all $865$ occupied directions of the census.
+\end{conjecture}
+
+\begin{conjecture}[The residual is $o(3^n)$]
+\label{con:residual}
+$R(n)/3^n\to 0$; equivalently $E(n)=2\cdot 3^n+o(3^n)$ by \cref{prop:sigma}. This is the weak form: \cref{con:witness} below asserts the sharp rate $R(n)=O(\varphi^{2n})$ and implies this statement, since $\varphi^2<3$, but the weak form is all that the second-moment application needs.
+\smallskip
+
+\noindent\emph{Evidence.} \Cref{thm:shift} settles the dominant part outright: the shift rays contribute $(2.1982\ldots+o(1))\varphi^{2n}$ to $E$, and $\varphi^2=2.618\ldots<3$. \Cref{fact:second} measures $R$ to level $17$: $R(n)/3^n$ falls at every level from $n=8$ onward, and $R(n)/\varphi^{2n}$ peaks at $3.2378$ at $n=12$ and then falls at five consecutive levels to $2.7724831\ldots$. \Cref{thm:weightfour} closes the weight-four orbit outright, $194096$ of $R(13)=863848$, by the same Fibonacci mechanism as \cref{thm:shift}.
+\smallskip
+
+\noindent\emph{Failure mode.} What \cref{thm:shift} does not touch is the non-shift rays, which carry between $0.16$ and $0.35$ of $R$ at every level measured. Bounding them by multiplier pair means bounding $\sum \#\{z: sz,tz\in G_n\}$ over the non-shift active pairs, a set that grows: at $n=4,\dots,13$ those pairs number $10$, $30$, $106$, $332$, $1010$, $2642$, $7564$, $20934$, $57858$, $154410$, and the largest multiplier occurring is exactly $\lfloor 3^n/8\rfloor$ at each of those levels, as \cref{lem:weight} requires. A per-pair bound $\lambda^\flat(s,t)\le 2$ buys nothing there unless it comes with a constant decaying in $(s,t)$ fast enough to beat that count, and \cref{fact:freespectrum} is a finite check at $\max(s,t)\le 52$, not a uniform statement.
+
+\Cref{def:witness} moves the sum off that index set. In the witness coordinate the constant is not missing but golden: $R(n)=\sum_z P_n(z)$ with $P_n(z)\le M_n(z)^2-M_n(z)$, and \cref{fact:ceiling} caps every $M_n(z)$ by $F(n+1)-1<\varphi^{n+1}/\sqrt5$. What is still owed is summability, stated next.
+\end{conjecture}
+
+\begin{conjecture}[The residual is golden]
+\label{con:witness}
+$R(n)=O(\varphi^{2n})$; equivalently, in the witness coordinate of \cref{def:witness},
+\[
+\sum_{z\in\mathbf{Z}_{\ge 1}^2}P_n(z)\ =\ O(\varphi^{2n}) .
+\]
+Since $\varphi^2=2.618\ldots<3$ this implies \cref{con:residual}, and by \cref{prop:sigma} it would put $E(n)=2\cdot 3^n+O(\varphi^{2n})$.
+\smallskip
+
+\noindent\emph{Evidence.} \Cref{fact:second}: $R(n)/\varphi^{2n}$ rises to $3.2378$ at $n=12$ and then falls at every level to $2.7724831\ldots$ at $n=17$, with the level ratio at $2.5073119\ldots$, below $\varphi^2$. \Cref{thm:weightfour} proves the bound for the weight-four orbit with the explicit constant $1.6945$, and \cref{thm:shift} proves it for the shift family with $2.803$. \Cref{fact:ceiling} supplies the per-witness cap that the per-pair route of \cref{rem:open} never had.
+\smallskip
+
+\noindent\emph{Failure mode.} The cap of \cref{fact:ceiling} is uniform in $z$ but the sum is not: witnesses of weight $w$ exist up to $w=(3^n-1)/2$ by \cref{lem:weight}, so the index set still grows with $n$, and $M_n(z)\le F(n+1)-1$ alone gives only $R(n)\le\varphi^{2n}\cdot\#\{z:M_n(z)\ge 2\}/5$, which is far too lossy: the crude majorant $\sum_z M_n(z)(M_n(z)-1)$ already grows at $2.907$ per level at $n=13$, against $2.573$ for $R$ itself, because it drops the coprimality of $(s,t)$. The missing lemma is a decay of $M_n(z)$ in the weight strong enough to make $\sum_{w}R_w(n)$ converge after the weight-four orbit is removed; along the geometric subsequence $w=3^k+1$, which is not the list of the heaviest layers but is the one whose members are comparable, the measured masses at $n=13$ are $120148$, $62436$, $35292$, $16424$, $9324$, $7600$, $4228$ at $w=4$, $10$, $28$, $82$, $244$, $730$, $2188$, each roughly half its predecessor. \Cref{prop:weightmass} supplies the first half of such a lemma outright, $M_n(z)\le D_n(w)$, and it is the wrong half by itself. The rate of $D_n(w)$ is $2$, not $\varphi$: at $n=24$ the counts $D_{24}(w)$ at $w=4$, $10$, $28$, $82$ are $4196351$, $1683971$, $613817$, $228519$, against the ceiling $F(25)-1=75024$, so for fixed $w$ the weight enters the bound through its constant only. What is still owed is a bound whose rate falls with $w$, or a summation that keeps the support condition dropped in passing from the displayed set to $D_n(w)$. Granting \cref{con:potential}, and with it the ceiling for every $z$, would leave that debt exactly where it stands: the ceiling bounds each summand of $R(n)=\sum_zP_n(z)$ and says nothing about how many summands there are, so the statement still to prove is precisely $\sum_{w>4}R_w(n)=O(\varphi^{2n})$, the whole sum after \cref{thm:weightfour} has removed the weight-four orbit. Coprimality has to survive that summation: the majorant $\sum_zM_n(z)(M_n(z)-1)$, which keeps the ceiling and drops only the coprimality of $(s,t)$, already runs at $2.907$ per level, above $\varphi^2$, so no route through the second moment of the mass alone can reach the conjecture.
 \end{conjecture}
 
 \begin{conjecture}[The gap is universal]
@@ -315,7 +686,7 @@ For every coprime pair $(s,t)$ with $s<t$, $\lambda(s,t)\in\{3\}\cup[0,2]$; that
 
 \begin{remark}[Open direction]
 \label{rem:open}
-\Cref{fact:spectrum} bounds pairs, not triples or larger families, and a bound on pairs alone gives only a crude bound on the number of occupied gasket rays. Extending the gap from pairs to $k$-tuples of multipliers is the natural next question and is not addressed here.
+\Cref{fact:spectrum} bounds pairs, not triples or larger families, and a bound on pairs alone gives only a crude bound on the number of occupied gasket rays. Extending the gap from pairs to $k$-tuples of multipliers is the natural next question and is not addressed here. Neither is the one thing \cref{con:residual} would need from it: a bound with a constant explicit in $(s,t)$, since the pairs active at level $n$ already number about $2.77^{\,n}$ and any bound of the shape $C(s,t)\,2^n$ is useless without control of $\sum C(s,t)$. That is a reason to change coordinate rather than to sharpen the pair bound: \cref{con:witness} asks the same question of the witness, where \cref{fact:ceiling} already supplies the constant and only the summation over weights is open.
 \end{remark}
 
 \section{Proofs}
@@ -371,6 +742,59 @@ The level-$n$ gasket has $3^n$ points, one per digit string, and distinct string
 and this count is precisely the sum of the masses of the non-fibre rays, since every such point lies on exactly one primitive ray.
 \end{proof}
 
+\begin{proof}[Proof of \cref{prop:raycarry}]
+A point $x\in G_n$ is a digit string $d_0,\dots,d_{n-1}\in G$, and $x$ lies on the ray through $(a,b)$ exactly when $b\,x_1-a\,x_2=0$. Run $\mathcal{C}(a,b)$ on the string. After $i$ steps the state is $(b\,u_1-a\,u_2)/3^i$, where $u$ is the point built from the first $i$ digits; admissibility is exactly the statement that this is an integer, and the run returns to $0$ after $n$ steps precisely when $b\,x_1-a\,x_2=0$. Closed paths of length $n$ at the start state are therefore in bijection with the level-$n$ gasket points on the ray, the origin included, so their number is $M_n(a,b)+1$. Trimming to live states changes nothing, as in \cref{prop:growth}. For the bound, the increment $b\,d_1-a\,d_2$ takes only the values $0$, $b$, $-a$ as $d$ runs over $G$, so $c\mapsto(c+\varepsilon)/3$ carries $[-a/2,\,b/2]$ into itself: the largest image is $(b/2+b)/3=b/2$ and the smallest is $(-a/2-a)/3=-a/2$. The start state $0$ lies in that interval.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:mass}(1), (3) and (4)]
+By \cref{prop:raycarry} it suffices to exhibit the live automaton in each case; then $(T^n)_{00}$ satisfies the linear recurrence whose polynomial is the characteristic polynomial of $T$, by Cayley--Hamilton, and matching as many initial values as the degree pins the sequence for every $n$.
+
+For $(3,1)$ the increment is $c\mapsto c+d_1-3d_2$. From $0$ the digit $(0,0)$ returns to $0$, the digit $(1,0)$ gives $1$, not divisible by $3$, and the digit $(0,1)$ gives $-3$, hence the state $-1$. From $-1$ the digit $(1,0)$ gives $0$ and the other two give $-1$ and $-4$, neither divisible by $3$. So the live states are $\{0,-1\}$ with $T=\left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right)$, whose powers are the Fibonacci matrix, $(T^n)_{00}=F(n+1)$.
+
+For $(1,12)$ the increment is $c\mapsto c+12d_1-d_2$. From $0$ the digit $(0,0)$ returns to $0$ and the digit $(1,0)$ gives $12$, hence the state $4$; from $4$ only $(0,1)$ survives, giving $3$, hence $1$; from $1$ only $(0,1)$ survives, giving $0$. The live set is $\{0,4,1\}$, a loop at $0$ together with a $3$-cycle through it, so $\det(\lambda I-T)=\lambda^3-\lambda^2-1$ and $(T^n)_{00}$ obeys $a(m)=a(m-1)+a(m-3)$ with $(T^0)_{00},(T^1)_{00},(T^2)_{00}=1,1,1$.
+
+For $(7,3)$ the increment is $c\mapsto c+3d_1-7d_2$. From $0$ the digit $(0,0)$ returns and $(1,0)$ gives $3$, hence $1$; from $1$ only $(0,1)$ survives, giving $-6$, hence $-2$; from $-2$ only $(0,1)$ survives, giving $-9$, hence $-3$; from $-3$ the digit $(1,0)$ gives $0$ and the digit $(0,0)$ gives $-3$, hence $-1$, from which no digit is admissible. The live set is $\{0,1,-2,-3\}$, a loop at $0$ together with a $4$-cycle, so $\det(\lambda I-T)=\lambda^4-\lambda^3-1$ and $(T^n)_{00}$ obeys $c(m)=c(m-1)+c(m-4)$ with $(T^3)_{00},\dots,(T^6)_{00}=1,2,3,4$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:mass}(2)]
+Multiplication by $3^j$ shifts base-$3$ digits, so the point $z\,(3^j,1)=(3^jz,\,z)$ has digit pair $(z_{i-j},\,z_i)$ at position $i$, with $z_{i-j}$ read as $0$ for $i<j$. That pair lies in $G=\{(0,0),(1,0),(0,1)\}$ exactly when both entries lie in $\{0,1\}$ and they are not both $1$. Also $3^jz<3^n$ exactly when $z<3^{\,n-j}$. So the multipliers $z$ with $z\,(3^j,1)\in G_n$ are exactly the strings $z_0,\dots,z_{n-j-1}$ over $\{0,1\}$ with no two ones at distance $j$.
+
+Sort the positions $0,\dots,n-j-1$ by residue modulo $j$. The constraint links two positions only when they are congruent modulo $j$ and adjacent inside their class, so the string factors as $j$ independent binary strings with no two adjacent ones, of lengths $m_r=\#\{i\in[0,n-j): i\equiv r\bmod j\}$. Binary strings of length $m$ with no two adjacent ones number $F(m+2)$, so the count is $\prod_{r<j}F(m_r+2)$, and removing $z=0$ gives the stated mass. Writing $n-j=qj+\rho$ with $0\le\rho<j$ gives $m_r=q+1$ for $r<\rho$ and $m_r=q$ otherwise, which is the block form. The mirror identity $M_n(1,3^j)=M_n(3^j,1)$ holds because $G$ is stable under swapping the two coordinates.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:shift}]
+First, $F(k)\le 2\varphi^{\,k-3}$ for every $k\ge 2$, by induction on two steps. The bases are $F(2)=1\le 2\varphi^{-1}=1.236\ldots$ and $F(3)=2=2\varphi^{0}$, the latter with equality. For $k\ge 4$, assuming the bound at $k-1$ and $k-2$,
+\[
+F(k)=F(k-1)+F(k-2)\le 2\varphi^{\,k-4}+2\varphi^{\,k-5}=2\varphi^{\,k-5}(\varphi+1)=2\varphi^{\,k-5}\varphi^2=2\varphi^{\,k-3},
+\]
+using $\varphi^2=\varphi+1$. That is $F(k)\le (2/\varphi^3)\varphi^k$, with equality exactly at $k=3$. Applying it to each factor of \cref{thm:mass}(2), and using $\sum_{r<j}(m_r+2)=(n-j)+2j=n+j$,
+\[
+\prod_{r<j}F(m_r+2)\ \le\ (2/\varphi^3)^j\,\varphi^{\,n+j}=(2/\varphi^2)^j\,\varphi^n=(3-\sqrt5)^j\,\varphi^n ,
+\]
+since $1/\varphi^2=2-\varphi$ and $2(2-\varphi)=3-\sqrt5$. Subtracting $1$ makes the inequality strict. Squaring, summing over $j\ge 1$ and doubling for the mirror rays,
+\[
+\mathrm{Sh}(n)<2\varphi^{2n}\sum_{j\ge 1}(3-\sqrt5)^{2j}=2\varphi^{2n}\frac{14-6\sqrt5}{6\sqrt5-13}=\frac{4+12\sqrt5}{11}\,\varphi^{2n} ,
+\]
+the geometric series converging because $(3-\sqrt5)^2=14-6\sqrt5=0.5835\ldots<1$.
+
+For the limit, fix $j$ and let $n\to\infty$. Then $q=\lfloor (n-j)/j\rfloor\to\infty$, and $F(k)=\varphi^k/\sqrt5+O(\varphi^{-k})$ gives
+\[
+F(q+3)^{\rho}F(q+2)^{\,j-\rho}=\frac{\varphi^{\,\rho(q+3)+(j-\rho)(q+2)}}{5^{j/2}}\bigl(1+o(1)\bigr)=\frac{\varphi^{\,n+j}}{5^{j/2}}\bigl(1+o(1)\bigr),
+\]
+because $\rho(q+3)+(j-\rho)(q+2)=qj+\rho+2j=n+j$. Hence $M_n(3^j,1)^2/\varphi^{2n}\to(\varphi^2/5)^j$ for each fixed $j$. The summands are dominated uniformly in $n$ by the summable $(3-\sqrt5)^{2j}$ just proved, so dominated convergence applies term by term and
+\[
+\frac{\mathrm{Sh}(n)}{\varphi^{2n}}\longrightarrow 2\sum_{j\ge 1}\Bigl(\frac{\varphi^2}{5}\Bigr)^{j}=\frac{2\varphi^2}{5-\varphi^2}=\frac{13+5\sqrt5}{11}. \qedhere
+\]
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:sigma}]
+Multiplication by $3^j$ shifts digits, so for $z\in\mathbf{Z}^2$ the condition $3^jz\in G_n$ says exactly $z\in G_{n-j}$, which already forces $z\in G_n$. The nonzero non-fibre points of $G_{n-j}$ number $3^{\,n-j}-2^{\,n-j+1}+1$ by \cref{prop:total}. Every ordered off-diagonal collinear pair with multiplier ratio a power of $3$ is $(z,3^jz)$ or $(3^jz,z)$ for a unique $j\ge 1$ and a unique such $z$, so summing over $j$ and doubling gives $\Sigma(n)$. The closed form follows from $\sum_{j=1}^{n-1}3^{\,n-j}=(3^n-3)/2$ and $\sum_{j=1}^{n-1}2^{\,n-j+1}=2^{n+1}-4$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:free}]
+At the start state the first carry is $\mathbf{a}=(0,0)$, so the admissibility test on the first track reads $d\bmod 3\in G$, which for $d\in\{0,1,2\}^2$ says $d\in G$; and the successor first carry is $\lfloor d/3\rfloor=(0,0)$. By induction the first carry is $(0,0)$ at every reachable state and every admissible digit lies in $G$, so $\mathcal{B}(1,t)$ and $\mathcal{A}(1,t)$ have the same reachable states and the same edges.
+\end{proof}
+
 \begin{proof}[Proof of \cref{prop:growth}]
 A point $z\in G_n$ is the same thing as a digit string $d_0,\dots,d_{n-1}\in G$, and distinct strings give distinct points. Run $\mathcal{A}(s,t)$ on that string. By construction the state after $i$ steps is the pair of carries left by multiplying $z$ by $s$ and by $t$, and the digit $d_i$ is admissible exactly when the base-$3$ digit at position $i$ of $sz$ and of $tz$ both lie in $G$. If the path is back at the start state after $n$ steps then both carries vanish, so $sz$ and $tz$ have all digits in $G$ and nothing above position $n-1$, that is $sz,tz\in G_n$; conversely if $sz,tz\in G_n$ then every step is admissible and the carries after $n$ steps are zero, so the path returns. Closed paths of length $n$ at the start state are therefore in bijection with the points counted. No closed path through the start state visits a state that is not live, so the count is unchanged by the trimming and equals $(T^n)_{00}$.
 
@@ -387,20 +811,146 @@ Its trace is $1$, the sum of its principal $2\times 2$ minors is $(-1)+(-1)+0=-2
 For the count, let $G_m$ be the number of paths of length $m$ starting at $A$. Such a path either begins with the loop $A\to A$, leaving a path of length $m-1$ from $A$, or begins with $A\to B$ or $A\to C$, in which case the next step is forced back to $A$ and leaves a path of length $m-2$ from $A$. Hence $G_m=G_{m-1}+2G_{m-2}$ for $m\ge 2$, with $G_0=1$ and $G_1=3$. Solving the recurrence with roots $2$ and $-1$ gives $G_m=\bigl(2^{m+2}-(-1)^m\bigr)/3$, and $G_{15}=(2^{17}+1)/3=43691$. The same split applies to paths that return to $A$, since after $A\to B\to A$ or $A\to C\to A$ the walk is again at $A$: writing $R_m$ for their number, $R_m=R_{m-1}+2R_{m-2}$ for $m\ge 2$ with $R_0=R_1=1$, so $R_m=\bigl(2^{m+1}+(-1)^m\bigr)/3$ and $R_{15}=(2^{16}-1)/3=21845$. By \cref{prop:growth} it is $R_m$, not $G_m$, that counts the $z$ with $z,4z\in G_m$.
 \end{proof}
 
+\begin{proof}[Proof of \cref{lem:weight}]
+A pair $(X,Y)$ lies in $G_n$ exactly when $X$ and $Y$ have base-$3$ digits in $\{0,1\}$ and disjoint digit support; equivalently, when $X$, $Y$ and $X+Y$ all have base-$3$ digits in $\{0,1\}$, since disjointness is exactly the absence of carries in $X+Y$. Suppose $mz\in G_n$ with $m\ge 1$ and $z_1,z_2\ge 1$, and put $w=z_1+z_2\ge 2$. If $w=2$ then $z=(1,1)$ and $mz_1=mz_2=m$, whose support meets itself unless $m=0$. If $w=3$ then $z$ is $(1,2)$ or $(2,1)$; the coordinate with multiplier $1$ forces $m$ itself to be binary, so its lowest nonzero digit is $1$, and then $2m$ carries the digit $2$ in that position, so $2m$ is not binary. Both cases are impossible, so $w\ge 4$.
+
+For the height, $tz_1$ and $tz_2$ lie in disjoint digit positions and are binary, so $tz_1+tz_2=tw$ is binary and less than $3^n$; the largest binary base-$3$ number below $3^n$ is $(3^n-1)/2$, whence $tw\le (3^n-1)/2$ and $t\le (3^n-1)/8$. The same argument applies to $s$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:topband}]
+Let $t=\max(s,t)>(3^n-1)/10$. By the proof of \cref{lem:weight} any witness has $tw\le (3^n-1)/2$, so $w<5$, and $w\ge 4$ gives $w=4$. The witnesses of weight $4$ are $(1,3)$, $(2,2)$ and $(3,1)$, and $(2,2)$ is excluded because $2m$ would have to be disjoint from itself. Exchanging coordinates is a symmetry of $G$ and hence of $G_n$, and it exchanges $(1,3)$ with $(3,1)$, so the two witnesses are admissible together. Each admissible witness contributes the unordered point pair $\{sz,tz\}$, that is two ordered pairs, so the pair carries $4$ or $0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:tensor}]
+A $\mathcal{B}$-edge on the digit $(d_x,d_y)$ from $(\mathbf{a};\mathbf{b})$ requires $\bigl((sd_x+a_1)\bmod 3,(sd_y+a_2)\bmod 3\bigr)\in G$ and the same for $t$, and its successor acts on the $x$-carries $(a_1,b_1)$ using $d_x$ alone and on the $y$-carries $(a_2,b_2)$ using $d_y$ alone. So the underlying transition is the product of two $\mathcal{C}$-steps, and only the admissibility couples them. Since $G=\{(0,0),(1,0),(0,1)\}$, membership says each of the four residues lies in $\{0,1\}$ and neither the two $s$-residues nor the two $t$-residues are both $1$. The first requirement is already imposed inside $\mathcal{C}$. Writing the two forbidden events as $\{u_x=u_y=1\}$ and $\{v_x=v_y=1\}$, inclusion and exclusion on the product $S\otimes S$ removes $U\otimes U$ and $V\otimes V$ and restores their intersection $W\otimes W$. The carry bound is immediate: $a\le s$ and $b\le t$ are preserved by $a\mapsto\lfloor (sd+a)/3\rfloor$ since $d\le 2$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:box}]
+By the proof of \cref{lem:weight}, $t(z_1+z_2)\le (3^n-1)/2$ for every $z$ counted on the left, so the constraint $z_1+z_2\le W_n(t)$ is vacuous and the two sets are equal. The right-hand set is contained in a triangle of $O(W_n(t)^2)$ lattice points, and each membership test reads $n$ base-$3$ digits.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:weightfour}]
+By the proof of \cref{prop:topband} the weight-four witnesses are exactly $(1,3)$ and $(3,1)$, which are exchanged by the coordinate swap, so $R_4(n)$ is twice the count for $z=(1,3)$. There $m$ is admissible exactly when $m$ and $3m$ are binary with disjoint support, that is when $m$ is binary with no two adjacent ones and $3m<3^n$; the binary strings of length $n-1$ with no two adjacent ones number $F(n+1)$, and discarding $m=0$ gives $\#F_n=F(n+1)-1$. The pairs counted are the ordered coprime pairs from $F_n$ whose ratio is not a power of $3$, so $R_4(n)<2(\#F_n)^2$. From $F(k)=(\varphi^k-\psi^k)/\sqrt5$ with $|\psi|<1<\sqrt5$ we get $F(n+1)-1<\varphi^{n+1}/\sqrt5$, hence $R_4(n)<2\varphi^{2n+2}/5=(2\varphi^2/5)\varphi^{2n}<1.0473\,\varphi^{2n}$.
+
+For the scaling, $3v\in G_n$ if and only if $v\in G_{n-1}$, since multiplying by $3$ shifts every base-$3$ digit up one place. So $m(3z)\in G_n$ if and only if $mz\in G_{n-1}$, giving $M_n(3z)=M_{n-1}(z)$ and $P_n(3z)=P_{n-1}(z)$. It remains to see that the witnesses of weight $3w$ are exactly $3$ times those of weight $w$, that is, that a witness $z$ of weight divisible by $3$ has both coordinates divisible by $3$. Suppose $3\mid z_1+z_2$ but $3\nmid z_1$, so also $3\nmid z_2$. Then for any $m\ge 1$, $v_3(mz_1)=v_3(m)=v_3(mz_2)$, so $mz_1$ and $mz_2$ have their lowest nonzero base-$3$ digit in the same position; being binary, that digit is $1$ in both, so their supports meet and $mz\notin G_n$. Hence such a $z$ is a witness for no $m$ at all, and summing $P_n(3z)=P_{n-1}(z)$ over the witnesses of weight $w$ gives $R_{3w}(n)=R_w(n-1)$. Iterating and summing the geometric series, $\sum_{j\ge 0}R_4(n-j)<(2\varphi^2/5)\varphi^{2n}\sum_{j\ge 0}\varphi^{-2j}=(2\varphi^3/5)\varphi^{2n}<1.6945\,\varphi^{2n}$, using $\varphi^2/(\varphi^2-1)=\varphi$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:branch}]
+(1) A prime dividing both $a$ and $b$ divides their gcd, which is $1$, so $3$ cannot divide both. If it divides $a$ then $a+b$ is congruent to $b$, which it does not divide, so it does not divide $a+b$; the case $3\mid b$ is symmetric. At most one of the three is a multiple of $3$.
+
+(2) If $3\nmid ab(a+b)$ the three increments are pairwise incongruent modulo $3$, so each state admits exactly one increment and the automaton is deterministic; from the start state the admissible increment is $0$, and the unique path of every length is the all-$(0,0)$ one. If instead $3\nmid ab$ but $3\mid a+b$, then $b\equiv-a\not\equiv 0$, so $0$ is the only increment congruent to $0$: the start state has out-degree one with itself as successor, and again the all-$(0,0)$ path is the only closed one at $0$. In both cases $M_n(a,b)=1-1=0$ by \cref{prop:raycarry}.
+
+(3) By (1) and (2) exactly one of $a$, $b$ is divisible by $3$; call it $q$. The congruent pair of increments is $\{0,-a\}$ or $\{0,b\}$ according as $q$ is $a$ or $b$, and in each case the two differ by $\pm q$; the third increment is not divisible by $3$, so it sits in a different class. A state $c$ admits $\varepsilon$ exactly when $\varepsilon\equiv-c$, so out-degree two occurs exactly on $3\mid c$ and out-degree one on the class of the third increment; the remaining class has out-degree zero. The successors of a branch state are $(c+\varepsilon_1)/3$ and $(c+\varepsilon_2)/3$, which differ by $(\varepsilon_1-\varepsilon_2)/3=\pm q/3$, and $3\nmid q/3$ exactly when $v_3(q)=1$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:ceilingproved}]
+(1) is \cref{lem:branch}(2).
+
+(2) Write $N(c,n)$ for the number of paths of length $n$ from the state $c$ to the start state $0$, and $G(n)=\max_c N(c,n)$ over the live states, a finite set by \cref{prop:raycarry}. Then $N(c,0)=[c=0]$, so $G(0)=1=F(1)$; and the successors of a state are distinct, so at most one of them is $0$ and $G(1)\le 1=F(2)$. Let $n\ge 2$. If $c$ has out-degree at most one then $N(c,n)\le G(n-1)$. If $c$ branches, its two successors are $c'$ and $c''$ and by hypothesis one of them, say $c''$, is not a branch state; then $N(c'',n-1)$ is $0$ if $c''$ has out-degree zero and otherwise equals $N(c''',n-2)\le G(n-2)$ for the unique successor $c'''$ of $c''$. So $N(c,n)\le G(n-1)+G(n-2)$ in every case, and $G(n)\le G(n-1)+G(n-2)$. Induction gives $G(n)\le F(n+1)$, and $M_n(a,b)=N(0,n)-1\le F(n+1)-1$ by \cref{prop:raycarry}.
+
+(3) For $n\le j$ the mass is $0$ and the claim is clear. For $n>j$, \cref{thm:mass}(2) gives $M_n(1,3^{\,j})+1=\prod_{r<j}F(m_r+2)$ with $m_r\ge 0$ and $\sum_r m_r=n-j$. The addition formula $F(p+q+3)=F(p+2)F(q+2)+F(p+1)F(q+1)$, valid for $p,q\ge 0$, gives
+\[
+F(p+2)F(q+2)=F(p+q+3)-F(p+1)F(q+1)\le F(p+q+3)-1 ,
+\]
+since $F(p+1)F(q+1)\ge 1$. Merging the $j$ factors one pair at a time replaces indices $p+2$ and $q+2$ by $p+q+3$, so the index total drops by exactly one per merge and after $j-1$ merges the bound is $F\bigl(\sum_r m_r+2j-(j-1)\bigr)=F(n+1)$. For $j\ge 2$ at least one merge occurs, so the product is at most $F(n+1)-1$ and the mass at most $F(n+1)-2$.
+
+(4) We show $N(c,m)\le\alpha(c)F(m+1)+\beta(c)F(m)$ for every live $c$ and every $m\ge 0$, by induction on $m$. At $m=0$ the right side is $\alpha(c)$ and the left is $[c=0]$, so the base case is $\alpha(0)\ge 1$ and $\alpha(c)\ge 0$. For the step, $N(c,m+1)=\sum_{c'}N(c',m)$ over successors with multiplicity, so
+\[
+\begin{aligned}
+N(c,m+1)&\le\Bigl(\sum_{c'}\alpha(c')\Bigr)F(m+1)+\Bigl(\sum_{c'}\beta(c')\Bigr)F(m)\\
+&\le\bigl(\alpha(c)+\beta(c)\bigr)F(m+1)+\alpha(c)F(m),
+\end{aligned}
+\]
+using $F(m+1)\ge 0$ and $F(m)\ge 0$, and the right side is $\alpha(c)F(m+2)+\beta(c)F(m+1)$. Taking $c=0$ gives $N(0,n)\le F(n+1)$, hence the ceiling.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:potential}]
+Write $G_M(c)=\sum_{m\le M}g(c,m)\varphi^{-m}$, so $G_M(0)=1$ for every $M$, and $g(c,m)=\sum_{c'}g(c',m-1)$ for $c\neq 0$ and $m\ge 1$, whence $G_M(c)=\varphi^{-1}\sum_{c'}G_{M-1}(c')$. We claim $G_M(c)\le\pi(c)/\pi(0)$ for every live $c$ and every $M$. At $M=0$ the left side is $[c=0]$, and the claim reads $1\le 1$ at the start state and $0\le\pi(c)/\pi(0)$ elsewhere. For the step nothing changes at $c=0$, while at $c\neq 0$
+\[
+G_M(c)=\varphi^{-1}\sum_{c'}G_{M-1}(c')
+\le\frac{\varphi^{-1}}{\pi(0)}\sum_{c'}\pi(c')
+\le\frac{\varphi^{-1}\varphi\,\pi(c)}{\pi(0)}=\frac{\pi(c)}{\pi(0)} .
+\]
+Letting $M$ grow gives $u(c)\le\pi(c)/\pi(0)<\infty$, and summing over the successors of the start state other than itself gives $U(a,b)\le\varphi^{-2}$, hence $S:=\sum_{j\ge2}f_j\varphi^{-j}=\varphi^{-1}U(a,b)\le\varphi^{-3}$.
+
+Next two envelopes: $F(m)\le\varphi^{m-1}$ for every $m\ge 0$ and $F(m)\ge\varphi^{m-2}$ for every $m\ge 1$. Both hold at $m=0$, $1$, $2$ by inspection: $F(0)=0<\varphi^{-1}$, and $F(1)=F(2)=1$ against the bounds $\varphi^{-1}\le 1\le\varphi^{0}$ at $m=1$ and $\varphi^{0}\le 1\le\varphi$ at $m=2$. Both are then inherited along $F(m)=F(m-1)+F(m-2)$ from $\varphi^{m-1}=\varphi^{m-2}+\varphi^{m-3}$.
+
+Write $N(c,n)$ for the number of paths of length $n$ from $c$ to the start state, so $M_n(a,b)=N(0,n)-1$ by \cref{prop:raycarry}. Cutting a closed path of length $n\ge 1$ at its first return to the start state gives $N(0,n)=\sum_{j=1}^{n}f_jN(0,n-j)$. We show $N(0,n)\le F(n+1)$ by induction. At $n=0$ and $n=1$ both counts are $1=F(1)=F(2)$, using $f_1=1$: the increments are distinct because $a,b\ge 1$, and the only one carrying the start state to itself is $0$. For $n\ge 2$,
+\[
+\begin{aligned}
+N(0,n)&\le F(n)+\sum_{j=2}^{n}f_jF(n+1-j)\le F(n)+\varphi^{n}S\\
+&\le F(n)+\varphi^{n-3}\le F(n)+F(n-1)=F(n+1),
+\end{aligned}
+\]
+the first step by the induction hypothesis and $f_1=1$, the second by $F(n+1-j)\le\varphi^{n-j}$, the third by $S\le\varphi^{-3}$ and the fourth by $F(n-1)\ge\varphi^{n-3}$.
+
+For the converse, suppose $U(a,b)\le\varphi^{-2}$. Every live $c$ is reached from the start state by a path, and after its last visit to the start state that path runs from some successor $c'\neq 0$ to $c$ in $\ell$ steps without meeting the start state; concatenating it with the first-hitting paths out of $c$ shows $u(c')\ge\varphi^{-\ell}u(c)$, so $u$ is finite everywhere. It is positive because a live state reaches the start state, $u(0)=1$, and $\sum_{c'}u(c')=\varphi\,u(c)$ at every $c\neq 0$ by the recursion above; the remaining hypothesis is $U(a,b)\le\varphi^{-2}$ itself.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:occupancy}]
+If $M_n(z)>0$ there is an $m\ge 1$ with $mz\in G_n$, so $mp$ and $mq$ are both binary in base $3$. Write $m=3^{\,s}m'$ with $3\nmid m'$. Then $mp=3^{\,s}(m'p)$ and $mq=3^{\,s+k}(m'q_1)$, and multiplying by a power of $3$ only shifts a base-$3$ expansion, so $m'p$ and $m'q_1$ are binary as well. Neither is divisible by $3$, since $3\nmid m'$, $3\nmid p$ and $3\nmid q_1$; a binary base-$3$ number with last digit not $0$ has last digit $1$, so $m'p\equiv m'q_1\equiv 1\pmod 3$. Cancelling $m'$, which is invertible modulo $3$, gives $p\equiv q_1$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:short}]
+The map $c\mapsto-c$ carries $\mathcal{C}(b,a)$ to $\mathcal{C}(a,b)$, because negating the increment set $\{0,a,-b\}$ gives $\{0,b,-a\}$ and the start state is fixed; so $u$, the $f_j$ and $U$ are unchanged by swapping the coordinates and we may assume $3\mid b$, that is $q=b$ and $p=a$. Then the two increments congruent to $0$ are $0$ and $b$, so by \cref{lem:branch}(3) a state $c$ has out-degree two exactly when $3\mid c$, with successors $c/3$ and $c/3+b/3$; out-degree one exactly when $c\equiv a$, with successor $(c-a)/3$; and out-degree zero when $c\equiv-a$. The start state therefore has exactly one successor other than itself, namely $c_0=b/3$, and the states with the start state as a successor are $a$ and $-b$.
+
+(1) Write $c_0=3^{\,k-1}q_1$ and let $0\le j\le k-1$. Every state reached from $c_0$ in $j$ steps has the form $3^{\,k-1-j}q_1\bigl(1+\sum_{i\in T}3^{\,i}\bigr)$ with $T\subseteq\{1,\dots,j\}$: this holds at $j=0$, and a state of that shape with $j\le k-2$ is divisible by $3$, so its two successors are obtained by dividing by $3$ and optionally adding $b/3=3^{\,k-1}q_1$, which is the shape at $j+1$. All those states are positive, hence different from the start state, so $g(c_0,j)=0$ for $j\le k-1$ and $f_j=g(c_0,j-1)=0$ for $2\le j\le k$.
+
+(2) This is the count in \cref{rem:golden}.
+
+(3) A first return of length $3$ is $0\to c_0\to c_2\to 0$ with $c_2\neq 0$, so $c_2\in\{a,-b\}$ and $c_2$ is a successor of $c_0$, that is $3c_2=b/3+\varepsilon$ with $\varepsilon\in\{0,b,-a\}$. Taking $c_2=a$: $\varepsilon=0$ gives $b=9a$, so $a=1$ and $b=9$; $\varepsilon=b$ gives $4b=9a$, so $a=4$ and $b=9$; $\varepsilon=-a$ gives $b=12a$, so $a=1$ and $b=12$. Taking $c_2=-b$: $\varepsilon=0$ and $\varepsilon=b$ ask $-3b$ to equal $b/3$ or $4b/3$, impossible for $b\ge 1$, and $\varepsilon=-a$ gives $3a=10b$, so $b=3$ and $a=10$. Each of the four is realised, with the required congruence $\varepsilon\equiv-c_0$ holding and $c_2$ inside the band of \cref{prop:raycarry}, and each admits exactly one such path, so $f_3=1$ there. At $\{1,3\}$ the state $c_0=1$ has the start state as its only successor, so $f_3=0$.
+
+(4) By \cref{def:golden}, $\sum_{j\ge 2}f_j\varphi^{-j}=\varphi^{-1}U(z)$, and $f_2=0$ by (2), so $U(z)=\varphi^{-2}\sum_{j\ge 3}f_j\varphi^{\,3-j}$. The terms are nonnegative, so a sum of at most $1$ forces $f_3\le 1$; with $f_3=0$ it forces $f_4\le\varphi$, that is $f_4\le 1$; and with $f_3=0$ and $f_4=1$ it leaves $\sum_{j\ge 5}f_j\varphi^{\,5-j}\le 1$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:degree}]
+Suppose no branch state of the live automaton has both successors of out-degree two. A live state of out-degree one has a single successor $c'$ with $\pi_0(c')\le 1=\varphi\cdot\varphi^{-1}=\varphi\,\pi_0(c)$. A live state $c\neq 0$ of out-degree two has successors $c_1$, $c_2$ of which at most one has out-degree two, the start state counting as such a successor since its out-degree is two; so $\pi_0(c_1)+\pi_0(c_2)\le 1+\varphi^{-1}=\varphi=\varphi\,\pi_0(c)$. That is the first inequality of \cref{thm:potential}.
+
+Now assume only that $\pi_0$ satisfies it. Write $L$ for the operator $(L\pi)(0)=1$, $(L\pi)(c)=\varphi^{-1}\sum_{c'}\pi(c')$ at live $c\neq 0$, so $\pi_{d}=L^{\,d}\pi_0$. The hypothesis is $L\pi_0\le\pi_0$, and $L$ is monotone because its coefficients are nonnegative, so $\pi_{d+1}\le\pi_d$ by induction. In the notation of the proof of \cref{thm:potential}, $G_M=L^{\,M}G_0$ and $G_0\le\pi_0$, since $G_0$ is the indicator of the start state and $\pi_0(0)=1$; monotonicity gives $G_M\le L^{\,M}\pi_0=\pi_M\le\pi_d$ for $M\ge d$, and letting $M$ grow gives $u\le\pi_d$ for every $d$. Summing over the successors of the start state other than itself gives $U(a,b)\le\sum_{c'\neq 0}\pi_d(c')$, and if that is at most $\varphi^{-2}$ then \cref{thm:potential} applies with $\pi=u$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:golden1}]
+As in the proof of \cref{lem:short} take $3\mid b$, so $b=q=3q_1$ and $a=p$, out-degree two on $3\mid c$, out-degree one on $c\equiv a$ and out-degree zero on $c\equiv-a$. By \cref{lem:occupancy} $q_1\equiv a\pmod 3$, so $3\mid q_1-a$ and $t\ge 1$; and $t=\infty$ means $q_1=a$, whence $1=\gcd(a,b)=\gcd(a,3a)=a$ and $z=\{1,3\}$, which is excluded. By \cref{lem:branch}(3) with $v_3(q)=1$ the two successors of a branch state differ by $q_1$, which is not divisible by $3$, so at most one of them is divisible by $3$ and hence has out-degree two; \cref{thm:degree} therefore applies and $u\le\pi_0$, where $\pi_0\le 1$ everywhere.
+
+The start state has the single other successor $c_0=q_1$, which is not divisible by $3$ and is congruent to $a$, so it has the single successor $x=(q_1-a)/3\neq 0$ and $U(z)=u(c_0)=\varphi^{-1}u(x)$.
+
+If $t=1$ then $3\nmid x$, so $\pi_0(x)=\varphi^{-1}$ and $U(z)\le\varphi^{-2}=\varphi^{-1}(1-\varphi^{-2})$.
+
+If $t\ge 2$, put $y_j=x/3^{\,j}$ for $0\le j\le t-1$, so $v_3(y_j)=t-1-j$ and $y_j\neq 0$. For $0\le j\le t-2$ the state $y_j$ is divisible by $3$ and its successors are $y_{j+1}$ and $y_{j+1}+q_1$. At $j=t-2$ the state $y_{t-1}$ is not divisible by $3$, so with $r$ its class modulo $3$ the two successor classes are $r$ and $r+a$ with $r\not\equiv 0$; whether $r\equiv a$ or $r\equiv-a$, one of $\{r,r+a\}$ is the class $-a$ of out-degree zero, so that successor is not live and contributes $u=0$; the other contributes at most $1$, being either the start state or a live state with $u\le\pi_0\le 1$ or a state that is not live with $u=0$. Hence $u(y_{t-2})\le\varphi^{-1}\cdot 1=\varphi^{-1}$. For $j\le t-3$ the state $y_{j+1}$ is divisible by $3$, so $y_{j+1}+q_1\equiv q_1\equiv a$ has out-degree at most one, and it is not the start state because $3\nmid q_1$; so either it is live, where $u(y_{j+1}+q_1)\le\pi_0(y_{j+1}+q_1)=\varphi^{-1}$, or it is not, where $u(y_{j+1}+q_1)=0$. Hence $u(y_j)\le\varphi^{-1}\bigl(u(y_{j+1})+\varphi^{-1}\bigr)$ for $j\le t-3$. Setting $\theta_0=\varphi^{-1}$ and $\theta_{i}=\varphi^{-1}(\theta_{i-1}+\varphi^{-1})$ gives $u(y_{t-2-i})\le\theta_i$, and $\theta_i=1-\varphi^{-(i+2)}$ solves that recursion since $\varphi^{-1}(1+\varphi^{-1})=1$. Taking $i=t-2$ gives $u(x)=u(y_0)\le 1-\varphi^{-t}$ and $U(z)\le\varphi^{-1}(1-\varphi^{-t})$.
+
+The two cases combine as $U(z)\le\varphi^{-1}(1-\varphi^{-\max(t,2)})<\varphi^{-1}$, and $1-\varphi^{-\max(t,2)}\le\varphi^{-1}=1-\varphi^{-2}$ exactly when $\max(t,2)=2$. Finally $U(z)<\varphi^{-1}$ makes $\Phi(\varphi^{-1})=\varphi^{-1}(1+U(z))<1$, so $\sum_nN(0,n)x^n=1/(1-\Phi(x))$ has radius of convergence larger than $\varphi^{-1}$ and $N(0,n)$ grows at a rate strictly below $\varphi$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:weightmass}]
+Let $mz\in G_n$. Then $mz_1$ and $mz_2$ are binary in base $3$, below $3^n$, with disjoint supports, so the base-$3$ expansion of $K=mz_1+mz_2=mw$ has no carries: it is binary, it is below $3^n$, and its support is the disjoint union of the two. Distinct $m$ give distinct $K$, and $z_1K/w=mz_1$ recovers the first coordinate, so the displayed set contains the image of $m\mapsto mw$. Conversely a $K$ in that set has $w\mid K$, and putting $m=K/w$ makes $mz_1=z_1K/w$ and $mz_2=K-mz_1$ binary with disjoint supports inside that of $K$, so $mz\in G_n$. The two sets therefore correspond, and dropping the support condition gives $D_n(w)$.
+\end{proof}
+
 \section{Reproducibility}
 \label{sec:repro}
 
 Two scripts ship with the paper. Both are plain \texttt{python3} with no dependencies outside the standard library, take no arguments, read nothing, and use only relative paths. Run them from the paper's directory.
 
-\texttt{python3 scripts/verify.py} runs in about two seconds and recomputes every number in \cref{sec:results}. It covers, in order:
+\texttt{python3 scripts/verify.py} runs in about $105$ seconds and recomputes every number in \cref{sec:results}, with the single flagged exception noted below. It covers, in order:
 \begin{itemize}
 \item all $84$ digit designs at levels $1\le n\le 6$, confirming the ten survivors and the four permutation designs of \cref{fact:census84}, their codes $84,98,140,266$ under the indexing of \cref{def:code}, the fibre counts, and that the cell set named by $148$ is not a permutation design;
 \item the cross coefficient of \cref{lem:cross} in all $18$ cases $(d_0,d_k,d_k')$ for each of the six permutations, confirming both that it is nonzero exactly when $\phi(0)\neq 0$ and that it equals $\phi(0)(d_k-d_k')$ modulo $3$;
 \item $Z_{F_\phi}(n)=3^n-2$ for the four diagonal designs and $1\le n\le 8$, $Z_{F_\phi}(0)=0$, and the two explicit collinear witnesses of \cref{thm:diagonal};
-\item \cref{fact:mass}: rays $(3,1)$, $(1,12)$ and $(7,3)$ for $n\le 30$, the thirteen shift rays $(3^j,1)$ for $1\le j\le 13$ and $n\le 30$ against the Fibonacci product, and the bounded-carry automaton against direct enumeration of all $3^n$ points for six rays and $1\le n\le 10$, and against the split enumeration for the same six rays and $1\le n\le 14$;
+\item \cref{thm:mass}: rays $(3,1)$, $(1,12)$ and $(7,3)$ for $n\le 30$, the thirteen shift rays $(3^j,1)$ for $1\le j\le 13$ and $n\le 30$ against the Fibonacci product, and the bounded-carry automaton against direct enumeration of all $3^n$ points for six rays and $1\le n\le 10$, and against the split enumeration for the same six rays and $1\le n\le 14$; then the three live automata of the proof, their state counts $2$, $3$, $4$, their exact characteristic polynomials, and the annihilator residuals of each claimed recurrence;
+\item \cref{thm:shift}: the run-length characterisation of the shift multipliers by direct enumeration for $n\le 11$, the block form for $n\le 60$, the integer lemma $F(k)\le 2F(k-1)$, the per-$j$ bound and the family bound in exact $\mathbf{Z}[\sqrt5]$ arithmetic for $n\le 160$, and a two-sided rational window placing $\mathrm{Sh}(n)/\varphi^{2n}$ in $(2.198212,\,2.198214)$ for $100\le n\le 160$;
+\item \cref{prop:sigma} for $n\le 20$, and \cref{fact:second}, both series by literal enumeration;
+\item \cref{fact:pairs9}: the level-$9$ census, its $2656$ active ordered multiplier pairs, the $482$ with a witness off the gasket and the $2540$ pairs they miss, $\mathcal{A}(s,t)$ against brute force on all $1328$ unordered pairs, and $\mathcal{B}(s,t)$ against brute force on the $103$ of height at most $52$;
 \item the perfect-square levels of \cref{rem:squares} over $1\le n\le 30$, and the two cases that make $x^4-x^3-1$ irreducible;
 \item \cref{prop:total} at every level $1\le n\le 12$, and \cref{fact:census12} by enumerating all $531441$ level-$12$ points, including the ten heaviest rays and the mirror symmetry;
-\item \cref{fact:spectrum}: all $829$ coprime unordered pairs with $\max(s,t)\le 52$, each trimmed to its live states and given an exact integer characteristic polynomial with a nonnegative-shift certificate, plus a bisection in exact rational arithmetic and two-sided rational windows pinning $1.6956207695598\ldots$ with its $25$ attainers and $1.6769719158912\ldots$ with its four, the largest reachable and live state counts $45$ and $33$, the trimming trap of \cref{rem:trim} at $(1,16)$, the return counts of \cref{prop:growth} against direct enumeration for $n\le 8$, and the explicit data of \cref{prop:one4} including the recurrence residuals through $m=15$.
+\item \cref{fact:spectrum}: all $829$ coprime unordered pairs with $\max(s,t)\le 52$, each trimmed to its live states and given an exact integer characteristic polynomial with a nonnegative-shift certificate, plus a bisection in exact rational arithmetic and two-sided rational windows pinning $1.6956207695598\ldots$ with its $25$ attainers and $1.6769719158912\ldots$ with its four, the largest reachable and live state counts $45$ and $33$, the trimming trap of \cref{rem:trim} at $(1,16)$, the return counts of \cref{prop:growth} against direct enumeration for $n\le 8$, and the explicit data of \cref{prop:one4} including the recurrence residuals through $m=15$;
+\item \cref{prop:tensor}: the tensor identity against the return counts of $\mathcal{B}(s,t)$ on all $473$ coprime pairs below $40$ at every level to $9$, and the four carry-against-reachable state counts;
+\item \cref{prop:box}: the box construction against $\mathcal{B}(s,t)$ on all $812$ coprime pairs with $s<30$, $t<60$ at $n=9$, and against \cref{prop:tensor} at five large-multiplier pairs at $n=9$ and $n=12$;
+\item \cref{lem:weight}, \cref{prop:topband} and \cref{thm:weightfour}: $R(n)$ and its weight layers by literal enumeration for $4\le n\le 13$, the scaling law on all $1869$ layers of weight divisible by $3$, the absence of any weight below $4$, the sharpness of the height bound at $\lfloor 3^n/8\rfloor$ for $4\le n\le 13$, the exactly-four contribution of all $30028$ pairs above $(3^n-1)/10$ for $6\le n\le 13$, and $R_4(n)$ against the no-adjacent-ones count with $\#F_n=F(n+1)-1$ for $4\le n\le 12$;
+\item \cref{fact:ceiling}: $M_n(1,3)=F(n+1)-1$ for $n\le 40$, the ceiling over all $13158$ coprime directions in the box at every $n\le 40$ with $(1,3)$ the sole attainer at $n=40$, and the ceiling over the six adversarial families at every $n\le 45$, family by family with their coprime counts $4221$, $253$, $2998$, $1499$, $1199$, $1199$;
+\item \cref{lem:branch}, \cref{thm:ceilingproved} and \cref{prop:boxsettled}: the ray automaton rebuilt from the increments $\{0,b,-a\}$ and matched against the gasket-digit automaton on all $947$ coprime pairs below $40$ for $n\le 20$; then over the box, the carry interval $[-z_1/2,z_2/2]$, the out-degree ceiling of two, the single branch class, the counts $13158$, $6566$, $6592$, $218$, $107$, $206$ and the twelve exceptions by name; the nine Fibonacci certificates checked in exact integer arithmetic; then \cref{def:golden} and \cref{thm:potential}, the golden potential solved in exact $\mathbf{Q}(\sqrt5)$ arithmetic on all $218$ occupied directions of the box and on all $647$ occupied outside it, each solution confirmed against both inequalities of the theorem, the counts $214$ and $644$ passing, the seven shift rays over the criterion at $U=\varphi^{-1}$ exactly, and the maximum $\varphi^{-2}$ with its three attainers; the addition formula $F(p+q+3)=F(p+2)F(q+2)+F(p+1)F(q+1)$ for $p,q<60$ and the shift-ray product against $F(n+1)$ for $j\le 13$, $n\le 45$; and the counterexample of \cref{rem:statemax} with its eight failing directions;
+\item \cref{prop:weightmass}: $M_n(z)\le D_n(w)$ on all $829$ coprime directions with $z_1\le 30$, $z_1\le z_2\le 60$ at $n=12$, and $D_{24}(w)$ at $w=4$, $10$, $28$, $82$ against $F(25)-1$;
+\item the extension of \cref{fact:second} to $n=13$ and $n=14$ by the direction-grouping pass. Levels $15$, $16$ and $17$ run the identical pass on a machine-integer array sort rather than a list of Python integers, which is a change of container and not of method; they are outside the shipped script only because $3^{17}$ points do not fit its time budget;
+\item \cref{lem:occupancy}, \cref{lem:short}, \cref{thm:degree} and \cref{thm:golden1} over the union of the box and the six families, $23303$ directions of which $11691$ have $3\mid z_1z_2$, $7103$ match the residue condition and $865$ are occupied: no occupied direction fails the residue match, no occupied direction has a first return of length between $2$ and $v_3(q)$, the burst identity of \cref{con:potential} and the value $u(p)=\varphi^{-1}$ hold at all $865$, the degree potential is a super-solution at $851$ of the $865$ and at $37$ directions outside \cref{thm:ceilingproved}(2), its sweep settles $849$ with the least-depth split $760$, $48$, $31$, $7$, $3$ at depths $1$, $3$, $4$, $5$, $6$ and leaves the seven shift rays and the nine directions named in \cref{con:potential}, and the bound of \cref{thm:golden1} holds at all $360$ occupied directions with $v_3(q)=1$, covers $261$ of them and is attained exactly at $(1,12)$ and $(3,10)$; the classification of $f_2$ and $f_3$ rechecked by direct enumeration on all occupied directions with $z_1<130$ and $z_2<800$;
+\item \cref{fact:freespectrum}: the same $829$ pairs read through $\mathcal{B}$, its largest live state set $167$, its agreement with $\mathcal{A}$ on every pair with $s=1$ as \cref{lem:free} requires, the same three, twenty and empty lists, then its own ceiling below $2$ pinned in a two-sided rational window with its four attainers, the split $19+25=44$ of pairs that reach or beat the gasket-digit ceiling, certified by the strict rational on one side and by exact divisibility of the characteristic polynomial by $x^3-x^2-2$ on the other, and the closed-path witness at $n=60$.
 \end{itemize}
 Every assertion names the quantity, the value obtained, and the value expected, and the script stops at the first mismatch. A successful run ends with \texttt{all green} and exit status $0$.
 

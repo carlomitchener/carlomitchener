@@ -1,8 +1,14 @@
+import math
+import os
 import sys
 import time
 from fractions import Fraction
 from itertools import product
 from math import comb
+
+sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import certify
 
 # POLYNOMIALS
 
@@ -563,24 +569,63 @@ def check_notransient():
                     "V dips at q=%d D=%d L=%d" % (q, D, L)
     return "bases 7, 9, 11, even D <= 24, L <= 12, window closure included"
 
+# THE CROSSING LEVEL
+
+def k_star(D):
+    levels = range(2, 60)
+    log_r = sum(math.log(math.cos(math.pi / 3 ** i) / math.cos(2 * math.pi / 3 ** i)) for i in levels)
+    s = sum(math.log((D - 2 * math.cos(math.pi / 3 ** i)) / (D - 2))
+            - math.log((D + 2 * math.cos(2 * math.pi / 3 ** i)) / (D + 2)) for i in levels)
+    return ((D - 1) * log_r + s) / math.log((D + 2) / (D - 2))
+
+def l_zero(D):
+    ks = k_star(D)
+    assert abs(ks - round(ks)) > 1e-6, "K* within 1e-6 of an integer at D=%d" % D
+    L0 = math.floor(ks)
+    return L0 if L0 % 2 else L0 - 1
+
+# THE ROW SWEEP
+
+def row_sweep(D, cap):
+    P = digit_poly(D, 3)
+    assert all(v >= 0 for v in P), "the digit polynomial has a negative coefficient at D=%d" % D
+    assert all(P[j] == P[2 * D - j] for j in range(2 * D + 1)), \
+        "the digit polynomial is not palindromic at D=%d" % D
+    N = m_even(D, 3)
+    n = len(N)
+    cols = [[(cp, N[cp][c]) for cp in range(n) if N[cp][c]] for c in range(n)]
+    r = [(3 if c % 3 == 0 else 0) - 1 for c in range(n)]
+    r = [r[c] if c == 0 else 2 * r[c] for c in range(n)]
+    last_neg = -1
+    for k in range(1, cap + 1):
+        r = [sum(w * r[cp] for cp, w in col) for col in cols]
+        if r[0] < 0:
+            last_neg = k
+        if min(r) >= 0:
+            assert min(r) > 0, "the row certificate closes without strictness at D=%d" % D
+            return k, last_neg
+    raise AssertionError("no nonnegative row within the cap at D=%d" % D)
+
 # CHECK TRANSIENT
 
 def check_transient(depths):
     table = {}
-    for D in range(6, 37, 2):
-        top = 4 * D + 8
-        bs, m0s = census(D, 3, top)
-        V = [3 * m0s[L] - bs[L] for L in range(top + 1)]
-        neg = [L for L in range(top + 1) if V[L] < 0]
-        assert neg, "no transient at D=%d" % D
-        star = max(neg)
-        assert star + 5 <= top and all(V[L] > 0 for L in range(star + 1, top + 1)), \
-            "transient not exhausted at D=%d" % D
-        K = depths[(3, D)]
+    for D in range(6, 75, 2):
+        assert_window_closed(D, 3)
+        K, star = row_sweep(D, D * D // 8 + 200)
+        assert star >= 1, "no transient at D=%d" % D
+        assert star == l_zero(D), \
+            "Lstar is not the greatest odd integer below K* at D=%d: %d vs %d" % (D, star, l_zero(D))
         assert K in (star + 1, star + 2), \
             "certificate depth off the transient at D=%d: K=%d Lstar=%d" % (D, K, star)
+        if D <= 36:
+            assert K == depths[(3, D)], \
+                "the row and column certificates disagree at D=%d: %d vs %d" % (D, K, depths[(3, D)])
         table[D] = (star, K)
-    return "base 3, even D = 6..36", table
+    plus_two = sorted(D for D in table if table[D][1] == table[D][0] + 2)
+    assert plus_two == [14, 22, 32, 38, 40, 48, 52, 54, 58, 70, 72], \
+        "the K_min = Lstar + 2 rows moved: %s" % plus_two
+    return "base 3, even D = 6..74, exhaustion by the row certificate", table
 
 # LEMMA M FINITE WINDOWS
 
@@ -699,15 +744,29 @@ def check_strictness():
     assert (delta7 & -delta7).bit_length() - 1 == 6, "v2 of the D=7 pencil changed"
     assert delta7 == -(1 << 6) * 2320407, "the odd part of the D=7 pencil changed"
     assert v2_det(E, prec) == 7, "v2 at D=7 changed"
-    for D in range(13, 152, 6):
+    tight = []
+    for D in sorted(set(range(9, 116, 2)) | set(range(13, 152, 6))):
+        n = (D + 1) // 2
         val = v2_det(m_even(D, 3), prec)
-        assert val < D - 1, "base-3 strictness fails at D=%d: v2=%d" % (D, val)
-        assert val <= (D + 1) // 2, "v2 above n at D=%d" % D
+        assert val <= n, "v2 above n at D=%d: v2=%d n=%d" % (D, val, n)
+        if val == n:
+            tight.append(D)
+        if D % 3 == 1:
+            assert val < D - 1, "base-3 strictness fails at D=%d: v2=%d" % (D, val)
+    assert tight == [9, 15], "the v2 = n equality set moved: %s" % tight
     for D in range(6, 157, 5):
         threshold = 2 * (D - 1) + (((D + 4) & -(D + 4)).bit_length() - 1)
         val = v2_det(m_even(D, 5), prec)
         assert val < threshold, "base-5 strictness fails at D=%d: v2=%d" % (D, val)
-    return "base 3 class members D = 13..151 plus D = 7 direct, base 5 class members D = 6..156", delta7
+    dom = ("base 3 odd D = 9..115 and class members D = 13..151 plus D = 7 direct, "
+           "base 5 class members D = 6..156")
+    return dom, delta7
+
+# CHECK THE INTERVAL CERTIFICATES
+
+def check_intervals():
+    summary, _results, _rows, _rows5 = certify.run()
+    return summary
 
 # MAIN
 
@@ -752,14 +811,21 @@ def main():
     dom, delta7 = check_strictness()
     results.append(("check_strictness", dom, time.time() - t))
 
+    t = time.time()
+    dom = check_intervals()
+    results.append(("check_intervals", dom, time.time() - t))
+
     for name, dom, secs in results:
         print("%s: PASS (%s, %.1f s)" % (name, dom, secs))
     print("total: %.1f s" % (time.time() - t0))
-    print("base 3 transient and certificate depth, even D = 6..36")
-    print("  D   L*  K_min")
-    for D in sorted(table):
-        star, K = table[D]
-        print("  %-3d %-3d %-3d" % (D, star, K))
+    print("base 3 transient and certificate depth, even D = 6..74")
+    dims = sorted(table)
+    for i in range(0, len(dims), 5):
+        row = ""
+        for D in dims[i:i + 5]:
+            star, K = table[D]
+            row += "  %3d: %4d/%4d" % (D, star, K)
+        print(row)
 
 if __name__ == "__main__":
     main()

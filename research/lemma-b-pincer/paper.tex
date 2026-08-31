@@ -25,13 +25,13 @@
 \title{The Pincer at Dimension One: Two Edges and Two Closed Doors}
 \author{Carlo Mitchener}
 \email{carlo.mitchener@gmail.com}
-\date{2026-08-23}
+\date{2026-08-31}
 
 % PAPER
 \begin{document}
 
 \begin{abstract}
-Take a lattice point of a fractal and ask whether its two coordinates share a common factor; on average the answer is known for every such fractal thicker than a line. Exactly at a line it is open, and what is missing is one estimate about primes of a single size. Writing $\beta = \log_3 p / n$ for the size of a prime $p$ against the level $n$ of the base-$3$ Sierpi\'nski gasket, we pin the troublesome range inside $\beta \in (0.446717310462,\, 0.6402121938]$, the upper endpoint being $1/(2 - \log_3 \varphi)$ with $\varphi$ the golden ratio, and proved here; the lower endpoint comes from a separate Fourier moment ladder and is not proved here. That edge comes from a burst certificate: one combinatorial injection bounding the growth of every one of infinitely many ray automata by $\varphi$, with no computation. Two impossibility results follow, each saying what a new idea must supply.
+Take a lattice point of a fractal and ask whether its two coordinates share a common factor; on average the answer is known for every such fractal thicker than a line. Exactly at a line it is open, and what is missing is one estimate about primes of a single size. Writing $\beta = \log_3 p / n$ for the size of a prime $p$ against the level $n$ of the base-$3$ Sierpi\'nski gasket, we pin the troublesome range inside $\beta \in (0.4475978,\allowbreak\, 0.6402121938]$, the upper endpoint being $1/(2 - \log_3 \varphi)$ with $\varphi$ the golden ratio, and proved here; the lower endpoint is the tenth rung of a separate Fourier moment ladder, proved there and imported here. That edge comes from a burst certificate: one combinatorial injection bounding the growth of every one of infinitely many ray automata by $\varphi$, with no computation. Two impossibility results follow, each saying what a new idea must supply.
 \end{abstract}
 
 \maketitle
@@ -48,16 +48,16 @@ Call this set $G_n$. It is the familiar triangle-of-triangles, drawn with intege
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}[x=12cm,y=1cm]
-  \draw[line width=3pt,black!25] (0,0) -- (0.446717,0);
+  \draw[line width=3pt,black!25] (0,0) -- (0.4475978,0);
   \draw[line width=3pt,black!25] (0.640212,0) -- (1,0);
-  \draw[line width=3pt,red!65!black] (0.446717,0) -- (0.640212,0);
+  \draw[line width=3pt,red!65!black] (0.4475978,0) -- (0.640212,0);
   \draw[->] (0,0) -- (1.03,0);
   \foreach \x/\l in {0/0, 1/1} {
     \draw (\x,-0.09) -- (\x,0.09) node[above,font=\footnotesize] {$\l$};
   }
-  \draw (0.446717,-0.12) -- (0.446717,0.12);
+  \draw (0.4475978,-0.12) -- (0.4475978,0.12);
   \draw (0.640212,-0.12) -- (0.640212,0.12);
-  \node[font=\footnotesize,align=center,anchor=north] at (0.446717,-0.18) {$0.446717$\\[-1pt]\scriptsize moment ladder};
+  \node[font=\footnotesize,align=right,anchor=north east] at ([xshift=-3pt]0.4475978,-0.18) {$0.4475978$\\[-1pt]\scriptsize moment ladder};
   \node[font=\footnotesize,align=center,anchor=north] at (0.640212,-0.18) {$0.640212$\\[-1pt]\scriptsize burst certificate};
   \node[font=\footnotesize,anchor=south] at (0.2,0.12) {closed};
   \node[font=\footnotesize,anchor=south] at (0.82,0.12) {closed};
@@ -69,7 +69,7 @@ Call this set $G_n$. It is the familiar triangle-of-triangles, drawn with intege
   \node[font=\scriptsize,anchor=north west] at (0.505,-1.00) {$1/2$ per-ray wall};
   \node[font=\scriptsize,anchor=north east] at (0.60,-0.80) {supergolden target $0.605303$};
 \end{tikzpicture}
-\caption{The pincer. Grey is proved closed, red is what remains, and the upper red endpoint is this paper's theorem. The dashed marks are structural walls: no moment order reaches $0.447931$, no per-ray maximum reaches $1/2$.}
+\caption{The pincer. Grey is proved closed, red is what remains, and the upper red endpoint is this paper's theorem. The dashed marks are structural walls: no moment order reaches $0.447931$, no per-ray maximum reaches $1/2$. The lower endpoint and the ladder cap are drawn at the same place because they now differ by less than $0.00034$: the ladder is all but spent, and only the upper edge has room to move.}
 \label{fig:pincer}
 \end{figure}
 
@@ -79,7 +79,7 @@ The estimate is easy for small $p$ and easy for enormous $p$. It is hard in the 
 \[
   \beta = \frac{\log_3 p}{n}.
 \]
-Two completely different machines close the two ends. From below, a Fourier moment ladder closes every $\beta$ under $0.446717310462$; that machine is stated here as \cref{def:hypL} and is not reproduced, because it shares nothing with this paper. From above, and this is what we prove, an elementary automaton argument with no Fourier analysis in it at all closes every $\beta$ above
+Two completely different machines close the two ends. From below, a Fourier moment ladder closes every $\beta$ under $0.4475978$; that machine is stated here as \cref{def:hypL} and is not reproduced, because it shares nothing with this paper. From above, and this is what we prove, an elementary automaton argument with no Fourier analysis in it at all closes every $\beta$ above
 \[
   \frac{1}{2 - \log_3 \varphi} = 0.6402121938 \dots
 \]
@@ -160,9 +160,9 @@ and \emph{Lemma B holds on an exponent range $I \subseteq (0,1]$} when the same 
 
 \begin{definition}[Hypothesis L, the low range]
 \label{def:hypL}
-\emph{Hypothesis L} is the statement that Lemma B holds on $(0,\ \beta_0]$ for $\beta_0 = 0.446717310462$. It is a theorem of a separate machine, the Fourier moment ladder: exact moment identities for the gasket's character sums, H\"older across digit blocks, and a dyadic summation. It works with the target-uniform count $\max_\tau \#\{x \in G_n : x \equiv \tau \bmod p\}$, which dominates $T_p(n)$, so what it delivers on $(0,\beta_0]$ is at least \cref{def:lemmab}; that weaker consequence is all we import. The argument shares no object with this paper and is not reproduced here, so every statement below that uses it is labelled as using it.
+\emph{Hypothesis L} is the statement that Lemma B holds on $(0,\ \beta_0]$ for $\beta_0 = 0.447597813453$. It is a theorem of a separate machine, the Fourier moment ladder \cite{ladder}: exact moment identities for the gasket's character sums, a three-block H\"older bound at moment order $2K$ whose middle block is supplied by an energy cap, and a dyadic summation over the primes. Its rungs $\beta_0^{(2K)}$ are indexed by the moment order and rise through the orders computed; the constant above is a truncation of the tenth rung, which is the highest rung whose master bound is written out and whose growth constant is bracketed in exact arithmetic rather than merely computed. It works with the target-uniform count $\max_\tau \#\{x \in G_n : x \equiv \tau \bmod p\}$, which dominates $T_p(n)$, so what it delivers on $(0,\beta_0]$ is at least \cref{def:lemmab}; that weaker consequence is all we import. The argument shares no object with this paper and is not reproduced here, so every statement below that uses it is labelled as using it.
 
-One further statement is imported from the same machine and used nowhere in a proof, only as a signpost: its rungs $\beta_0^{(2K)}$ obey the cap $\beta_0^{(2K)} < 2/(3 + \log_3 5)$ for every $K$, because the Fourier peak forces the ladder parameter $\kappa_{2K}$ below $2$. So no moment order reaches $1/2$. The numbers this definition contributes are re-checked arithmetically in \cref{fact:ladder}.
+One further statement is imported from the same machine and used nowhere in a proof, only as a signpost: the rungs obey the cap $\beta_0^{(2K)} < 2/(3 + \log_3 5)$ for every $K$, because the Fourier peak forces the ladder parameter $\kappa_{2K}$ below $2$. So no moment order reaches $1/2$, and the tenth rung already sits within $0.00034$ of that cap. Since the cap is far below the upper edge of \cref{thm:topedge}, the ladder can never close the window on its own, however high the moment order: whatever closes it must come from above. The numbers this definition contributes are re-checked arithmetically in \cref{fact:ladder}, and the growth constant behind the tenth rung is re-certified there from scratch.
 \end{definition}
 
 \begin{remark}[Scope]
@@ -199,9 +199,9 @@ unconditionally, with no unproved input.
 \label{cor:pincer}
 Under \cref{def:hypL}, Lemma B at dimension one can fail only for prime exponents in
 \[
-  \beta \ \in \ (\,0.446717310462,\ \ 0.6402121938\,] .
+  \beta \ \in \ (\,0.447597813453,\ \ 0.6402121938\,] .
 \]
-The upper endpoint is \cref{thm:topedge} and is proved here in full; the lower endpoint is Hypothesis L and is proved elsewhere by the moment ladder, not in this paper.
+The upper endpoint is \cref{thm:topedge} and is proved here in full; the lower endpoint is Hypothesis L and is proved elsewhere by the moment ladder, not in this paper. Both endpoints are unconditional; only the labour is divided.
 \end{corollary}
 
 \begin{theorem}[Closure one: exact Fibonacci products do not help]
@@ -241,13 +241,39 @@ So the bound of \cref{thm:burst} is attained and nothing uniform in the ray is s
 There are exactly $490$ unordered primitive rays of height at most $40$. Removing $(1,1)$, which is class eq and not a shift, leaves $489$: the three shifts $(1,3), (1,9), (1,27)$ and $486$ non-shift rays. On the $486$, the certificate $\rho \le \|A^{55}\mathbf 1\|_\infty^{1/55}$ gives largest values $1.4812034260$ at $(4,9)$, then $1.4765525267$ at $(3,10)$ and $1.4728541511$ at $(1,12)$, every one below $\varphi$. Taking the exact value $\varphi$ on the three shifts and that certificate off them, the inverse-square-weighted mean over the $489$ is $1.0997454$. The counts, the certificates and that mean are checked by \texttt{scripts/verify.py} in exact integer arithmetic. The corresponding mean of the \emph{exact} radii is smaller, $1.0639086$, and including $(1,1)$ instead of excluding it moves that one to $1.0481989$; those two numbers are recorded here because the convention must travel with any such mean, and they are outside the script's domain, which certifies rather than diagonalises.
 \end{fact}
 
-\begin{fact}[The three ladder numbers]
+\begin{fact}[The ladder rungs, and the tenth one certified]
 \label{fact:ladder}
 With $\kappa = 3 - \log_3 5$ and $\beta_0^{(2K)} = \kappa_{2K} / (2\kappa_{2K} + 2 - \kappa)$, $\kappa_{2K} = 2K - \log_3\lambda_{2K}$:
 the order-$8$ growth constant $\lambda_8 = 456 + 3\sqrt{11017}$ gives $\beta_0^{(8)} = 0.446717310462$;
-and the order-$10$ growth constant $\lambda_{10} = 6664.113662506$ gives $\beta_0^{(10)} = 0.447597813454$.
-The cap constant imported in \cref{def:hypL} evaluates to $2/(3 + \log_3 5) = 0.447930988$.
-The order-$8$ rung is the one carrying a written three-block master bound, and it is the rung Hypothesis L uses. The order-$10$ rung is a rigorously computed ladder parameter whose three-block master bound is not written, so it is a strongly supported improvement and not a re-proof of target-uniform Lemma B at that edge. This Fact asserts only the arithmetic of the three displayed numbers, not the ladder theorems behind them; that arithmetic is checked by \texttt{scripts/verify.py}.
+the order-$10$ growth constant $\lambda_{10} = 6664.113662506\ldots$ gives $\beta_0^{(10)} = 0.447597813454\ldots$;
+and the cap of \cref{def:hypL} is $2/(3 + \log_3 5) = 0.447930988$.
+
+The tenth rung is the one Hypothesis L uses, and its growth constant is bracketed rather than approximated. Write
+\[
+  E_{10}(G_a) \ = \ \#\Bigl\{ (x_1,\dots,x_5,\,y_1,\dots,y_5) \in G_a^{10} \ : \ \textstyle\sum_i x_i = \sum_i y_i \Bigr\}
+\]
+for the tenth additive energy of the gasket. Carrying the digit sums through base $3$ turns this into a walk count on a box $\{-2,\dots,2\}^2$ of carry states, an exact $25 \times 25$ nonnegative integer matrix $M$ with $E_{10}(G_a) = (M^a)_{(0,0),(0,0)}$, so that
+\begin{gather*}
+  E_{10}(G_a) \ = \ 1,\ 4653,\ 28967859,\ 190911254427, \\
+  1270015973323281,\ 8461182216374750493
+\end{gather*}
+for $a = 0,\dots,5$, the values at $a \le 3$ confirmed independently by direct convolution of the digit set. Its characteristic polynomial factors over $\mathbb Z$ as
+\[
+  \det(xI - M) \ = \ x^6\,(x-120)\,(x^2-450x+12231)\; c_1(x)^2\, c_2(x)^2\, q(x)
+\]
+with
+\begin{align*}
+  c_1(x) &= x^3-2190x^2+282096x-5186835, \\
+  c_2(x) &= x^3-990x^2+116154x-2569725, \\
+  q(x) &= x^4 - 7833x^3 + 7916949x^2 - 850684437x + 13054946580 .
+\end{align*}
+The ladder's $\lambda_{10}$ is the Perron root of the strongly connected component of the zero state, a diagonal block of $M$ in strongly connected form, hence one of the real eigenvalues of $M$. A Sturm count in exact rational arithmetic puts no real root of any factor above $66641136626/10^{7}$, and exactly one root of $q$ in the bracket of width $10^{-7}$ immediately below it. Therefore
+\[
+  \lambda_{10} < 6664.1136626, \quad \kappa_{10} > 1.985805792698, \quad \beta_0^{(10)} > 0.447597813453 ,
+\]
+every digit truncated down and never rounded up, and the short form $0.4475978$ printed elsewhere in this paper is the same truncation at seven places. Rounding the rung to $0.447598$ would claim a sliver that is not proved, so it is never written that way here.
+
+This Fact asserts the arithmetic, the matrix, the factorisation and the bracket, not the ladder theorems that turn $\lambda_{10}$ into Hypothesis L; those are \cite{ladder}. Everything displayed above is rebuilt from the digit set $F$ and re-checked in exact integer and rational arithmetic by \texttt{scripts/verify.py}, which reads no code of the ladder's.
 \end{fact}
 
 \begin{fact}[The census inequalities, verified small]
@@ -279,7 +305,7 @@ Inserted into the octave sum of \cref{thm:topedge}, it moves the edge to $1/(2 -
 
 \begin{conjecture}[The second-moment route]
 \label{con:z}
-A second moment over ray pairs, $Z(n) = \sum_y M_n(y)^2$, is conjectured to satisfy $Z(n) = 2 \cdot 3^n + o(3^n)$; under it the window of \cref{cor:pincer} shrinks to $(0.446717310462,\ 1/2]$, and the per-ray wall at $1/2$ of \cref{fig:pincer} is then the binding one.
+A second moment over ray pairs, $Z(n) = \sum_y M_n(y)^2$, is conjectured to satisfy $Z(n) = 2 \cdot 3^n + o(3^n)$; under it the window of \cref{cor:pincer} shrinks to $(0.447597813453,\ 1/2]$, and the per-ray wall at $1/2$ of \cref{fig:pincer} is then the binding one.
 
 \emph{Evidence.} $Z(n)$ decomposes exactly into an arithmetic part with closed form plus a residual, and the arithmetic part already carries the constant $2$; the residual is measured to $n = 18$ and decays.
 
@@ -472,16 +498,17 @@ which tends to infinity with $H$ by Mertens \cite{mertens}. So the inverse-squar
 \end{proof}
 
 \begin{proof}[Proof of \cref{cor:pincer}]
-\Cref{thm:topedge} gives Lemma B on $(\beta',1]$ for every $\beta' > 0.6402121938$, hence on $(0.6402121938, 1]$ by taking a decreasing sequence of such $\beta'$ and noting that the exponent ranges nest. \Cref{def:hypL} gives it on $(0, 0.446717310462]$. The union leaves exactly the stated interval, on which nothing is claimed.
+\Cref{thm:topedge} gives Lemma B on $(\beta',1]$ for every $\beta' > 0.6402121938$, hence on $(0.6402121938, 1]$ by taking a decreasing sequence of such $\beta'$ and noting that the exponent ranges nest. \Cref{def:hypL} gives it on $(0, 0.447597813453]$. The union leaves exactly the stated interval, on which nothing is claimed.
 \end{proof}
 
 \section{Reproducibility}
 \label{sec:repro}
 
-Everything numerical in this paper is re-checked by one script, \texttt{scripts/verify.py}, which uses the Python standard library only, takes no arguments, reads no files, and runs from the lane root in about two seconds on a laptop. Every assertion in it names the value obtained and the value expected, and any mismatch aborts the run. It covers exactly the following.
+Everything numerical in this paper is re-checked by one script, \texttt{scripts/verify.py}, which uses the Python standard library only, takes no arguments, reads no files, and runs from the lane root in a couple of seconds on a laptop. Every assertion in it names the value obtained and the value expected, and any mismatch aborts the run. It covers exactly the following.
 
 \begin{itemize}
   \item \emph{Constants.} $\log_3\varphi$, the edge $1/(2-\log_3\varphi) = 0.6402121938$, $c^* = 0.3597878$, the supergolden root $1.4655712319$ and the edge $0.6053028664$ it would give, the cap $2/(3+\log_3 5) = 0.447930988$, and, from $\lambda_8 = 456+3\sqrt{11017}$ and $\lambda_{10} = 6664.113662506$, the two ladder rungs $0.446717310462$ and $0.447597813454$ of \cref{fact:ladder}.
+  \item \emph{\cref{fact:ladder}, the tenth rung, from scratch.} The order-$10$ carry matrix rebuilt from $F$ alone on the box $\{-2,\dots,2\}^2$, its six energies $E_{10}(G_a)$ for $a \le 5$, the values at $a \le 3$ against direct convolution of the digit set, the degree-$25$ characteristic polynomial in exact rational arithmetic against the displayed factorisation, and Sturm chains over $\mathbb Q$ placing no real root of any factor above the exact rational $6664.1136626$ and exactly one root of $q$ in the bracket below it, whence the truncated $\kappa_{10} > 1.985805792698$ and $\beta_0^{(10)} > 0.447597813453$. The closure $\lfloor (r+K)/3 \rfloor \le r$ of the carry box and the order-$4$ control $E_4(G_a) = 15^a$ are checked alongside.
   \item \emph{The quarantined substitutions of \cref{rem:quarantine}.} $1/(2-\log_3 1.0639086) = 0.5145062$ and $1/(2-\log_3 1.0997454) = 0.5226147$, checked as arithmetic identities so that the two are never confused.
   \item \emph{\cref{lem:subsets}.} $D_k(w)$ against brute-force enumeration of all subsets for $w \le 14$ and $1 \le k \le 5$, and $D_k(w) \le \varphi^{\,w+k}$ for $1 \le k \le 6$, $w \le 60$.
   \item \emph{\cref{lem:types}.} Exact branch counts, not merely bounds, at every state of every primitive ray of height at most $24$: div and opp states admit exactly $2$, $1$ or $0$ digits as the residue rule predicts, and eq states admit at most $1$.
@@ -511,6 +538,9 @@ J. Maynard, \emph{Primes with restricted digits}, Inventiones Mathematicae \text
 
 \bibitem{cvy}
 S. Chow, P. P. Varj\'u and H. Yu, \emph{Counting rationals and diophantine approximation in missing-digit Cantor sets}, Advances in Mathematics (2026). arXiv:2402.18395, \url{https://arxiv.org/abs/2402.18395}
+
+\bibitem{ladder}
+C.~Mitchener, \emph{The dimension-one Fourier moment ladder}, open notes and generator. The exact moment identities, the energy cap, the three-block master bound at moment order $2K$, and the carry matrices, characteristic polynomials and Sturm certification behind $\lambda_{10}$. \url{https://github.com/mrlyprod/mrlyprod/tree/main/research/lab/dimension-one-ladder}
 
 \bibitem{mertens}
 F. Mertens, \emph{Ein Beitrag zur analytischen Zahlentheorie}, Journal f\"ur die reine und angewandte Mathematik \textbf{78} (1874), 46--62. \url{https://doi.org/10.1515/crll.1874.78.46}

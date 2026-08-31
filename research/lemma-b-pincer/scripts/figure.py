@@ -8,7 +8,7 @@ X0 = 60
 X1 = 840
 Y = 96
 
-LOW = 0.446717
+LOW = 0.4475978
 HIGH = 0.640212
 
 def px(t):
@@ -37,12 +37,12 @@ def build():
     p.append(text(px(0.22), Y - 22, "closed", 15, fill="#555555"))
     p.append(text(px(0.82), Y - 22, "closed", 15, fill="#555555"))
     p.append(text(px((LOW + HIGH) / 2), Y - 22, "open window", 15, fill="#c0392b", weight="bold"))
-    p.append(text(px(LOW), Y + 42, "0.446717", 15))
-    p.append(text(px(LOW), Y + 60, "moment ladder", 12, fill="#555555"))
+    p.append(text(px(LOW) - 6, Y + 42, "0.4475978", 15, anchor="end"))
+    p.append(text(px(LOW) - 6, Y + 60, "moment ladder", 12, anchor="end", fill="#555555"))
     p.append(text(px(HIGH), Y + 42, "0.640212", 15))
     p.append(text(px(HIGH), Y + 60, "burst certificate", 12, fill="#555555"))
     for t, lab, dy, anchor in (
-        (0.447931, "0.447931  ladder cap", 96, "start"),
+        (0.447931, "0.447931  ladder cap, only 0.00034 above the edge", 96, "start"),
         (0.5, "1/2  per-ray wall", 118, "start"),
         (0.605303, "0.605303  supergolden target", 140, "end"),
     ):

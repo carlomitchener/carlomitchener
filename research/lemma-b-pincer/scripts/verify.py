@@ -1,11 +1,12 @@
-import itertools
-from math import gcd, log, sqrt
+from fractions import Fraction
+from math import comb, gcd, log, sqrt
 
 # PINCER
 
 F = ((0, 0), (1, 0), (0, 1))
 FS = set(F)
 PHI = (1 + sqrt(5)) / 2
+KAPPA = 3 - log(5, 3)
 
 def near(got, want, tol, what):
     assert abs(got - want) <= tol, "%s: got %.12f want %.12f" % (what, got, want)
@@ -87,6 +88,179 @@ def typ(cls, a, b, s):
     c1, c2 = divmod(s, b)
     return c1 % 3 if cls == "div" else (c1 + c2) % 3
 
+# LADDER
+
+def rung(lam, order):
+    k = order - log(lam, 3)
+    return k / (2 * k + 2 - KAPPA)
+
+def delta_counts(K):
+    types = [(b, c, comb(K, b) * comb(K - b, c)) for b in range(K + 1) for c in range(K + 1 - b)]
+    out = {}
+    for b, c, m in types:
+        for u, v, w in types:
+            out[(b - u, c - v)] = out.get((b - u, c - v), 0) + m * w
+    return out
+
+def carry(K):
+    r = (K - 1) // 2
+    states = [(i, j) for i in range(-r, r + 1) for j in range(-r, r + 1)]
+    at = {s: i for i, s in enumerate(states)}
+    M = [[0] * len(states) for _ in states]
+    for s in states:
+        for (d1, d2), w in delta_counts(K).items():
+            z1, z2 = s[0] + d1, s[1] + d2
+            if z1 % 3 == 0 and z2 % 3 == 0:
+                M[at[s]][at[(z1 // 3, z2 // 3)]] += w
+    return M, at[(0, 0)], r
+
+def energies(K, levels):
+    M, zero, _ = carry(K)
+    v = [0] * len(M)
+    v[zero] = 1
+    out = [1]
+    for _ in range(levels):
+        v = [sum(v[i] * M[i][j] for i in range(len(v))) for j in range(len(v))]
+        out.append(v[zero])
+    return out
+
+def energy_direct(K, a):
+    pts = [(0, 0)]
+    for l in range(a):
+        pts = [(x + dx * 3 ** l, y + dy * 3 ** l) for x, y in pts for dx, dy in F]
+    dist = {(0, 0): 1}
+    for _ in range(K):
+        fresh = {}
+        for (x, y), c in dist.items():
+            for dx, dy in pts:
+                key = (x + dx, y + dy)
+                fresh[key] = fresh.get(key, 0) + c
+        dist = fresh
+    return sum(c * c for c in dist.values())
+
+def charpoly(M):
+    n = len(M)
+    A = [[Fraction(x) for x in row] for row in M]
+    coeffs = [Fraction(1)]
+    N = [[Fraction(int(i == j)) for j in range(n)] for i in range(n)]
+    for k in range(1, n + 1):
+        AN = [[sum(A[i][t] * N[t][j] for t in range(n)) for j in range(n)] for i in range(n)]
+        c = -sum(AN[i][i] for i in range(n)) / k
+        coeffs.append(c)
+        N = [[AN[i][j] + (c if i == j else 0) for j in range(n)] for i in range(n)]
+    return [int(c) for c in coeffs]
+
+def polymul(a, b):
+    out = [0] * (len(a) + len(b) - 1)
+    for i, x in enumerate(a):
+        for j, y in enumerate(b):
+            out[i + j] += x * y
+    return out
+
+def trim(p):
+    i = 0
+    while i < len(p) - 1 and p[i] == 0:
+        i += 1
+    return p[i:]
+
+def deriv(p):
+    n = len(p) - 1
+    return trim([p[i] * (n - i) for i in range(n)]) if n else [Fraction(0)]
+
+def polyrem(a, b):
+    a = [Fraction(x) for x in a]
+    b = [Fraction(x) for x in b]
+    while len(a) >= len(b) and any(a):
+        f = a[0] / b[0]
+        for i in range(len(b)):
+            a[i] -= f * b[i]
+        a = trim(a)
+    return a
+
+def sturm(p):
+    chain = [trim([Fraction(x) for x in p])]
+    chain.append(deriv(chain[0]))
+    while len(chain[-1]) > 1:
+        r = polyrem(chain[-2], chain[-1])
+        if not any(r):
+            break
+        chain.append([-c for c in r])
+    return chain
+
+def variations(vals):
+    s = [v for v in vals if v != 0]
+    return sum(1 for i in range(len(s) - 1) if (s[i] > 0) != (s[i + 1] > 0))
+
+def value(p, t):
+    v = Fraction(0)
+    for c in p:
+        v = v * t + c
+    return v
+
+def sign_changes(chain, t):
+    return variations([value(q, t) for q in chain])
+
+def sign_changes_infinity(chain):
+    return variations([q[0] for q in chain])
+
+def squarefree(p):
+    chain = sturm(p)
+    return len(chain[-1]) == 1 and chain[-1][0] != 0
+
+def real_roots_above(p, t):
+    chain = sturm(p)
+    return sign_changes(chain, t) - sign_changes_infinity(chain)
+
+def real_roots_between(p, lo, hi):
+    chain = sturm(p)
+    return sign_changes(chain, lo) - sign_changes(chain, hi)
+
+QUARTIC = [1, -7833, 7916949, -850684437, 13054946580]
+
+OTHERS = [[1, 0], [1, -120], [1, -450, 12231], [1, -2190, 282096, -5186835], [1, -990, 116154, -2569725]]
+
+MULTIPLICITY = [6, 1, 1, 2, 2]
+
+ENERGIES = [1, 4653, 28967859, 190911254427, 1270015973323281, 8461182216374750493]
+
+LO = Fraction(66641136625, 10 ** 7)
+
+HI = Fraction(66641136626, 10 ** 7)
+
+def ladder():
+    for K in range(1, 9):
+        r = (K - 1) // 2
+        assert (r + K) // 3 <= r, "order %d carry box: got (r + K) // 3 = %d want <= %d" % (2 * K, (r + K) // 3, r)
+        assert max(max(abs(d1), abs(d2)) for d1, d2 in delta_counts(K)) == K, "order %d digit spread: want %d" % (2 * K, K)
+    same(energies(2, 6), [15 ** a for a in range(7)], "E_4(G_a) = 15^a")
+    M, zero, r = carry(5)
+    same((len(M), r), (25, 2), "order-10 carry matrix shape")
+    same(energies(5, 5), ENERGIES, "E_10(G_a) from the carry matrix")
+    for a in range(1, 4):
+        same(energy_direct(5, a), ENERGIES[a], "E_10(G_%d) by direct convolution" % a)
+    poly = charpoly(M)
+    same(len(poly) - 1, 25, "charpoly degree")
+    product = QUARTIC
+    for f, m in zip(OTHERS, MULTIPLICITY):
+        for _ in range(m):
+            product = polymul(product, f)
+    same(product, poly, "charpoly factorisation")
+    assert squarefree(QUARTIC), "quartic factor: got a repeated root want squarefree"
+    same(real_roots_above(QUARTIC, HI), 0, "quartic real roots above 6664.1136626")
+    same(real_roots_between(QUARTIC, LO, HI), 1, "quartic real roots in the bracket")
+    for f in OTHERS[1:]:
+        assert squarefree(f), "factor %r: got a repeated root want squarefree" % f
+        same(real_roots_above(f, HI), 0, "factor %r real roots above 6664.1136626" % f)
+    k10 = 10 - log(float(HI), 3)
+    b10 = rung(float(HI), 10)
+    assert k10 > 1.985805792698, "certified kappa_10: got %.12f want > 1.985805792698" % k10
+    assert b10 > 0.447597813453, "certified rung 10: got %.12f want > 0.447597813453" % b10
+    assert b10 > 0.4475978, "short edge: got %.7f want > 0.4475978" % b10
+    assert b10 < rung(6664.113662506, 10), "certified rung 10 must sit below the floating value"
+    print("ladder: order-10 carry matrix 25 states, energies to a = 5, exact charpoly factorisation, Sturm gives lambda_10 < 6664.1136626 and beta_0^(10) > 0.447597813453")
+
+# PINCER
+
 def constants():
     L = log(PHI, 3)
     near(1 / (2 - L), 0.6402121938, 5e-10, "top edge")
@@ -97,13 +271,8 @@ def constants():
     near(x, 1.4655712319, 5e-10, "supergolden root")
     near(1 / (2 - log(x, 3)), 0.6053028664, 5e-10, "supergolden edge")
     near(2 / (3 + log(5, 3)), 0.447930988, 5e-9, "ladder cap")
-    kap = 3 - log(5, 3)
-    l8 = 456 + 3 * sqrt(11017)
-    k8 = 8 - log(l8, 3)
-    near(k8 / (2 * k8 + 2 - kap), 0.446717310462, 5e-12, "rung 8")
-    l10 = 6664.113662506
-    k10 = 10 - log(l10, 3)
-    near(k10 / (2 * k10 + 2 - kap), 0.447597813454, 5e-12, "rung 10")
+    near(rung(456 + 3 * sqrt(11017), 8), 0.446717310462, 5e-12, "rung 8")
+    near(rung(6664.113662506, 10), 0.447597813454, 5e-12, "rung 10")
     near(1 / (2 - log(1.0639086, 3)), 0.5145062, 5e-8, "quarantined 0.5145062")
     near(1 / (2 - log(1.0997454, 3)), 0.5226147, 5e-8, "quarantined 0.5226147")
     print("constants: edge 0.6402121938, rungs 0.446717310462 / 0.447597813454, cap 0.447930988")
@@ -239,6 +408,7 @@ def census(jmax):
 
 def main():
     constants()
+    ladder()
     subsets()
     branching(24)
     delay(24)
