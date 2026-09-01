@@ -1,4 +1,4 @@
-import lib  # noqa: F401 — lib/__init__.py puts mrlypy on sys.path
+import lib  # noqa: F401
 
 from PIL import Image, ImageDraw, ImageFont
 

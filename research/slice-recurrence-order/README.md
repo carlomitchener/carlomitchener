@@ -14,5 +14,6 @@ Keep the cells of the base-3 grid whose digit vector has at most one coordinate 
 
 The proof is three moves: the digit polynomial factors as $P_D(t) = (1+t^2)^{D-1}(1+Dt+t^2)$, the carry map $c \mapsto (c+D-s)/3$ contracts onto $\{|c| \le \lfloor (D-1)/2 \rfloor\}$, and the palindromic symmetry $P_D[s] = P_D[2D-s]$ halves that set. Exactness of the order is verified, not proved: the exact rational Hankel determinant is nonzero for $2 \le D \le 24$, starting $2, 72, -6336, -1029600000, -62272025640000$. The script re-derives the $D = 3$ matrix $[[6,6],[1,3]]$, its polynomial $\lambda^2 - 9\lambda + 12$, and the census $1, 6, 42, 306, 2250, 16578, 122202$ - which is [A299916](https://oeis.org/A299916) - along with the $D = 4$ ladder $6, 132, 1848, 29040, 441408, 6772128$ and the traces $3 \cdot 2^{D-2} - 1$ and $3D \cdot 2^{D-3}$.
 
+- Grew from the [spectra](https://github.com/mrlyprod/mrlyprod/blob/main/research/spectra.md) page of the MrlyMath tree.
 - [paper.pdf](paper.pdf) - the paper.
 - `tectonic paper.tex` rebuilds it; `python3 scripts/verify.py` re-checks every number; `python3 scripts/figure.py` redraws the bars.

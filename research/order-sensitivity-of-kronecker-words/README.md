@@ -10,5 +10,6 @@ A *design* is a two-by-two square with some of its four cells filled, so there a
 
 The proofs are contact geometry: two adjacent copies of a tile touch only when its facing edges share a filled row or column, and that contact count is a product over the factors, so it cannot see the order - while the merging it permits can. Beyond the theorems the paper ships an exhaustive census (over the $105$ reorderable length-two multisets: components split on $74$, Euler characteristic on $78$, perimeter on $78$, holes on $10$, boundary cells on none) and six explicit $4 \times 4$ integer matrices whose products reproduce the component count of every one of the $54{,}241$ words of length at most four, zero mismatches. Why the rank is $4$ is open, and an earlier claim that no such representation could exist is retracted in the paper, with its date.
 
+- [component-exponent-of-kronecker-words](../component-exponent-of-kronecker-words/) - the sequel: closed forms for the component count on all 105 two-letter alphabets, and the growth rate they give, which is order-blind at every interior letter frequency.
 - [paper.pdf](paper.pdf) - the paper.
 - `tectonic paper.tex` rebuilds it; `python3 scripts/verify.py` re-checks every number in about four seconds; `python3 scripts/figure.py` redraws the witness.

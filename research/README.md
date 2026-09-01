@@ -17,10 +17,10 @@ Formal write-ups of [MrlyMath](../README.md#mrlymath): the mathematics that fall
 - [slice-sign-even-half](slice-sign-even-half/) - the even half of the slice sign law: below the generic exponent in every even dimension at bases 3 and 5, the quadratic base-3 transient identified exactly, and the Jacobsthal tent rank law behind the remaining strictness gap.
 - [gasket-ray-machine](gasket-ray-machine/) - which origin lines hit a base-3 design, how much each catches, and a spectral gap at two.
 - [order-sensitivity-of-kronecker-words](order-sensitivity-of-kronecker-words/) - what survives swapping nested patterns, and the connectivity that does not.
+- [component-exponent-of-kronecker-words](component-exponent-of-kronecker-words/) - the piece count of a two-letter nesting has a closed form on all 105 alphabets, so its growth rate exists, is order-blind, and mostly just repeats the cell count.
 - [moire-correlation-laws](moire-correlation-laws/) - two parity carpets agree by an exact gcd law, zero exactly when the scales are coprime; the stack's full spectrum is the squared-divisor field of the frequency gcd, zeta quotients and nothing more.
 - [divisor-avatars](divisor-avatars/) - when a parity design's cell census is the divisor count of a power, and exactly which integers have one.
 - [sequence-census](sequence-census/) - how many integer sequences a parity rule can write, which ones the catalogue already holds, and why the polygonal numbers keep turning up.
-- [lorem-ipsum](lorem-ipsum/) - the pipeline shakedown: a toy theorem in full ceremonial dress.
 
 ## BUILD
 

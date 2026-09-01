@@ -46,5 +46,6 @@ Write $q = 3^k q_1$ for the coordinate divisible by three ($3 \nmid q_1$) and $p
 
 The free-digit automaton is a constrained tensor square of a one-coordinate carry automaton, $T^\flat = S \otimes S - U \otimes U - V \otimes V + W \otimes W$, so its four-tuple state graph never has to be built; and at large multipliers the witness box $z_1 + z_2 \le (3^n-1)/(2t)$ replaces the automaton entirely, cheapest exactly where a forward build is most expensive.
 
+- Grew from the [coprime](https://github.com/mrlyprod/mrlyprod/blob/main/research/coprime.md) page of the MrlyMath tree.
 - [paper.pdf](paper.pdf) - the paper.
 - `tectonic paper.tex` rebuilds it; `python3 scripts/verify.py` re-checks every number in about 100 seconds; `python3 scripts/figure.py` redraws the two panels.

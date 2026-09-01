@@ -14,5 +14,6 @@ Both proofs run on one machine: an exact integer Collatz-Wielandt certificate, a
 
 The tent is layer one of a 2-adic Smith cascade behind the last open piece of the sign law - strictness at odd $D \equiv 1 \pmod 3$ - which the paper reduces to a single valuation conjecture, states the layer-two window law with its Jacobsthal-repunit generator, and leaves with six sharply-stated open problems.
 
+- Grew from the [spectra](https://github.com/mrlyprod/mrlyprod/blob/main/research/spectra.md) page of the MrlyMath tree.
 - [paper.pdf](paper.pdf) - the paper.
 - `tectonic paper.tex` rebuilds it; `python3 scripts/verify.py` re-runs all ten checks in about twenty-one seconds (`--deep` extends the two largest domains, about twenty-four seconds); `python3 scripts/certify.py` re-certifies every interval constant in the paper, in exact rational arithmetic with outward rounding, in about six seconds; `python3 scripts/figure.py` redraws the figures and re-checks the certificate depths and the tent law behind them. Nothing in the paper is left to a floating-point evaluation and nothing is left unbundled.
