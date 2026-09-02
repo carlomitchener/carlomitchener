@@ -1,5 +1,7 @@
 # The Pincer at Dimension One: Two Edges and Two Closed Doors
 
+![avatar](figures/avatar.png)
+
 Take the base-3 Sierpinski gasket at level `n` - the `3^n` lattice points whose base-3 digit pairs all come from `{(0,0),(1,0),(0,1)}` - and ask how often a point's two coordinates are coprime. Above dimension one the answer is a theorem. Exactly at dimension one, where the gasket lives, one estimate is missing, and it is missing only for primes of one particular size. This paper squeezes that size range from both ends and then proves that the two obvious ways to squeeze further are shut.
 
 ![A number line from 0 to 1 with the range of prime exponents that can still cause trouble marked in red between 0.4475978 and 0.640212.](figures/pincer.svg)

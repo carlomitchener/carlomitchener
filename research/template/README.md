@@ -1,5 +1,7 @@
 # {{TITLE}}
 
+![avatar](figures/avatar.png)
+
 One paragraph a stranger enjoys: the claim in plain words, and why anyone should care.
 
 ![The figure.](figures/figure.svg)

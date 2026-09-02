@@ -1,5 +1,7 @@
 # The Even Half of the Slice Sign Law
 
+![avatar](figures/avatar.png)
+
 Slice a Menger-like solid through its centre, perpendicular to the main diagonal, and count the cells the cut meets as the solid is refined. The count grows geometrically, and its growth exponent misses the generic codimension-one value in every dimension - above it when the dimension is odd, below it when the dimension is even. The odd half of that sign law was proved in [slice-recurrence-order](../slice-recurrence-order/). This paper proves the even half, at base 3 and at base 5, in every even dimension at once.
 
 ![Certificate depth against even dimension at bases 3, 5, 7, 9, 11: base 3 pays a quadratic transient while every other base stays at depth at most 2.](figures/depth.svg)

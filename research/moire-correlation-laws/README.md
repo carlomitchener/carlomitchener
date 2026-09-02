@@ -1,5 +1,7 @@
 # Parity Carpets Correlate by gcd: Four Exact Laws for a Square-Wave Stack
 
+![avatar](figures/avatar.png)
+
 Cut a square into an odd number of equal strips each way, number the strips from zero, and ink every cell whose column and row numbers are both odd. Draw a second such picture at a different scale and hold the two up to the light. How much do they agree? The answer is one exact number built from the greatest common divisor of the two scales, and it is exactly zero when the scales are coprime - not small, not zero to five decimals, zero. So a picture whose scale is prime agrees with every picture before it exactly as much as chance, and you can see which ones those are: they are the white rows.
 
 ![The correlation between parity carpets at odd scales 3 to 63, white where the scales are coprime and dark where they share a factor; the all-white rows and columns are the primes.](figures/carpet.svg)

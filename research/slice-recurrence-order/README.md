@@ -1,5 +1,7 @@
 # Menger Diagonal Slices: A Recurrence of Order $\lceil D/2 \rceil$
 
+![avatar](figures/avatar.png)
+
 Slice a Menger sponge along its main diagonal, count the cubes the cut meets, and repeat in every dimension. The counts are not arbitrary: each one is decided by the few before it. A carry automaton with a contraction and a reflection shows that in dimension $D$ only $\lceil D/2 \rceil$ previous terms are ever needed - about a quarter of the $2D+1$ that the standard construction hands you for free. At $D = 3$ the machine returns the published spectrum of the hexagon-triangle substitution without ever seeing a hexagon.
 
 ![How many past terms the diagonal slice census needs: the free bound 2D+1 against the proved order ceil(D/2), for dimensions 2 through 14.](figures/order.svg)

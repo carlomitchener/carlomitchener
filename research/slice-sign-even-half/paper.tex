@@ -28,7 +28,7 @@
 \author{Carlo Mitchener}
 \address{MrlyProd, Inc.}
 \email{carlo.mitchener@gmail.com}
-\date{First published 2026-08-31}
+\date{First published 2026-08-31, revised 2026-09-02}
 
 % PAPER
 \begin{document}
@@ -37,6 +37,9 @@
 Slice a sponge along its longest diagonal, count the cells the cut meets, and watch how fast that count grows as the sponge is refined; the growth rate lands just above or just below the value a generic slice would give, and which side it lands on is decided by nothing but whether the dimension is even or odd. That is the sign law. Its odd half was proved in a companion paper. This paper proves the even half at the two smallest odd bases: on the middle-digit design in base $3$ and in base $5$, the Perron root $\rho_D$ of the carry matrix satisfies $\rho_D < f_D/q$ for every even $D \ge 2$, where $f_D$ is the fill of the digit polynomial, so the diagonal slice exponent sits strictly below the generic value in every even dimension. Both proofs run on one machine: an exact Fourier form of the Collatz--Wielandt test vector, an exact telescoping in which the leading fill-powers cancel identically, and a frequency-separation estimate. The two bases differ only in how deep the certificate must go. Base $5$ needs depth $\Theta(\log D)$; base $3$ needs depth $\Theta(D^2)$, and the quadratic transient is identified: its length is $\tfrac14 (\log R)\, D^2 + O(D)$ with $R = \prod_{i \ge 2} \cos(\pi/3^i)/\cos(2\pi/3^i)$ and $\tfrac14\log R = 0.0568486146\ldots$, the crossing of the half-point frequency. A one-line lemma explains why base $3$ alone is hard: it is the unique odd base at which the design's digit-generating polynomial has the same modulus at $-1$ as at $1$. Exact integer certificates settle bases $7$, $9$ and $11$ on stated finite ranges with depth at most two and no transient at all. The second half of the paper turns to what the sign law still lacks -- strictness at odd $D \equiv 1 \pmod 3$ -- and reduces it to a $2$-adic bound whose first layer is a proved tent law built from the Jacobsthal numbers.
 \end{abstract}
 
+\begin{center}
+\includegraphics[width=0.36\textwidth]{figures/avatar.png}
+\end{center}
 \maketitle
 
 % INTRODUCTION

@@ -1,5 +1,7 @@
 # Order Sensitivity of Kronecker Design Words: What the Perfect Shuffle Cannot See
 
+![avatar](figures/avatar.png)
+
 Nest one small black-and-white pattern inside another, then swap the order of the nesting. The picture keeps its size and its number of black cells, and every algebraic thing about it - rank, determinant, spectrum, trace - stays put, because the two orders differ by a perfect shuffle of rows and columns. But a shuffle does not preserve which cells touch which. So the picture can fall apart into twice as many pieces, and this paper says exactly which observables that breaks and how early.
 
 ![Two designs nested both ways: four isolated cells one way, two dominoes the other, four black cells either way.](figures/witness.svg)

@@ -1,5 +1,7 @@
 # The Component Exponent of a Two-Letter Kronecker Word
 
+![avatar](figures/avatar.png)
+
 Nest one small black-and-white pattern inside another, then inside a third, and keep going forever, picking at each step one of two patterns according to an infinite word. Count the connected pieces after $L$ steps. The count depends on the order of the word, which is what the companion paper is about; this one asks whether the *growth rate* of the count does. It does not. We write down an exact formula for the piece count on every one of the $105$ two-letter alphabets over the fifteen nonempty two-by-two designs, and the rate falls out: whenever both letters occur with positive frequency it exists, sees nothing but the two frequencies, and on $89$ of the $105$ alphabets it is just the growth rate of the black-cell count, which never cared about the order in the first place. So the hoped-for payoff, an aperiodic word beating a periodic one, is not there, and the paper says so.
 
 ![Left: the smallest order-sensitive pair, four black cells either way, four pieces one order and two the other. Right: all 105 alphabets, coloured by whether the exponent meets the cell-count ceiling and by whether the constant-word rule survives.](figures/ledger.svg)

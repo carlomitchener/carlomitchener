@@ -1,5 +1,7 @@
 # The Walsh Spectrometer: Exact Diagonal-Slice Ink for Every Three-Dimensional Parity Design
 
+![avatar](figures/avatar.png)
+
 Take a cube of graph paper `4n` cells on a side, chop each axis into blocks of four, and give every cell three bits: is its x-block even or odd, its y-block, its z-block. A *design* is a decision about those eight bit-triples, ink or paper, so there are exactly 256 designs. Cut the cube with the slanted plane `x + y + z = 6n - 2`, keep the cells with `z` even, and you get a hexagon of exactly `6n^2` cells. What fraction of the hexagon is inked? This paper answers that for all 256 designs at once, exactly, with no fit and no error term - and the answer's coefficients turn out to be the design's Walsh-Fourier spectrum, level by level. Point the layer stack at a design and it prints the design's spectrum, which is why we call it a spectrometer.
 
 ![The same design at n = 5 and n = 7: the slice flips from mostly ink to mostly paper, and the flip amplitude is exactly minus half the design's top Walsh coefficient.](figures/blink.svg)

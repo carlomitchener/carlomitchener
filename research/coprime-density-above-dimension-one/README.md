@@ -1,5 +1,7 @@
 # Coprimality Density Above Dimension One
 
+![avatar](figures/avatar.png)
+
 Stand at the origin of a square grid and look out: you can see a lattice point exactly when its coordinates share no common factor, and $6/\pi^2$ of all lattice points are visible. Now do the same on a fractal - the Sierpinski gasket, say, built by keeping the points of $[0,2^n)^2$ whose binary digit pairs all avoid $(1,1)$. The answer changes to $16/(3\pi^2)$, and this paper proves why, for every fractal of this kind whose dimension exceeds one. Every prime away from the base keeps its classical factor; every prime dividing the base is deleted and replaced, collectively and exactly, by a single rational number read straight off the digit set.
 
 ![The level-5 Sierpinski gasket design: 243 points, the 122 visible from the origin filled and the rest hollow.](figures/gasket.svg)

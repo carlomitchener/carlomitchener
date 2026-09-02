@@ -1,5 +1,7 @@
 # Base-3 Digit Designs: Diagonality, Ray Masses, and a Spectral Gap at Two
 
+![avatar](figures/avatar.png)
+
 Write two numbers in base three at once, stacked, so each digit position carries a pair from the nine possibilities; keep three of those nine pairs and forbid the rest. You get a self-similar cloud of points in the plane. Now ask the simplest question available: which straight lines through the origin hit the cloud, and how many points does each line catch? Some designs pile everything onto a few lines. Others spread every single point onto a line of its own, and it turns out you can tell which is which by looking at one digit.
 
 ![Two base-3 digit designs at level 3: the gasket piles points onto lines, a diagonal design gives every point its own ray.](figures/rays.svg)
