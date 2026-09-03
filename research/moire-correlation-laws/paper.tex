@@ -26,7 +26,7 @@
 \author{Carlo Mitchener}
 \address{MrlyProd, Inc.}
 \email{carlo.mitchener@gmail.com}
-\date{First published 2026-08-23, revised 2026-09-02}
+\date{First published 2026-08-23, revised 2026-09-03}
 
 % PAPER
 \begin{document}
@@ -35,11 +35,33 @@
 Cut a square into an odd number of equal strips each way and ink every cell whose two strip numbers are both odd. Two such pictures at different scales overlap by an amount fixed by the greatest common divisor of the scales, and that amount is exact. We prove the master integral behind it, derive the exact correlation law for each of the four fields the parity rule generates, and show that all four vanish precisely when the scales are coprime. So an odd number above one is prime exactly when its picture is uncorrelated with every picture before it: a portrait of coprimality, not a primality test. Two ray laws are proved alongside, and two boundaries: the exactness fails in a hexagonal section, and the stack's brightness carries no M\"obius information.
 \end{abstract}
 
-\begin{center}
-\includegraphics[width=0.36\textwidth]{figures/avatar.png}
-\end{center}
+% TITLE PAGE
+\makeatletter
+\global\let\titledate\@date
+\global\let\paperabstract\@setabstracta
+\global\let\@date\@empty
+\global\let\@setabstract\relax
+\makeatother
+
 \maketitle
 
+\begin{center}
+\normalfont\footnotesize\titledate
+\end{center}
+
+\vspace*{\stretch{1}}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/avatar.png}
+\end{center}
+
+\vspace*{\stretch{1.25}}
+
+\newpage
+
+\paperabstract
+
+% BODY
 \section{Introduction}
 \label{sec:intro}
 

@@ -35,11 +35,33 @@
 Plain first sentence, no symbols. Then the result, stated once, cleanly.
 \end{abstract}
 
-\begin{center}
-\includegraphics[width=0.36\textwidth]{figures/avatar.png}
-\end{center}
+% TITLE PAGE
+\makeatletter
+\global\let\titledate\@date
+\global\let\paperabstract\@setabstracta
+\global\let\@date\@empty
+\global\let\@setabstract\relax
+\makeatother
+
 \maketitle
 
+\begin{center}
+\normalfont\footnotesize\titledate
+\end{center}
+
+\vspace*{\stretch{1}}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/avatar.png}
+\end{center}
+
+\vspace*{\stretch{1.25}}
+
+\newpage
+
+\paperabstract
+
+% BODY
 \section{Introduction}
 
 The picture, the question, the answer. A figure belongs here.

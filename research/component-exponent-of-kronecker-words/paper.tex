@@ -38,20 +38,42 @@
 \author{Carlo Mitchener}
 \address{MrlyProd, Inc.}
 \email{carlo.mitchener@gmail.com}
-\date{First published 2026-09-02}
+\date{First published 2026-09-02, revised 2026-09-03}
 
 % PAPER
 \begin{document}
 
 \begin{abstract}
-Nest one small black-and-white pattern inside another, then inside a third, and keep going, choosing at each step one of two patterns according to an infinite word. Count the connected pieces after $L$ steps. The count depends on the order of the word, so the question is whether its growth rate does. We give an exact closed formula for the piece count on every one of the $105$ two-letter alphabets over the fifteen nonempty two-by-two designs, in five regimes, proved from six geometric lemmas. It follows that when both letters occur with positive frequency the growth rate exists, depends on nothing but the two frequencies, and is therefore blind to the order; on $89$ of the $105$ it is just the growth rate of the cell count. The one linear rule exact on constant words is refuted at every interior frequency on $78$ of the $105$. Along the Thue-Morse word over a gasket-and-domino alphabet the rate is exactly $\tfrac12\log 6$, with a two-sided certificate and no fit. The positive-frequency hypothesis is load-bearing: at a boundary frequency, three words with the same letter frequencies have rates $0$, $\log 2$, and no rate at all.
+Nest one small black-and-white pattern inside another, then inside a third, and keep going, choosing at each step one of two patterns according to an infinite word. Count the connected pieces after $L$ steps. The count depends on the order of the word, so the question is whether its growth rate does. We give an exact closed formula for the piece count on every one of the $105$ two-letter alphabets over the fifteen nonempty two-by-two designs, in five regimes, proved from six geometric lemmas. It follows that when both letters occur with positive frequency the growth rate exists, depends on nothing but the two frequencies, and is therefore blind to the order; on $89$ of the $105$ it is just the growth rate of the cell count. The one linear rule exact on constant words is refuted at every interior frequency on $78$ of the $105$. Along the Thue-Morse word over a gasket-and-domino alphabet, one three-cell design against one two-cell bar, the rate is exactly $\tfrac12\log 6$, with a two-sided certificate and no fit. The positive-frequency hypothesis is load-bearing: at a boundary frequency, three words with the same letter frequencies have rates $0$, $\log 2$, and no rate at all.
 \end{abstract}
 
-\begin{center}
-\includegraphics[width=0.36\textwidth]{figures/avatar.png}
-\end{center}
+% TITLE PAGE
+\makeatletter
+\global\let\titledate\@date
+\global\let\paperabstract\@setabstracta
+\global\let\@date\@empty
+\global\let\@setabstract\relax
+\makeatother
+
 \maketitle
 
+\begin{center}
+\normalfont\footnotesize\titledate
+\end{center}
+
+\vspace*{\stretch{1}}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/avatar.png}
+\end{center}
+
+\vspace*{\stretch{1.25}}
+
+\newpage
+
+\paperabstract
+
+% BODY
 \section{Introduction}
 \label{sec:intro}
 
@@ -77,12 +99,12 @@ The answer has three parts, and the third one kills the hope.
 \noindent\textbf{Every alphabet has a closed form.} There is an exact formula for $\comp(A_w)$ on each of the $\binom{15}{2} = 105$ two-letter alphabets, and five regimes, proved from six geometric lemmas, cover them all (\cref{thm:forms}). Two-thirds of the alphabets fall to a single lemma: if either letter has no contact with a copy of itself in either direction, the piece count is the cell count of a prefix, and nothing else needs to be said. The other four regimes are two letters that never break apart, two dominoes at right angles, a run-counting law, and a row-block law.
 
 \medskip
-\noindent\textbf{At an interior frequency the rate exists and is order-blind.} If both letters occur with strictly positive frequency, then $\chi(w)$ exists, is a function of the frequency vector alone, and is read off the closed form (\cref{thm:exponent}). Existence is earned from the formula: no ergodic theorem is used, and \cref{prop:norm} says why none could be. Consequently Thue-Morse returns exactly what a periodic word of the same frequencies returns, and the hoped-for non-stationary effect is not there.
+\noindent\textbf{At an interior frequency the rate exists and is order-blind.} If both letters occur with strictly positive frequency, then $\chi(w)$ exists, is a function of the frequency vector alone, and is read off the closed form (\cref{thm:exponent}). Existence is earned from the formula: no ergodic theorem is used, and \cref{prop:norm} says why the matrix-norm route could not supply one. Consequently Thue-Morse returns exactly what a periodic word of the same frequencies returns, and the hoped-for non-stationary effect is not there.
 
 \medskip
 \noindent\textbf{And most of the rate is not news.} On $89$ of the $105$ alphabets the rate equals the growth rate of the cell count, which was order-blind to begin with (\cref{thm:saturation}). The one class of alphabets whose rate sits strictly between the constant-word values and that ceiling is a domino against the full tile, where at equal frequencies the rate is $\tfrac12 \log 2$ against per-letter values $0, 0$ and a ceiling of $\tfrac32 \log 2$.
 
-What does fail, cleanly and everywhere, is the obvious guess. A constant word $c^L$ has $\comp(A_{c^L}) = \comp(A_c)^L$, and $\comp(A_c) = 2$ for exactly two of the fifteen designs, so the unique linear functional on the frequency simplex that is exact on constant words is $\Phi(f) = (f_6 + f_9)\log 2$. It is refuted at every interior frequency on $78$ of the $105$ alphabets (\cref{thm:phi}), and the failure is a wrong shape rather than a wrong coefficient: on those alphabets the interior formula continues to a positive value at a vertex where the constant word has rate $0$, so no continuous frequency functional whatever gives the rate of every word. \Cref{fig:ledger} is the whole verdict in one square.
+What does fail, cleanly and everywhere, is the obvious guess. A constant word $c^L$ has $\comp(A_{c^L}) = \comp(A_c)^L$, and $\comp(A_c) = 2$ for exactly two of the fifteen designs, so the unique linear functional on the frequency simplex that is exact on constant words is $\Phi(f) = (f_6 + f_9)\log 2$. It is refuted at every interior frequency on $78$ of the $105$ alphabets (\cref{thm:phi}), and changing its coefficients does not repair it: the interior rate is linear, so some linear functional does match it there, but on those alphabets that functional continues to a positive value at a vertex where the constant word has rate $0$, so no continuous frequency functional whatever gives the rate of every word whose letter frequencies and rate both exist. \Cref{fig:ledger} is the whole verdict in one square.
 
 The hypothesis inside every statement above is that both letters occur with positive frequency, and it is not decoration. Over the alphabet $\{3, 6\}$ at the frequency vector $(1,0)$ the constant word has rate $0$, the word carrying the second letter at the square places has rate $\log 2$, and the word carrying it at the powers of $2$ has no rate at all: its prefix rates accumulate on a whole interval (\cref{thm:sharp}). The same three-word pathology occurs on an alphabet carrying no diagonal letter, so it is not a property of one design class.
 
@@ -111,10 +133,10 @@ For a word $w = (c_1, \dots, c_L)$ the picture $A_w \subseteq \{0, \dots, 2^L-1\
 
 \begin{definition}[Contacts]
 \label{def:contact}
-For a picture $X$ of side $n$, $h(X)$ is the number of rows $r$ with both $(r,0)$ and $(r, n-1)$ filled, and $v(X)$ the number of columns $s$ with both $(0,s)$ and $(n-1,s)$ filled. These count the places at which two side-by-side, respectively two stacked, copies of $X$ touch. A design is \emph{contact-free} if $h = v = 0$, which happens exactly for the four one-cell designs $1, 2, 4, 8$ and the two diagonal designs $6, 9$. It is \emph{heavy} if it is connected and $h, v \ge 1$, which happens exactly for the four three-cell designs $7, 11, 13, 14$ and the full tile $15$. The remaining four designs $3, 12, 5, 10$ are the \emph{dominoes}, each with exactly one contact direction; $3$ and $12$ are the row dominoes, $5$ and $10$ the column dominoes.
+For a picture $X$ of side $n$, $h(X)$ is the number of rows $r$ with both $(r,0)$ and $(r, n-1)$ filled, and $v(X)$ the number of columns $s$ with both $(0,s)$ and $(n-1,s)$ filled. These count the places at which two side-by-side, respectively two stacked, copies of $X$ touch. A design is \emph{contact-free} if $h = v = 0$, which happens exactly for the four one-cell designs $1, 2, 4, 8$ and the two diagonal designs $6, 9$. It is \emph{heavy} if it is connected and $h, v \ge 1$, which happens exactly for the four three-cell designs $7, 11, 13, 14$ and the full tile $15$. The remaining four designs $3, 12, 5, 10$ are the \emph{dominoes}, each with exactly one contact direction; $3$ and $12$ are the row dominoes, $5$ and $10$ the column dominoes; two dominoes are \emph{like} when they share an orientation and \emph{unlike} when they do not.
 \end{definition}
 
-The six classes named above, the units $\{1,2,4,8\}$, the row dominoes $\{3,12\}$, the column dominoes $\{5,10\}$, the diagonals $\{6,9\}$, the gaskets $\{7,11,13,14\}$ and the full tile $\{15\}$, are the equivalence classes of every statement in this paper. There are $\binom{15}{2} = 105$ two-letter alphabets and $\binom{6}{2} + 5 = 20$ pairs of classes, of which $15$ hold a pair of distinct letters.
+The six classes named above, the units $\{1,2,4,8\}$, the row dominoes $\{3,12\}$, the column dominoes $\{5,10\}$, the diagonals $\{6,9\}$, the gaskets $\{7,11,13,14\}$ and the full tile $\{15\}$, are the equivalence classes of every statement in this paper. There are $\binom{15}{2} = 105$ two-letter alphabets and $\binom{6}{2} + 5 = 20$ pairs of classes, of which $15$ pair distinct classes.
 
 \begin{definition}[Frequency and exponent]
 \label{def:freq}
@@ -176,12 +198,12 @@ In particular $\chi$ is the same along Thue-Morse, along every periodic word wit
 
 \begin{theorem}[Saturation]
 \label{thm:saturation}
-At every interior frequency the component exponent equals the fill exponent on $89$ of the $105$ alphabets and falls strictly below it on the other $16$. The alphabets on which it falls short are the $12$ of the second regime and the $4$ of the fourth. Among the $16$, exactly the $4$ of the fourth regime, that is a domino against the full tile, have an exponent strictly between $\Phi(f)$ and the fill exponent; at equal frequencies that exponent is $\tfrac12 \log 2$ against per-letter values $0, 0$ and a ceiling of $\tfrac32\log 2$. This is the unique class pair on the whole alphabet with that property.
+At every interior frequency the component exponent equals the fill exponent on $89$ of the $105$ alphabets and falls strictly below it on the other $16$. The alphabets on which it falls short are the $12$ of the second regime and the $4$ of the fourth. Among the $16$, exactly the $4$ of the fourth regime, that is a domino against the full tile, have an exponent strictly between $\Phi(f)$ and the fill exponent; at equal frequencies that exponent is $\tfrac12 \log 2$ against per-letter values $0, 0$ and a ceiling of $\tfrac32\log 2$. Up to transposition this is the one class pair with that property.
 \end{theorem}
 
 \begin{theorem}[The constant-word functional is refuted]
 \label{thm:phi}
-At every interior frequency, $\Phi$ is exact on $27$ of the $105$ alphabets and refuted on the other $78$. It is exact exactly on the $15$ alphabets both of whose letters are units or diagonals, and on the $12$ alphabets of the second regime. On each of the $78$ the failure is a wrong shape rather than a wrong coefficient: the interior formula is linear, so it extends continuously to the closed simplex, and at some vertex that extension takes a positive value while the constant word sitting at that vertex has count $1$ and rate $0$. Hence on those alphabets no continuous functional of $f$ alone gives the rate of every word whose letter frequencies exist.
+At every interior frequency, $\Phi$ is exact on $27$ of the $105$ alphabets and refuted on the other $78$. It is exact exactly on the $15$ alphabets both of whose letters are units or diagonals, and on the $12$ alphabets of the second regime. On each of the $78$ the obstruction sits at a vertex rather than in the interior: changing the coefficients does repair the interior, since the interior formula is itself linear, but the repaired functional extends continuously to the closed simplex and at some vertex takes a positive value while the constant word sitting at that vertex has count $1$ and rate $0$. Hence on those alphabets no continuous functional of $f$ alone gives the rate of every word whose letter frequencies exist and whose rate exists.
 \end{theorem}
 
 \begin{figure}[!ht]
@@ -193,12 +215,12 @@ At every interior frequency, $\Phi$ is exact on $27$ of the $105$ alphabets and 
 
 \begin{remark}[Two different eighty-nines]
 \label{rem:two89}
-The $89$ of \cref{thm:saturation} is the set of alphabets whose exponent saturates. There is a second set of size $89$ below, in \cref{cor:smooth}: the alphabets outside the fifth regime, on which every count is of the form $2^\alpha 3^\beta$. The two are different sets, and since each holds $89$ of the same $105$ they must differ by exactly sixteen on each side. The sixteen of the fifth regime saturate and are not smooth. The sixteen of the second and fourth regimes are smooth and do not saturate: the second because its count is always $1$, and the fourth because its count $2^{n-j}$ is a power of two, while \cref{thm:exponent} gives it the exponent $f_{\text{full}}\log 2$ against a fill exponent of $(1+f_{\text{full}})\log 2$, so it falls short at every interior frequency. The coincidence of size is a coincidence.
+The $89$ of \cref{thm:saturation} is the set of alphabets whose exponent saturates. There is a second set of size $89$ below, in \cref{cor:smooth}: the alphabets outside the fifth regime, on which every count is $3$-smooth, that is of the form $2^\alpha 3^\beta$. The two are different sets, and since each holds $89$ of the same $105$ they must differ by exactly sixteen on each side. The sixteen of the fifth regime saturate and are not smooth. The sixteen of the second and fourth regimes are smooth and do not saturate: the second because its count is always $1$, and the fourth because its count $2^{n-j}$ is a power of two, while \cref{thm:exponent} gives it the exponent $f_{\text{full}}\log 2$ against a fill exponent of $(1+f_{\text{full}})\log 2$, so it falls short at every interior frequency. The coincidence of size is a coincidence.
 \end{remark}
 
 \subsection{Thue-Morse, exactly}
 
-Let $t$ be the Thue-Morse sequence \cite{oeisA010060}, $t_n$ the parity of the binary digit sum of $n$, and read an infinite word over a gasket-and-domino alphabet off it by sending $t_n = 0$ to one letter and $t_n = 1$ to the other. There are two readings, and they give different words.
+Let $t$ be the Thue-Morse sequence \cite{oeisA010060}, $t_n$ the parity of the binary digit sum of $n$, and read an infinite word over a gasket-and-domino alphabet off it by sending $t_n = 0$ to one letter and $t_n = 1$ to the other, starting at $n = 0$, so that $w_i$ is the letter of $t_{i-1}$. There are two readings, and they give different words.
 
 \begin{theorem}[The Thue-Morse value]
 \label{thm:morse}
@@ -219,7 +241,7 @@ The certificate does not come from an ergodic theorem or from a fit. It comes fr
 
 \begin{fact}[The saturation ratio over one finite sweep]
 \label{fact:saturation}
-This is the result easiest to overstate: the exponents agree with the fill exponent, and the counts themselves do not. Along Thue-Morse over $(3,7)$ and over $1 \le L \le 2^{14}$, \vpy{} measures the ratio $\comp/\fil$ as taking its smallest value $0.0113766545$, above the floor $1/108$ proved in \cref{lem:sandwich}, and its largest value at $L \ge 5$ as the exact rationals $43397/186624$ under one reading and $151/648$ under the other. At $L = 4096$ the ratio is $0.2325367033$, which is neither the largest nor the smallest value of that sweep. Nothing here is a claim about the limit; \cref{con:accum} is what the paper says about that.
+This is the result easiest to overstate: the exponents agree with the fill exponent, and the counts themselves do not. Along Thue-Morse over $(3,7)$ and over $1 \le L \le 2^{14}$, \vpy{} measures the ratio $\comp/\fil$ as taking its smallest value $0.0113766545$, above the floor $1/108$ proved in \cref{lem:sandwich}, and its largest value at $L \ge 5$ as the exact rationals $43397/186624$ under one reading and $151/648$ under the other. The cutoff at $L \ge 5$ is not cosmetic: on the short prefixes \cref{thm:forms} gives the larger values $1/2$ at $L = 1$ and $1/4$ at $L = 4$ in one reading and $1/3$ at $L = 2$ in the other. At $L = 4096$ the ratio is $0.2325367033$, which is neither the largest nor the smallest value of that sweep. Nothing here is a claim about the limit; \cref{con:accum} is what the paper says about that.
 \end{fact}
 
 \subsection{Failure modes}
@@ -284,7 +306,7 @@ Positive lower density of both letters is not enough for $\chi$ to exist. Over $
 
 \begin{conjecture}[The accumulation set of the saturation]
 \label{con:accum}
-Whether $\comp/\fil$ converges at all along Thue-Morse over a gasket-and-domino alphabet is open, and the measurement of \cref{fact:saturation} is that it does not settle over $1 \le L \le 2^{14}$, its values there spreading over more than a factor of twenty. Its accumulation set is unidentified, and is plausibly the attractor of the two affine maps that the two letters induce on the normalised chart. \Cref{lem:sandwich} traps every value in $(1/108, 5/12]$.
+Whether $\comp/\fil$ converges at all along Thue-Morse over a gasket-and-domino alphabet is open, and the measurement of \cref{fact:saturation} is that it does not settle over $1 \le L \le 2^{14}$, its values there spreading over more than a factor of twenty. Its accumulation set is unidentified, and is plausibly the attractor of the two affine maps that the two letters induce on the normalised chart. \Cref{lem:sandwich} traps every value at $L \ge 4$ in $(1/108, 5/12]$.
 \end{conjecture}
 
 \begin{conjecture}[Where a non-stationary effect could still live]
@@ -354,7 +376,7 @@ $\comp(A_{c^L}) = \comp(A_c)^L$ for every code $c$, and $\comp(A_c) = 2$ exactly
 \end{lemma}
 
 \begin{proof}
-A unit design has fill $1$, so $A_{c^L}$ is one cell. A domino word of one orientation is a full line, hence connected, by \cref{lem:runs} applied repeatedly or directly: the filled set is a product of a single forced row with the whole column range. A heavy letter gives $1$ at every length by \cref{lem:heavy}. A diagonal letter is contact-free with fill $2$, so \cref{lem:cut} applies at every suffix and $\comp(A_{c^L}) = 2^L$. Finally $\comp(A_c)$ is $1$ for the eleven designs of fill $1, 3, 4$ and for the four dominoes, and $2$ for the two diagonals, since the two cells of a diagonal design are not $4$-adjacent.
+A unit design has fill $1$, so $A_{c^L}$ is one cell. A domino word of one orientation is a full line, hence connected, by \cref{lem:runs} applied repeatedly or directly: the filled set is a product of a single forced row with the whole column range. A heavy letter gives $1$ at every length by \cref{lem:heavy}. A diagonal letter is contact-free with fill $2$, so \cref{lem:cut} applies at every suffix and $\comp(A_{c^L}) = 2^L$. Finally $\comp(A_c)$ is $1$ for the nine designs of fill $1, 3, 4$ and for the four dominoes, and $2$ for the two diagonals, since the two cells of a diagonal design are not $4$-adjacent.
 \end{proof}
 
 \subsection{Proof of \texorpdfstring{\cref{thm:forms}}{the closed forms}}
@@ -371,7 +393,7 @@ Otherwise exactly one letter $z$ is contact-free; call the other $c$. If $w$ car
 
 \emph{Second regime.} If both letters are heavy then $\comp(A_w) = 1$ by \cref{lem:heavy} and induction on the length. If both are row dominoes then every letter forces the row digit at its place and leaves the column digit free, so the filled set is a single full row; if both are column dominoes the transposed argument gives a single full column. Either way $\comp(A_w) = 1$.
 
-\emph{Third regime.} Let $r$ be the length of the terminal run and suppose first $r < L$, so that place $L-r$ carries the other orientation. The suffix $u = w_{L-r..L}$ satisfies $h(A_u) = h(A_{w_{L-r}}) h(A_{w_L})^{r}$ and $v(A_u) = v(A_{w_{L-r}}) v(A_{w_L})^{r}$; one of the two orientations has $h = 0$ and the other has $v = 0$, so both products vanish. \Cref{lem:cut} gives $\comp(A_w) = \fil(A_{w_{1..L-r-1}}) \comp(A_u) = 2^{L-r-1}\comp(A_u)$. And $\comp(A_u) = 2$, computed directly: up to reflection $A_u$ is a column domino carrying in each of its two cells a copy of $A_{w_L^{\,r}}$, which is a full horizontal line at one row of its $2^r \times 2^r$ block; the two copies occupy blocks one above the other, so the two lines sit $2^r \ge 2$ rows apart and are not adjacent. Hence $\comp(A_w) = 2^{L-r}$. If $r = L$ the word is constant, $\comp(A_w) = 1 = 2^{L-r}$.
+\emph{Third regime.} Let $r$ be the length of the terminal run and suppose first $r < L$, so that place $L-r$ carries the other orientation. The suffix $u = w_{L-r..L}$ satisfies $h(A_u) = h(A_{w_{L-r}}) h(A_{w_L})^{r}$ and $v(A_u) = v(A_{w_{L-r}}) v(A_{w_L})^{r}$; one of the two orientations has $h = 0$ and the other has $v = 0$, so both products vanish. \Cref{lem:cut} gives $\comp(A_w) = \fil(A_{w_{1..L-r-1}}) \comp(A_u) = 2^{L-r-1}\comp(A_u)$. And $\comp(A_u) = 2$, computed directly: up to transposition $A_u$ is a column domino carrying in each of its two cells a copy of $A_{w_L^{\,r}}$, which is a full horizontal line at one row of its $2^r \times 2^r$ block; the two copies occupy blocks one above the other, so the two lines sit $2^r \ge 2$ rows apart and are not adjacent. Hence $\comp(A_w) = 2^{L-r}$. If $r = L$ the word is constant, $\comp(A_w) = 1 = 2^{L-r}$.
 
 \emph{Fourth regime.} This is \cref{lem:block}.
 
@@ -433,7 +455,7 @@ For the second claim, the suffix $w_{i^*..L}$ has the shape $q\, p^{\,\alpha}\, 
 \subsection{Proof of \texorpdfstring{\cref{thm:saturation,thm:phi}}{the two counting theorems}}
 
 \begin{proof}
-Both are a walk through the five regimes with the weights of \cref{thm:exponent} in hand. Write $\phi_c = \log 2$ if $c$ is a diagonal and $0$ otherwise, so that $\Phi(f) = f_a \phi_a + f_b \phi_b$, and write $\epsilon_c$ for the exponent weight and $\log k_c$ for the fill weight. Since two frequencies are free on the open simplex, $\chi$ equals the fill exponent at every interior $f$ if and only if $\epsilon_c = \log k_c$ for both letters, and $\Phi$ is exact at every interior $f$ if and only if $\epsilon_c = \phi_c$ for both letters.
+Both are a walk through the five regimes with the weights of \cref{thm:exponent} in hand. Write $\phi_c = \log 2$ if $c$ is a diagonal and $0$ otherwise, so that $\Phi(f) = f_a \phi_a + f_b \phi_b$, and write $\epsilon_c$ for the exponent weight and $\log k_c$ for the fill weight. Since one frequency is free on the open simplex, $\chi$ equals the fill exponent at every interior $f$ if and only if $\epsilon_c = \log k_c$ for both letters, and $\Phi$ is exact at every interior $f$ if and only if $\epsilon_c = \phi_c$ for both letters.
 
 \emph{First regime, $69$ alphabets.} $\epsilon_c = \log k_c$ for both letters, so all $69$ saturate. And $\epsilon_c = \phi_c$ requires $\log k_c = \phi_c$ for each letter, which holds for a unit ($k = 1$, $\phi = 0$) and a diagonal ($k = 2$, $\phi = \log 2$) and fails for a domino ($k = 2$, $\phi = 0$), a gasket ($k = 3$) and the full tile ($k = 4$). So $\Phi$ is exact on the $\binom{6}{2} = 15$ alphabets both of whose letters are units or diagonals and refuted on the other $54$.
 
@@ -447,7 +469,7 @@ Both are a walk through the five regimes with the weights of \cref{thm:exponent}
 
 Adding, saturation holds on $69 + 4 + 16 = 89$ and fails on $12 + 4 = 16$; $\Phi$ is exact on $15 + 12 = 27$ and refuted on $54 + 4 + 4 + 16 = 78$.
 
-For the strictly-between claim, an alphabet has $\Phi(f) < \chi(f) < $ fill exponent at interior $f$ exactly when saturation fails and $\Phi$ is refuted, since otherwise one of the two inequalities is an equality. Saturation fails only in the second and fourth regimes, and $\Phi$ is exact throughout the second, so only the fourth regime survives: the $4$ alphabets of a domino against the full tile, one class pair. At $f = (\tfrac12,\tfrac12)$ its exponent is $\tfrac12 \log 2$, against $\Phi = 0$ and a fill exponent of $\tfrac12\log 2 + \tfrac12 \log 4 = \tfrac32 \log 2$.
+For the strictly-between claim, an alphabet has $\Phi(f) < \chi(f) < $ fill exponent at interior $f$ exactly when saturation fails and $\Phi$ is refuted, since otherwise one of the two inequalities is an equality. Saturation fails only in the second and fourth regimes, and $\Phi$ is exact throughout the second, so only the fourth regime survives: the $4$ alphabets of a domino against the full tile, one class pair up to transposition. At $f = (\tfrac12,\tfrac12)$ its exponent is $\tfrac12 \log 2$, against $\Phi = 0$ and a fill exponent of $\tfrac12\log 2 + \tfrac12 \log 4 = \tfrac32 \log 2$.
 
 Finally the wrong-shape statement of \cref{thm:phi}. On each of the $78$, pick a vertex of the simplex at which the interior formula reads a positive value. In the first regime with a refuting letter $c$ the interior formula is the fill exponent, which reads $\log k_c > 0$ at the vertex $f = \delta_c$ for any letter of fill at least $2$; in the third it reads $\log 2$ at both vertices; in the fourth it reads $\log 2$ at the full-tile vertex; in the fifth it reads $\log 2$ or $\log 3$ at the two vertices. The constant word at that vertex has rate $0$, since its letter is not a diagonal in any of the cases listed. A continuous functional agreeing with $\chi$ in the interior takes the interior formula's value at that vertex by continuity, which is positive, so it misses the constant word.
 \end{proof}
@@ -455,7 +477,7 @@ Finally the wrong-shape statement of \cref{thm:phi}. On each of the $78$, pick a
 \subsection{Proof of \texorpdfstring{\cref{thm:morse}}{the Thue-Morse value}}
 
 \begin{proof}
-Two properties of the Thue-Morse sequence do all the work. First, no three consecutive terms are equal: among any three consecutive indices there is an even index $2n$ whose successor $2n+1$ is also among them, and $t_{2n} = t_n$ while $t_{2n+1} = 1 - t_n$, so those two differ. Second, the letter counts are exactly balanced: pairing indices $(2k, 2k+1)$, each pair contributes one of each letter, so a prefix of even length $L$ has exactly $L/2$ of each and a prefix of odd length has $\lfloor L/2 \rfloor$ or $\lceil L/2 \rceil$; in both cases $|N_q(L) - L/2| \le \tfrac12$.
+Two properties of the Thue-Morse sequence do all the work. First, no three consecutive terms are equal: among any three consecutive indices there is an even index $2n$ whose successor $2n+1$ is also among them, and $t_{2n} = t_n$ while $t_{2n+1} = 1 - t_n$, so those two differ. Second, the letter counts are exactly balanced: the prefix $w_{1..L}$ reads the indices $0, \dots, L-1$, and pairing them as $(2k, 2k+1)$ each pair contributes one of each letter, so a prefix of even length $L$ has exactly $L/2$ of each and a prefix of odd length has $\lfloor L/2 \rfloor$ or $\lceil L/2 \rceil$; in both cases $|N_q(L) - L/2| \le \tfrac12$.
 
 Fix a gasket-and-domino alphabet, a reading, and $L \ge 4$, which is what it takes for a gasket place and a domino place both to occur, so that $m$ and $i^*$ are defined. No lower bound on $T$ is needed, and none is available: under the reading sending $0$ to the gasket the prefix of length $4$ is $q\,p\,p\,q$, whose $i^*$ is $1$ and whose $T$ is therefore $\fil(A_\varepsilon) = 1$. By \cref{lem:sandwich} and the first property, $\comp(A_{w_{1..L}})/\fil(A_{w_{1..L}}) \in (1/108, 5/12]$, hence
 \[
@@ -525,7 +547,7 @@ Two scripts, both plain \texttt{python3} with nothing beyond the standard librar
 
 \texttt{python3 scripts/figure.py} runs in well under a second and writes \texttt{figures/ledger.svg}, the two-plate picture the repository page embeds, and \texttt{figures/plates.tex}, the TikZ that \cref{fig:witness,fig:ledger} are drawn from. Every cell of both plates is computed: the witness pictures are rendered from \cref{def:word} and their piece counts are read off the drawing, and each of the $210$ coloured cells of the square is a verdict recomputed from \cref{thm:forms}, as are the four counts in the caption. The script carries a verbatim copy of the drawing style shared by the papers in this collection.
 
-Every numbered statement above is either proved in \cref{sec:proofs} or re-checked by \vpy{}, and most are both. The exceptions are the three conjectures, which are labelled as such, and \cref{rem:monoid}, which is cited to \cite{voet} and not reproved here.
+Every numbered statement above is either proved, in \cref{sec:proofs} or in place as with \cref{prop:norm}, or re-checked by \vpy{}, and most are both. The exceptions are the three conjectures, which are labelled as such, and \cref{rem:monoid}, which is cited to \cite{voet} and not reproved here.
 
 \subsection*{Open problem}
 

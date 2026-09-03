@@ -26,7 +26,7 @@
 \author{Carlo Mitchener}
 \address{MrlyProd, Inc.}
 \email{carlo.mitchener@gmail.com}
-\date{First published 2026-08-23, revised 2026-09-02}
+\date{First published 2026-08-23, revised 2026-09-03}
 
 % PAPER
 \begin{document}
@@ -35,11 +35,33 @@
 Slice a Menger sponge along its main diagonal and count the cubes the cut meets; then do the same in every dimension. The count obeys a linear recurrence with constant coefficients of order at most $\lceil D/2 \rceil$ in dimension $D$, a fourfold sharpening of the order $2D+1$ that the standard carry automaton gives for free; exactness of that order is verified for $2 \le D \le 24$. A discrete Fourier extraction then turns a relaxed census into an exact product of cosines, and the formula decides half of the sign law this cut obeys: at every odd dimension $D$ with $D \not\equiv 1 \pmod 3$, the counting exponent sits strictly above the solid's dimension minus one, proved, with the parity carried by the single factor $(-1)^{D-1}(D-1)$ that every term of the formula ends in. Two exact identities frame what remains: the dominant root is pinned to within $2(D-1)/3$ of $f_D/3$ unconditionally, so the slice exponent converges to the generic Marstrand--Mattila value in every case, and the whole sign law is equivalent to the parity-free statement that the Perron carry vector puts more than a third of its mass on carries divisible by three. At $D = 3$ the machine outputs $\bigl(\begin{smallmatrix} 6 & 6 \\ 1 & 3\end{smallmatrix}\bigr)$, reproducing the published hexagon-triangle substitution spectrum and the integers $1, 6, 42, 306, 2250, 16578, 122202$ by a route that never mentions a hexagon.
 \end{abstract}
 
-\begin{center}
-\includegraphics[width=0.36\textwidth]{figures/avatar.png}
-\end{center}
+% TITLE PAGE
+\makeatletter
+\global\let\titledate\@date
+\global\let\paperabstract\@setabstracta
+\global\let\@date\@empty
+\global\let\@setabstract\relax
+\makeatother
+
 \maketitle
 
+\begin{center}
+\normalfont\footnotesize\titledate
+\end{center}
+
+\vspace*{\stretch{1}}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/avatar.png}
+\end{center}
+
+\vspace*{\stretch{1.25}}
+
+\newpage
+
+\paperabstract
+
+% BODY
 \section{Introduction}
 
 Take a cube. Cut it into $27$ equal subcubes and throw away the seven that touch the middle of a face or the middle of the cube; twenty survive. Repeat inside each survivor forever, and the limit is the Menger sponge. Now slice the sponge with the plane through its centre perpendicular to a main diagonal. The picture that falls out is famous: a hexagon full of six-pointed stars, first rendered by P\'erez-Duarte \cite{perezduarte}, popularised by Hart \cite{hart} and by Cook's slicing code \cite{cook}, and given its substitution rule and its dimension $1.8184$ by Abel \cite{abelstars}.

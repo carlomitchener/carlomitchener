@@ -26,7 +26,7 @@
 \author{Carlo Mitchener}
 \address{MrlyProd, Inc.}
 \email{carlo.mitchener@gmail.com}
-\date{First published 2026-08-23, revised 2026-09-02}
+\date{First published 2026-08-23, revised 2026-09-03}
 
 % PAPER
 \begin{document}
@@ -35,11 +35,33 @@
 Take a fractal built by keeping only certain digit patterns, and ask how often a point of it has coordinates with no common factor. This paper answers that for every such fractal of dimension greater than one. Fix a base $q \ge 2$, a dimension $D \ge 2$, and a set $F \subseteq \{0,\dots,q-1\}^D$ of admissible digit vectors, $k = |F|$; let $S_n$ be the $k^n$ points of $[0,q^n)^D$ whose base-$q$ digit vectors all lie in $F$, and let $A(n)$ count those with coordinate gcd $1$. If $F-F$ generates $\mathbb{Z}^D$ and $k > q$, then $A(n)/k^n \to B(F)\prod_{p \nmid q}(1-p^{-D})$, where $B(F) = \sum_{e \mid \mathrm{rad}(q)} \mu(e)k_e/k$ is an exact digit bracket. Away from the base the classical Euler factors survive untouched; at the base they are replaced, collectively and exactly, by $B(F)$, which at a composite base provably does not factor. The hypothesis $k>q$ says the attractor has dimension above one; on its own it is not enough. Consequences: the Sierpi\'nski gasket density $16/(3\pi^2)$; and, for $D$ even or $D=3$ with $B(F)>0$, that $A(n)$ satisfies no linear recurrence with constant rational coefficients.
 \end{abstract}
 
-\begin{center}
-\includegraphics[width=0.36\textwidth]{figures/avatar.png}
-\end{center}
+% TITLE PAGE
+\makeatletter
+\global\let\titledate\@date
+\global\let\paperabstract\@setabstracta
+\global\let\@date\@empty
+\global\let\@setabstract\relax
+\makeatother
+
 \maketitle
 
+\begin{center}
+\normalfont\footnotesize\titledate
+\end{center}
+
+\vspace*{\stretch{1}}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/avatar.png}
+\end{center}
+
+\vspace*{\stretch{1.25}}
+
+\newpage
+
+\paperabstract
+
+% BODY
 \section{Introduction}
 \label{sec:intro}
 
