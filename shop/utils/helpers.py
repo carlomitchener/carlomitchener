@@ -3,9 +3,17 @@ import os
 
 # ENV
 
+def find_env() -> str:
+    here = os.path.dirname(os.path.abspath(__file__))
+    while here != os.path.dirname(here):
+        candidate = os.path.join(here, ".env")
+        if os.path.exists(candidate): return candidate
+        here = os.path.dirname(here)
+    return ""
+
 def load_env(path: str = None):
-    path = path or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
-    if not os.path.exists(path): return
+    path = path or find_env()
+    if not path or not os.path.exists(path): return
     with open(path) as f:
         for line in f:
             line = line.strip()

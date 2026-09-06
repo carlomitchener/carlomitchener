@@ -273,7 +273,7 @@ def cut(cell: Cell3d):
 
 ![the four families, number 5, cut](files/gifs/showcase-cut-5.gif)
 
-And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/crates/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlyprod/mrlypy/](../mrlyprod/mrlypy/), which is what the scripts here actually run.
+And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/crates/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlypy/](../mrlypy/), which is what the scripts here actually run.
 
 For a tour of all four families, see [SHOWCASE.md](SHOWCASE.md).
 
@@ -394,7 +394,7 @@ Stack every snowflake from 1 to 55 like sheets of tracing paper and a picture su
 
 Ready to get your hands... snowy?
 
-The sponge, the slice and the renderers all live in `mrlypy/six`, inside this repo's [mrlyprod/mrlypy/](../mrlyprod/mrlypy/) — clone the repo and everything is already next door:
+The sponge, the slice and the renderers all live in `mrlypy/six`, inside this repo's [mrlypy/](../mrlypy/) — clone the repo and everything is already next door:
 
 ```bash
 git clone https://github.com/carlomitchener/carlomitchener

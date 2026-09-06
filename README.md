@@ -4,7 +4,7 @@ Entrepreneur, inventor and CEO (or as I prefer, *Captain*) of [MrlyProd, Inc.](h
 
 Born (October 7th 1998) and raised in Brussels, Belgium — French, Italian, American, and Belgian.
 
-- The *legacy* `mrlyprod/` folder in this repo is production-ready and hosts the `mrlyprod.com` Shopify store.
+- `shop/` is the store pipeline and `site/` the pages of [carlomitchener.com](https://carlomitchener.com).
 - The `mrlyprod` Rust repo is the research code: the MrlyMath crates.
 
 ## MrlyProd

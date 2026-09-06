@@ -1,14 +1,14 @@
 export { CATEGORY_NAMES as CATEGORIES } from "./categories";
 export { SHOP_URL } from "./cart";
 
-export const API_URL = "https://1332b7-26.myshopify.com/api/2026-01/graphql.json";
-export const PUBLIC_TOKEN = "40721a2494bd56d85b09daa4ab995506";
+export const API_URL = "https://{shop}/api/2026-01/graphql.json";
+export const PUBLIC_TOKEN = "";
 
 export const PRODUCT_COUNT = 1000;
 
 export const IMAGE_SIZE = 1000;
 export const IMAGE_FORMAT = "webp";
-export const CDN_PREFIX = "https://cdn.shopify.com/s/files/1/0657/6360/6710/files/";
+export const CDN_PREFIX = "https://cdn.shopify.com/s/files/1/{shop_id}/files/";
 
 import { cdnUrl } from "../../lib/browser/cdn";
 export const CDN_BASE = cdnUrl("mrlyshop/files");

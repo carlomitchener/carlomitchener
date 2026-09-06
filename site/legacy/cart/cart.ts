@@ -2,7 +2,7 @@ import type { CartItem } from "./types";
 import { getItem, setItem, removeItem } from "../../../lib/browser/storage";
 
 const STORAGE_KEY = "mrly_cart";
-export const SHOP_URL = "https://1332b7-26.myshopify.com/cart/";
+export const SHOP_URL = "https://{shop}/cart/";
 
 export function loadCart(): CartItem[] {
   try {
