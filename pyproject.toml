@@ -6,6 +6,7 @@ description = "MrlyMath and friends: one environment for every script in the rep
 requires-python = ">=3.10"
 dependencies = [
     "boto3",
+    "botocore[crt]",
     "numpy",
     "pillow",
 ]
