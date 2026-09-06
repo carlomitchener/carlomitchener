@@ -1,0 +1,20 @@
+<h1>Cart</h1>
+{% if cart.item_count == 0 %}
+<p>Empty. <a href="https://carlomitchener.com/">Back to carlomitchener.com</a></p>
+{% else %}
+<form action="{{ routes.cart_url }}" method="post">
+<table>
+{% for item in cart.items %}
+<tr>
+<td>{{ item.product.title }} {{ item.variant.title }}</td>
+<td><input type="number" name="updates[]" value="{{ item.quantity }}" min="0" size="2"></td>
+<td>{{ item.final_line_price | money }}</td>
+</tr>
+{% endfor %}
+<tr><td>Total</td><td></td><td>{{ cart.total_price | money }}</td></tr>
+</table>
+<button type="submit" name="update">Update</button>
+<button type="submit" name="checkout">Checkout</button>
+</form>
+<p><a href="https://carlomitchener.com/cart/">Back to carlomitchener.com</a></p>
+{% endif %}
