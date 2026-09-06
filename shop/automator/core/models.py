@@ -1,6 +1,8 @@
 from dataclasses import asdict, dataclass, field
 from .steps import Step
 
+TILE = "Tile"
+
 @dataclass
 class Product:
 
@@ -55,10 +57,10 @@ class Placement:
         return cls(**data)
 
     @property
-    def id(self):
-        width = f"{int(self.width * 100):04d}"
-        height = f"{int(self.height * 100):04d}"
-        dpi = f"{int(self.dpi):04d}"
+    def id(self) -> str:
+        width = f"{round(self.width * 100):04d}"
+        height = f"{round(self.height * 100):04d}"
+        dpi = f"{round(self.dpi):04d}"
         return f"{width}-{height}-{dpi}"
 
 @dataclass
@@ -70,7 +72,7 @@ class Variant:
     shopify_id: str = None
     printful_id: int = None
     synced: bool = None
-    price: str = None
+    cost: str = None
     size: str = None
     color: str = None
 
@@ -105,6 +107,10 @@ class Mockup:
         return f"{self.id} - {self.category} - {self.title}"
 
     @property
+    def is_tile(self) -> bool:
+        return self.category == TILE
+
+    @property
     def extension(self) -> str:
         return self.url.split("?")[0].split(".")[-1]
 
@@ -122,9 +128,7 @@ class Task:
     placements: list[Placement] = field(default_factory=list)
     variants: list[Variant] = field(default_factory=list)
     mockups: list[Mockup] = field(default_factory=list)
-    shopify_token: str = None
     metadata: dict = field(default_factory=dict)
-    logs: list[dict] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         data = {}
@@ -139,7 +143,6 @@ class Task:
         data["placements"] = [p.to_dict() for p in self.placements]
         data["variants"] = [v.to_dict() for v in self.variants]
         data["mockups"] = [m.to_dict() for m in self.mockups]
-        data["shopify_token"] = self.shopify_token
         data["metadata"] = self.metadata
         return data
 
@@ -156,8 +159,7 @@ class Task:
     def desc(self) -> str:
         if self.product.title:
             return f"{self.product.title} ({self.key})"
-        else:
-            return f"({self.key})"
+        return f"({self.key})"
 
     @property
     def stitch_color(self) -> str:
@@ -167,5 +169,4 @@ class Task:
         self.step = step.value
 
     def wipe(self) -> None:
-        self.shopify_token = None
         self.metadata = {}

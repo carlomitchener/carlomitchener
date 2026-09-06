@@ -1,125 +1,122 @@
-import boto3
-from config import AWS_ACCOUNT_ID, ROLE_ARN
+import json
+import os
+import sys
+from common import (
+    AUTOMATOR_NAME,
+    REGION,
+    aws,
+    gate,
+    maybe,
+    need,
+    say,
+    tmpfile,
+    verb,
+)
 
-scheduler_client = boto3.client("scheduler")
-REGION = scheduler_client.meta.region_name
-
-RATES = {
-    "mrlyshop-automator": "rate(8 minutes)",
-    "mrlyshop-storefront": "rate(8 minutes)",
+SCHEDULES = {
+    "automator": {
+        "name": AUTOMATOR_NAME,
+        "function": AUTOMATOR_NAME,
+        "rate": "rate(5 minutes)",
+        "timezone": "UTC",
+        "retries": 0,
+        "age": 60,
+    },
 }
 
-# HELPERS
+# STATE
 
-def schedule_exists(schedule_name: str) -> bool:
-    try:
-        scheduler_client.get_schedule(Name=schedule_name)
-        return True
-    except scheduler_client.exceptions.ResourceNotFoundException:
-        return False
+def live(name):
+    return maybe("scheduler", "get-schedule", "--name", name)
 
-def get_schedule(schedule_name: str) -> dict:
-    return scheduler_client.get_schedule(Name=schedule_name)
+def function_arn(function):
+    return f"arn:aws:lambda:{REGION}:{need('AWS_ACCOUNT_ID')}:function:{function}"
 
-# DEPLOY
-
-def deploy_schedule(function_name: str, schedule: str):
-    schedule_name = f"{function_name}"
-    lambda_arn = f"arn:aws:lambda:{REGION}:{AWS_ACCOUNT_ID}:function:{function_name}"
-    print(f"Deploying: {schedule_name}")
-    print(f"Schedule: {schedule}")
-    config = {
-        "Name": schedule_name,
-        "ScheduleExpression": schedule,
-        "ScheduleExpressionTimezone": "UTC",
-        "State": "DISABLED",
-        "FlexibleTimeWindow": {"Mode": "OFF"},
-        "Target": {
-            "Arn": lambda_arn,
-            "RoleArn": ROLE_ARN,
-            "RetryPolicy": {
-                "MaximumRetryAttempts": 0,
-                "MaximumEventAgeInSeconds": 60
-            }
-        }
+def target(spec):
+    return {
+        "Arn": function_arn(spec["function"]),
+        "RoleArn": need("ROLE_ARN"),
+        "Input": "{}",
+        "RetryPolicy": {
+            "MaximumRetryAttempts": spec["retries"],
+            "MaximumEventAgeInSeconds": spec["age"],
+        },
     }
-    if schedule_exists(schedule_name):
-        print("Updating existing schedule")
-        scheduler_client.update_schedule(**config)
-        print("Schedule updated")
-    else:
-        print("Creating new schedule")
-        scheduler_client.create_schedule(**config)
-        print("Schedule created")
-    return f"arn:aws:scheduler:{REGION}:{AWS_ACCOUNT_ID}:schedule/default/{schedule_name}"
 
-# ENABLE
-
-def enable_schedule(function_name: str):
-    schedule_name = f"{function_name}"
+def write(spec, state, exists):
+    path = tmpfile(json.dumps(target(spec)), ".json")
     try:
-        existing = get_schedule(schedule_name)
-        scheduler_client.update_schedule(
-            Name=schedule_name,
-            ScheduleExpression=existing["ScheduleExpression"],
-            ScheduleExpressionTimezone=existing.get("ScheduleExpressionTimezone", "UTC"),
-            State="ENABLED",
-            FlexibleTimeWindow=existing["FlexibleTimeWindow"],
-            Target=existing["Target"]
+        aws(
+            "scheduler", "update-schedule" if exists else "create-schedule",
+            "--name", spec["name"],
+            "--schedule-expression", spec["rate"],
+            "--schedule-expression-timezone", spec["timezone"],
+            "--state", state,
+            "--flexible-time-window", "Mode=OFF",
+            "--target", f"file://{path}",
         )
-        print(f"Enabled schedule: {schedule_name}")
-        return True
-    except Exception as e:
-        print(f"Error enabling schedule for {function_name}: {e}")
-        return False
+    finally:
+        os.remove(path)
 
-# DISABLE
+# VERBS
 
-def disable_schedule(function_name: str):
-    schedule_name = f"{function_name}"
-    try:
-        existing = get_schedule(schedule_name)
-        scheduler_client.update_schedule(
-            Name=schedule_name,
-            ScheduleExpression=existing["ScheduleExpression"],
-            ScheduleExpressionTimezone=existing.get("ScheduleExpressionTimezone", "UTC"),
-            State="DISABLED",
-            FlexibleTimeWindow=existing["FlexibleTimeWindow"],
-            Target=existing["Target"]
-        )
-        print(f"Disabled schedule: {schedule_name}")
-        return True
-    except Exception as e:
-        print(f"Error disabling schedule for {function_name}: {e}")
-        return False
+def show():
+    for key, spec in SCHEDULES.items():
+        found = live(spec["name"])
+        if not found:
+            say(f"{key:<12} {spec['name']:<28} none yet")
+            continue
+        say(f"{key:<12} {spec['name']:<28} {found['State']} {found['ScheduleExpression']}")
 
-# DELETE
+def sync():
+    key = need_key()
+    spec = SCHEDULES[key]
+    found = live(spec["name"])
+    state = found["State"] if found else "DISABLED"
+    steps = [
+        f"{'update' if found else 'create'} schedule {spec['name']}",
+        f"{spec['rate']} {spec['timezone']}, flexible window OFF",
+        f"target {spec['function']} through ROLE_ARN, retries {spec['retries']}, age {spec['age']} s",
+        f"state {state}",
+    ]
+    if not gate(f"schedules sync {key}", steps): return
+    write(spec, state, found is not None)
+    say(f"synced {spec['name']} at {state}")
 
-def delete_schedule(function_name: str):
-    schedule_name = f"{function_name}"
-    try:
-        scheduler_client.delete_schedule(Name=schedule_name)
-        print(f"Deleted schedule: {schedule_name}")
-        return True
-    except Exception as e:
-        print(f"Error deleting schedule for {function_name}: {e}")
-        return False
+def switch(state):
+    key = need_key()
+    spec = SCHEDULES[key]
+    found = live(spec["name"])
+    if not found:
+        raise SystemExit(f"refuse: {spec['name']} does not exist, sync it first")
+    if not gate(f"schedules {state.lower()} {key}", [
+        f"{spec['name']} {found['State']} -> {state}",
+    ]): return
+    write(spec, state, True)
+    say(f"{spec['name']} is {state}")
 
-# COMMANDS
+def enable():
+    switch("ENABLED")
 
-def deploy(name: str):
-    deploy_schedule(name, RATES[name])
+def disable():
+    switch("DISABLED")
 
-def enable(name: str):
-    enable_schedule(name)
+# MAIN
 
-def disable(name: str):
-    disable_schedule(name)
+def need_key():
+    if len(sys.argv) < 3 or sys.argv[2].startswith("--"):
+        raise SystemExit("refuse: schedule is required (" + " ".join(SCHEDULES) + ")")
+    key = sys.argv[2]
+    if key not in SCHEDULES:
+        raise SystemExit(f"refuse: {key} is not a schedule")
+    return key
 
-def delete(name: str):
-    delete_schedule(name)
+ACTIONS = {
+    "list": show,
+    "sync": sync,
+    "enable": enable,
+    "disable": disable,
+}
 
 if __name__ == "__main__":
-    pass
-    disable_schedule("mrlyshop-automator")
-    disable_schedule("mrlyshop-storefront")
+    ACTIONS[verb(list(ACTIONS))]()

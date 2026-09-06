@@ -27,9 +27,9 @@ class Placement:
 
     @property
     def id(self):
-        w = f"{int(self.width * 100):04d}"
-        h = f"{int(self.height * 100):04d}"
-        d = f"{int(self.dpi):04d}"
+        w = f"{round(self.width * 100):04d}"
+        h = f"{round(self.height * 100):04d}"
+        d = f"{round(self.dpi):04d}"
         return f"{w}-{h}-{d}"
 
 @dataclass
@@ -38,7 +38,7 @@ class Variant:
     id: int = None
     size: str = None
     color: str = None
-    price: str = None
+    cost: str = None
     is_ignored: bool = None
 
     def to_dict(self):
@@ -70,7 +70,7 @@ class Mockup:
 
     @property
     def alt(self):
-        return f"{self.category} - {self.title} - {self.id}"
+        return f"{self.id} - {self.category} - {self.title}"
 
 @dataclass
 class Product:
@@ -86,8 +86,7 @@ class Product:
     mockups: list[Mockup] = field(default_factory=list)
 
     def to_dict(self):
-        data = asdict(self)
-        return data
+        return asdict(self)
 
     @classmethod
     def from_dict(cls, data: dict):

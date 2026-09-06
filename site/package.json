@@ -1,0 +1,19 @@
+{
+  "name": "carlomitchener-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "kit": "bun scripts/kit.ts",
+    "snapshot": "bun scripts/snapshot.ts",
+    "fake": "bun scripts/fake.ts",
+    "build": "bun scripts/build.ts",
+    "dev": "bun scripts/dev.ts"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.8"
+  }
+}

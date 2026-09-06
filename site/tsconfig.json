@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "esnext",
+    "strict": false,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "react": ["./node_modules/react"],
+      "react/*": ["./node_modules/react/*"],
+      "react-dom": ["./node_modules/react-dom"],
+      "react-dom/*": ["./node_modules/react-dom/*"],
+      "mrlyjs/*": ["./data/mrlyjs/*"]
+    }
+  }
+}

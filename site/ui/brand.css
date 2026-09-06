@@ -1,0 +1,82 @@
+/* TINT */
+
+:root { --accent: #0062B8; --on-accent: #ffffff; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --accent: #0088FF; --on-accent: #0b0d10; }
+}
+
+:root[data-theme="dark"] { --accent: #0088FF; --on-accent: #0b0d10; }
+
+/* HEADER */
+
+.top { grid-template-columns: var(--head) minmax(0, 1fr) auto var(--head); }
+.top .word { font: 600 0.9rem/1 var(--sans); }
+.brand { display: flex; align-items: center; gap: var(--s2); justify-self: center; color: var(--fg); font-weight: 650; }
+.brand:hover { color: var(--accent); text-decoration: none; }
+.brand img { width: 32px; height: 32px; border-radius: var(--r1); }
+.bag { display: inline-flex; align-items: center; gap: var(--s2); padding: 0 var(--s3); min-height: 2rem; border: var(--hair); border-radius: var(--r2); color: var(--fg); font-size: 13px; }
+.bag:hover { border-color: var(--accent); text-decoration: none; }
+.bag .n { font-family: var(--mono); color: var(--dim); }
+
+@media (max-width: 40rem) {
+  .brand span { display: none; }
+  .bag span { display: none; }
+}
+
+/* GRID */
+
+.gallery.square { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.gallery.square img { aspect-ratio: 1; image-rendering: auto; object-fit: cover; }
+.card img { width: 100%; aspect-ratio: 1; display: block; border-radius: var(--r2); background: var(--art); object-fit: cover; }
+.tile h2 { font-size: 0.95rem; }
+.tile p.num { color: var(--fg); }
+
+/* STRIP */
+
+.strip { display: flex; flex-wrap: wrap; gap: var(--s2); margin: var(--s4) 0; }
+.strip img { width: 88px; height: 88px; image-rendering: pixelated; border: var(--hair); border-radius: var(--r1); background: var(--art); }
+.strip a:hover img { border-color: var(--accent); }
+
+/* DOWNLOADS */
+
+[data-downloads] { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); align-items: baseline; }
+[data-downloads] a { font-family: var(--mono); font-size: 0.75rem; }
+
+/* CONTROLS */
+
+.price { font-size: 1.4rem; margin-bottom: var(--s3); }
+.sizes { margin-bottom: var(--s3); }
+.sizes button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+button.primary[data-add] { width: 100%; justify-content: center; background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+button.primary[data-add]:disabled { opacity: 0.4; cursor: not-allowed; }
+.buy { display: flex; align-items: center; justify-content: center; min-height: 2.25rem; margin-top: var(--s2); border: var(--hair); border-radius: var(--r2); color: var(--fg); }
+.buy:hover { border-color: var(--accent); text-decoration: none; }
+.buy[aria-disabled] { opacity: 0.4; pointer-events: none; }
+.count { font-family: var(--mono); font-size: 0.8rem; color: var(--dim); margin: var(--s3) 0; }
+[data-share] { width: 100%; justify-content: center; }
+.filter { display: block; font-family: var(--mono); padding: var(--s2) 0; }
+.tabs.stack { flex-direction: column; gap: var(--s1); margin-top: var(--s3); }
+.tabs.stack a { display: block; padding: var(--s1) var(--s2); color: var(--dim); }
+.tabs.stack a:hover { color: var(--fg); text-decoration: none; }
+
+/* CART */
+
+.line { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto auto; gap: var(--s3); align-items: center; padding: var(--s3) 0; border-bottom: var(--hair); }
+.line img { width: 88px; height: 88px; object-fit: cover; border-radius: var(--r1); background: var(--art); }
+.line .who a { color: var(--fg); font-weight: 600; }
+.qty { display: flex; align-items: center; gap: var(--s2); margin-top: var(--s2); }
+.qty button { min-width: 2rem; justify-content: center; padding: 0; }
+.sum { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); margin-top: var(--s5); }
+.sum .buy { flex: 1 1 12rem; background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
+
+@media (max-width: 40rem) {
+  .line { grid-template-columns: 64px minmax(0, 1fr); }
+  .line img { width: 64px; height: 64px; }
+}
+
+/* FOOTER */
+
+.base .links { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); justify-content: center; font-size: 0.75rem; }
+.base .links a { color: var(--dim); }
+.base .links a:hover { color: var(--fg); }

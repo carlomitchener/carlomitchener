@@ -1,9 +1,10 @@
-from helpers import all_ids, load_product, save_product
-from models import Variant
+from catalog.helpers import load_product, save_product
+from catalog.models import Variant
 from typing import Tuple
 
 STANDARD_SIZES = [
-    "2XS", "XS", "S", "S/M", "M", "M/L", "L", "L/XL", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"
+    "3XS", "2XS", "XS", "S", "S/M", "M", "M/L", "L", "L/XL", "XL",
+    "2XL", "3XL", "4XL", "5XL", "6XL", "7XL"
 ]
 
 SPECIAL_SIZES = [
@@ -11,7 +12,7 @@ SPECIAL_SIZES = [
 ]
 
 KIDS_SIZES = [
-    "2T", "3T", "4T", "5T", "6", "6X", "7"
+    "2T", "3T", "4T", "5T", "6", "6X", "7", "8", "10", "12", "14"
 ]
 
 SIZE_CATEGORIES = {
@@ -89,7 +90,3 @@ def sort_products(ids: list[int]):
         print(f"Sorted: {product.desc} - {size_type.upper()}")
         save_product(product)
     print(f"Sorted {len(ids)} products")
-
-if __name__ == "__main__":
-    ids = all_ids()
-    sort_products(ids)

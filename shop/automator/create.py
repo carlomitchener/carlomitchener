@@ -3,17 +3,21 @@ import mrlypy.paint
 import mrlypy.tile
 import random
 import time
-from core.amazon import task_exists, load_paths, load_product, save_paths
-from core.helpers import get_admin_token, hex_key
-from core.models import Mockup, Placement, Printfile, Task, Variant
-from core.steps import Step
+from automator.core.api import logger
+from automator.core.errors import NoTaskError
+from automator.core.models import Mockup, Placement, Printfile, Task, Variant
+from automator.core.s3 import load_paths, load_product, save_paths, task_exists
+from automator.core.steps import Step
+from mrlypy.core.helpers import hex_key
 from mrlypy.paint.colors import get_primary_inks
 from typing import Any
+
+MAX_VARIANTS = 100
+MAX_PATHS = 20
 
 def create_task() -> Task:
     task = Task()
     task.created_at = int(time.time())
-    task.shopify_token = get_admin_token()
     while True:
         key = hex_key()
         if not task_exists(key):
@@ -22,16 +26,24 @@ def create_task() -> Task:
 
 def choose_path(task: Task) -> Task:
     paths = load_paths()
-    available_products = [product for product, open in paths.items() if open]
-    if not available_products:
-        for product in paths:
-            paths[product] = True
-        available_products = list(paths.keys())
-    product = random.choice(available_products)
+    open_products = [product for product, state in paths.items() if state is True]
+    if not open_products:
+        for product, state in paths.items():
+            if state is False:
+                paths[product] = True
+        open_products = [product for product, state in paths.items() if state is True]
+    if not open_products:
+        raise NoTaskError("every path is quarantined")
+    product = random.choice(open_products)
     paths[product] = False
     save_paths(paths)
     task.product.id = int(product)
     return task
+
+def quarantine(task: Task) -> None:
+    paths = load_paths()
+    paths[str(task.product.id)] = None
+    save_paths(paths)
 
 def parse_basics(task: Task, data: dict) -> Task:
     task.product.id = data["id"]
@@ -55,7 +67,7 @@ def parse_placements(task: Task, data: dict) -> Task:
     ]
     return task
 
-def create_keys(items: list[Any], task_key: str):
+def create_keys(items: list[Any], task_key: str) -> list[Any]:
     seen: set[str] = set()
     for item in items:
         while True:
@@ -67,19 +79,32 @@ def create_keys(items: list[Any], task_key: str):
         item.name = f"{task_key}-{key}"
     return items
 
+def dedup_variants(task: Task) -> Task:
+    kept: dict[str, Variant] = {}
+    for variant in task.variants:
+        first = kept.get(variant.size)
+        if first is None:
+            kept[variant.size] = variant
+            continue
+        if first.color != variant.color:
+            logger.info(f"{task.desc} dropped variant {variant.id} size {variant.size} colour {variant.color}")
+    task.variants = list(kept.values())[:MAX_VARIANTS]
+    return task
+
 def parse_variants(task: Task, data: dict) -> Task:
     task.variants = [
         Variant(
             id=variant["id"],
-            price=variant["price"],
+            cost=variant["cost"],
             size=variant["size"],
             color=variant["color"],
         )
         for variant in data["variants"]
         if not variant["is_ignored"]
     ]
+    task = dedup_variants(task)
     task.variants = create_keys(task.variants, task.key)
-    return task  
+    return task
 
 def parse_mockups(task: Task, data: dict) -> Task:
     task.mockups = [
@@ -100,13 +125,12 @@ def parse_printfiles(task: Task) -> Task:
     for placement in task.placements:
         if placement.id in printfiles:
             continue
-        printfile = Printfile(
+        printfiles[placement.id] = Printfile(
             id=placement.id,
             width=placement.width,
             height=placement.height,
-            dpi=placement.dpi
+            dpi=placement.dpi,
         )
-        printfiles[placement.id] = printfile
     task.printfiles = list(printfiles.values())
     task.printfiles = create_keys(task.printfiles, task.key)
     return task
@@ -133,18 +157,19 @@ def create_variation(task: Task) -> Task:
     task.variation = gen.to_dict()
     return task
 
+def open_product(task: Task) -> Task:
+    for _ in range(MAX_PATHS):
+        task = choose_path(task)
+        try:
+            return parse_product(task)
+        except NoTaskError:
+            quarantine(task)
+            logger.info(f"quarantined product {task.product.id}, no product json in the bucket")
+    raise NoTaskError(f"no product json under {MAX_PATHS} open paths")
+
 def mrly_create() -> Task:
     task = create_task()
-    task = choose_path(task)
-    task = parse_product(task)
+    task = open_product(task)
     task = create_variation(task)
     task.place(Step.GENERATE)
     return task
-
-def test_create():
-    from core.amazon import save_task
-    task = mrly_create()
-    save_task(task)
-
-if __name__ == "__main__":
-    test_create()

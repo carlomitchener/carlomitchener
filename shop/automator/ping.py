@@ -1,34 +1,31 @@
-from core.errors import Retry
-from core.helpers import extract_gid, printful_request
-from core.models import Task
-from core.steps import Step
+from automator.core.api import extract_gid, printful_request
+from automator.core.errors import Retry, TaskAborted
+from automator.core.models import Task
+from automator.core.steps import Step
 
 PRINTFUL_PING_URL = "sync/products/@"
+MAX_PING_ATTEMPTS = 12
+
+def wait(task: Task) -> None:
+    count = task.metadata.get("ping_count", 0) + 1
+    task.metadata["ping_count"] = count
+    if count >= MAX_PING_ATTEMPTS:
+        raise TaskAborted(f"ping_count {count} for task {task.key}")
+    raise Retry(f"Current: {Step.PING}. Next: {Step.PING} ({count}/{MAX_PING_ATTEMPTS})")
 
 def mrly_ping(task: Task) -> Task:
-    result = printful_request(
-        task=task,
-        method="GET",
-        url=f"{PRINTFUL_PING_URL}{extract_gid(task.product.shopify_id)}"
-    )
+    shopify_id = extract_gid(task.product.shopify_id)
+    result = printful_request(task, "GET", f"{PRINTFUL_PING_URL}{shopify_id}", allow_404=True)
     if not result:
-        raise Retry(f"Current: {Step.PING}. Next: {Step.PING}")
+        wait(task)
     data = result["result"]
-    sync_product = data["sync_product"]
-    sync_variants = data["sync_variants"]
-    task.product.printful_id = sync_product["id"]
-    sv_map = {sv["sku"]: sv["id"] for sv in sync_variants}
+    task.product.printful_id = data["sync_product"]["id"]
+    synced = {sv["sku"]: sv["id"] for sv in data["sync_variants"]}
     for variant in task.variants:
-        variant.printful_id = sv_map[variant.name]
+        if variant.name not in synced:
+            wait(task)
+    for variant in task.variants:
+        variant.printful_id = synced[variant.name]
     task.product.synced = True
     task.place(Step.SYNC)
     return task
-
-def test_ping():
-    from core.amazon import load_task, save_task
-    task = load_task()
-    try: task = mrly_ping(task); save_task(task)
-    except Retry: save_task(task)
-
-if __name__ == "__main__":
-    test_ping()

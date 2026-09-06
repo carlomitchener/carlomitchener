@@ -1,11 +1,13 @@
-import os
-from utils.helpers import load_env
+from env import load_env, need
 
 load_env()
 
 # AWS
-MRLYSHOP_BUCKET = os.environ["MRLYSHOP_BUCKET"]
+
+CARLOMITCHENER_BUCKET = need("CARLOMITCHENER_BUCKET")
 
 # PRINTFUL
-PRINTFUL_API_KEY = os.environ["PRINTFUL_API_KEY"]
+
+PRINTFUL_API_KEY = need("PRINTFUL_API_KEY")
 PRINTFUL_URL = "https://api.printful.com"
+DELAY = 0.6

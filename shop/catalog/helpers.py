@@ -1,56 +1,61 @@
 import json
 import os
 from enum import Enum
-from models import Product
-from utils.helpers import load_json, save_json
+from catalog.models import Product
+from env import SHOP_DIR, load_json, save_json
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = SHOP_DIR
+
+CATALOG = os.path.join(ROOT, "files/catalog.json")
+CORRECTIONS = os.path.join(ROOT, "files/corrections.json")
 
 class Category(Enum):
-    ACCESSORIES = "Accessories"
-    BAGS = "Bags"
-    KIDS = "Kids"
-    MEN = "Men"
-    UNISEX = "Unisex"
-    WOMEN = "Women"
-    YOUTH = "Youth"
+    ACCESSORIES = "accessories"
+    BAGS = "bags"
+    KIDS = "kids"
+    MEN = "men"
+    UNISEX = "unisex"
+    WOMEN = "women"
 
-def load_product(id: int) -> Product:
-    data = load_json(os.path.join(ROOT, f"data/products/{id}.json"))
-    return Product.from_dict(data)
+# CATALOG
 
-def save_product(product: Product):
-    filepath = os.path.join(ROOT, f"data/products/{product.id}.json")
-    save_json(filepath, product.to_dict())
+def load_catalog() -> list[dict]:
+    return load_json(CATALOG)
 
-def print_product(id: int):
-    product = load_json(os.path.join(ROOT, f"data/products/{id}.json"))
-    print(json.dumps(product, indent=2))
+def load_corrections() -> dict:
+    return load_json(CORRECTIONS)
+
+def catalog_map() -> dict:
+    return {row["id"]: row for row in load_catalog()}
 
 def all_ids(category: Category = None) -> list[int]:
-    products = load_json(os.path.join(ROOT, "files/catalog.json"))
+    rows = load_catalog()
     if category:
-        products = [p for p in products if p["category"] == category.value]
-    return [product["id"] for product in products]
+        rows = [r for r in rows if r["category"] == category.value]
+    return [r["id"] for r in rows]
 
-def sort_products():
-    products = load_json(os.path.join(ROOT, "files/catalog.json"))
-    sorted_products = sorted(products, key=lambda x: (x["category"], x["title"]))
-    if products != sorted_products:
-        save_json(os.path.join(ROOT, "files/catalog.json"), sorted_products)
-        print(f"Sorted {len(sorted_products)} products alphabetically")
+def live_ids() -> list[int]:
+    return [r["id"] for r in load_catalog() if r.get("live")]
+
+def sort_catalog():
+    rows = load_catalog()
+    ordered = sorted(rows, key=lambda r: (not r.get("live"), r["category"], r["title"]))
+    if rows != ordered:
+        save_json(CATALOG, ordered)
+        print(f"Sorted {len(ordered)} catalog rows, live first")
     else:
-        print("Products are already sorted alphabetically")
+        print("Catalog rows are already sorted, live first")
 
-def create_dictionary():
-    products = load_json(os.path.join(ROOT, "files/catalog.json"))
-    dictionary = {}
-    for product in products:
-        category = product["category"]
-        title = product["title"]
-        dictionary[product["id"]] = f"{category}, {title}"
-    save_json(os.path.join(ROOT, "files/dictionary.json"), dictionary)
-    print(f"Created dictionary with {len(dictionary)} products")
+# PRODUCTS
 
-if __name__ == "__main__":
-    create_dictionary()
+def product_path(id: int) -> str:
+    return os.path.join(ROOT, f"data/products/{id}.json")
+
+def load_product(id: int) -> Product:
+    return Product.from_dict(load_json(product_path(id)))
+
+def save_product(product: Product):
+    save_json(product_path(product.id), product.to_dict())
+
+def print_product(id: int):
+    print(json.dumps(load_json(product_path(id)), indent=2))

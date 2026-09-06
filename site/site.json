@@ -1,0 +1,75 @@
+{
+  "title": "carlomitchener",
+  "root": "https://carlomitchener.com",
+  "since": 2013,
+  "prefix": "cm-",
+  "font": false,
+  "settings": false,
+  "tint": {
+    "light": { "accent": "#0062B8", "on": "#ffffff" },
+    "dark": { "accent": "#0088FF", "on": "#0b0d10" }
+  },
+  "live": 14,
+  "country": "US",
+  "api": "2026-07",
+  "printful": "https://www.printful.com/custom/products/all/",
+  "art": "/art",
+  "tiles": [1, 3, 5, 7, 9],
+  "tree": [
+    { "name": "Shop", "href": "/" },
+    { "name": "Collections", "href": "/collections/", "fill": "collections", "open": true },
+    { "name": "Cart", "href": "/cart/" },
+    { "name": "About", "href": "/about/" }
+  ],
+  "socials": [{ "name": "GitHub", "href": "https://github.com/carlomitchener" }],
+  "contact": "help@mrly.net",
+  "company": { "name": "MrlyProd, Inc.", "href": "https://mrlyprod.com" },
+  "emoji": {
+    "all": "💈",
+    "accessories": "🧢",
+    "bags": "🎒",
+    "kids": "🧸",
+    "men": "👨",
+    "unisex": "🦄",
+    "women": "👩",
+    "youth": "🛼"
+  },
+  "links": [
+    { "name": "printful website", "href": "https://www.printful.com" },
+    { "name": "shipping", "href": "https://www.printful.com/shipping" },
+    { "name": "status", "href": "https://www.printfulstatus.com" },
+    { "name": "help center", "href": "https://help.printful.com" },
+    { "name": "recent updates", "href": "https://www.printful.com/recent-updates" },
+    { "name": "sustainability", "href": "https://www.printful.com/sustainability-responsibility" }
+  ],
+  "inputs": {
+    "shop": { "path": "data/shop.json" },
+    "catalog": { "path": "../shop/files/catalog.json" },
+    "tasks": { "path": "data/tasks", "deep": true, "ext": ".json" },
+    "pages": { "path": "pages", "ext": ".md" },
+    "public": { "path": "public" }
+  },
+  "kit": {
+    "path": "data/mrlyjs/ui",
+    "out": "ui",
+    "hash": true,
+    "files": ["tokens.css", "base.css", "chrome.css", "chrome.js"]
+  },
+  "assets": [
+    { "path": "ui", "out": "ui", "hash": true, "ext": ".css" },
+    { "path": "js", "out": "js", "hash": true, "ext": ".js" }
+  ],
+  "robots": { "disallow": ["/cart/"] },
+  "manifest": {
+    "name": "carlomitchener",
+    "short_name": "carlomitchener",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0b0d10",
+    "theme_color": "#0b0d10",
+    "icons": [
+      { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+      { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    ]
+  }
+}

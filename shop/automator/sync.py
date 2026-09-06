@@ -1,75 +1,63 @@
-import random
 import time
-from core.errors import Retry, TaskAborted
-from core.helpers import printful_request
-from core.models import Task, Variant
-from core.steps import Step
+from automator.core.api import printful_request
+from automator.core.errors import Retry, TaskAborted
+from automator.core.models import Task, Variant
+from automator.core.steps import Step
 
 PRINTFUL_SYNC_URL = "sync/variant/"
 VISIBLE = False
-TOKENS = random.randint(1, 9)
+DELAY = 0.6
+BATCH = 30
 
 def fetch_files(task: Task) -> list[dict]:
     files: list[dict] = []
     for placement in task.placements:
-        printfile = next(
-            pf for pf in task.printfiles
-            if pf.id == placement.id
-        )
+        printfile = next(pf for pf in task.printfiles if pf.id == placement.id)
         files.append({
             "type": placement.name,
             "url": printfile.url,
             "filename": f"{printfile.name}.png",
-            "visible": VISIBLE
+            "visible": VISIBLE,
         })
     return files
 
 def create_payload(task: Task, variant: Variant) -> dict:
     return {
         "variant_id": variant.id,
-        "retail_price": variant.price,
+        "retail_price": variant.cost,
         "sku": variant.name,
         "is_ignored": False,
         "files": fetch_files(task),
-        "options": [
-            {
-                "id": "stitch_color",
-                "value": task.stitch_color
-            }
-        ]
+        "options": [{"id": "stitch_color", "value": task.stitch_color}],
     }
 
 def sync_variant(task: Task, variant: Variant) -> Task:
     payload = create_payload(task, variant)
     result = printful_request(
-        task=task,
-        method="PUT",
-        url=f"{PRINTFUL_SYNC_URL}{variant.printful_id}",
-        data=payload
+        task,
+        "PUT",
+        f"{PRINTFUL_SYNC_URL}{variant.printful_id}",
+        data=payload,
     )
     if not result:
         raise Retry(f"Current: {Step.SYNC}. Next: {Step.SYNC}")
-    synced = result["result"]["sync_variant"]["synced"]
-    if not synced:
-        raise TaskAborted("Variant not synced")
+    sync_variant_data = result["result"]["sync_variant"]
+    if not sync_variant_data["synced"]:
+        raise TaskAborted(f"variant {variant.name} not synced")
+    if sync_variant_data["is_ignored"]:
+        raise TaskAborted(f"variant {variant.name} ignored")
     variant.synced = True
-    is_ignored = result["result"]["sync_variant"]["is_ignored"]
-    if is_ignored:
-        raise TaskAborted("Variant ignored")
     return task
 
 def unsynced_variants(task: Task) -> list[Variant]:
     return [v for v in task.variants if not v.synced]
 
 def process_batch(task: Task) -> Task:
-    unsynced = unsynced_variants(task)
-    batch = unsynced[:TOKENS]
-    count = len(batch)
+    batch = unsynced_variants(task)[:BATCH]
     for i, variant in enumerate(batch):
         task = sync_variant(task, variant)
-        if i < count - 1:
-            delay = random.randint(1, 9) / 10
-            time.sleep(delay)
+        if i < len(batch) - 1:
+            time.sleep(DELAY)
     return task
 
 def mrly_sync(task: Task) -> Task:
@@ -77,15 +65,5 @@ def mrly_sync(task: Task) -> Task:
     if unsynced_variants(task):
         task.place(Step.SYNC)
         raise Retry(f"Current: {Step.SYNC}. Next: {Step.SYNC}")
-    else:
-        task.place(Step.PUBLISH)
-        return task
-
-def test_sync():
-    from core.amazon import load_task, save_task
-    task = load_task()
-    try: task = mrly_sync(task); save_task(task)
-    except Retry: save_task(task)
-
-if __name__ == "__main__":
-    test_sync()
+    task.place(Step.PUBLISH)
+    return task

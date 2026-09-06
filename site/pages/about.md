@@ -1,0 +1,5 @@
+Carlo Mitchener, born in Brussels in 1998, French, Italian, American and Belgian. MrlyProd is the company; the name came from a PSN account in 2012 and never left. In 2017 a new logo for it turned out to be a square with four holes, which turned out to be the first iteration of the next Sierpinski carpet. That accident became MrlyMath, the mathematics of designs on the corners of a cube, and everything on [mrly.net](https://mrly.net) grows out of it.
+
+This shop is where the code started. The first version taught me to program: a generator that paints a design, a pipeline that puts it on a bandana, a page that sells it. It is back, rebuilt, and it runs itself: one product at a time, a new design every hour, each one alive for fourteen days and then gone.
+
+The dream is to put MrlyMath on everything physical. Everything digital stays free: every printfile and every tile on this site is a download link, at full resolution, no account, no email. You pay for cotton and shipping, never for the mathematics.
