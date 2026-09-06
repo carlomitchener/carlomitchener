@@ -11,6 +11,7 @@ Formal write-ups of [MrlyMath](../README.md#mrlymath): the mathematics that fall
 
 - [coprime-density-above-dimension-one](coprime-density-above-dimension-one/) - the visible-point density of every digit-restricted fractal above dimension one, exactly.
 - [lemma-b-pincer](lemma-b-pincer/) - the missing dimension-one estimate squeezed from both edges, and two routes past it proved shut.
+- [sparse-mertens-under-grh](sparse-mertens-under-grh/) - under GRH, the Mobius function cancels by a power over the integers missing a digit, at every base from 3690 up.
 - [menger-pairwise-coprimality](menger-pairwise-coprimality/) - drilling the sponge's holes costs its coordinates exactly 12.25 percent of their pairwise-coprimality odds.
 - [walsh-spectrometer](walsh-spectrometer/) - the exact slice ink of all 256 parity designs, with the design's Walsh spectrum as the coefficients.
 - [slice-recurrence-order](slice-recurrence-order/) - Menger diagonal slice counts obey a recurrence of order exactly ceil(D/2), and at odd D != 1 mod 3 their exponent provably beats the generic slice dimension.
