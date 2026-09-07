@@ -27,6 +27,7 @@ Formal write-ups of [MrlyMath](../README.md#mrlymath): the mathematics that fall
 
 - Written and checked, not shipped: the threshold each aims at is still under review upstream.
 - [first-base-below-a-quarter](first-base-below-a-quarter/) - the least base whose one-missing-digit set has Fourier `l^1` exponent below a quarter, and the least base whose every digit clears.
+- [design-dirichlet-inverse](design-dirichlet-inverse/) - the design's own Mobius function, and the zeros of its zeta that push its partial sums past the design's own size; still owes its outside read.
 
 ## BUILD
 
