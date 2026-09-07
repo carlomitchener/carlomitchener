@@ -1,0 +1,650 @@
+% PREAMBLE
+\documentclass[11pt]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage[capitalize]{cleveref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{fact}[theorem]{Fact}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The First Base Below a Quarter}
+\author{Carlo Mitchener}
+\address{MrlyProd, Inc.}
+\email{carlo.mitchener@gmail.com}
+\date{First published 2026-09-07}
+
+% PAPER
+\begin{document}
+
+\begin{abstract}
+Drop one digit from a base and look at the numbers you can still write. How much of the Fourier mass of that set survives is measured by a single number, its $\ell^1$ exponent, and a sieve turns on when the number falls below a quarter. This paper locates the threshold. Base $21$ with the digit $0$ removed is the first base carrying any such set below a quarter; base $34$ is the first base whose every excluded digit clears; and a bound that names the base and forgets the digit proves clearance for every base from $126$ up, so the family floor $34$ is exact.
+\end{abstract}
+
+% TITLE PAGE
+\makeatletter
+\global\let\titledate\@date
+\global\let\paperabstract\@setabstracta
+\global\let\@date\@empty
+\global\let\@setabstract\relax
+\makeatother
+
+\maketitle
+
+\begin{center}
+\normalfont\footnotesize\titledate
+\end{center}
+
+\vspace*{\stretch{1}}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/avatar.png}
+\end{center}
+
+\vspace*{\stretch{1.25}}
+
+\newpage
+
+\paperabstract
+
+% BODY
+\emergencystretch=2em
+
+\section{Introduction}
+\label{sec:intro}
+
+Fix a base $q$ and cross out one digit. What is left is a set of integers: those you can still write, the ones whose base-$q$ expansion never uses the missing digit. In base $10$ with the digit $7$ removed these are $1, 2, \dots, 6, 8, 9, 10, \dots, 69, 80, \dots$, and there are $9^{L}$ of them below $10^{L}$, so the set is thin but not very thin. Sets of this shape are the standard test bed for analytic number theory on a fractal: Maynard proved that infinitely many of them are prime in base $10$ \cite{may}, and everything in that proof passes through the set by way of its Fourier transform.
+
+The transform is one function on the circle. Write
+\[
+  \widehat{F}(t) \;=\; \frac{1}{q-1}\sum_{\substack{0 \le a < q \\ a \ne a_{0}}} e(a t), \qquad e(x) = e^{2\pi i x},
+\]
+for the normalised character sum of the surviving digits $F = \{0, \dots, q-1\} \setminus \{a_{0}\}$, and $\widehat{F}_{L}(t) = \prod_{j<L} \widehat{F}(q^{j} t)$ for the transform of the $L$-digit strings. A sieve does not read $\widehat{F}_{L}$ pointwise; it reads how much of it survives when the whole grid of $q^{L}$ frequencies is added up in absolute value. The growth rate of that grid sum is one number, the \emph{$\ell^{1}$ exponent} $\alpha_{1}$ of \cref{def:alpha}, and it is the number this paper is about. Small $\alpha_{1}$ means the digit restriction cancels; $\alpha_{1}$ close to $1$ means it barely does.
+
+\begin{figure}[t]
+\centering
+\input{figures/lemma.tex}
+\caption{Base $21$. The two curves are $|\widehat{F}|$ with the digit $0$ removed and with the digit $10$ removed, on the half period $[0, \tfrac12]$; the envelope above them is the digit-blind majorant $u_{q}$ of \cref{lem:dom}, which names the base and forgets the digit. The exponent $\alpha_{1}$ is the growth rate of the grid sums of the lower curves; the theorem of this paper is what the envelope alone already forces.}
+\label{fig:lemma}
+\end{figure}
+
+The published values sit near a third. In base $10$ with one digit removed the bound behind \cite{may} is $\alpha_{1} \le 27/77 = 0.35065$, and Karwatowski \cite{kar} carries the same shape of bound to every base $b \ge 10$. A quarter is a different demand, and the question is where it is first met.
+
+The exponent has been read for several different purposes, and the readings do not compete. Erd\H{o}s, Mauduit and S\'ark\"ozy \cite{ems} and Konyagin \cite{kon} distribute missing-digit sets in residue classes; \cite{may} and \cite{may22} consume the exponent as a level of distribution for primes, \cite{nath} as one of four Fourier norms in a Bombieri-Vinogradov theorem, and Leng and Sawhney \cite{ls} as the single input $g^{\varepsilon k}$ that settles ternary Goldbach on such a set at large base. Chow, Varj\'u and Yu \cite{cvy} study the same quantity against the threshold $1/2$ rather than $1/4$, and their Proposition 2.4 puts it above $1/2$ for every base $b \ge 5$ with one digit removed, which is the opposite side of a different line and consistent with everything below. What none of these fixes is the least base at which a given threshold is met, which is the question here.
+
+\begin{remark}[Why a quarter, and why this is only motivation]
+\label{rem:motive}
+A quarter is the threshold at which one conditional route to a M\"obius asymptotic over a digit-restricted set switches on. Expanding the indicator of the set in additive characters modulo $q^{L}$ costs exactly the $\ell^{1}$ mass of $\widehat{F}_{L}$, and feeding each frequency into the uniform bound $\max_{\theta}|\sum_{n \le x}\mu(n)e(n\theta)| \ll_{\varepsilon} x^{3/4+\varepsilon}$ that the generalized Riemann hypothesis buys \cite{bh91} produces a power saving against the set's own counting function precisely when $\alpha_{1} < 1/4$. That implication is not proved here and nothing below depends on it: it is the reason the number $1/4$ is interesting, not a theorem of this paper. Every statement in \cref{sec:results} is a statement about $\alpha_{1}$ alone.
+\end{remark}
+
+Three results answer the question, and they answer it in the two different senses the question has.
+
+\begin{theorem}[The digit-uniform bound]
+\label{thm:main0}
+For every base $q \ge 126$ and every excluded digit $a_{0}$, $\alpha_{1} < 1/4$. The bound is uniform in the digit: it is deduced from a majorant that names $q$ and forgets $a_{0}$. It is also sharp for its own method, in that the same chain fails at $q = 125$. \cref{thm:main} below is the explicit form, with the constant it depends on.
+\end{theorem}
+
+The second sense is computational, and it is where the two floors are.
+
+\begin{itemize}
+\item \emph{The first base.} $q = 21$ with the digit $0$ removed is the least base carrying any one-missing-digit set with $\alpha_{1} < 1/4$. It clears by about $10^{-5}$. Every one of the $108$ distinct sets of every base $3 \le q \le 20$ has $\alpha_{1} > 1/4$ (\cref{fact:floor21}).
+\item \emph{The first family.} $q = 34$ is the least base whose \emph{every} excluded digit clears; all $17$ of its distinct sets do, while each of the bases $21 \le q \le 33$ still carries a digit that misses (\cref{fact:floor34}). Together with \cref{thm:main0} and a certified sweep of the bases in between, every base $q \ge 34$ clears at every excluded digit, and $34$ is exact.
+\end{itemize}
+
+The two floors are not the same number because clearing the threshold is easier at some excluded digits than at others: removing $0$ or $q-1$ is cheapest, removing a digit near the middle is dearest, and between $21$ and $33$ the cheap digits have crossed while the dear ones have not. The cover image is that whole picture: one dash per set, one column per base from $10$ to $40$, dark above the quarter line and light below it, one light dash first at base $21$ and every dash of every column light from base $34$ on.
+
+The proof of \cref{thm:main0} is elementary and self-contained. It rests on one observation: the triangle inequality replaces the excluded digit by a phase of modulus one, leaving a majorant built from the Dirichlet kernel that no longer mentions which digit was removed. The level product of that majorant expands over subsets of the digit positions, every maximal run of consecutive positions telescopes into a single Dirichlet kernel at a higher modulus, and what is left is a sum of $2^{N}$ Lebesgue sums, each of which is bounded by the classical Lebesgue constant of its own modulus. The bookkeeping closes into a cubic, and the cubic clears a quarter from $q = 126$ up.
+
+The computations are of a different kind and are labelled as such throughout: a transfer matrix on windows of digits brackets $\alpha_{1}$ from both sides in a way that a machine can check, and \cref{sec:repro} names the script, its runtime and its exact finite domain. No claim below leans on an unproved lemma.
+
+\section{The exponent and the machine that brackets it}
+\label{sec:defs}
+
+Throughout, $q \ge 3$ is an integer base, $a_{0} \in \{0, \dots, q-1\}$ is the excluded digit, $F = \{0,\dots,q-1\}\setminus\{a_{0}\}$ and $k = |F| = q-1$. We write $e(x) = e^{2\pi i x}$ and
+\[
+  D_{M}(t) \;=\; \sum_{0 \le a < M} e(a t) \cdot e\!\left(-\tfrac{M-1}{2}t\right) \;=\; \frac{\sin(\pi M t)}{\sin(\pi t)}
+\]
+for the Dirichlet kernel, with $D_{M}(t) = M$ at integer $t$.
+
+\begin{definition}[The transform]
+\label{def:hat}
+\[
+  \widehat{F}(t) = \frac{1}{q-1}\sum_{a \in F} e(a t), \qquad \widehat{F}_{L}(t) = \prod_{0 \le j < L}\widehat{F}(q^{j}t).
+\]
+\end{definition}
+
+$\widehat{F}_{L}$ is the normalised transform of the set of $L$-digit strings over $F$, because the digits of a string are independent. Both are $1$-periodic and both satisfy $|\widehat{F}(1-t)| = |\widehat{F}(t)|$, since the coefficients are real.
+
+\begin{definition}[The shifted grid sum and the exponent]
+\label{def:alpha}
+For $N \ge 1$ and $x \in \mathbb{R}$ put
+\[
+  \Sigma_{N}(x) \;=\; \sum_{0 \le i < q^{N}} \; \prod_{0 \le j < N} \left|\widehat{F}\!\left(q^{j}\!\left(x + \tfrac{i}{q^{N}}\right)\right)\right| \;=\; \sum_{0 \le i < q^{N}} \left|\widehat{F}_{N}\!\left(x + \tfrac{i}{q^{N}}\right)\right| ,
+\]
+and $S_{N} = \max_{x} \Sigma_{N}(x)$. The \emph{$\ell^{1}$ exponent} of the pair $(q, a_{0})$ is
+\[
+  \alpha_{1} \;=\; \alpha_{1}(q, a_{0}) \;=\; \lim_{N \to \infty} \frac{1}{N}\log_{q} S_{N} \;=\; \inf_{N \ge 1} \frac{1}{N}\log_{q} S_{N}.
+\]
+\end{definition}
+
+The limit exists, and equals the infimum, because $\log S_{N}$ is subadditive; this is \cref{lem:fekete}. The exponent is what a sieve pays: the $q^{L}$ frequencies of the level-$L$ set carry total mass $k^{L}S_{L} \le k^{L}q^{L\alpha_{1}+o(L)}$, against the trivial $k^{L}q^{L}$.
+
+\begin{remark}[Three exponents, one bracket]
+\label{rem:three}
+Two neighbours of $\alpha_{1}$ appear in the literature and in the estimates below: the exponent $\alpha_{1}^{-}$ of $\min_{x}\Sigma_{N}(x)$, and the exponent $\alpha_{1}^{0}$ of $q^{L}\int_{0}^{1}|\widehat{F}_{L}|$. Substituting $t = (y+i)/q^{L}$ shows that $q^{L}\int_{0}^{1}|\widehat{F}_{L}|$ is the average of $\Sigma_{L}$ over one cell, so
+\[
+  \alpha_{1}^{-} \;\le\; \alpha_{1}^{0} \;\le\; \alpha_{1}.
+\]
+The upper certificate of \cref{prop:window} bounds all three from above, and its lower certificate bounds $\alpha_{1}^{0}$, hence also $\alpha_{1}$, from below. Bounds on $\alpha_{1}$ are the strongest of the three, and $\alpha_{1}$ is what a sup-over-shifts sieve estimate actually consumes, which is why it is the definition used here.
+\end{remark}
+
+\begin{definition}[The digit symmetry]
+\label{def:mirror}
+$|\widehat{F}|$, and hence $\alpha_{1}$, is unchanged by $a_{0} \mapsto q-1-a_{0}$. A base therefore carries $\lceil q/2 \rceil$ distinct one-missing-digit sets, and the pair coincides only when $q$ is odd and $a_{0} = (q-1)/2$.
+\end{definition}
+
+Indeed $\sum_{a \in F} e(a(1-t)) = \overline{\sum_{a \in F} e(at)}$ after the substitution $a \mapsto q-1-a$, which fixes $F$ exactly when the excluded digit is fixed.
+
+For computation the transform is evaluated in closed form rather than as a character sum. Since $\sum_{0 \le a < q} e(at) = e\!\left(\tfrac{q-1}{2}t\right)D_{q}(t)$,
+\begin{equation}
+\label{eq:closed}
+\begin{split}
+  |\widehat{F}(t)| \;&=\; \frac{1}{q-1}\left|D_{q}(t) - e\!\left(\left(a_{0} - \tfrac{q-1}{2}\right)t\right)\right| \\
+  \;&=\; \frac{1}{q-1}\sqrt{D_{q}(t)^{2} - 2D_{q}(t)\cos\!\left(\pi(2a_{0}-q+1)t\right) + 1},
+\end{split}
+\end{equation}
+three trigonometric calls instead of $q-1$ complex exponentials.
+
+\begin{proposition}[The window machine]
+\label{prop:window}
+Fix $n \ge 2$ and split the circle into the $q^{n}$ cells $I_{w} = [w q^{-n}, (w+1)q^{-n})$. Put
+\[
+  G^{+}(w) = \sup_{t \in I_{w}} |\widehat{F}(t)|, \qquad G^{-}(w) = \inf_{t \in I_{w}} |\widehat{F}(t)| ,
+\]
+and let $M^{\pm}$ be the nonnegative $q^{n-1} \times q^{n-1}$ matrices
+\[
+  (M^{\pm}y)(v) \;=\; \sum_{0 \le c < q} G^{\pm}(vq + c)\, y\big((vq+c) \bmod q^{n-1}\big).
+\]
+Then $\alpha_{1} \le \log_{q}\rho(M^{+})$, and $\alpha_{1} \ge \log_{q}\rho(M'')$ for the restriction $M''$ of $M^{-}$ to any subset of states. Moreover, for any $y > 0$, $M^{+}y \le \mu y$ componentwise gives $\rho(M^{+}) \le \mu$, and $M''y \ge \mu y$ componentwise gives $\rho(M'') \ge \mu$.
+\end{proposition}
+
+The proof is in \cref{sec:proofs}. The last sentence is the Collatz-Wielandt test, and it is what makes the machine certifiable: a power iteration supplies a candidate vector $y$, and one further pass over the matrix turns that candidate into a rigorous one-sided bound. A poor vector weakens the bound and can never break it. The restriction clause matters in practice: $|\widehat{F}|$ vanishes at finitely many points, a cell containing such a point has $G^{-} = 0$, and a state all of whose successors vanish would otherwise force the lower bound to zero. Restricting to the support of the iterate repairs this at no cost.
+
+The suprema and infima over a cell are taken by a sub-scan of $m$ equally spaced points together with the Lipschitz correction $\Lambda_{q,a_{0}}/(2mq^{n})$ of \cref{eq:lip} below. The correction is derived, never fitted, and every certificate below states the pair $(n,m)$ it used.
+
+\section{Results}
+\label{sec:results}
+
+Every statement below is tagged. A \emph{theorem} or \emph{lemma} carries a full proof in \cref{sec:proofs}; a \emph{fact} is a finite computation, stated with its exact domain and with the script that reruns it named in \cref{sec:repro}; a \emph{conjecture} is open and says so.
+
+\subsection{The digit-uniform bound}
+\label{sub:uniform}
+
+Set $c_{1} = 2/\pi$ and $c_{0} = 0.98$, and for $q \ge 3$ let $z_{q} > 1$ be the unique root of
+\begin{equation}
+\label{eq:cubic}
+  (z-1)^{3} \;=\; c_{1}(\log q)\, z \;+\; c_{0}(z-1).
+\end{equation}
+
+\begin{theorem}
+\label{thm:main}
+For every base $q \ge 100$ and every excluded digit $a_{0}$,
+\[
+  \alpha_{1}(q, a_{0}) \;\le\; \log_{q}\!\left(\frac{z_{q}\, q}{q-1}\right).
+\]
+In particular $\alpha_{1} < 1/4$ for every $q \ge 126$ and every excluded digit: the right side reads $0.249808$ at $q = 126$, $0.231905$ at $q = 200$, $0.187674$ at $q = 1000$ and $0.108949$ at $q = 10^{6}$, and it tends to $0$ like $\log\log q/\log q$. The bound is uniform in $a_{0}$; it comes from a majorant that does not mention which digit was removed.
+\end{theorem}
+
+The threshold $126$ is where the chain closes and not where the phenomenon starts. Two remarks fence it in.
+
+\begin{remark}[The chain is sharp for itself]
+\label{rem:sharp126}
+The inequality $z_{q} < q^{1/4}(1-1/q)$ that \cref{thm:main} needs holds at $q = 126$ and fails at $q = 125$, so $126$ is exactly the threshold of this chain of estimates. It is not the threshold of the majorant: see \cref{sub:ceiling}.
+
+Where the threshold sits depends on $c_{0}$, and $c_{0} = 0.98$ is a rounding up of the value $0.9724870$ that \cref{lem:leb}(iii) actually proves. The rounding is harmless but the constant is not: the threshold is exactly $126$ for every $c_{0}$ in $(0.9679, 0.9961)$ and rises to $127$ above that interval, while below it the same certificate would also clear $q = 125$. In particular the constant $0.9625272$ that \cref{fact:cert} observes numerically sits under $0.9679$, so the numerics alone would put the threshold at $125$; $126$ is the threshold of what is proved, and the whole distance between the two is the odd-$M$ slack in \cref{lem:leb}(ii).
+\end{remark}
+
+\begin{remark}[The cost of forgetting the digit]
+\label{rem:cost}
+The triangle inequality that produces the majorant discards a phase of modulus one, so the majorant is attained only where that phase is antipodal to the Dirichlet kernel and is strictly larger than $|\widehat{F}|$ everywhere else. The uniform bound is therefore weaker than the per-digit one at every base, by construction and never by accident.
+\end{remark}
+
+\subsection{The two floors}
+\label{sub:floors}
+
+\begin{fact}[The first base]
+\label{fact:floor21}
+Base $21$ with the digit $0$ removed satisfies $\alpha_{1} < 0.2499917$, and it is the least base carrying any one-missing-digit set with $\alpha_{1} < 1/4$: every one of the $108$ distinct sets of every base $3 \le q \le 20$ satisfies $\alpha_{1} > 1/4$.
+
+\emph{Domain.} The upper bound is the window machine of \cref{prop:window} at $n = 5$ window digits and sub-scan $m = 2$, clearing the threshold by $8.3 \times 10^{-6}$. Four window digits do not decide it: at $n = 4$, $m = 8$ the same machine returns the bracket $[0.2498658, 0.2500871]$, which straddles $1/4$. The $108$ lower bounds are the same machine on the infimum side, $41$ of them settled at $n = 2$ and $67$ at $n = 3$, all with $m = 8$; the least of the certified lower bounds is $0.2502668$.
+\end{fact}
+
+\begin{fact}[Each base up to 33 still misses somewhere]
+\label{fact:witness}
+Every base $21 \le q \le 33$ carries an excluded digit with $\alpha_{1} > 1/4$. One witness for each is recorded in \cref{tab:witness}.
+
+\emph{Domain.} The window machine on the infimum side at $n = 3$, $m = 8$, except base $33$ which needs $n = 4$.
+\end{fact}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{ccl@{\qquad}ccl}
+\toprule
+$q$ & $a_{0}$ & $\alpha_{1} >$ & $q$ & $a_{0}$ & $\alpha_{1} >$ \\
+\midrule
+21 & 9  & 0.27706 & 28 & 13 & 0.25907 \\
+22 & 10 & 0.27415 & 29 & 9  & 0.25734 \\
+23 & 7  & 0.27155 & 30 & 14 & 0.25512 \\
+24 & 11 & 0.26847 & 31 & 14 & 0.25293 \\
+25 & 11 & 0.26561 & 32 & 10 & 0.25184 \\
+26 & 8  & 0.26380 & 33 & 15 & 0.25061 \\
+27 & 12 & 0.26083 &    &    &         \\
+\bottomrule
+\end{tabular}
+\caption{One excluded digit per base that still misses the quarter, certified at three window digits and sub-scan $8$. Base $33$ is the last and the tightest, and the only row needing four window digits: there the digit $15$ gives $\alpha_{1} > 0.2506145$.}
+\label{tab:witness}
+\end{table}
+
+\begin{fact}[The first family]
+\label{fact:floor34}
+All $17$ distinct one-missing-digit sets of base $34$ satisfy $\alpha_{1} < 1/4$. With \cref{fact:witness}, base $34$ is the least base whose every excluded digit clears the threshold.
+
+\emph{Domain.} The window machine on the supremum side. Sixteen of the seventeen digits clear at $n = 3$, $m = 8$; the digit $16$ needs $n = 4$, $m = 2$. The bounds run from $\alpha_{1} < 0.2257743$ at the digit $0$ to $\alpha_{1} < 0.2497573$ at the digit $13$, the largest of the seventeen.
+\end{fact}
+
+\begin{corollary}[The family floor is exact]
+\label{cor:exact}
+Every base $q \ge 34$ satisfies $\alpha_{1}(q, a_{0}) < 1/4$ at every excluded digit $a_{0}$, and $34$ is the least such base.
+\end{corollary}
+
+\begin{proof}
+Base $34$ is \cref{fact:floor34}. The bases $q \ge 126$ are \cref{thm:main}. The bases $35 \le q \le 125$ are the certified sweep recorded in \cref{fact:sweep}. Minimality is \cref{fact:witness} together with \cref{fact:floor21}, which rule out every base below $34$.
+\end{proof}
+
+\begin{fact}[The sweep between the floors]
+\label{fact:sweep}
+Every one of the $3663$ distinct one-missing-digit sets of every base $35 \le q \le 125$ satisfies $\alpha_{1} < 1/4$, each certified at the shortest window of two, three or four digits that clears; the bases $35 \le q \le 57$ need three window digits and every $q \ge 58$ clears at two.
+
+\emph{Domain.} This row is not rerun by the script of this paper, which would need hours of plain Python; it comes from the interval-arithmetic generator named in \cref{sec:repro}, whose certificates are the tests of \cref{prop:window} carried out in directed rounding. It is the one computational input here that the accompanying script does not reproduce, and \cref{cor:exact} is the only statement that uses it.
+\end{fact}
+
+\begin{fact}[The published exponent is an upper bound, not the constant]
+\label{fact:calib}
+For base $10$ with the digit $5$ removed the window machine at $n = 5$, $m = 8$ certifies
+\[
+  \alpha_{1} \in [0.3505101,\ 0.3506467] \;<\; \tfrac{27}{77} = 0.3506494 .
+\]
+The published $27/77$ of \cite{may} is therefore a finite-window upper bound on the $\ell^{1}$ exponent and not the exponent itself. The generator of \cref{fact:sweep}, at seven window digits and the slightly wider box the sieve literature uses, narrows the same quantity to $[0.3505775, 0.3505797]$.
+\end{fact}
+
+\subsection{What the uniform route cannot reach}
+\label{sub:ceiling}
+
+\cref{thm:main} is a statement about $q$ with the digit forgotten, and \cref{rem:cost} says that costs something. Two measurements say how much.
+
+\begin{fact}[The numeric ceiling of the majorant]
+\label{fact:ceiling}
+Run the window machine of \cref{prop:window} on the majorant $u_{q}$ of \cref{lem:dom} in place of $|\widehat{F}|$. At four window digits the resulting digit-blind bound reads $0.339085$ at $q = 21$ and $0.297296$ at $q = 34$, against $0.340029$ and $0.297650$ at three, and it first falls below $1/4$ near $q = 75$. The exact crossing base is sensitive to the window length and to the cell convention, and this paper claims no value for it; what the row is for is the order of magnitude of the gap. Around $75$ is where the majorant itself stops working, $126$ is where the chain of \cref{sec:proofs} proves it works uniformly in $q$, and the distance between them is slack in the run decomposition and not in the majorant.
+\end{fact}
+
+\begin{fact}[The uniform bound is never stronger]
+\label{fact:consistency}
+Where both apply, the digit-blind window bound exceeds the per-digit one at every base tested and never falls below it. The digit-blind column is the generator; the per-digit column is the script of this paper at the window it certifies with, so the two are read at the same base and digit but not by the same code, and the comparison is only ever used qualitatively.
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+base and digit & digit-blind & per-digit & window \\
+\midrule
+$q = 10$, $a_{0} = 5$  & 0.440960 & 0.3506467 & $n = 5$ \\
+$q = 21$, $a_{0} = 0$  & 0.339085 & 0.2500871 & $n = 4$ \\
+$q = 34$, $a_{0} = 16$ & 0.297296 & 0.2494348 & $n = 4$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The gap closes as the base grows, from $0.138$ at $q = 9$ to $0.048$ at $q = 34$ in the generator's own rows, which is the discarded phase costing $1/(q-1)$.
+\end{fact}
+
+The digit-blind numbers of \cref{fact:ceiling,fact:consistency} come from the same generator as \cref{fact:sweep}; neither fact is used in the proof of anything above.
+
+\subsection{Open problems}
+\label{sub:open}
+
+Three questions are left, and one guess is worth recording because it is falsifiable.
+
+\begin{conjecture}[The cheapest digit is always an end digit]
+\label{conj:zero}
+For every base $q \ge 3$, $\alpha_{1}(q, a_{0})$ is minimised at $a_{0} = 0$ (equivalently, by \cref{def:mirror}, at $a_{0} = q-1$).
+
+\emph{Evidence.} It holds at every base and digit computed here. At base $34$ the seventeen bounds run from $0.2257743$ at the digit $0$ to $0.2497573$ at the digit $13$, a spread of $0.024$, and the digit $0$ is well clear of the rest. \emph{Failure mode.} The obvious strengthening, that $\alpha_{1}$ increases monotonically as the excluded digit moves from the end toward the middle, is false: at base $34$ the digit $11$ reads $0.2475920$, below both its neighbours $10$ and $12$, and the largest of the seventeen sits at the digit $13$ rather than at the middle digit $16$. The ordering of the interior digits is not monotone, and any proof of the conjecture has to separate the end digit from the interior without ordering the interior.
+\end{conjecture}
+
+First, the gap between $75$ and $126$. \cref{fact:ceiling} says the majorant of \cref{lem:dom} numerically clears $1/4$ from base $75$ on, while the chain of \cref{sec:proofs} only proves clearance from $126$. Every step of that chain is an inequality with a measurable loss, and the largest is the peel of \cref{lem:peel}, which throws away the correlation between runs at different digit positions. A sharper peel, or a direct treatment of the two-run terms, should move $126$ toward $75$. Below $75$ nothing can be recovered without keeping the digit.
+
+Second, the gap between $34$ and $21$. Between those two bases the cheap digits have crossed the threshold and the dear ones have not, and no proof separates them; \cref{tab:witness} is thirteen separate computations with no pattern extracted. A proved lower bound for the middle excluded digit, uniform in $q$, would replace that table with an argument.
+
+Third, the exponent itself. Nothing here computes $\alpha_{1}$; every statement is a bracket, and the brackets narrow only as fast as the window grows. At base $21$ with the digit $0$ the exponent is pinned inside an interval of width $6 \times 10^{-7}$ around $0.24998$, which clears $1/4$ by about one part in $10^{4}$ of that interval's own width. Whether $\alpha_{1}$ is ever rational, or algebraic, or equal to the growth rate of some finite automaton attached to the base, is untouched. The transfer matrices of \cref{prop:window} have entries that are suprema of a transcendental function over cells, so they carry no visible algebraic structure, and the question of what kind of number $\alpha_{1}$ is remains open even for the smallest interesting base.
+
+\section{Proofs}
+\label{sec:proofs}
+
+\subsection{Domination}
+
+\begin{lemma}[The digit-blind majorant]
+\label{lem:dom}
+For every base $q \ge 3$, every excluded digit $a_{0}$ and every real $t$,
+\[
+  |\widehat{F}(t)| \;\le\; u_{q}(t) \;:=\; \min\left(1, \; \frac{|D_{q}(t)| + 1}{q-1}\right).
+\]
+The right side does not mention $a_{0}$.
+\end{lemma}
+
+\begin{proof}
+Summing the full residue system, $\sum_{0 \le a < q} e(at) = e\!\left(\frac{q-1}{2}t\right)D_{q}(t)$, an identity that holds at integer $t$ with the convention $D_{q} = q$ there. Subtracting the excluded term,
+\[
+  (q-1)\widehat{F}(t) \;=\; e\!\left(\tfrac{q-1}{2}t\right)D_{q}(t) \;-\; e(a_{0}t),
+\]
+which is \cref{eq:closed}, and the triangle inequality gives $(q-1)|\widehat{F}(t)| \le |D_{q}(t)| + 1$. The second bound is immediate: $\widehat{F}(t)$ is the average of $q-1$ complex numbers of modulus one.
+\end{proof}
+
+The cost of the lemma is exactly one phase. Equality in the triangle inequality needs $e\!\left(\left(a_{0}-\frac{q-1}{2}\right)t\right)$ to point opposite to $e\!\left(\frac{q-1}{2}t\right)D_{q}(t)$, which happens on a set of measure zero, so $u_{q}$ is strictly larger than $|\widehat{F}|$ almost everywhere. That is \cref{rem:cost}, and \cref{fig:lemma} is a picture of it.
+
+\subsection{The exponent, and the machine that brackets it}
+
+\begin{lemma}[Subadditivity]
+\label{lem:fekete}
+$S_{N+M} \le S_{N}S_{M}$ for all $N, M \ge 1$; hence $\frac{1}{N}\log_{q}S_{N}$ converges to its infimum and \cref{def:alpha} is well posed. Moreover $\Sigma_{N}$ is $q^{-N}$-periodic.
+\end{lemma}
+
+\begin{proof}
+Periodicity is clear: replacing $x$ by $x + q^{-N}$ permutes the summands cyclically. For subadditivity write $i = b + q^{N}a$ with $0 \le b < q^{N}$, $0 \le a < q^{M}$, and $t = x + i q^{-(N+M)}$. Since $\widehat{F}$ is $1$-periodic, $q^{M}t \equiv q^{M}x + b q^{-N} \pmod 1$, so the last $N$ factors of $\prod_{j<N+M}|\widehat{F}(q^{j}t)|$ depend on $b$ alone and reproduce the summand of $\Sigma_{N}(q^{M}x)$ indexed by $b$. The first $M$ factors are the summand of $\Sigma_{M}(x + bq^{-(N+M)})$ indexed by $a$. Summing over $a$ first,
+\[
+\begin{split}
+  \Sigma_{N+M}(x) \;&=\; \sum_{b < q^{N}} \left|\widehat{F}_{N}(q^{M}x + bq^{-N})\right| \, \Sigma_{M}(x + bq^{-N-M}) \\
+  \;&\le\; S_{M}\,\Sigma_{N}(q^{M}x) \;\le\; S_{N}S_{M} . \qedhere
+\end{split}
+\]
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:window}]
+Write the base-$q$ digits of a cell index $w < q^{\ell}$ as $w = (w_{1}\cdots w_{\ell})$, most significant first, so that $I_{w}$ is the set of $t$ whose expansion starts $0.w_{1}\cdots w_{\ell}$. For such $t$ and $0 \le j < \ell$, $q^{j}t$ reduced mod $1$ lies in the level-$(\ell-j)$ cell indexed by $w_{j+1}\cdots w_{\ell}$. If $j + n \le \ell$ that cell is contained in the level-$n$ cell $v_{j}(w) := (w_{j+1}\cdots w_{j+n})$.
+
+\emph{The upper bound.} Take $\ell = L$. For $t \in I_{w}$ and $j \le L-n$ the factor $|\widehat{F}(q^{j}t)|$ is at most $G^{+}(v_{j}(w))$, and the remaining $n-1$ factors are at most $1$. Hence
+\[
+  U_{L} := \sum_{w<q^{L}} \sup_{I_{w}}|\widehat{F}_{L}| \;\le\; \sum_{w<q^{L}}\ \prod_{j=0}^{L-n} G^{+}(v_{j}(w)) \;=\; \mathbf{1}^{\mathsf{T}}(M^{+})^{L-n+1}\mathbf{1},
+\]
+the identity being the definition of $M^{+}$: a state is a string of $n-1$ digits, appending a digit $c$ to the state $v$ forms the window $vq+c$ with weight $G^{+}(vq+c)$ and moves to the state $(vq+c) \bmod q^{n-1}$, and summing over $w$ is summing over all initial states and all appended digits. Since $x + iq^{-L}$ lies in the cell $I_{i}$ for $x \in [0, q^{-L})$, periodicity gives $S_{L} \le U_{L}$, and Gelfand's formula gives $\limsup_{L} U_{L}^{1/L} \le \rho(M^{+})$. Therefore $\alpha_{1} \le \log_{q}\rho(M^{+})$.
+
+\emph{The lower bound.} Take $\ell = L + n - 1$. Now every $j$ in $0 \le j < L$ satisfies $j + n \le \ell$, so on the cell $I_{w}$ every one of the $L$ factors of $|\widehat{F}_{L}|$ is at least $G^{-}(v_{j}(w))$, with no truncated window left over. Hence
+\[
+  \int_{0}^{1}|\widehat{F}_{L}| \;\ge\; \sum_{w < q^{\ell}} q^{-\ell}\inf_{I_{w}}|\widehat{F}_{L}| \;\ge\; q^{-(L+n-1)}\, \mathbf{1}^{\mathsf{T}}(M^{-})^{L}\mathbf{1}.
+\]
+Substituting $t = (y+i)q^{-L}$ shows $q^{L}\int_{0}^{1}|\widehat{F}_{L}| = \int_{0}^{1}\Sigma_{L}(y q^{-L})\,dy \le S_{L}$, so $S_{L} \ge q^{-(n-1)}\mathbf{1}^{\mathsf{T}}(M^{-})^{L}\mathbf{1}$. Let $S'$ be any set of states and $M''$ the restriction of $M^{-}$ to $S'$, that is, the matrix obtained by keeping only the rows and columns in $S'$. Every entry of $M^{-}$ is nonnegative, so $\mathbf{1}^{\mathsf{T}}(M^{-})^{L}\mathbf{1} \ge \mathbf{1}^{\mathsf{T}}(M'')^{L}\mathbf{1}$. If $y$ is positive on $S'$ and $M''y \ge \mu y$ componentwise then $(M'')^{L}y \ge \mu^{L}y$, whence
+\[
+  \mathbf{1}^{\mathsf{T}}(M'')^{L}\mathbf{1} \;\ge\; \frac{1}{\max_{S'} y}\,\mathbf{1}^{\mathsf{T}}(M'')^{L}y \;\ge\; \mu^{L}\,\frac{\sum_{S'}y}{\max_{S'}y}.
+\]
+The final factor does not depend on $L$, so $\alpha_{1} = \lim_{L}\frac{1}{L}\log_{q}S_{L} \ge \log_{q}\mu$. Taking the best such $\mu$ gives $\alpha_{1} \ge \log_{q}\rho(M'')$, since a nonnegative irreducible matrix admits its own Perron vector as a test vector and a reducible one is handled by restricting further.
+
+\emph{The tests.} If $y > 0$ and $M^{+}y \le \mu y$ then $\rho(M^{+}) \le \mu$: iterating gives $(M^{+})^{L}y \le \mu^{L}y$, so all entries of $(M^{+})^{L}$ are $O(\mu^{L})$ and Gelfand's formula applies. The lower test is the display above.
+\end{proof}
+
+The Lipschitz correction is the last ingredient. Differentiating \cref{def:hat} termwise, the derivative in $t$ of $\frac{1}{q-1}\sum_{a \in F} e(at)$ has modulus at most $\frac{2\pi}{q-1}\sum_{a \in F} a$, and $\sum_{a \in F} a = \frac{q(q-1)}{2} - a_{0}$ exactly, so
+\begin{equation}
+\label{eq:lip}
+  \bigl|\widehat{F}(t) - \widehat{F}(t')\bigr| \;\le\; \Lambda_{q,a_{0}}\,|t-t'|, \qquad
+  \Lambda_{q,a_{0}} \;:=\; \pi q - \frac{2\pi a_{0}}{q-1},
+\end{equation}
+and the reverse triangle inequality carries the same Lipschitz constant to $|\widehat{F}|$.
+Two neighbouring points of a sub-scan of $m$ equally spaced points in a cell of width $q^{-n}$ are $q^{-n}/m$ apart and the extreme points sit $q^{-n}/(2m)$ from the ends, so the supremum and the infimum of $|\widehat{F}|$ over the cell differ from the extremes of the sub-scan by at most $\Lambda_{q,a_{0}}/(2mq^{n})$. The digit-dependent form matters: the sharper constant is what the accompanying script uses, and it is what \cref{fact:calib} needs, since at base $10$ missing $5$ it reads $27.926$ where the digit-blind $\pi q$ reads $31.416$. At $a_{0} = 0$ the two agree, so \cref{fact:floor21} is the same under either. Adding the correction outward on both sides turns the sub-scan into a rigorous enclosure of $G^{\pm}$, and monotonicity of the Perron root in the entries turns rigorous enclosures of the entries into rigorous bounds on $\mu$.
+
+\subsection{The run identity}
+
+Write $v_{q}(t) = (|D_{q}(t)|+1)/(q-1)$, so that $u_{q} = \min(1, v_{q}) \le v_{q}$, and put
+\[
+  \Sigma^{v}_{N}(x) \;=\; \sum_{0 \le i < q^{N}}\ \prod_{0 \le j < N} v_{q}\!\left(q^{j}\!\left(x + \tfrac{i}{q^{N}}\right)\right) \; \ge \; \Sigma_{N}(x)
+\]
+by \cref{lem:dom}. A subset $E \subseteq \{0,\dots,N-1\}$ splits uniquely into maximal runs of consecutive positions; write $(s, l)$ for the run occupying $s, s+1, \dots, s+l-1$.
+
+\begin{lemma}[The run identity]
+\label{lem:runs}
+For every $x$,
+\[
+  (q-1)^{N}\,\Sigma^{v}_{N}(x) \;=\; \sum_{E \subseteq \{0,\dots,N-1\}}\ \sum_{0 \le i < q^{N}}\ \prod_{(s,l)\ \mathrm{run\ of}\ E} \left|D_{q^{l}}\!\left(q^{s}\!\left(x + \tfrac{i}{q^{N}}\right)\right)\right| .
+\]
+\end{lemma}
+
+\begin{proof}
+Expand $\prod_{j<N}\left(|D_{q}(q^{j}t)| + 1\right)$ over subsets $E$ of the positions at which the kernel factor is taken. Inside a run $s, \dots, s+l-1$ the factors telescope: with $t' = q^{s}t$,
+\[
+  \prod_{r=0}^{l-1} \frac{\sin(\pi q^{r+1}t')}{\sin(\pi q^{r}t')} \;=\; \frac{\sin(\pi q^{l}t')}{\sin(\pi t')} \;=\; D_{q^{l}}(t'),
+\]
+and taking absolute values gives the claim. Distinct runs occupy disjoint blocks, so the factorisation is unambiguous.
+\end{proof}
+
+Every term of \cref{lem:runs} is a sum of Dirichlet kernels over an arithmetic progression of points, that is, a Lebesgue sum. Let
+\[
+  L_{M} \;=\; \max_{x \in \mathbb{R}} \sum_{0 \le j < M}\left|D_{M}\!\left(x + \tfrac{j}{M}\right)\right|, \qquad \lambda_{l} = \frac{L_{q^{l}}}{q^{l}} .
+\]
+
+\subsection{The peel}
+
+\begin{lemma}[The peel]
+\label{lem:peel}
+Let $E \subseteq \{0,\dots,N-1\}$, and let $(s_{1},l_{1}), \dots, (s_{r},l_{r})$ be its maximal runs, ordered so that $s_{1} < \cdots < s_{r}$. Put $t_{i} = x + iq^{-N}$. Then for every real $x$,
+\[
+  \sum_{0 \le i < q^{N}}\ \prod_{k=1}^{r} \left|D_{q^{l_{k}}}(q^{s_{k}}t_{i})\right| \;\le\; q^{N} \prod_{k=1}^{r} \lambda_{l_{k}}.
+\]
+\end{lemma}
+
+\begin{proof}
+First a sub-lemma: for integers $M \ge l \ge 1$ and every real $y$,
+\begin{equation}
+\label{eq:sublem}
+  \sum_{0 \le c < q^{M}} \left|D_{q^{l}}\!\left(y + \tfrac{c}{q^{M}}\right)\right| \;\le\; q^{M}\lambda_{l} .
+\end{equation}
+Indeed, write $c = \rho + q^{M-l}c'$ with $0 \le \rho < q^{M-l}$ and $0 \le c' < q^{l}$, so that $c/q^{M} = \rho/q^{M} + c'/q^{l}$. For fixed $\rho$ the inner sum runs over $q^{l}$ points spaced $q^{-l}$ apart, hence is at most $L_{q^{l}} = q^{l}\lambda_{l}$; summing over the $q^{M-l}$ values of $\rho$ gives \cref{eq:sublem}.
+
+Now set $a_{s} = i \bmod q^{N-s}$. Since $D_{M}$ is $1$-periodic, $q^{s}(x + iq^{-N}) \equiv q^{s}x + a_{s}q^{-(N-s)} \pmod 1$, so the $k$-th factor depends on $i$ only through $a_{s_{k}}$, and $a_{s_{1}}$ determines every $a_{s_{k}}$. The top $s_{1}$ digits of $i$ enter no factor, so the left side equals $q^{s_{1}}$ times the sum over $a_{s_{1}} < q^{N-s_{1}}$, and it suffices to prove
+\[
+  \sum_{a_{s_{1}} < q^{N-s_{1}}}\ \prod_{k} \left|D_{q^{l_{k}}}\!\left(q^{s_{k}}x + \tfrac{a_{s_{k}}}{q^{N-s_{k}}}\right)\right| \;\le\; q^{N-s_{1}}\prod_{k}\lambda_{l_{k}} .
+\]
+Induct on $r$. For $r = 1$ this is \cref{eq:sublem} with $M = N - s_{1} \ge l_{1}$, which holds because the run lies inside $\{0,\dots,N-1\}$. For $r \ge 2$ write $a_{s_{1}} = a_{s_{2}} + q^{N-s_{2}}w$ with $0 \le w < q^{s_{2}-s_{1}}$. The factors $k \ge 2$ depend on $a_{s_{2}}$ alone, and the first factor is
+\[
+  \left|D_{q^{l_{1}}}\!\left(z + \tfrac{w}{q^{s_{2}-s_{1}}}\right)\right|, \qquad z = q^{s_{1}}x + \tfrac{a_{s_{2}}}{q^{N-s_{1}}} \ \text{fixed}.
+\]
+Runs are maximal, so they are separated by at least one absent position and $s_{2} - s_{1} \ge l_{1} + 1 > l_{1}$. Applying \cref{eq:sublem} with $M = s_{2}-s_{1}$ bounds the inner sum by $q^{s_{2}-s_{1}}\lambda_{l_{1}}$, and the induction hypothesis bounds the outer sum by $q^{N-s_{2}}\prod_{k \ge 2}\lambda_{l_{k}}$. The product of the two is $q^{N-s_{1}}\prod_{k}\lambda_{l_{k}}$.
+\end{proof}
+
+\begin{lemma}[The count]
+\label{lem:count}
+Put $A_{0} = 1$ and $A_{N} = \sum_{E \subseteq \{0,\dots,N-1\}}\prod_{\mathrm{runs}}\lambda_{l}$. Then
+\[
+  A_{N} \;=\; A_{N-1} \;+\; \sum_{l=1}^{N-1}\lambda_{l}A_{N-1-l} \;+\; \lambda_{N} \qquad (N \ge 1),
+\]
+and if $z > 1$ is the unique root of $z = 1 + \sum_{l \ge 1}\lambda_{l}z^{-l}$ then $\limsup_{N} A_{N}^{1/N} \le z$. Moreover $z$ is nondecreasing in the sequence $(\lambda_{l})$.
+\end{lemma}
+
+\begin{proof}
+Split by the first position. If $0 \notin E$ the rest is an arbitrary subset of a set of $N-1$ positions and contributes $A_{N-1}$. If $0 \in E$ let $l \ge 1$ be the length of the initial run; then position $l$ is absent (when $l < N$) and the rest is an arbitrary subset of the remaining $N-1-l$ positions, contributing $\lambda_{l}A_{N-1-l}$; the case $l = N$ contributes $\lambda_{N}$.
+
+Let $\Lambda(x) = \sum_{l \ge 1}\lambda_{l}x^{l}$. Since $\lambda_{l} \le L_{q^{l}}/q^{l}$ grows at most linearly in $l$, $\Lambda$ has radius of convergence $1$ and tends to $\infty$ as $x \uparrow 1$. Multiplying the recursion by $x^{N}$ and summing gives $A(x)\left(1 - x - x\Lambda(x)\right) = 1 + \Lambda(x)$. The map $\varphi(z) = 1 + \Lambda(1/z)$ is finite, continuous and strictly decreasing on $(1,\infty)$, with $\varphi \to \infty$ at $1^{+}$ and $\varphi \to 1$ at $\infty$, so $z - \varphi(z)$ has a unique zero $z > 1$; and $\varphi$ increases pointwise when the $\lambda_{l}$ do, which gives the monotonicity. For $|x| < 1/z$, $|x + x\Lambda(x)| \le |x|(1 + \Lambda(|x|)) < z^{-1}\varphi(z) = 1$, so the denominator does not vanish and $A$ is analytic on that disc. The coefficients $A_{N}$ are nonnegative, so the radius of convergence is at least $1/z$, which is the claim.
+\end{proof}
+
+\begin{corollary}
+\label{cor:sigmabound}
+$\alpha_{1} \le \log_{q}\!\left(\dfrac{z\,q}{q-1}\right)$, with $z$ as in \cref{lem:count}.
+\end{corollary}
+
+\begin{proof}
+Combining \cref{lem:dom,lem:runs,lem:peel}, $(q-1)^{N}\Sigma_{N}(x) \le (q-1)^{N}\Sigma^{v}_{N}(x) \le q^{N}A_{N}$ for every $x$, so $S_{N} \le (q/(q-1))^{N}A_{N}$ and
+\[
+  \alpha_{1} \;\le\; \log_{q}\frac{q}{q-1} + \limsup_{N}\frac{1}{N}\log_{q}A_{N} \;\le\; \log_{q}\frac{zq}{q-1}. \qedhere
+\]
+\end{proof}
+
+\subsection{The Lebesgue constant}
+
+\begin{lemma}[The Lebesgue constant of the shifted grid]
+\label{lem:leb}
+Let $M \ge 2$ and $\gamma' = \frac{2}{\pi}\left(\gamma + \log\frac{8}{\pi}\right) = 0.9625228\ldots$, with $\gamma$ Euler's constant. Then
+\begin{enumerate}
+\item the maximum defining $L_{M}$ is attained at the half offset, and
+\[
+  L_{M} \;=\; 2\sum_{0 \le m < \lceil M/2\rceil} \csc\frac{(2m+1)\pi}{2M} \;-\; (M \bmod 2);
+\]
+\item writing $P_{M} = M\!\left(\frac{2}{\pi}\log M + \gamma'\right)$, one has $L_{M} \le P_{M} + \frac{2}{\pi}$ for $M$ even and $L_{M} \le P_{M} + 1 + \frac{2}{\pi(M-1)}$ for $M$ odd;
+\item consequently $\lambda_{l} = L_{q^{l}}/q^{l} \le \frac{2}{\pi}\,l\log q + c_{0}$ with $c_{0} = 0.98$, for every $l \ge 1$ and every $q \ge 100$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) Write $x = \theta/M$. All $M$ points $x + j/M$ share the value $|\sin(\pi M t)| = |\sin(\pi\theta)| =: s$, so with $d_{j}$ the distance from $x + j/M$ to $\mathbb{Z}$ the sum is $s\sum_{j}\csc(\pi d_{j})$. Replacing $\theta$ by $1-\theta$ reflects the point set, so we may take $\theta \in [0,\tfrac12]$; and $\theta = 0$ gives the value $M$, which is below the half-offset value because the single pair at $m = 0$ already contributes $2\csc\frac{\pi}{2M} > \frac{4M}{\pi} > M$.
+
+Let $\theta \in (0,\tfrac12]$. The distances are the pairs
+\[
+  \left\{\tfrac{m+\theta}{M},\ \tfrac{m+1-\theta}{M}\right\}, \qquad 0 \le m < \lceil M/2\rceil - [M \text{ odd}],
+\]
+together with the single distance $\frac{(M-1)/2+\theta}{M}$ when $M$ is odd. Put
+\[
+  \mu_{m} = \frac{\pi(m+\tfrac12)}{M}, \qquad \delta = \frac{\pi(\tfrac12-\theta)}{M} \in \left[0, \tfrac{\pi}{2M}\right),
+\]
+so the pair sits at $\mu_{m} \mp \delta$, every $\mu_{m}$ used lies in $(0, \tfrac{\pi}{2})$, and $s = \sin(\pi\theta) = \cos(M\delta)$. From $\csc(\mu-\delta)+\csc(\mu+\delta) = \frac{2\sin\mu\cos\delta}{\sin^{2}\mu - \sin^{2}\delta}$ the pair contributes $2\csc(\mu_{m})\,X_{m}$ with
+\[
+  X_{m} \;=\; \frac{\cos(M\delta)\cos\delta}{1 - \left(\sin\delta/\sin\mu_{m}\right)^{2}} .
+\]
+Since $0 \le \delta \le \mu_{m} < \pi/2$ and $\sin$ is concave there, $\sin\delta/\sin\mu_{m} \le \delta/\mu_{m} = r/(2m+1)$ with $r = 1-2\theta \in [0,1)$. Also $\cos(M\delta) = \cos(\pi r/2) = 1 - 2\sin^{2}(\pi r/4) \le 1 - r^{2}$, because $\sin$ is concave on $[0,\pi/4]$ and so $\sin(\pi r/4) \ge r\sin(\pi/4) = r/\sqrt{2}$. Hence
+\[
+  X_{m} \;\le\; \frac{1-r^{2}}{1 - r^{2}/(2m+1)^{2}} \;\le\; \frac{1-r^{2}}{1-r^{2}} \;=\; 1,
+\]
+with equality throughout at $\delta = 0$, that is $\theta = \tfrac12$. The odd leftover sits at $\frac{\pi}{2}-\delta$ and contributes $\cos(M\delta)/\cos\delta \le 1$, again with equality at $\theta = \tfrac12$, since $\delta \le M\delta < \pi/2$. So every summand is maximised at the half offset, where $s = 1$, the pairs are $2\csc\frac{(2m+1)\pi}{2M}$ and the odd leftover is $\csc\frac{\pi}{2} = 1$; the displayed formula counts that leftover once by subtracting one from twice the full range.
+
+(ii) Split $\csc x = \frac{1}{x} + g(x)$. The expansion $g(x) = \sum_{k\ge1}\frac{2(2^{2k-1}-1)|B_{2k}|}{(2k)!}x^{2k-1}$ has nonnegative coefficients, so $g$ is nonnegative, increasing and convex on $(0,\pi)$, and $\int_{0}^{\pi/2} g = \left[\log\tan\frac{x}{2} - \log x\right]_{0}^{\pi/2} = \log\frac{4}{\pi}$.
+
+Let $M$ be even, $n = M/2$. The points $x_{m} = \frac{(2m+1)\pi}{2M}$, $m < n$, are the midpoints of the $n$ intervals of length $\pi/M$ partitioning $(0,\frac{\pi}{2}]$, so convexity and the midpoint rule give $\sum_{m<n} g(x_{m}) \le \frac{M}{\pi}\int_{0}^{\pi/2}g = \frac{M}{\pi}\log\frac{4}{\pi}$. Also $\sum_{m<n}\frac{1}{x_{m}} = \frac{2M}{\pi}\sum_{m<n}\frac{1}{2m+1} = \frac{2M}{\pi}\left(H_{M} - \tfrac12 H_{M/2}\right)$. With $H_{2n} \le \log 2n + \gamma + \frac{1}{4n}$ and $H_{n} \ge \log n + \gamma$,
+\[
+  H_{M} - \tfrac12 H_{M/2} \;\le\; \tfrac12\log M + \tfrac12\log 2 + \tfrac{\gamma}{2} + \tfrac{1}{2M},
+\]
+and doubling gives $L_{M} \le \frac{2M}{\pi}\left(\log M + \gamma + \log\frac{8}{\pi}\right) + \frac{2}{\pi}$, which is (ii) for even $M$.
+
+Let $M$ be odd. Then $L_{M} = 2\sum_{m<(M-1)/2}\csc(x_{m}) + 1$, and those $x_{m}$ are the midpoints of the $(M-1)/2$ intervals of length $\pi/M$ partitioning $\left(0, \frac{(M-1)\pi}{2M}\right] \subset (0,\frac{\pi}{2}]$, so the same two estimates apply with $M$ replaced by $M-1$ inside the harmonic numbers. This gives
+\[
+  L_{M} \;\le\; \frac{2M}{\pi}\left(\log(M-1) + \gamma + \log\tfrac{8}{\pi}\right) + \frac{2M}{\pi(M-1)} + 1,
+\]
+and $\log(M-1) \le \log M - \frac{1}{M}$ converts the first term, leaving the additive $1 + \frac{2}{\pi(M-1)}$.
+
+(iii) Take $M = q^{l} \ge q \ge 100$. For even $M$ the excess over $\frac{2}{\pi}\log M$ is at most $\gamma' + \frac{2}{\pi M} \le 0.9625229 + 0.0063662 < 0.97$; for odd $M \ge 101$ it is at most $\gamma' + \frac{1}{M} + \frac{2}{\pi M(M-1)} \le 0.9625229 + 0.0099010 + 0.0000631 = 0.9724870 < 0.98$. In both cases $\lambda_{l} \le \frac{2}{\pi}\log(q^{l}) + 0.98 = \frac{2}{\pi}l\log q + c_{0}$.
+\end{proof}
+
+\subsection{The root equation and the threshold}
+
+\begin{proof}[Proof of \cref{thm:main}]
+Let $q \ge 100$. By \cref{lem:leb}(iii), $\lambda_{l} \le \Lambda_{l} := c_{1}l\log q + c_{0}$ for every $l \ge 1$, with $c_{1} = 2/\pi$ and $c_{0} = 0.98$. By the monotonicity in \cref{lem:count} it is enough to bound the root $z$ of $z = 1 + \sum_{l\ge1}\Lambda_{l}z^{-l}$. Summing the two geometric-type series,
+\[
+  \sum_{l \ge 1}\left(c_{1}l\log q + c_{0}\right)z^{-l} \;=\; \frac{c_{1}(\log q)\,z}{(z-1)^{2}} + \frac{c_{0}}{z-1},
+\]
+so the equation $z - 1 = \frac{c_{1}(\log q)z}{(z-1)^{2}} + \frac{c_{0}}{z-1}$, multiplied by $(z-1)^{2} > 0$, is exactly \cref{eq:cubic}. \cref{cor:sigmabound} then gives $\alpha_{1} \le \log_{q}(z_{q}q/(q-1))$, the first claim.
+
+For the second, $\alpha_{1} < 1/4$ follows from $z_{q}q/(q-1) < q^{1/4}$, that is from $z_{q} < w_{q} := q^{1/4}(1-1/q)$. Since $\varphi(z) = 1 + \sum_{l}\Lambda_{l}z^{-l}$ is strictly decreasing and meets the diagonal exactly once, $z_{q} < w$ holds if and only if $\varphi(w) < w$ for $w > 1$, and multiplying by $(w-1)^{2}$ that is
+\begin{equation}
+\label{eq:cert}
+  (w-1)^{3} \;>\; c_{1}(\log q)\,w \;+\; c_{0}(w-1).
+\end{equation}
+\cref{fact:cert} verifies \cref{eq:cert} at $w = w_{q}$ for every integer $126 \le q < 3000$, and records that it fails at $q = 125$.
+
+For $q \ge 211$ no evaluation is needed. First $z_{q} \ge 2$: if $z_{q} < 2$ then the left side of \cref{eq:cubic} is below $1$ while the right side exceeds $c_{1}\log q \ge c_{1}\log 211 > 3.4$. Then $z_{q} \le 2(z_{q}-1)$, so \cref{eq:cubic} gives $(z_{q}-1)^{3} \le \left(2c_{1}\log q + c_{0}\right)(z_{q}-1)$ and
+\[
+  z_{q} \;\le\; 1 + \sqrt{2c_{1}\log q + c_{0}} \;=:\; g(q).
+\]
+Finally $g(q) < w_{q}$ for all $q \ge 211$: it holds at $q = 211$ by \cref{fact:cert}, and $w_{q} - g(q)$ is increasing there, since
+\[
+  \frac{d}{dq}\,w_{q} \;>\; \tfrac14 q^{-3/4} \quad\text{and}\quad \frac{d}{dq}\,g(q) = \frac{c_{1}}{q\sqrt{2c_{1}\log q + c_{0}}},
+\]
+and $\frac14 q^{1/4}\sqrt{2c_{1}\log q + c_{0}} > c_{1}$ already at $q = 211$, both factors on the left being increasing. So \cref{eq:cert} holds at every $q \ge 126$, and the numerical values quoted in \cref{thm:main} are the right side of \cref{cor:sigmabound} evaluated at the root of \cref{eq:cubic}. As $q \to \infty$, $z_{q} = 1 + O(\sqrt{\log q})$ and $\log_{q}(z_{q}q/(q-1)) = O(\log\log q/\log q)$.
+\end{proof}
+
+\begin{fact}[The certificate]
+\label{fact:cert}
+Inequality \cref{eq:cert} at $w = w_{q}$ holds for every integer $q$ with $126 \le q < 3000$, with tightest margin $3.749 \times 10^{-2}$ at $q = 126$, and fails at $q = 125$. The closed-form comparison $1 + \sqrt{2c_{1}\log q + c_{0}} < w_{q}$ holds at $q = 211$ and at every sampled $q$ up to $10^{12}$. The constant $\gamma'$ of \cref{lem:leb} is confirmed to seven places, and the scan of $L_{M}$ over $2 \le M < 200$ and $M \in \{256, 400, 1000, 2048, 4096\}$ confirms both that the half offset is the maximum, over a grid of $97$ competing offsets, and that $L_{M}/M - \frac{2}{\pi}\log M$ stays below $0.9625272$ for $M \ge 100$.
+\end{fact}
+
+\section{Reproducibility}
+\label{sec:repro}
+
+Two scripts accompany this paper. Both are plain \texttt{python3} with no dependency beyond the standard library, take no arguments, write nothing outside \texttt{figures/}, and are run from the lane root. Every assertion names the value obtained and the value wanted, and a failure stops the script.
+
+\texttt{python3 scripts/verify.py} runs in about $30$ seconds in a peak of about $150$ megabytes, and covers the following, in order.
+\begin{itemize}
+\item \emph{The closed form.} \cref{eq:closed} against the direct character sum of \cref{def:hat}, on the five pairs $(7,0)$, $(10,5)$, $(21,0)$, $(21,10)$, $(34,16)$ at $1500$ arguments each; agreement to $4.3\times10^{-13}$.
+\item \emph{The exact anchor.} $\sum_{a<q}|\widehat{F}(a/q)| = 2$ exactly, for every base $3 \le q \le 39$ and every distinct excluded digit.
+\item \emph{Domination}, \cref{lem:dom}: $|\widehat{F}| \le u_{q}$ at $4000$ equally spaced arguments, for every distinct digit of the bases $3, 10, 21, 34, 126, 200$.
+\item \emph{The Lebesgue constant}, \cref{lem:leb} and \cref{fact:cert}: for every $2 \le M < 200$ and for $M \in \{256, 400, 1000, 2048, 4096\}$, the half-offset formula of \cref{lem:leb}(i) against a grid of $97$ competing offsets, and the bound of \cref{lem:leb}(ii); and $L_{M}/M - \frac{2}{\pi}\log M < 0.9625272$ for the rows with $M \ge 100$.
+\item \emph{The threshold}, \cref{fact:cert}: \cref{eq:cert} at $w = w_{q}$ for every integer $126 \le q < 3000$ and its failure at $q = 125$; the closed-form comparison at $q \in \{211, 500, 3000, 10^{6}, 10^{12}\}$; and the four values of \cref{thm:main}, each rounded up from the root of \cref{eq:cubic}.
+\item \emph{Below the floor}, \cref{fact:floor21}: all $108$ distinct sets of all bases $3 \le q \le 20$, lower bounds by \cref{prop:window} at the shortest window in $\{2,3,4\}$ that clears with a margin of $2\times10^{-4}$, sub-scan $m = 8$. All $108$ settle at two or three window digits.
+\item \emph{The first base}, \cref{fact:floor21}: base $21$ missing $0$, the two-sided bracket at $n = 4$, $m = 8$ and the decisive upper bound at $n = 5$, $m = 2$.
+\item \emph{The witnesses}, \cref{fact:witness}: the thirteen rows of \cref{tab:witness} and base $33$, lower bounds at $n = 3$ and, for base $33$, $n = 4$, with $m = 8$.
+\item \emph{The first family}, \cref{fact:floor34}: all $17$ distinct sets of base $34$, upper bounds at $n = 3$, $m = 8$, escalating to $n = 4$, $m = 2$ for the digit $16$.
+\item \emph{The calibration}, \cref{fact:calib}: base $10$ missing $5$ at $n = 5$, $m = 8$, both sides.
+\end{itemize}
+Nothing in the script is sampled without a Lipschitz correction and nothing is fitted. Suprema and infima over a cell are the extremes of a sub-scan of $m$ points widened outward by $\Lambda_{q,a_{0}}/(2mq^{n}) + 10^{-12}$ with $\Lambda_{q,a_{0}}$ the digit-dependent constant of \cref{eq:lip}, the second term a guard against floating-point drift that is four orders of magnitude below the thinnest margin claimed. Upper bounds are rounded up and lower bounds truncated down before printing, and no digit is printed past what the enclosure establishes. The script checks finite statements only: it cannot and does not verify \cref{thm:main}, which rests on \cref{sec:proofs} alone, and it does not rerun \cref{fact:sweep,fact:ceiling,fact:consistency}.
+
+Those three rows come from two interval-arithmetic generators of the MrlyMath research tree at \url{https://github.com/mrlyprod/mrlyprod}, namely
+\begin{gather*}
+  \texttt{research/lab/digit-transform-norms}, \\
+  \texttt{research/lab/digit-uniform-bound}.
+\end{gather*}
+They carry out the same Collatz-Wielandt tests as \cref{prop:window} with every operation rounded outward at $96$ or $120$ bits: \cref{fact:sweep} is $3663$ certified sets and takes about $150$ seconds there, \cref{fact:ceiling} the digit-blind window bound at three and four window digits, and \cref{fact:consistency} the two bounds side by side. \cref{cor:exact} is the only statement in this paper that consumes any of them.
+
+\begin{sloppypar}
+\texttt{python3 scripts/figure.py} runs in under a second. It writes \texttt{figures/figure.svg}, the picture the repository README embeds, and \texttt{figures/lemma.tex}, the Ti\emph{k}Z version of \cref{fig:lemma} that this document includes; both are drawn from the same evaluation of \cref{eq:closed}. \texttt{tectonic paper.tex} rebuilds \texttt{paper.pdf}.
+\end{sloppypar}
+
+\section*{Acknowledgments}
+
+This paper was developed and verified in collaboration with Claude (Anthropic). The author takes sole responsibility for every claim.
+
+\begin{thebibliography}{9}
+
+\bibitem{bh91}
+R. C. Baker and G. Harman, \emph{Exponential sums formed with the M\"obius function}, J. London Math. Soc. (2) \textbf{43} (1991), no. 2, 193--198. \href{https://doi.org/10.1112/jlms/s2-43.2.193}{doi:10.1112/jlms/s2-43.2.193}
+
+\bibitem{cvy}
+S. Chow, P. P. Varj\'u and H. Yu, \emph{Counting rationals and Diophantine approximation in missing-digit Cantor sets}, preprint, 2024. \href{https://arxiv.org/abs/2402.18395}{arXiv:2402.18395}
+
+\bibitem{ems}
+P. Erd\H{o}s, C. Mauduit and A. S\'ark\"ozy, \emph{On arithmetic properties of integers with missing digits I: distribution in residue classes}, J. Number Theory \textbf{70} (1998), no. 2, 99--120. \href{https://doi.org/10.1006/jnth.1998.2229}{doi:10.1006/jnth.1998.2229}
+
+\bibitem{kar}
+K. Karwatowski, \emph{Primes with one excluded digit}, Acta Arith. \textbf{202} (2022), 105--121. \href{https://doi.org/10.4064/aa191002-26-8}{doi:10.4064/aa191002-26-8}
+
+\bibitem{kon}
+S. V. Konyagin, \emph{Arithmetic properties of integers with missing digits: distribution in residue classes}, Period. Math. Hungar. \textbf{42} (2001), 145--162. \href{https://doi.org/10.1023/A:1015256809636}{doi:10.1023/A:1015256809636}
+
+\bibitem{ls}
+J. Leng and M. Sawhney, \emph{Vinogradov's theorem for primes with restricted digits}, preprint, 2025. \href{https://arxiv.org/abs/2409.06894}{arXiv:2409.06894}
+
+\bibitem{may}
+J. Maynard, \emph{Primes with restricted digits}, Invent. Math. \textbf{217} (2019), 127--218. \href{https://doi.org/10.1007/s00222-019-00865-6}{doi:10.1007/s00222-019-00865-6}
+
+\bibitem{may22}
+J. Maynard, \emph{Primes and polynomials with restricted digits}, Int. Math. Res. Not. IMRN \textbf{2022} (2022), no. 14, 10626--10648. \href{https://doi.org/10.1093/imrn/rnab002}{doi:10.1093/imrn/rnab002}
+
+\bibitem{nath}
+K. Nath, \emph{Primes with a missing digit: distribution in arithmetic progressions and an application in sieve theory}, J. London Math. Soc. \textbf{109} (2024), no. 1, e12837. \href{https://doi.org/10.1112/jlms.12837}{doi:10.1112/jlms.12837}
+
+\end{thebibliography}
+
+\end{document}

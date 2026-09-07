@@ -23,6 +23,11 @@ Formal write-ups of [MrlyMath](../README.md#mrlymath): the mathematics that fall
 - [divisor-avatars](divisor-avatars/) - when a parity design's cell census is the divisor count of a power, and exactly which integers have one.
 - [sequence-census](sequence-census/) - how many integer sequences a parity rule can write, which ones the catalogue already holds, and why the polygonal numbers keep turning up.
 
+## DRAFTS
+
+- Written and checked, not shipped: the threshold each aims at is still under review upstream.
+- [first-base-below-a-quarter](first-base-below-a-quarter/) - the least base whose one-missing-digit set has Fourier `l^1` exponent below a quarter, and the least base whose every digit clears.
+
 ## BUILD
 
 - PDFs are committed; nothing needs installing to read.
