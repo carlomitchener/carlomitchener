@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { Output, Route, Site, Spec } from "mrlyjs/ssg/build.ts";
@@ -21,9 +21,11 @@ const dist = join(org, "dist");
 const root = (process.env.SITE_URL ?? site.root).replace(/\/$/, "");
 const SHOP = process.env.SHOPIFY_SHOP_URL ?? "";
 const DAY = 24 * 60 * 60 * 1000;
+const FALLBACK = `${root}/icon-512.png`;
 
 const read = (path: string) => readFileSync(path, "utf8");
-const lower = (text: string) => String(text ?? "").toLowerCase();
+
+const slugify = (text: string) => String(text ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
 /* MARKDOWN */
 
@@ -47,6 +49,26 @@ function markdown(text: string) {
   return out.join("\n");
 }
 
+function sheet(text: string) {
+  const blocks = text.trim().split(/\n{2,}/).map((block) => block.trim()).filter(Boolean);
+  let title = "";
+  let lead = "";
+  const rest: string[] = [];
+  for (const block of blocks) {
+    const head = !title && block.match(/^#\s+(.*)$/);
+    if (head) {
+      title = head[1].trim();
+      continue;
+    }
+    if (title && !lead && !block.startsWith("#") && !block.startsWith("- ")) {
+      lead = block.replace(/\n/g, " ");
+      continue;
+    }
+    rest.push(block);
+  }
+  return { title, lead, body: markdown(rest.join("\n\n")) };
+}
+
 /* TYPES */
 
 type Row = {
@@ -64,9 +86,11 @@ type Row = {
   variant: string;
 };
 
+type Leaf = { route: string; name: string; description: string; image: string; type: string; data?: object; scripts: string[] };
+
 /* HEAD */
 
-function head(site_: Site, leaf: { route: string; name: string; description: string; image: string; type: string; data?: object; scripts: string[] }) {
+function head(site_: Site, leaf: Leaf) {
   const url = root + leaf.route;
   const tags = [
     `<link rel="canonical" href="${url}">`,
@@ -75,31 +99,32 @@ function head(site_: Site, leaf: { route: string; name: string; description: str
     `<meta property="og:description" content="${escape(leaf.description)}">`,
     `<meta property="og:url" content="${url}">`,
     `<meta property="og:type" content="${leaf.type}">`,
-    `<meta property="og:site_name" content="${escape(site.title)}">`,
+    `<meta property="og:site_name" content="${escape(site.name)}">`,
     `<meta property="og:image" content="${leaf.image}">`,
     `<meta property="og:image:width" content="1200">`,
     `<meta property="og:image:height" content="1200">`,
     `<meta name="twitter:card" content="summary_large_image">`,
     `<meta name="twitter:image" content="${leaf.image}">`,
-    `<link rel="icon" href="/favicon.png" type="image/png">`,
+    `<link rel="icon" href="/favicon.svg" type="image/svg+xml">`,
+    `<link rel="icon" href="/favicon.png" type="image/png" sizes="40x40">`,
     `<link rel="apple-touch-icon" href="/apple-touch-icon.png">`,
     `<link rel="manifest" href="/manifest.webmanifest">`,
   ];
-  const css = ["palette.css", "tokens.css", "base.css", "chrome.css", "brand.css"].map((name) => `<link rel="stylesheet" href="${site_.asset(name)}">`);
+  const css = ["palette.css", "tokens.css", "base.css", "chrome.css", "fonts/fonts.css", "brand.css"].map((name) => `<link rel="stylesheet" href="${site_.asset(name)}">`);
   const tint = site.tint ? `<style>${tintCss(site.tint)}</style>` : "";
   const js = ["chrome.js", ...leaf.scripts].map((name) => `<script type="module" src="${site_.asset(name)}"></script>`);
   const ld = leaf.data ? `<script type="application/ld+json">${JSON.stringify(leaf.data)}</script>` : "";
   return [...tags, ...css, tint, ld, ...js].filter(Boolean).join("\n");
 }
 
-function shell(site_: Site, leaf: { route: string; name: string; description: string; image: string; type: string; data?: object; scripts: string[]; body: unknown }) {
+function shell(site_: Site, leaf: Leaf & { body: unknown }) {
   const main = renderToStaticMarkup(leaf.body as never);
   return `<!doctype html>
 <html lang="en" data-prefix="${site.prefix}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escape(leaf.name === site.title ? site.title : `${leaf.name} · ${site.title}`)}</title>
+<title>${escape(leaf.name === site.name ? site.name : `${leaf.name} · ${site.name}`)}</title>
 ${head(site_, leaf)}
 </head>
 <body>
@@ -111,13 +136,23 @@ ${main}
 
 /* DATA */
 
-const CATEGORIES = ["accessories", "bags", "kids", "men", "unisex", "women"];
+const CATEGORIES: [string, string][] = [
+  ["accessories", "Accessories"],
+  ["bags", "Bags"],
+  ["kids", "Kids"],
+  ["men", "Men"],
+  ["unisex", "Unisex"],
+  ["women", "Women"],
+];
 
-const cycle = (name: string) => {
-  const order = ["all", ...CATEGORIES];
-  const at = order.indexOf(name);
-  return `/collections/${order[(at + 1) % order.length]}/`;
+const TABS = ["all", ...CATEGORIES.map(([slug]) => slug)];
+
+const cycle = (slug: string) => {
+  const at = TABS.indexOf(slug);
+  return `/collections/${TABS[(at + 1) % TABS.length]}/`;
 };
+
+const emoji = (name: string) => (site.emoji as Record<string, string>)[name] ?? "";
 
 const buyUrl = (id: string) => (SHOP ? `https://${SHOP}/cart/${id}:1` : "/cart/");
 
@@ -183,29 +218,68 @@ const newestFirst = (list: Row[]) => {
 
 /* COLLECT */
 
-const LEAD = "one design at a time. every printfile and every tile is a free download.";
+const LEAD = "One design at a time. Every printfile and every tile is a free download.";
+const INDEX = "Every design, by category and by product.";
+
+const HERO: Record<string, string> = { contact: "site-contact", donate: "site-donate" };
+
+const ACTION: Record<string, { href: string; name: string }> = {
+  donate: { href: "https://donate.stripe.com/dRm3cu3XLfHj19e6WW5kk00", name: "Donate" },
+};
 
 function collect(site_: Site) {
   const all = rows(site_);
   const catalog = site_.input("catalog").files[0];
   const byType = new Map<string, Row[]>();
   for (const row of all) byType.set(row.type, [...(byType.get(row.type) ?? []), row]);
+  const kinds = [...byType.entries()]
+    .map(([type, list]) => ({ type, slug: slugify(list[0].title), name: list[0].title, list }))
+    .sort((a, b) => a.name.localeCompare(b.name));
   const nav = tree({
     collections: [
-      { name: "all", href: "/collections/all/" },
-      ...CATEGORIES.map((name) => ({ name, href: `/collections/${name}/` })),
+      { name: "All", href: "/collections/all/" },
+      ...CATEGORIES.map(([slug, name]) => ({ name, href: `/collections/${slug}/` })),
+      ...kinds.map((kind) => ({ name: kind.name, href: `/collections/${kind.slug}/` })),
     ],
   });
+  const card = (name: string, href: string, mark: string, list: Row[]) => ({
+    name,
+    href,
+    emoji: mark,
+    count: list.length,
+    image: list[0]?.images[0] ?? null,
+    key: list[0]?.key ?? "",
+  });
+  const groups = [
+    {
+      name: "By category",
+      cards: [
+        card("All", "/collections/all/", emoji("all"), all),
+        ...CATEGORIES.map(([slug, name]) => card(name, `/collections/${slug}/`, emoji(slug), all.filter((row) => row.category === slug))),
+      ],
+    },
+    { name: "By product", cards: kinds.map((kind) => card(kind.name, `/collections/${kind.slug}/`, emoji(kind.list[0].category), kind.list)) },
+  ];
   const routes: Route[] = [];
-  routes.push({ route: "/", kind: "home", name: site.title, data: { products: all }, inputs: [catalog], at: today() });
-  routes.push({ route: "/collections/", kind: "collections", name: "collections", data: { products: all }, inputs: [catalog], at: today() });
-  for (const name of ["all", ...CATEGORIES]) {
-    const list = name === "all" ? all : all.filter((row) => row.category === name);
+  routes.push({ route: "/", kind: "home", name: site.name, data: { products: all }, inputs: [catalog], at: today() });
+  routes.push({ route: "/collections/", kind: "collections", name: "Collections", data: { groups, count: all.length, image: cover(all) }, inputs: [catalog], at: today() });
+  for (const [slug, name] of [["all", "All"] as [string, string], ...CATEGORIES]) {
+    const list = slug === "all" ? all : all.filter((row) => row.category === slug);
     routes.push({
-      route: `/collections/${name}/`,
+      route: `/collections/${slug}/`,
       kind: "collection",
       name,
-      data: { name, products: newestFirst(list) },
+      data: { slug, name, products: newestFirst(list) },
+      inputs: [catalog],
+      at: today(),
+    });
+  }
+  for (const kind of kinds) {
+    routes.push({
+      route: `/collections/${kind.slug}/`,
+      kind: "collection",
+      name: kind.name,
+      data: { slug: kind.slug, name: kind.name, products: kind.list },
       inputs: [catalog],
       at: today(),
     });
@@ -215,16 +289,19 @@ function collect(site_: Site) {
     routes.push({
       route: `/products/${row.key}/`,
       kind: "product",
-      name: lower(row.title),
-      data: { product: row, family },
+      name: row.title,
+      data: { product: row, family, slug: slugify(row.title) },
       inputs: [catalog],
       at: row.created.slice(0, 10),
     });
   }
-  routes.push({ route: "/cart/", kind: "cart", name: "cart", inputs: [catalog], at: today(), hidden: true });
-  const about = site_.input("pages").files.find((file) => file.endsWith("about.md"));
-  if (about) routes.push({ route: "/about/", kind: "about", name: "about", source: about, inputs: [about], at: today() });
-  routes.push({ route: "/404.html", kind: "missing", name: "not found", hidden: true });
+  routes.push({ route: "/cart/", kind: "cart", name: "Cart", inputs: [catalog], at: today(), hidden: true });
+  routes.push({ route: "/menu/", kind: "menu", name: "Menu", at: today() });
+  for (const file of site_.input("pages").files) {
+    const name = basename(file, ".md");
+    routes.push({ route: `/${name}/`, kind: "page", name: sheet(read(file)).title || name, source: file, inputs: [file], at: today() });
+  }
+  routes.push({ route: "/404.html", kind: "missing", name: "Not found", hidden: true });
   return { routes, nav };
 }
 
@@ -234,8 +311,12 @@ const today = () => new Date().toISOString().slice(0, 10);
 
 const ogFor = (row: Row) => root + ogUrl(row.key);
 
-function describe(row: Row) {
-  return `${lower(row.title)} by ${site.title}. USD ${Number(row.price).toFixed(2)}. One design, ${site.live} days.`;
+const describe = (row: Row) => `${row.title} by ${site.name}. USD ${Number(row.price).toFixed(2)}. One design, ${site.live} days.`;
+
+function cover(products: Row[]) {
+  const first = products[0];
+  if (!first) return FALLBACK;
+  return first.images[0] ? grid(first.images[0].url, 1200) : ogFor(first);
 }
 
 function draw(site_: Site, route: Route): Output[] {
@@ -243,46 +324,41 @@ function draw(site_: Site, route: Route): Output[] {
   const at = route.route === "/" ? "index.html" : path;
   if (route.kind === "home") {
     const { products } = route.data as { products: Row[] };
-    const body = h(R.Page, { route: route.route, nav: site_.nav, controls: h(R.Filter, { label: "all", count: products.length, next: cycle("all") }) }, h(R.Home, { products, lead: LEAD }));
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: site.title, description: LEAD, image: cover(products), type: "website", scripts: ["cart.js"], body }) }];
+    const body = h(R.Page, { route: route.route, nav: site_.nav, controls: h(R.Filter, { label: "All", count: products.length, next: cycle("all") }) }, h(R.Home, { products, lead: LEAD }));
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: site.name, description: LEAD, image: cover(products), type: "website", scripts: ["cart.js"], body }) }];
   }
   if (route.kind === "collections") {
-    const { products } = route.data as { products: Row[] };
-    const cards = ["all", ...CATEGORIES].map((name) => {
-      const list = name === "all" ? products : products.filter((row) => row.category === name);
-      return { name, href: `/collections/${name}/`, emoji: (site.emoji as Record<string, string>)[name] ?? "", count: list.length, image: list[0]?.images[0], key: list[0]?.key };
-    });
-    const body = h(R.Page, { route: route.route, nav: site_.nav, controls: h(R.Filter, { label: "all", count: products.length, next: cycle("all") }) }, h(R.Collections, { cards }));
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "collections", description: "every design, by what it is printed on.", image: cover(products), type: "website", scripts: ["cart.js"], body }) }];
+    const { groups, count, image } = route.data as { groups: unknown[]; count: number; image: string };
+    const body = h(R.Page, { route: route.route, nav: site_.nav, controls: h(R.Filter, { label: "All", count, next: cycle("all") }) }, h(R.Collections, { groups, lead: INDEX }));
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Collections", description: INDEX, image, type: "website", scripts: ["cart.js"], body }) }];
   }
   if (route.kind === "collection") {
-    const { name, products } = route.data as { name: string; products: Row[] };
-    const body = h(R.Page, { route: route.route, nav: site_.nav, controls: h(R.Filter, { label: name, count: products.length, next: cycle(name) }) }, h(R.Collection, { name, products }));
+    const { slug, name, products } = route.data as { slug: string; name: string; products: Row[] };
+    const body = h(R.Page, { route: route.route, nav: site_.nav, controls: h(R.Filter, { label: name, count: products.length, next: cycle(slug) }) }, h(R.Collection, { name, products }));
     const lead = `${products.length} design${products.length === 1 ? "" : "s"} in ${name}.`;
     return [{ path: at, bytes: shell(site_, { route: route.route, name, description: lead, image: cover(products), type: "website", scripts: ["cart.js"], body }) }];
   }
   if (route.kind === "product") return product(site_, route, at);
   if (route.kind === "cart") {
     const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.Cart, {}));
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "cart", description: "your cart.", image: `${root}/mark.png`, type: "website", scripts: ["cart.js"], body }) }];
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Cart", description: "Your cart.", image: FALLBACK, type: "website", scripts: ["cart.js"], body }) }];
   }
-  if (route.kind === "about") {
-    const text = markdown(read(route.source as string));
-    const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.About, { body: text }));
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "about", description: "who makes this shop and why every file is free.", image: `${root}/mark.png`, type: "website", scripts: ["cart.js"], body }) }];
+  if (route.kind === "menu") {
+    const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.Menu, { nav: site_.nav }));
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Menu", description: `Every page on ${site.name}.`, image: FALLBACK, type: "website", scripts: ["cart.js"], body }) }];
+  }
+  if (route.kind === "page") {
+    const name = basename(route.source as string, ".md");
+    const doc = sheet(read(route.source as string));
+    const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.Doc, { ...doc, hero: HERO[name], action: ACTION[name] }));
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: doc.title || name, description: doc.lead, image: FALLBACK, type: "website", scripts: ["cart.js"], body }) }];
   }
   const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.NotFound, {}));
-  return [{ path: "404.html", bytes: shell(site_, { route: route.route, name: "not found", description: "that page is gone, or the design expired.", image: `${root}/mark.png`, type: "website", scripts: ["cart.js"], body }) }];
-}
-
-function cover(products: Row[]) {
-  const first = products[0];
-  if (!first) return `${root}/mark.png`;
-  return first.images[0] ? grid(first.images[0].url, 1200) : ogFor(first);
+  return [{ path: "404.html", bytes: shell(site_, { route: route.route, name: "Not found", description: "That page is gone, or the design expired.", image: FALLBACK, type: "website", scripts: ["cart.js"], body }) }];
 }
 
 function product(site_: Site, route: Route, at: string): Output[] {
-  const { product: row, family } = route.data as { product: Row; family: Row[] };
+  const { product: row, family, slug } = route.data as { product: Row; family: Row[]; slug: string };
   const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
   const index = family.findIndex((one) => one.key === row.key);
   const expires = new Date(row.created).getTime() + site.live * DAY;
@@ -303,17 +379,17 @@ function product(site_: Site, route: Route, at: string): Output[] {
   const body = h(
     R.Page,
     { route: route.route, nav: site_.nav, controls },
-    h(R.Product, { product: row, siblings: family, printful, files: row.files, tiles: site.tiles }),
+    h(R.Product, { product: row, siblings: family, collection: `/collections/${slug}/`, files: row.files, tiles: site.tiles }),
     h("script", { type: "application/json", id: "siblings", dangerouslySetInnerHTML: { __html: JSON.stringify(siblings) } }),
   );
   const data = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: lower(row.title),
+    name: row.title,
     sku: row.key,
     image: ogFor(row),
     description: describe(row),
-    brand: { "@type": "Brand", name: site.title },
+    brand: { "@type": "Brand", name: site.name },
     offers: {
       "@type": "Offer",
       url: root + route.route,
@@ -327,7 +403,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
       path: at,
       bytes: shell(site_, {
         route: route.route,
-        name: lower(row.title),
+        name: row.title,
         description: describe(row),
         image: ogFor(row),
         type: "website",

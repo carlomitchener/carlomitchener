@@ -36,7 +36,7 @@ function swap(key) {
     const list = [...one.files.map((name) => [name, art(key, name)])];
     for (const tile of document.querySelectorAll('[data-strip] a')) list.push([`${tile.dataset.tile}x${tile.dataset.tile}`, tile.href]);
     list.push(['og', art(key, `${key}-og`)]);
-    downloads.replaceChildren(Object.assign(document.createElement('span'), { textContent: 'download ' }));
+    downloads.replaceChildren(Object.assign(document.createElement('span'), { textContent: 'Download ' }));
     for (const [name, href] of list) {
       const link = document.createElement('a');
       link.href = href;
@@ -73,7 +73,7 @@ function swap(key) {
     else tile.removeAttribute('aria-current');
   }
   const fine = document.querySelector('.lede .fine');
-  if (fine) fine.textContent = `design ${key}`;
+  if (fine) fine.textContent = `Design ${key}`;
   if (old !== key) history.pushState({ key }, '', `/products/${key}/`);
   window.dispatchEvent(new CustomEvent('flip', { detail: key }));
 }
@@ -99,9 +99,9 @@ async function share() {
   } catch {}
   const button = document.querySelector('[data-share]');
   if (!button) return;
-  button.textContent = 'copied!';
+  button.textContent = 'Copied!';
   setTimeout(() => {
-    button.textContent = 'share';
+    button.textContent = 'Share';
   }, 1500);
 }
 

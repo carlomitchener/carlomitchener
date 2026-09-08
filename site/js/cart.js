@@ -51,13 +51,6 @@ export const checkoutUrl = (items) =>
 
 const money = (amount) => `$${Number(amount).toFixed(2)}`;
 
-/* BAG */
-
-function bag() {
-  const badge = document.querySelector('[data-bag] .n');
-  if (badge) badge.textContent = String(count(load()));
-}
-
 /* PRODUCT */
 
 function stock() {
@@ -96,10 +89,10 @@ function drop(button) {
     image: shot(),
   });
   button.classList.add('added');
-  button.textContent = 'added!';
+  button.textContent = 'Added!';
   setTimeout(() => {
     button.classList.remove('added');
-    button.textContent = 'add to cart';
+    button.textContent = 'Add to cart';
   }, 1500);
 }
 
@@ -115,10 +108,10 @@ function lines() {
   if (!items.length) {
     const lead = document.createElement('p');
     lead.className = 'lead';
-    lead.textContent = 'your cart is empty.';
+    lead.textContent = 'Your cart is empty.';
     const back = document.createElement('a');
     back.href = '/';
-    back.textContent = 'go to the shop';
+    back.textContent = 'Go to the shop';
     sum.append(lead, back);
     return;
   }
@@ -133,7 +126,7 @@ function lines() {
     const title = node.querySelector('[data-title]');
     title.href = `/products/${item.key}/`;
     title.textContent = `${item.title} (${item.key})`;
-    node.querySelector('[data-size]').textContent = `${String(item.size).toLowerCase()} · ${money(item.price)}`;
+    node.querySelector('[data-size]').textContent = `${item.size} · ${money(item.price)}`;
     node.querySelector('[data-qty]').textContent = String(item.qty);
     node.querySelector('[data-total]').textContent = money(Number(item.price) * item.qty);
     node.querySelector('[data-dec]').dataset.id = item.id;
@@ -150,23 +143,18 @@ function lines() {
   go.className = 'buy primary';
   go.href = checkoutUrl(items);
   go.dataset.checkout = '';
-  go.textContent = 'checkout';
+  go.textContent = 'Checkout';
   const wipe = document.createElement('button');
   wipe.type = 'button';
   wipe.dataset.clear = '';
-  wipe.textContent = 'clear cart';
+  wipe.textContent = 'Clear cart';
   const back = document.createElement('a');
   back.href = '/';
-  back.textContent = 'continue shopping';
+  back.textContent = 'Continue shopping';
   sum.append(price, go, wipe, back);
 }
 
 /* WIRE */
-
-function paint() {
-  bag();
-  lines();
-}
 
 document.addEventListener('click', (event) => {
   const target = event.target instanceof Element ? event.target : null;
@@ -183,8 +171,8 @@ document.addEventListener('click', (event) => {
   if (wipe) return void clear();
 });
 
-window.addEventListener('cart', paint);
+window.addEventListener('cart', lines);
 window.addEventListener('flip', stock);
-window.addEventListener('storage', paint);
+window.addEventListener('storage', lines);
 stock();
-paint();
+lines();

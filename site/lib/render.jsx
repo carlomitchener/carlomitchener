@@ -1,49 +1,24 @@
-import { Shell } from 'mrlyjs/ui/chrome.jsx';
+import { Menu as Sitemap, Shell } from 'mrlyjs/ui/chrome.jsx';
 import { configure } from 'mrlyjs/ui/config.js';
 import site from '../site.json';
 import { grid, money, ogUrl, tileUrl, artUrl } from './shop.ts';
 
 configure(site);
 
-const CATEGORIES = ['accessories', 'bags', 'kids', 'men', 'unisex', 'women'];
+const CATEGORIES = [
+  ['accessories', 'Accessories'],
+  ['bags', 'Bags'],
+  ['kids', 'Kids'],
+  ['men', 'Men'],
+  ['unisex', 'Unisex'],
+  ['women', 'Women'],
+];
 
-const lower = (text) => String(text ?? '').toLowerCase();
-
-/* SLOTS */
-
-function Brand() {
-  return (
-    <>
-      <a className="brand" href="/">
-        <img src="/mark.png" width="32" height="32" alt="" />
-        <span>{site.title}</span>
-      </a>
-      <a className="bag" href="/cart/" data-bag>
-        <span>cart</span>
-        <b className="n">0</b>
-      </a>
-    </>
-  );
-}
-
-function Note() {
-  return (
-    <>
-      <p className="fine">
-        a <a href={site.company.href}>{site.company.name}</a> company · <a href={`mailto:${site.contact}`}>{site.contact}</a>
-      </p>
-      <nav className="links" aria-label="Printful">
-        {site.links.map((link) => (
-          <a key={link.name} href={link.href} rel="noopener">{link.name}</a>
-        ))}
-      </nav>
-    </>
-  );
-}
+/* SHELL */
 
 export function Page({ route, nav, controls, wide, children }) {
   return (
-    <Shell route={route} tree={nav} controls={controls} wide={wide} brand={<Brand />} note={<Note />}>
+    <Shell route={route} tree={nav} controls={controls} wide={wide}>
       {children}
     </Shell>
   );
@@ -68,7 +43,7 @@ function Card({ product, width = 600, eager = false, pick = 0 }) {
       ) : (
         <img src={tileUrl(product.key, 3)} alt={product.title} width="88" height="88" loading="lazy" decoding="async" />
       )}
-      <h2>{lower(product.title)}</h2>
+      <h2>{product.title}</h2>
       <p className="num">{money(product.price)}</p>
     </a>
   );
@@ -89,12 +64,32 @@ export function Filter({ label, count, next }) {
     <>
       <a className="filter" href={next}>{`${label} (${count})`}</a>
       <ul className="tabs stack">
-        <li><a href="/collections/all/">all</a></li>
-        {CATEGORIES.map((name) => (
-          <li key={name}><a href={`/collections/${name}/`}>{name}</a></li>
+        <li><a href="/collections/all/">All</a></li>
+        {CATEGORIES.map(([slug, name]) => (
+          <li key={slug}><a href={`/collections/${slug}/`}>{name}</a></li>
         ))}
       </ul>
     </>
+  );
+}
+
+function Deck({ cards }) {
+  return (
+    <div className="cards">
+      {cards.map((card) => (
+        <a className="card" key={card.href} href={card.href}>
+          {card.image ? (
+            <img src={grid(card.image.url, 600)} alt={card.name} width="600" height="600" loading="lazy" decoding="async" />
+          ) : (
+            <img src={tileUrl(card.key, 3)} alt={card.name} width="88" height="88" loading="lazy" decoding="async" />
+          )}
+          <p className="code">
+            {card.emoji ? <span role="img" aria-label={card.name}>{card.emoji}</span> : null} {card.name}
+          </p>
+          <p className="name">{`${card.count} design${card.count === 1 ? '' : 's'}`}</p>
+        </a>
+      ))}
+    </div>
   );
 }
 
@@ -104,7 +99,7 @@ export function Home({ products, lead }) {
   return (
     <>
       <div className="lede">
-        <h1>{site.title}</h1>
+        <h1>{site.name}</h1>
         <p className="lead">{lead}</p>
       </div>
       <Gallery products={products} eager={2} />
@@ -114,28 +109,19 @@ export function Home({ products, lead }) {
 
 /* COLLECTIONS */
 
-export function Collections({ cards }) {
+export function Collections({ groups, lead }) {
   return (
     <>
       <div className="lede">
-        <h1>collections</h1>
-        <p className="lead">every design, by what it is printed on.</p>
+        <h1>Collections</h1>
+        <p className="lead">{lead}</p>
       </div>
-      <div className="cards">
-        {cards.map((card) => (
-          <a className="card" key={card.name} href={card.href}>
-            {card.image ? (
-              <img src={grid(card.image.url, 600)} alt={card.name} width="600" height="600" loading="lazy" decoding="async" />
-            ) : (
-              <img src={tileUrl(card.key, 3)} alt={card.name} width="88" height="88" loading="lazy" decoding="async" />
-            )}
-            <p className="code">
-              <span role="img" aria-label={card.name}>{card.emoji}</span> {card.name}
-            </p>
-            <p className="name">{`${card.count} design${card.count === 1 ? '' : 's'}`}</p>
-          </a>
-        ))}
-      </div>
+      {groups.map((group) => (
+        <section key={group.name}>
+          <h2>{group.name}</h2>
+          <Deck cards={group.cards} />
+        </section>
+      ))}
     </>
   );
 }
@@ -154,15 +140,15 @@ export function Collection({ name, products }) {
 
 /* PRODUCT */
 
-export function Product({ product, siblings, printful, files, tiles }) {
+export function Product({ product, siblings, collection, files, tiles }) {
   const images = product.images;
   return (
     <>
       <div className="lede">
         <h1>
-          <a href={printful} rel="noopener">{lower(product.title)}</a>
+          <a href={collection}>{product.title}</a>
         </h1>
-        <p className="fine">design {product.key}</p>
+        <p className="fine">Design {product.key}</p>
       </div>
       <div className="gallery square" data-mockups>
         {images.map((image, i) => (
@@ -188,7 +174,7 @@ export function Product({ product, siblings, printful, files, tiles }) {
         ))}
       </div>
       <p className="fine" data-downloads>
-        <span>download </span>
+        <span>Download </span>
         {files.map((name) => (
           <a key={name} href={artUrl(product.key, name)} download>{name}</a>
         ))}
@@ -197,7 +183,7 @@ export function Product({ product, siblings, printful, files, tiles }) {
         ))}
         <a href={ogUrl(product.key)} download>og</a>
       </p>
-      <h2 id="designs">designs</h2>
+      <h2 id="designs">Designs</h2>
       <div className="gallery square" data-siblings>
         {siblings.map((one) => (
           <a
@@ -231,7 +217,7 @@ export function Controls({ product, printful, sizes, index, total, buy, expires,
               data-size={size.size}
               aria-pressed={size.id === product.variant ? 'true' : 'false'}
             >
-              {lower(size.size)}
+              {size.size}
             </button>
           ))}
         </div>
@@ -241,25 +227,23 @@ export function Controls({ product, printful, sizes, index, total, buy, expires,
         className="primary"
         data-add
         data-key={product.key}
-        data-title={lower(product.title)}
+        data-title={product.title}
         data-variant={product.variant}
         data-price={product.price}
         data-size={product.variants[0] ? product.variants[0].size : ''}
         disabled={!product.available}
       >
-        add to cart
+        Add to cart
       </button>
-      <a className="buy" href={buy} data-buy rel="noopener">buy now</a>
+      <a className="buy" href={buy} data-buy rel="noopener">Buy now</a>
       <p className="count" data-expiry={expires} data-live={live} data-ttl></p>
-      <div className="row">
-        <button type="button" data-prev disabled={total < 2}>prev</button>
+      <div className="row pager">
+        <button type="button" data-prev disabled={total < 2}>Prev</button>
         <span className="num" data-index>{`${index + 1} / ${total}`}</span>
-        <button type="button" data-next disabled={total < 2}>next</button>
+        <button type="button" data-next disabled={total < 2}>Next</button>
       </div>
-      <button type="button" data-share>share</button>
-      <p className="fine">
-        <a href={printful} rel="noopener">size and care</a>
-      </p>
+      <button type="button" data-share>Share</button>
+      <a className="button" href={printful} rel="noopener">View on Printful</a>
     </>
   );
 }
@@ -270,7 +254,7 @@ export function Cart() {
   return (
     <>
       <div className="lede">
-        <h1>cart</h1>
+        <h1>Cart</h1>
       </div>
       <div data-cart-lines></div>
       <div className="sum" data-cart-sum></div>
@@ -283,13 +267,13 @@ export function Cart() {
             <a data-title></a>
             <p className="dim" data-size></p>
             <div className="qty">
-              <button type="button" data-dec aria-label="one less">-</button>
+              <button type="button" data-dec aria-label="One less">-</button>
               <b className="num" data-qty></b>
-              <button type="button" data-inc aria-label="one more">+</button>
+              <button type="button" data-inc aria-label="One more">+</button>
             </div>
           </div>
           <p className="num" data-total></p>
-          <button type="button" data-remove>remove</button>
+          <button type="button" data-remove>Remove</button>
         </div>
       </template>
     </>
@@ -298,16 +282,37 @@ export function Cart() {
 
 /* PAGES */
 
-export function About({ body }) {
+export function Menu({ nav }) {
   return (
     <>
       <div className="lede">
-        <h1>about</h1>
+        <h1>Menu</h1>
+        <p className="lead">Every page on {site.name}.</p>
       </div>
-      <article className="prose" dangerouslySetInnerHTML={{ __html: body }}></article>
-      <p className="fine">
-        a <a href={site.company.href}>{site.company.name}</a> company · <a href={`mailto:${site.contact}`}>{site.contact}</a>
-      </p>
+      <Sitemap tree={nav} />
+    </>
+  );
+}
+
+export function Doc({ title, lead, body, hero, action }) {
+  return (
+    <>
+      {hero && (
+        <figure className="opener">
+          <img className="dark" src={`/figures/${hero}-dark.png`} alt="" width="1024" height="1024" decoding="async" />
+          <img className="light" src={`/figures/${hero}-light.png`} alt="" width="1024" height="1024" decoding="async" />
+        </figure>
+      )}
+      <div className="lede">
+        <h1>{title}</h1>
+        {lead && <p className="lead">{lead}</p>}
+      </div>
+      {action && (
+        <div className="prose">
+          <p><a className="button primary" href={action.href}>{action.name}</a></p>
+        </div>
+      )}
+      {body && <article className="prose" dangerouslySetInnerHTML={{ __html: body }}></article>}
     </>
   );
 }
@@ -315,9 +320,9 @@ export function About({ body }) {
 export function NotFound() {
   return (
     <div className="lede">
-      <h1>not found</h1>
-      <p className="lead">that page is gone, or the design expired.</p>
-      <p><a href="/">back to the shop</a></p>
+      <h1>Not found</h1>
+      <p className="lead">That page is gone, or the design expired.</p>
+      <p><a href="/">Back to the shop</a></p>
     </div>
   );
 }

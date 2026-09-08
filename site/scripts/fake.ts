@@ -25,17 +25,27 @@ const write = (path: string, body: unknown) => {
   writeFileSync(path, JSON.stringify(body, null, 2) + "\n");
 };
 
-const catalog = read(join(shop, "files", "catalog.json")) as { id: number; category: string; title: string }[];
+const STUB = {
+  variants: [
+    { id: 1, size: "S", cost: "24.00" },
+    { id: 2, size: "M", cost: "24.00" },
+    { id: 3, size: "L", cost: "24.00" },
+  ],
+  mockups: [
+    { id: 1, category: "Flat", title: "Front" },
+    { id: 2, category: "Lifestyle", title: "Worn" },
+  ],
+  placements: [{ width: 20, height: 20, dpi: 300 }],
+};
+
+const catalog = read(join(shop, "files", "catalog.json")) as { id: number; live: boolean; category: string; title: string }[];
 const products: unknown[] = [];
 let stamp = Date.now();
 
 for (const entry of catalog) {
   const file = join(shop, "data", "products", `${entry.id}.json`);
-  if (!existsSync(file)) {
-    console.warn(`fake: no product json for ${entry.id}, skipped`);
-    continue;
-  }
-  const source = read(file);
+  if (!existsSync(file) && !entry.live) continue;
+  const source = existsSync(file) ? read(file) : STUB;
   const live = (source.variants ?? []).filter((v: { is_ignored: boolean }) => !v.is_ignored);
   const variants = (live.length ? live : source.variants ?? []).filter(
     (v: { size: string }, i: number, all: { size: string }[]) => all.findIndex((o) => o.size === v.size) === i,

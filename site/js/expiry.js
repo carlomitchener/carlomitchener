@@ -23,7 +23,7 @@ function tick() {
   if (!node) return true;
   const left = Number(node.dataset.expiry) - Date.now();
   if (left <= 0) {
-    node.textContent = 'expired';
+    node.textContent = 'Expired';
     expired();
     return true;
   }
