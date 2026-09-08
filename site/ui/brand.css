@@ -53,3 +53,11 @@ button.primary[data-add]:disabled { opacity: 0.4; cursor: not-allowed; }
   .line { grid-template-columns: 64px minmax(0, 1fr); }
   .line img { width: 64px; height: 64px; }
 }
+
+/* ELSEWHERE */
+
+.elsewhere { margin-top: var(--s5); }
+.elsewhere h2 { font-size: 0.95rem; margin-bottom: var(--s3); }
+.elsewhere ul { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); list-style: none; margin: 0; padding: 0; }
+.elsewhere a { color: var(--dim); font-size: 0.85rem; }
+.elsewhere a:hover { color: var(--fg); }

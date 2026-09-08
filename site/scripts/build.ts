@@ -227,6 +227,18 @@ const ACTION: Record<string, { href: string; name: string }> = {
   donate: { href: "https://donate.stripe.com/dRm3cu3XLfHj19e6WW5kk00", name: "Donate" },
 };
 
+const PAGES: [string, string, string][] = [
+  ["Cart", "/cart/", "site-cart"],
+  ["About", "/about/", "site-icon"],
+  ["Contact", "/contact/", "site-contact"],
+  ["FAQ", "/faq/", "site-page"],
+  ["Terms", "/terms/", "site-page"],
+  ["Privacy", "/privacy/", "site-page"],
+  ["Donate", "/donate/", "site-donate"],
+];
+
+const figure = (stem: string) => ({ dark: `/figures/${stem}-dark.png`, light: `/figures/${stem}-light.png` });
+
 function collect(site_: Site) {
   const all = rows(site_);
   const catalog = site_.input("catalog").files[0];
@@ -259,6 +271,31 @@ function collect(site_: Site) {
       ],
     },
     { name: "By product", cards: kinds.map((kind) => card(kind.name, `/collections/${kind.slug}/`, emoji(kind.list[0].category), kind.list)) },
+  ];
+  const shelf = (name: string, href: string, list: Row[]) => {
+    const image = list[0]?.images[0];
+    const url = image ? grid(image.url, 600) : "";
+    return {
+      name,
+      href,
+      ...(url ? { figure: { dark: url, light: url } } : {}),
+      text: `${list.length} design${list.length === 1 ? "" : "s"}`,
+    };
+  };
+  const menu = [
+    {
+      name: "Collections",
+      href: "/collections/",
+      nodes: [
+        shelf("All", "/collections/all/", all),
+        ...CATEGORIES.map(([slug, name]) => shelf(name, `/collections/${slug}/`, all.filter((row) => row.category === slug))),
+        ...kinds.map((kind) => shelf(kind.name, `/collections/${kind.slug}/`, kind.list)),
+      ],
+    },
+    {
+      name: "Pages",
+      nodes: PAGES.map(([name, href, stem]) => ({ name, href, figure: figure(stem) })),
+    },
   ];
   const routes: Route[] = [];
   routes.push({ route: "/", kind: "home", name: site.name, data: { products: all }, inputs: [catalog], at: today() });
@@ -296,7 +333,7 @@ function collect(site_: Site) {
     });
   }
   routes.push({ route: "/cart/", kind: "cart", name: "Cart", inputs: [catalog], at: today(), hidden: true });
-  routes.push({ route: "/menu/", kind: "menu", name: "Menu", at: today() });
+  routes.push({ route: "/menu/", kind: "menu", name: "Menu", data: { menu }, at: today() });
   for (const file of site_.input("pages").files) {
     const name = basename(file, ".md");
     routes.push({ route: `/${name}/`, kind: "page", name: sheet(read(file)).title || name, source: file, inputs: [file], at: today() });
@@ -344,7 +381,8 @@ function draw(site_: Site, route: Route): Output[] {
     return [{ path: at, bytes: shell(site_, { route: route.route, name: "Cart", description: "Your cart.", image: FALLBACK, type: "website", scripts: ["cart.js"], body }) }];
   }
   if (route.kind === "menu") {
-    const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.Menu, { nav: site_.nav }));
+    const { menu } = route.data as { menu: unknown[] };
+    const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.Menu, { tree: menu }));
     return [{ path: at, bytes: shell(site_, { route: route.route, name: "Menu", description: `Every page on ${site.name}.`, image: FALLBACK, type: "website", scripts: ["cart.js"], body }) }];
   }
   if (route.kind === "page") {

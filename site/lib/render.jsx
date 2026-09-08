@@ -282,14 +282,27 @@ export function Cart() {
 
 /* PAGES */
 
-export function Menu({ nav }) {
+export function Menu({ tree }) {
   return (
     <>
       <div className="lede">
         <h1>Menu</h1>
         <p className="lead">Every page on {site.name}.</p>
       </div>
-      <Sitemap tree={nav} />
+      <Sitemap tree={tree} />
+      <section className="elsewhere">
+        <h2>Elsewhere</h2>
+        <ul>
+          {site.socials.map((one) => (
+            <li key={one.href}>
+              <a href={one.href}>{one.name}</a>
+            </li>
+          ))}
+          <li>
+            <a href={`mailto:${site.contact}`}>{site.contact}</a>
+          </li>
+        </ul>
+      </section>
     </>
   );
 }

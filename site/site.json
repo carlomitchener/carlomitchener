@@ -29,44 +29,6 @@
     { "name": "Contact", "href": "/contact/" },
     { "name": "FAQ", "href": "/faq/" }
   ],
-  "footer": [
-    {
-      "name": "Shop",
-      "links": [
-        { "name": "Home", "href": "/" },
-        { "name": "Collections", "href": "/collections/" },
-        { "name": "Cart", "href": "/cart/" },
-        { "name": "Menu", "href": "/menu/" }
-      ]
-    },
-    {
-      "name": "Company",
-      "links": [
-        { "name": "About", "href": "/about/" },
-        { "name": "Contact", "href": "/contact/" },
-        { "name": "FAQ", "href": "/faq/" },
-        { "name": "Donate", "href": "/donate/" }
-      ]
-    },
-    {
-      "name": "Legal",
-      "links": [
-        { "name": "Terms", "href": "/terms/" },
-        { "name": "Privacy", "href": "/privacy/" }
-      ]
-    },
-    {
-      "name": "Printful",
-      "links": [
-        { "name": "Printful website", "href": "https://www.printful.com" },
-        { "name": "Shipping", "href": "https://www.printful.com/shipping" },
-        { "name": "Status", "href": "https://www.printfulstatus.com" },
-        { "name": "Help center", "href": "https://help.printful.com" },
-        { "name": "Recent updates", "href": "https://www.printful.com/recent-updates" },
-        { "name": "Sustainability", "href": "https://www.printful.com/sustainability-responsibility" }
-      ]
-    }
-  ],
   "socials": [
     { "name": "GitHub", "href": "https://github.com/carlomitchener" },
     { "name": "YouTube", "href": "https://www.youtube.com/@carlomitchener" },
