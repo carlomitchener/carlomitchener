@@ -1,6 +1,6 @@
 # The Sequence Census of a Parity Design
 
-![avatar](figures/avatar.png)
+<picture><source media="(prefers-color-scheme: dark)" srcset="figures/avatar-dark.png"><img alt="avatar" src="figures/avatar-light.png"></picture>
 
 Colour the cells of a grid by the parity of their coordinates, keep a chosen set of colours, and count what you kept. Every such rule writes an integer sequence, and this paper counts the sequences rather than admiring them. In dimension $D$ there are $2^{2^D}$ rules but only $\prod_{w=0}^{D}\left(1+\binom{D}{w}\right)$ distinct counting sequences, and in the plane every one of them is a classical figurate number - which one being decided by two bits of the rule.
 

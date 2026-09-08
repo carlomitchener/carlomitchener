@@ -1,6 +1,6 @@
 # Pairwise Coprimality in the Menger Sponge
 
-![avatar](figures/avatar.png)
+<picture><source media="(prefers-color-scheme: dark)" srcset="figures/avatar-dark.png"><img alt="avatar" src="figures/avatar-light.png"></picture>
 
 Cut a cube into twenty-seven, throw away the seven that touch the middle, repeat forever: that is the Menger sponge, and reading a surviving subcube's address in base three turns it into a triple of whole numbers. Ask an arithmetic question about that geometry - how often do the three coordinates share no prime factor, pairwise? On the full lattice the answer is a classical constant. On the sponge it is a different one, and the whole difference lives at the single prime 3: drilling the holes costs the coordinates exactly 12.25 percent of their odds.
 

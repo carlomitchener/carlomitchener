@@ -1,5 +1,5 @@
 FLIP = str.maketrans("01", "10")
-HEIGHT = 3 ** 0.5 / 2  # rows are this tall, so the triangles come out equilateral
+HEIGHT = 3 ** 0.5 / 2
 
 # BINARY
 

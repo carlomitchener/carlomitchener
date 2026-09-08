@@ -1,11 +1,11 @@
 import math
 
 from PIL import Image
-from mrlypy.core.colors import Color
+from mrlypy.core.colors import ink
 
 H3 = math.sqrt(3) / 2
-INK = Color(17, 17, 17)
-PAPER = Color(255, 255, 255)
+INK = ink("black")
+PAPER = ink("white")
 
 def flatten(image, background=PAPER):
     canvas = Image.new("RGB", image.size, background.to_rgb())

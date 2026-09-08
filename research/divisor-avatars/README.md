@@ -1,6 +1,6 @@
 # Divisor Avatars: Which Parity Designs Count the Divisors of a Power
 
-![avatar](figures/avatar.png)
+<picture><source media="(prefers-color-scheme: dark)" srcset="figures/avatar-dark.png"><img alt="avatar" src="figures/avatar-light.png"></picture>
 
 Take a cube of small cells, number the coordinates from one, and throw away every cell with at least two even coordinates. That is the first step of the Menger sponge. At side 3 it keeps 20 cells; at side 5 it keeps 81; at side 2n+1 it keeps exactly as many cells as the number 240 raised to the n has divisors. A geometric census is computing an arithmetic function, and this paper settles exactly when that can happen: an integer x has such a design if and only if it has at most twice as many prime factors with multiplicity as it has distinct ones.
 

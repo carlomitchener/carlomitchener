@@ -6,8 +6,8 @@
   "font": false,
   "settings": false,
   "tint": {
-    "light": { "accent": "#0062B8", "on": "#ffffff" },
-    "dark": { "accent": "#0088FF", "on": "#0b0d10" }
+    "light": { "accent": "#00559f", "on": "#ffffff" },
+    "dark": { "accent": "#008cff", "on": "#000000" }
   },
   "live": 14,
   "country": "US",
@@ -53,7 +53,7 @@
     "path": "data/mrlyjs/ui",
     "out": "ui",
     "hash": true,
-    "files": ["tokens.css", "base.css", "chrome.css", "chrome.js"]
+    "files": ["palette.css", "tokens.css", "base.css", "chrome.css", "chrome.js"]
   },
   "assets": [
     { "path": "ui", "out": "ui", "hash": true, "ext": ".css" },
@@ -65,8 +65,8 @@
     "short_name": "carlomitchener",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#0b0d10",
-    "theme_color": "#0b0d10",
+    "background_color": "#070707",
+    "theme_color": "#070707",
     "icons": [
       { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
       { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }

@@ -1,6 +1,6 @@
 # A Power Saving for Mobius Sums on Missing-Digit Integers, under GRH
 
-![avatar](figures/avatar.png)
+<picture><source media="(prefers-color-scheme: dark)" srcset="figures/avatar-dark.png"><img alt="avatar" src="figures/avatar-light.png"></picture>
 
 Write out the whole numbers whose base expansion never uses one chosen digit - in base ten with the `7` thrown away, that is `1, 2, 3, 4, 5, 6, 8, 9, 10, ..., 16, 18, ..., 69, 80, ...` - and add up the Mobius function over them. The Mobius function is `+1`, `-1` or `0` according to how a number factors, and adding it up over all integers is the question the Riemann hypothesis answers. Adding it up over a missing-digit set is the same question on a set that has no multiplicative structure at all, and the free answer is the number of terms. We beat the free answer by a fixed power, on the generalized Riemann hypothesis, for every base from 3690 up.
 

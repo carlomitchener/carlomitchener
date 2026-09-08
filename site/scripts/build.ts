@@ -7,6 +7,7 @@ import { loadEnv } from "../lib/env.ts";
 import { tree } from "../lib/tree.js";
 import { grid, ogUrl } from "../lib/shop.ts";
 import { kit } from "./kit.ts";
+import { tintCss } from "mrlyjs/ui/config.js";
 import site from "../site.json";
 
 loadEnv();
@@ -84,10 +85,11 @@ function head(site_: Site, leaf: { route: string; name: string; description: str
     `<link rel="apple-touch-icon" href="/apple-touch-icon.png">`,
     `<link rel="manifest" href="/manifest.webmanifest">`,
   ];
-  const css = ["tokens.css", "base.css", "chrome.css", "brand.css"].map((name) => `<link rel="stylesheet" href="${site_.asset(name)}">`);
+  const css = ["palette.css", "tokens.css", "base.css", "chrome.css", "brand.css"].map((name) => `<link rel="stylesheet" href="${site_.asset(name)}">`);
+  const tint = site.tint ? `<style>${tintCss(site.tint)}</style>` : "";
   const js = ["chrome.js", ...leaf.scripts].map((name) => `<script type="module" src="${site_.asset(name)}"></script>`);
   const ld = leaf.data ? `<script type="application/ld+json">${JSON.stringify(leaf.data)}</script>` : "";
-  return [...tags, ...css, ld, ...js].filter(Boolean).join("\n");
+  return [...tags, ...css, tint, ld, ...js].filter(Boolean).join("\n");
 }
 
 function shell(site_: Site, leaf: { route: string; name: string; description: string; image: string; type: string; data?: object; scripts: string[]; body: unknown }) {

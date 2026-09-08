@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List, Optional, Tuple
 from .errors import MrlyError
+from .palette import PALETTE
 from .state import state
 
 class Color:
@@ -148,38 +149,18 @@ def gradient(colors: List[Color], steps: int) -> List[Color]:
         result.append(mix(start, end, ratio))
     return result
 
-alpha = Color(0, 0, 0, 0)
-black = Color(0, 0, 0)
-white = Color(255, 255, 255)
-gray = Color(128, 128, 128)
-red = Color(255, 0, 0)
-green = Color(0, 255, 0)
-blue = Color(0, 0, 255)
-cyan = Color(0, 255, 255)
-magenta = Color(255, 0, 255)
-yellow = Color(255, 255, 0)
-
-# INKS
-
-INKS = {
-    "black": (0, 0, 0),
-    "white": (255, 255, 255),
-    "gray": (142, 142, 147),
-    "red": (255, 59, 48),
-    "orange": (255, 149, 0),
-    "yellow": (255, 204, 0),
-    "green": (52, 199, 89),
-    "mint": (0, 199, 190),
-    "teal": (48, 176, 199),
-    "cyan": (50, 173, 230),
-    "blue": (0, 122, 255),
-    "indigo": (88, 86, 214),
-    "purple": (175, 82, 222),
-    "pink": (255, 45, 85),
-    "brown": (162, 132, 94),
-}
-
 def ink(name: str) -> Color:
-    if name not in INKS:
+    if name not in PALETTE:
         raise MrlyError(f"Unknown ink {name!r}.")
-    return Color(*INKS[name])
+    return Color(*PALETTE[name])
+
+alpha = Color(0, 0, 0, 0)
+black = ink("black")
+white = ink("white")
+gray = ink("gray")
+red = ink("red")
+green = ink("green")
+blue = ink("blue")
+cyan = ink("cyan")
+purple = ink("purple")
+yellow = ink("yellow")

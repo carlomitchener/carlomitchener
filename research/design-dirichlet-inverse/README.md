@@ -1,6 +1,6 @@
 # The Dirichlet Inverse of a Digit Design and the Transport of Zeros
 
-![avatar](figures/avatar.png)
+<picture><source media="(prefers-color-scheme: dark)" srcset="figures/avatar-dark.png"><img alt="avatar" src="figures/avatar-light.png"></picture>
 
 > **Draft.** This lane is written, built and checked, but it has not had its outside read yet. Read it as a preprint of a preprint.
 

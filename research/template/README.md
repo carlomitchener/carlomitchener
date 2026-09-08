@@ -1,6 +1,6 @@
 # {{TITLE}}
 
-![avatar](figures/avatar.png)
+<picture><source media="(prefers-color-scheme: dark)" srcset="figures/avatar-dark.png"><img alt="avatar" src="figures/avatar-light.png"></picture>
 
 One paragraph a stranger enjoys: the claim in plain words, and why anyone should care.
 

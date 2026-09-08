@@ -1,6 +1,6 @@
 # The First Base Below a Quarter
 
-![avatar](figures/avatar.png)
+<picture><source media="(prefers-color-scheme: dark)" srcset="figures/avatar-dark.png"><img alt="avatar" src="figures/avatar-light.png"></picture>
 
 > **Draft.** This lane is written, built and checked, but it is not finished work: the threshold it aims at is still under review upstream, and the paper says so in its own words. Read it as a preprint of a preprint.
 
