@@ -40,17 +40,17 @@ button.primary[data-add]:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* CART */
 
-.line { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto auto; gap: var(--s3); align-items: center; padding: var(--s3) 0; border-bottom: var(--hair); }
-.line img { width: 88px; height: 88px; object-fit: cover; border-radius: var(--r1); background: var(--art); }
-.line .who a { color: var(--fg); font-weight: 600; }
+.item { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto auto; gap: var(--s3); align-items: center; padding: var(--s3) 0; border-bottom: var(--hair); }
+.item img { width: 88px; height: 88px; object-fit: cover; border-radius: var(--r1); background: var(--art); }
+.item .who a { color: var(--fg); font-weight: 600; }
 .qty { display: flex; align-items: center; gap: var(--s2); margin-top: var(--s2); }
 .qty button { min-width: 2rem; justify-content: center; padding: 0; }
 .sum { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); margin-top: var(--s5); }
 .sum .buy { flex: 1 1 12rem; background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
 
 @media (max-width: 40rem) {
-  .line { grid-template-columns: 64px minmax(0, 1fr); }
-  .line img { width: 64px; height: 64px; }
+  .item { grid-template-columns: 64px minmax(0, 1fr); }
+  .item img { width: 64px; height: 64px; }
 }
 
 /* ELSEWHERE */

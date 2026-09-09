@@ -259,7 +259,7 @@ export function Cart() {
       <div data-cart-lines></div>
       <div className="sum" data-cart-sum></div>
       <template id="line">
-        <div className="line">
+        <div className="item">
           <a className="shot" data-href>
             <img alt="" width="88" height="88" decoding="async" />
           </a>
