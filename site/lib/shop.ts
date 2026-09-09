@@ -111,13 +111,13 @@ export async function feed(wire: Wire): Promise<ProductRow[]> {
   return rows;
 }
 
-/* ART */
+/* CDN */
 
-export const artUrl = (key: string, name: string) => `/art/${key}/${name}.png`;
+export const cdnUrl = (key: string, name: string) => (key ? `/cdn/printful/${key}/${name}.png` : "");
 
-export const tileUrl = (key: string, n: number) => artUrl(key, `${key}-${n}`);
+export const tileUrl = (key: string, n: number) => cdnUrl(key, `tile-${n}`);
 
-export const ogUrl = (key: string) => artUrl(key, `${key}-og`);
+export const ogUrl = (key: string) => cdnUrl(key, "og");
 
 export const grid = (url: string, width: number) => `${url}${url.includes("?") ? "&" : "?"}width=${width}&format=auto`;
 

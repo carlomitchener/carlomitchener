@@ -8,8 +8,8 @@ const size = (url, width) => `${url}${url.includes('?') ? '&' : '?'}width=${widt
 
 const money = (amount) => `$${Number(amount).toFixed(2)}`;
 
-function art(key, name) {
-  return `/art/${key}/${name}.png`;
+function cdn(key, name) {
+  return `/cdn/printful/${key}/${name}.png`;
 }
 
 function swap(key) {
@@ -26,16 +26,16 @@ function swap(key) {
     if (link) link.href = size(found.url, 2000);
   }
   for (const image of document.querySelectorAll('[data-strip] img[data-tile]')) {
-    image.src = art(key, `${key}-${image.dataset.tile}`);
+    image.src = cdn(key, `tile-${image.dataset.tile}`);
     image.alt = `${key} ${image.dataset.tile}x${image.dataset.tile}`;
     const link = image.closest('a');
     if (link) link.href = image.src;
   }
   const downloads = document.querySelector('[data-downloads]');
   if (downloads) {
-    const list = [...one.files.map((name) => [name, art(key, name)])];
+    const list = [...one.files.map((name) => [name, cdn(key, name)])];
     for (const tile of document.querySelectorAll('[data-strip] a')) list.push([`${tile.dataset.tile}x${tile.dataset.tile}`, tile.href]);
-    list.push(['og', art(key, `${key}-og`)]);
+    list.push(['og', cdn(key, 'og')]);
     downloads.replaceChildren(Object.assign(document.createElement('span'), { textContent: 'Download ' }));
     for (const [name, href] of list) {
       const link = document.createElement('a');

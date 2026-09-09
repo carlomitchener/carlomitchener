@@ -3,7 +3,7 @@ import mrlypy.gen
 from automator.core.api import logger
 from automator.core.errors import TaskAborted
 from automator.core.models import Mockup, Task
-from automator.core.s3 import art_key, put_png, s3_url, save_task
+from automator.core.s3 import cdn_key, put_png, s3_url, save_task
 from automator.core.steps import Step
 from io import BytesIO
 from mrlypy.core.state import seed
@@ -15,7 +15,9 @@ TILE_SCALE = 10
 UNIT_IN = 0.25
 DPI = 300
 TILES = [1, 3, 5, 7, 9]
+TILE_NAME = "tile"
 OG_TILE = 3
+OG_NAME = "og"
 OG_SIZE = 1200
 MAX_RENDERS = 3
 
@@ -74,13 +76,13 @@ def process_printfiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> Task:
             resample=Image.Resampling.NEAREST,
         )
         image = crop(image, round(pf.width * pf.dpi), round(pf.height * pf.dpi))
-        pf.url = save_png(art_key(task.key, pf.name), image, pf.dpi)
+        pf.url = save_png(cdn_key(task.key, pf.name), image, pf.dpi)
         logger.info(f"{task.desc} uploaded_printfile {pf.url}")
     return task
 
 def process_og(task: Task, image: Image.Image) -> None:
     og = image.resize(size=(OG_SIZE, OG_SIZE), resample=Image.Resampling.NEAREST)
-    url = save_png(art_key(task.key, f"{task.key}-og"), og)
+    url = save_png(cdn_key(task.key, OG_NAME), og)
     logger.info(f"{task.desc} uploaded_og {url}")
 
 def process_tiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> Task:
@@ -91,7 +93,7 @@ def process_tiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> Task:
             resample=Image.Resampling.NEAREST,
         )
         name = f"{task.key}-{size}"
-        url = save_png(art_key(task.key, name), image)
+        url = save_png(cdn_key(task.key, f"{TILE_NAME}-{size}"), image)
         logger.info(f"{task.desc} uploaded_tile {url}")
         task.mockups.append(
             Mockup(

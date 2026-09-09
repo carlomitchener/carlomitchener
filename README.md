@@ -7,6 +7,19 @@ Born (October 7th 1998) and raised in Brussels, Belgium — French, Italian, Ame
 - `shop/` is the store pipeline and `site/` the pages of [carlomitchener.com](https://carlomitchener.com).
 - The `mrlyprod` Rust repo is the research code: the MrlyMath crates.
 
+## Commands
+
+Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
+
+- `bun run kit` - fetch `mrlyprod/sites/kit` at the sha in `kit.lock` into `data/kit/`; `KIT=<path>` copies a local checkout instead.
+- `bun run snapshot` - the live Shopify products into `data/shop.json`.
+- `bun run fake` - the same file, invented, so the site builds with no shop.
+- `bun run build` - render every page into `dist/`, `/git/` and `/raw/` too.
+- `bun run push` - upload what changed, delete what went, never touch `cdn/` or `art/`.
+- `bun run dev` - build once, then serve `dist/` on port 3000.
+- `bun aws/site.ts` - the builder Lambda: commit, snapshot, build, push, head.
+- The builder takes `{"source":"push|schedule|automator|manual","sha":"..."}`; only `automator` rebuilds a sha that has not moved.
+
 ## MrlyProd
 
 Inspired by the Bob Marley documentary (2012), I created a PSN account named "Im_Mrly", then a YouTube channel "zMrly" (2013) where I made Photoshop art, MW2 montages, and skateboard edits. The name stuck.

@@ -1,7 +1,7 @@
-import { Menu as Sitemap, Shell } from 'mrlyjs/ui/chrome.jsx';
-import { configure } from 'mrlyjs/ui/config.js';
+import { Menu as Sitemap, Shell } from 'kit/ui/chrome.jsx';
+import { configure } from 'kit/ui/config.js';
 import site from '../site.json';
-import { grid, money, ogUrl, tileUrl, artUrl } from './shop.ts';
+import { cdnUrl, grid, money, ogUrl, tileUrl } from './shop.ts';
 
 configure(site);
 
@@ -80,9 +80,9 @@ function Deck({ cards }) {
         <a className="card" key={card.href} href={card.href}>
           {card.image ? (
             <img src={grid(card.image.url, 600)} alt={card.name} width="600" height="600" loading="lazy" decoding="async" />
-          ) : (
+          ) : card.key ? (
             <img src={tileUrl(card.key, 3)} alt={card.name} width="88" height="88" loading="lazy" decoding="async" />
-          )}
+          ) : null}
           <p className="code">
             {card.emoji ? <span role="img" aria-label={card.name}>{card.emoji}</span> : null} {card.name}
           </p>
@@ -176,7 +176,7 @@ export function Product({ product, siblings, collection, files, tiles }) {
       <p className="fine" data-downloads>
         <span>Download </span>
         {files.map((name) => (
-          <a key={name} href={artUrl(product.key, name)} download>{name}</a>
+          <a key={name} href={cdnUrl(product.key, name)} download>{name}</a>
         ))}
         {tiles.map((n) => (
           <a key={`t${n}`} href={tileUrl(product.key, n)} download>{`${n}x${n}`}</a>

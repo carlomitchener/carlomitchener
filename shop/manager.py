@@ -6,10 +6,11 @@ from automator.core.models import Task
 from automator.core.s3 import (
     AUTOMATOR_KEY,
     BUCKET,
+    CDN_PREFIX,
     PATHS_KEY,
     SITE_PREFIX,
     abort_task,
-    art_prefix,
+    cdn_prefix,
     delete_folder,
     get_json,
     load_paths,
@@ -36,7 +37,10 @@ COUNTERS = [
     "status_count",
 ]
 DATA_PREFIX = "data/"
-ART_PREFIX = f"{SITE_PREFIX}art/"
+
+# OLD ART
+
+OLD_PREFIX = f"{SITE_PREFIX}art/"
 
 def argument(index: int, name: str) -> str:
     if len(sys.argv) <= index or sys.argv[index].startswith("--"):
@@ -101,7 +105,7 @@ def abort():
     steps = [
         f"delete shopify product {task.product.shopify_id}",
         f"delete {BUCKET}/{task_prefix(task.key)}",
-        f"delete {BUCKET}/{art_prefix(task.key)}",
+        f"delete {BUCKET}/{cdn_prefix(task.key)}",
         f"quarantine {task.product.id} in {PATHS_KEY}",
     ]
     if not gate("manager abort", steps): return
@@ -114,24 +118,28 @@ def reap():
     task = Task.from_dict(get_json(task_key(key)))
     steps = [
         f"delete shopify product {task.product.shopify_id}",
-        f"delete {BUCKET}/{art_prefix(key)}",
+        f"delete {BUCKET}/{cdn_prefix(key)}",
+        f"delete {BUCKET}/{OLD_PREFIX}{key}/",
         f"delete {BUCKET}/{task_prefix(key)}",
     ]
     if not gate("manager reap", steps): return
     if task.product.shopify_id:
         mint_token()
         delete_product(task)
-    say(f"deleted {delete_folder(art_prefix(key))} art objects")
+    files = delete_folder(cdn_prefix(key)) + delete_folder(f"{OLD_PREFIX}{key}/")
+    say(f"deleted {files} product files")
     say(f"deleted {delete_folder(task_prefix(key))} task objects")
 
 def wipe():
     steps = [
         f"delete every object under {BUCKET}/{DATA_PREFIX}",
-        f"delete every object under {BUCKET}/{ART_PREFIX}",
+        f"delete every object under {BUCKET}/{CDN_PREFIX}",
+        f"delete every object under {BUCKET}/{OLD_PREFIX}",
     ]
     if not gate("manager wipe", steps): return
     say(f"deleted {delete_folder(DATA_PREFIX)} objects under {DATA_PREFIX}")
-    say(f"deleted {delete_folder(ART_PREFIX)} objects under {ART_PREFIX}")
+    say(f"deleted {delete_folder(CDN_PREFIX)} objects under {CDN_PREFIX}")
+    say(f"deleted {delete_folder(OLD_PREFIX)} objects under {OLD_PREFIX}")
 
 ACTIONS = {
     "init": init,

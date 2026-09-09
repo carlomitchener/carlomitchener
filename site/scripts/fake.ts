@@ -65,9 +65,9 @@ for (const entry of catalog) {
     stamp -= HOUR;
     const created = new Date(stamp).toISOString();
     const files = [...placements.keys()].map((id) => ({ id, key: hex(), name: "", url: "" }));
-    for (const one of files) {
-      one.name = `${key}-${one.key}`;
-      one.url = `${site.root}/art/${key}/${one.name}.png`;
+    for (const [i, one] of files.entries()) {
+      one.name = files.length === 1 ? "printfile" : `printfile-${i + 1}`;
+      one.url = `${site.root}/cdn/printful/${key}/${one.name}.png`;
     }
     products.push({
       key,

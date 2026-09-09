@@ -2,10 +2,10 @@ import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeF
 import { dirname, join, resolve } from "node:path";
 
 const org = resolve(import.meta.dir, "..");
-const home = join(org, "data", "mrlyjs");
-const lock = join(org, "mrlyjs.lock");
+const home = join(org, "data", "kit");
+const lock = join(org, "kit.lock");
 const REPO = "mrlyprod/mrlyprod";
-const KEEP = "pkgs/js/mrlyjs/";
+const KEEP = "sites/kit/";
 const HEAD = `https://api.github.com/repos/${REPO}/commits/main`;
 
 /* TAR */
@@ -72,23 +72,34 @@ async function pull(at: string) {
   const reply = await fetch(`https://codeload.github.com/${REPO}/tar.gz/${at}`);
   if (!reply.ok) throw new Error(`HTTP ${reply.status}`);
   const tar = Bun.gunzipSync(new Uint8Array(await reply.arrayBuffer()));
-  const fresh = join(org, "data", "mrlyjs.next");
+  const fresh = join(org, "data", "kit.next");
   rmSync(fresh, { recursive: true, force: true });
   const files = untar(tar, fresh);
-  if (!existsSync(join(fresh, "ui", "chrome.jsx"))) throw new Error(`${at} carries no pkgs/js/mrlyjs/ui`);
+  if (!existsSync(join(fresh, "ui", "chrome.jsx"))) throw new Error(`${at} carries no sites/kit/ui`);
   rmSync(home, { recursive: true, force: true });
   renameSync(fresh, home);
   return files;
 }
 
+/* DEPS */
+
+function deps() {
+  if (!existsSync(join(home, "package.json"))) return;
+  const done = Bun.spawnSync([process.execPath, "install", "--production", "--frozen-lockfile"], { cwd: home, stdout: "pipe", stderr: "pipe" });
+  if (done.exitCode !== 0) throw new Error(`kit: bun install in ${home} failed\n${done.stderr.toString().trim().slice(-500)}`);
+}
+
+/* KIT */
+
 export async function kit(): Promise<string> {
-  const local = process.env.MRLYJS;
+  const local = process.env.KIT;
   if (local) {
     const from = resolve(local);
-    if (!existsSync(join(from, "ui", "chrome.jsx"))) throw new Error(`kit: MRLYJS=${from} holds no ui/chrome.jsx`);
+    if (!existsSync(join(from, "ui", "chrome.jsx"))) throw new Error(`kit: KIT=${from} holds no ui/chrome.jsx`);
     rmSync(home, { recursive: true, force: true });
     mkdirSync(dirname(home), { recursive: true });
     cpSync(from, home, { recursive: true });
+    deps();
     console.log(`kit: copied from ${from}`);
     return home;
   }
@@ -96,9 +107,10 @@ export async function kit(): Promise<string> {
     const files = await pull(sha());
     console.log(`kit: fetched ${files} files at ${sha().slice(0, 8)}`);
   } catch (reason) {
-    if (!existsSync(join(home, "ui", "chrome.jsx"))) throw new Error(`kit: fetch failed (${reason}) and no cache at ${home}; set MRLYJS to a local checkout`);
+    if (!existsSync(join(home, "ui", "chrome.jsx"))) throw new Error(`kit: fetch failed (${reason}) and no cache at ${home}; set KIT to a local checkout`);
     console.warn(`kit: fetch failed (${reason}), building from the cached copy`);
   }
+  deps();
   return home;
 }
 
@@ -106,7 +118,7 @@ if (import.meta.main) {
   if (!process.argv.includes("--hold")) {
     const at = await head();
     writeFileSync(lock, `${at}\n`);
-    console.log(`kit: mrlyjs.lock now ${at}`);
+    console.log(`kit: kit.lock now ${at}`);
   }
   await kit();
 }

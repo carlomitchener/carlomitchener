@@ -13,6 +13,7 @@ BUCKET = CARLOMITCHENER_BUCKET
 AUTOMATOR_KEY = "data/automator.json"
 PATHS_KEY = "data/paths.json"
 SITE_PREFIX = "site/"
+CDN_PREFIX = f"{SITE_PREFIX}cdn/printful/"
 
 # KEYS
 
@@ -25,11 +26,11 @@ def task_key(key: str) -> str:
 def task_prefix(key: str) -> str:
     return f"data/tasks/{key}/"
 
-def art_prefix(key: str) -> str:
-    return f"{SITE_PREFIX}art/{key}/"
+def cdn_prefix(key: str) -> str:
+    return f"{CDN_PREFIX}{key}/"
 
-def art_key(key: str, name: str) -> str:
-    return f"{SITE_PREFIX}art/{key}/{name}.png"
+def cdn_key(key: str, name: str) -> str:
+    return f"{CDN_PREFIX}{key}/{name}.png"
 
 def s3_url(key: str) -> str:
     if key.startswith(SITE_PREFIX):
@@ -115,7 +116,7 @@ def abort_task(task: Task) -> None:
         except Exception as error:
             logger.info(f"{task.desc} productDelete failed during abort: {error}")
     delete_folder(task_prefix(task.key))
-    delete_folder(art_prefix(task.key))
+    delete_folder(cdn_prefix(task.key))
     paths = load_paths()
     paths[str(task.product.id)] = None
     save_paths(paths)

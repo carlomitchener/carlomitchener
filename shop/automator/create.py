@@ -14,6 +14,7 @@ from typing import Any
 
 MAX_VARIANTS = 100
 MAX_PATHS = 20
+PRINTFILE = "printfile"
 
 def create_task() -> Task:
     task = Task()
@@ -120,6 +121,14 @@ def parse_mockups(task: Task, data: dict) -> Task:
     task.mockups = create_keys(task.mockups, task.key)
     return task
 
+def name_printfiles(printfiles: list[Printfile]) -> list[Printfile]:
+    if len(printfiles) == 1:
+        printfiles[0].name = PRINTFILE
+        return printfiles
+    for i, printfile in enumerate(printfiles, 1):
+        printfile.name = f"{PRINTFILE}-{i}"
+    return printfiles
+
 def parse_printfiles(task: Task) -> Task:
     printfiles = {}
     for placement in task.placements:
@@ -133,6 +142,7 @@ def parse_printfiles(task: Task) -> Task:
         )
     task.printfiles = list(printfiles.values())
     task.printfiles = create_keys(task.printfiles, task.key)
+    task.printfiles = name_printfiles(task.printfiles)
     return task
 
 def parse_product(task: Task) -> Task:

@@ -2,18 +2,21 @@ import { readFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import type { Output, Route, Site, Spec } from "mrlyjs/ssg/build.ts";
+import type { Output, Route, Site, Spec } from "kit/ssg/build.ts";
+import type { Leaf as GitLeaf } from "kit/git/git.ts";
 import { loadEnv } from "../lib/env.ts";
 import { tree } from "../lib/tree.js";
 import { grid, ogUrl } from "../lib/shop.ts";
 import { kit } from "./kit.ts";
-import { tintCss } from "mrlyjs/ui/config.js";
 import site from "../site.json";
 
 loadEnv();
 await kit();
 
-const { build, escape } = await import("mrlyjs/ssg/build.ts");
+const { build, escape } = await import("kit/ssg/build.ts");
+const { isGit } = await import("kit/git/git.ts");
+const { resolve: resolveLink } = await import("kit/ssg/links.ts");
+const { headScript, tintCss } = await import("kit/ui/config.js");
 const R = await import("../lib/render.jsx");
 
 const org = resolve(import.meta.dir, "..");
@@ -29,27 +32,36 @@ const slugify = (text: string) => String(text ?? "").toLowerCase().replace(/[^a-
 
 /* MARKDOWN */
 
-const inline = (text: string) =>
-  escape(text)
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+const marks = (html: string) =>
+  html
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
     .replace(/`([^`]+)`/g, "<code>$1</code>");
 
-function markdown(text: string) {
+const inline = (text: string, href?: (url: string) => string) => {
+  let out = "";
+  let at = 0;
+  for (const hit of text.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)) {
+    out += escape(text.slice(at, hit.index)) + `<a href="${escape(href ? href(hit[2]) : hit[2])}">${escape(hit[1])}</a>`;
+    at = hit.index! + hit[0].length;
+  }
+  return marks(out + escape(text.slice(at)));
+};
+
+function markdown(text: string, href?: (url: string) => string) {
   const out: string[] = [];
   for (const block of text.trim().split(/\n{2,}/)) {
     const line = block.trim();
     if (!line) continue;
     const head = line.match(/^(#{1,3})\s+(.*)$/);
-    if (head) out.push(`<h${head[1].length}>${inline(head[2])}</h${head[1].length}>`);
-    else if (line.startsWith("- ")) out.push(`<ul>${line.split("\n").map((item) => `<li>${inline(item.replace(/^- /, ""))}</li>`).join("")}</ul>`);
-    else out.push(`<p>${inline(line.replace(/\n/g, " "))}</p>`);
+    if (head) out.push(`<h${head[1].length}>${inline(head[2], href)}</h${head[1].length}>`);
+    else if (line.startsWith("- ")) out.push(`<ul>${line.split("\n").map((item) => `<li>${inline(item.replace(/^- /, ""), href)}</li>`).join("")}</ul>`);
+    else out.push(`<p>${inline(line.replace(/\n/g, " "), href)}</p>`);
   }
   return out.join("\n");
 }
 
-function sheet(text: string) {
+function sheet(text: string, href?: (url: string) => string) {
   const blocks = text.trim().split(/\n{2,}/).map((block) => block.trim()).filter(Boolean);
   let title = "";
   let lead = "";
@@ -66,7 +78,7 @@ function sheet(text: string) {
     }
     rest.push(block);
   }
-  return { title, lead, body: markdown(rest.join("\n\n")) };
+  return { title, lead, body: markdown(rest.join("\n\n"), href) };
 }
 
 /* TYPES */
@@ -86,7 +98,7 @@ type Row = {
   variant: string;
 };
 
-type Leaf = { route: string; name: string; description: string; image: string; type: string; data?: object; scripts: string[] };
+type Leaf = { route: string; name: string; description: string; image: string; type: string; data?: object; scripts: string[]; code?: boolean };
 
 /* HEAD */
 
@@ -110,8 +122,9 @@ function head(site_: Site, leaf: Leaf) {
     `<link rel="apple-touch-icon" href="/apple-touch-icon.png">`,
     `<link rel="manifest" href="/manifest.webmanifest">`,
   ];
-  const css = ["palette.css", "tokens.css", "base.css", "chrome.css", "fonts/fonts.css", "brand.css"].map((name) => `<link rel="stylesheet" href="${site_.asset(name)}">`);
-  const tint = site.tint ? `<style>${tintCss(site.tint)}</style>` : "";
+  const sheets = ["palette.css", "tokens.css", "base.css", "chrome.css", "fonts/fonts.css", "brand.css", ...(leaf.code ? ["code.css", "seti/seti.css"] : [])];
+  const css = sheets.map((name) => `<link rel="stylesheet" href="${site_.asset(name)}">`);
+  const tint = `<style>${tintCss(site.tint)}</style>`;
   const js = ["chrome.js", ...leaf.scripts].map((name) => `<script type="module" src="${site_.asset(name)}"></script>`);
   const ld = leaf.data ? `<script type="application/ld+json">${JSON.stringify(leaf.data)}</script>` : "";
   return [...tags, ...css, tint, ld, ...js].filter(Boolean).join("\n");
@@ -124,6 +137,7 @@ function shell(site_: Site, leaf: Leaf & { body: unknown }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+${headScript(site.prefix)}
 <title>${escape(leaf.name === site.name ? site.name : `${leaf.name} · ${site.name}`)}</title>
 ${head(site_, leaf)}
 </head>
@@ -387,7 +401,7 @@ function draw(site_: Site, route: Route): Output[] {
   }
   if (route.kind === "page") {
     const name = basename(route.source as string, ".md");
-    const doc = sheet(read(route.source as string));
+    const doc = sheet(read(route.source as string), (url) => resolveLink(site_, route.source as string, url));
     const body = h(R.Page, { route: route.route, nav: site_.nav }, h(R.Doc, { ...doc, hero: HERO[name], action: ACTION[name] }));
     return [{ path: at, bytes: shell(site_, { route: route.route, name: doc.title || name, description: doc.lead, image: FALLBACK, type: "website", scripts: ["cart.js"], body }) }];
   }
@@ -453,14 +467,32 @@ function product(site_: Site, route: Route, at: string): Output[] {
   ];
 }
 
+/* GIT */
+
+function gitPage(site_: Site, leaf: GitLeaf) {
+  const article = h("article", { className: "prose", dangerouslySetInnerHTML: { __html: leaf.body } });
+  const body = h(R.Page, { route: leaf.route, nav: leaf.tree ?? site_.nav, wide: leaf.wide }, article);
+  return shell(site_, {
+    route: leaf.route,
+    name: leaf.name,
+    description: leaf.description,
+    image: FALLBACK,
+    type: leaf.type ?? "website",
+    code: leaf.code,
+    scripts: ["cart.js"],
+    body,
+  });
+}
+
 /* SPEC */
 
-const spec: Spec = {
+export const spec: Spec = {
   root: org,
   out: dist,
   templates: ["lib", "scripts", "js", "ui"],
   collect,
   render: draw,
+  git: { page: gitPage, md: (site_, text, from) => markdown(text, (url) => resolveLink(site_, from, url)) },
   asset: (name, body) => (name === "cart.js" ? new TextDecoder().decode(body).replaceAll("{{SHOP}}", SHOP) : body),
 };
 
@@ -470,5 +502,6 @@ export async function pages() {
 
 if (import.meta.main) {
   const done = await pages();
-  console.log(`site: ${done.site.routes.length} routes, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
+  const code = done.site.routes.filter(isGit).length;
+  console.log(`site: ${done.site.routes.length} routes, ${code} code pages, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
 }

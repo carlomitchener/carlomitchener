@@ -8,15 +8,12 @@
   "settings": true,
   "menu": "/menu/",
   "cart": "/cart/",
-  "tint": {
-    "light": { "accent": "#00559f", "on": "#ffffff" },
-    "dark": { "accent": "#008cff", "on": "#000000" }
-  },
+  "tint": "blue",
   "live": 14,
   "country": "US",
   "api": "2026-07",
   "printful": "https://www.printful.com/custom/products/all/",
-  "art": "/art",
+  "cdn": "/cdn/printful",
   "tiles": [1, 3, 5, 7, 9],
   "company": "MrlyProd, Inc.",
   "tagline": "One design at a time, and every printfile and tile is a free download.",
@@ -25,6 +22,7 @@
     { "name": "Home", "href": "/" },
     { "name": "Collections", "href": "/collections/", "fill": "collections", "open": true },
     { "name": "Cart", "href": "/cart/" },
+    { "name": "Code", "href": "/git/" },
     { "name": "About", "href": "/about/" },
     { "name": "Contact", "href": "/contact/" },
     { "name": "FAQ", "href": "/faq/" }
@@ -46,6 +44,17 @@
     "women": "👩",
     "youth": "🛼"
   },
+  "git": { "root": "..", "slug": "carlomitchener/carlomitchener", "branch": "main" },
+  "llms": {
+    "about": "carlomitchener.com is a shop that publishes one design at a time. Every product is printed on demand by Printful and sold through Shopify; a design stays live for 14 days and then goes. Nothing digital is sold: every printfile and every tile on a product page is a free download. The whole repository behind the shop, the pipeline that makes the designs and the code that renders these pages, is browsable at /git/ and served byte for byte under /raw/.",
+    "links": [
+      { "href": "/collections/", "name": "Collections", "note": "every design, by category and by product" },
+      { "href": "/git/", "name": "Code", "note": "the whole repository, browsable, raw bytes under /raw/" },
+      { "href": "/raw/README.md", "name": "README", "note": "who Carlo is, in markdown" },
+      { "href": "/faq/", "name": "FAQ", "note": "printing, shipping, returns and the 14 days" },
+      { "href": "/contact/", "name": "Contact", "note": "where to write" }
+    ]
+  },
   "inputs": {
     "shop": { "path": "data/shop.json" },
     "catalog": { "path": "../shop/files/catalog.json" },
@@ -54,7 +63,7 @@
     "public": { "path": "public" }
   },
   "kit": {
-    "path": "data/mrlyjs/ui",
+    "path": "data/kit/ui",
     "out": "ui",
     "hash": false,
     "files": [
@@ -63,8 +72,20 @@
       "base.css",
       "chrome.css",
       "chrome.js",
+      "palette.js",
+      "logo.js",
+      "code.css",
+      "seti/seti.css",
+      "seti/seti.woff2",
       "font.js",
       "font.json",
+      "savers/index.js",
+      "savers/frame.js",
+      "savers/gl.js",
+      "savers/matrix.js",
+      "savers/sleep.js",
+      "savers/tiles.js",
+      "savers/fractal.js",
       "fonts/fonts.css",
       "fonts/sans.woff2",
       "fonts/serif.woff2",

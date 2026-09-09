@@ -13,7 +13,7 @@
       "react/*": ["./node_modules/react/*"],
       "react-dom": ["./node_modules/react-dom"],
       "react-dom/*": ["./node_modules/react-dom/*"],
-      "mrlyjs/*": ["./data/mrlyjs/*"]
+      "kit/*": ["./data/kit/*"]
     }
   }
 }
