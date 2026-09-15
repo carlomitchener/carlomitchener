@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { client, getText, putBytes } from "./s3.ts";
-import { need } from "../site/lib/env.ts";
+import { need } from "../site/src/lib/env.ts";
 
 /* WHERE */
 
