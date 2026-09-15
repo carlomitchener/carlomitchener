@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-const DESK = resolve(import.meta.dir, "../../..");
+const DESK = resolve(import.meta.dir, "../../../..");
 
 export function loadEnv(path = join(DESK, ".env")) {
   if (!existsSync(path)) return;

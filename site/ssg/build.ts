@@ -59,6 +59,7 @@ export type Spec = {
   out: string;
   config?: Config;
   templates?: string[];
+  prepare?: () => Promise<void> | void;
   collect: (site: Site) => Promise<Route[]> | Route[];
   render: (site: Site, route: Route) => Promise<Output[]> | Output[];
   globals?: (site: Site) => Promise<Output[]> | Output[];
@@ -139,6 +140,7 @@ function bundle(root: string, decl: NonNullable<Config["assets"]>[number]): Bund
 }
 
 export async function scan(spec: Spec): Promise<Site> {
+  if (spec.prepare) await spec.prepare();
   const root = resolve(spec.root);
   const config = spec.config ?? (JSON.parse(readFileSync(join(root, "site.json"), "utf8")) as Config);
   const found = inputs(root, config);

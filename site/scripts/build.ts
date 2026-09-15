@@ -413,12 +413,12 @@ export const spec: Spec = {
   out: dist,
   config,
   templates: ["src", "scripts", "ui"],
+  prepare: bundle,
   collect,
   render: draw,
 };
 
 export async function pages() {
-  await bundle();
   return await build(spec, { manifest: ".cache/manifest.json" });
 }
 
