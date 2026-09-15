@@ -4,7 +4,7 @@ import mrlypy.music
 from mrlypy.core.state import choice, bool
 from mrlypy.music.enums import ChordType, Movement, Scale
 from mrlypy.music.models import Voice
-from config import FPS, FREEZE_DURATION, HEATMAP_FPS, INTER_SEGMENT_FREEZE, DATA_DIR
+from config import FPS, FREEZE_DURATION, HEATMAP_FPS, INTER_SEGMENT_FREEZE
 from enums import Way
 from models import MusicParams
 
@@ -89,14 +89,11 @@ def _compose(params: MusicParams, count: int):
 
 # ASSEMBLY
 
-def assemble_segment_track(track, beat_duration, open_freeze, close_freeze):
-    timed = []
-    if open_freeze > 0:
-        timed.append((track[0], open_freeze))
-    for chord in track:
-        timed.append((chord, beat_duration))
-    if close_freeze > 0:
-        timed.append((track[-1], close_freeze))
+def assemble_segment_track(track, beat_duration, open_freeze, close_freeze, rest):
+    edge = track or [rest]
+    timed = [(edge[0], open_freeze)] if open_freeze > 0 else []
+    timed += [(chord, beat_duration) for chord in track]
+    timed += [(edge[-1], close_freeze)] if close_freeze > 0 else []
     return timed
 
 # HEATMAP TRACK
@@ -130,9 +127,8 @@ def _halve_segment_lengths(segment_lengths):
         cumulative_halved = expected
     return halved
 
-def compose_saga_audio(saga):
-    output_dir = f"{DATA_DIR}/{saga.key}"
-    os.makedirs(output_dir, exist_ok=True)
+def compose_saga_audio(saga, path: str) -> str:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     heatmap_lengths = _halve_segment_lengths([s.count for s in saga.segments])
     frames_parts = []
     heatmap_parts = []
@@ -142,14 +138,16 @@ def compose_saga_audio(saga):
         music, renderer, music_config = _compose(seg.music, seg.count)
         open_freeze = FREEZE_DURATION if i == 0 else 0.0
         close_freeze = FREEZE_DURATION if i == n - 1 else INTER_SEGMENT_FREEZE
-        frames_timed = assemble_segment_track(music.track, 1.0 / FPS, open_freeze, close_freeze)
+        rest = music.track[-1]
+        frames_timed = assemble_segment_track(music.track, 1.0 / FPS, open_freeze, close_freeze, rest)
         frames_parts.append(renderer.render(frames_timed))
         heatmap_track = create_heatmap_track(music, heatmap_lengths[i], music_config)
-        heatmap_timed = assemble_segment_track(heatmap_track, 2.0 / HEATMAP_FPS, open_freeze, close_freeze)
+        heatmap_timed = assemble_segment_track(heatmap_track, 2.0 / HEATMAP_FPS, open_freeze, close_freeze, rest)
         heatmap_parts.append(renderer.render(heatmap_timed))
         last_renderer = renderer
     frames_combined = np.concatenate(frames_parts)
     heatmap_combined = np.concatenate(heatmap_parts)
     full = np.concatenate([frames_combined, heatmap_combined])
-    last_renderer.save(f"{output_dir}/{saga.key}.wav", full)
-    print(f"Composed saga audio for {saga.key}")
+    last_renderer.save(path, full)
+    print(f"audio {len(full) / 44100:.1f} s -> {path}")
+    return path

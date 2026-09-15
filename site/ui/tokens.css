@@ -1,0 +1,39 @@
+/* TOKENS */
+
+:root {
+  --sans: "Noto Sans", -apple-system, system-ui, sans-serif, "Noto Color Emoji";
+  --mono: "Noto Sans Mono", ui-monospace, monospace;
+  --t-fine: 12px;
+  --t-small: 14px;
+  --t-body: 17px;
+  --t-h3: 19px;
+  --t-lead: 21px;
+  --t-h2: clamp(28px, 4vw, 40px);
+  --t-h1: clamp(38px, 6vw, 56px);
+  --t-huge: clamp(72px, 16vw, 140px);
+  --lh-body: 1.47;
+  --lh-tight: 1.08;
+  --track-tight: -0.02em;
+  --track-wide: 0.02em;
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 64px;
+  --s9: 96px;
+  --r-card: 12px;
+  --r-media: 18px;
+  --r-pill: 980px;
+  --header: 48px;
+  --w-grid: 1440px;
+  --w-text: 980px;
+  --w-prose: 680px;
+  --gutter: clamp(20px, 4vw, 32px);
+  --hair: 1px;
+  --fast: 0.2s;
+  --slow: 0.4s;
+  --ease: cubic-bezier(0.32, 0.08, 0.24, 1);
+}

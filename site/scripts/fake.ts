@@ -1,10 +1,10 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join, relative, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import site from "../site.json";
 
 const org = resolve(import.meta.dir, "..");
 const shop = resolve(org, "../shop");
-const DATA_DIR = join("data", relative(process.cwd(), org));
+const DATA_DIR = resolve(org, "../../data/carlomitchener/site");
 const DESIGNS = Number(process.env.FAKE_DESIGNS ?? 2);
 const HOUR = 60 * 60 * 1000;
 const CDN = "https://cdn.shopify.com/s/files/1/0000/0001/files";
@@ -40,10 +40,10 @@ const STUB = {
 
 const catalog = read(join(shop, "files", "catalog.json")) as { id: number; live: boolean; category: string; title: string }[];
 const products: unknown[] = [];
-let stamp = Date.now();
+let stamp = Math.floor(Date.now() / (24 * HOUR)) * 24 * HOUR;
 
 for (const entry of catalog) {
-  const file = join("data", relative(process.cwd(), shop), "products", `${entry.id}.json`);
+  const file = resolve(shop, "../../data/carlomitchener/shop/products", `${entry.id}.json`);
   if (!existsSync(file) && !entry.live) continue;
   const source = existsSync(file) ? read(file) : STUB;
   const live = (source.variants ?? []).filter((v: { is_ignored: boolean }) => !v.is_ignored);
@@ -105,3 +105,28 @@ for (const entry of catalog) {
 
 write(join(DATA_DIR, "shop.json"), { at: Date.now(), products });
 console.log(`fake: ${products.length} products from ${catalog.length} catalog rows into ${join(DATA_DIR, "shop.json")}`);
+
+/* GAMES */
+
+const LOCAL = resolve(org, "../../data/carlomitchener/game/index.json");
+
+function game(): unknown[] {
+  try {
+    const rows = existsSync(LOCAL) ? read(LOCAL) : [];
+    if (Array.isArray(rows) && rows.length) return rows;
+  } catch {}
+  return [0, 1].map((n) => ({
+    name: hex(),
+    seed: Math.floor(next() * 1000000),
+    at: new Date(Date.now() - n * HOUR).toISOString(),
+    duration: 12,
+    frames: 360,
+    segments: 4,
+    canvas: 1080,
+    story: `An invented game, number ${n + 1}.`,
+  }));
+}
+
+const games = game();
+write(join(DATA_DIR, "game.json"), games);
+console.log(`fake: ${games.length} games into ${join(DATA_DIR, "game.json")}`);

@@ -2,7 +2,7 @@
 
 Where to write, and who answers what.
 
-Email [help@mrly.net](mailto:help@mrly.net) for anything about the site, the designs, the files or any feedback.
+Email [carlo@mrly.net](mailto:carlo@mrly.net) for anything about the site, the designs, the files or any feedback.
 
 Elsewhere: [GitHub](https://github.com/carlomitchener), [YouTube](https://www.youtube.com/@carlomitchener), [Instagram](https://www.instagram.com/carlo.mitchener), [X](https://twitter.com/carlomitchener), [Pinterest](https://www.pinterest.com/carlomitchener).
 

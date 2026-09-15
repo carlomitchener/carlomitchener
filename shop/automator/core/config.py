@@ -11,6 +11,10 @@ except ImportError:
 CARLOMITCHENER_BUCKET = os.environ["CARLOMITCHENER_BUCKET"]
 SITE_URL = os.environ.get("SITE_URL") or "https://carlomitchener.com"
 
+# LIFE
+
+LIVE_DAYS = 29.53
+
 # PRINTFUL
 
 PRINTFUL_API_KEY = os.environ["PRINTFUL_API_KEY"]

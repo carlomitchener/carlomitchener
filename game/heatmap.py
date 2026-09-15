@@ -3,12 +3,10 @@ from mrlypy.two import Cell2d
 import numpy as np
 import os
 from colors import create_heatmap_colors
-from config import FORMAT, HEATMAP_DIR, DATA_DIR
+from config import FORMAT
 from models import Saga
 
-def create_saga_heatmap(saga: Saga, output_dir: str = None) -> Saga:
-    print(f"Creating heatmap for saga: {saga.key}")
-    output_dir = output_dir or f"{DATA_DIR}/{saga.key}/{HEATMAP_DIR}"
+def create_saga_heatmap(saga: Saga, output_dir: str) -> Saga:
     os.makedirs(output_dir, exist_ok=True)
     shape = saga.grids[0].types.shape
     cursor = 0
@@ -18,7 +16,6 @@ def create_saga_heatmap(saga: Saga, output_dir: str = None) -> Saga:
         for g in seg_grids:
             final += g.types
         max_count = max(1, int(np.max(final)))
-        print(f"Segment {seg.key} max heatmap count: {max_count}")
         primary, secondary = create_heatmap_colors(seg)
         gradient_colors = gradient(secondary, max_count)
         gradient_colors.insert(0, primary)
@@ -30,9 +27,7 @@ def create_saga_heatmap(saga: Saga, output_dir: str = None) -> Saga:
             colored = gradient_array[cumulative]
             cell = Cell2d(colors=colored)
             image = cell.to_image(1).convert("RGB")
-            fp = f"{output_dir}/{saga.key}_{cursor + i + 1:03d}.{FORMAT}"
-            image.save(fp, format=FORMAT)
-            print(f"Saved: {fp}")
+            image.save(f"{output_dir}/{saga.key}_{cursor + i + 1:03d}.{FORMAT}", format=FORMAT)
         cursor += seg_len
-    print(f"Saved {len(saga.grids)} heatmaps to {output_dir}")
+    print(f"heatmap {len(saga.grids)} -> {output_dir}")
     return saga

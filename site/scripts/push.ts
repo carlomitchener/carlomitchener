@@ -2,12 +2,10 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { spec } from "./build.ts";
-import { need } from "../lib/env.ts";
+import { need } from "../src/lib/env.ts";
 import { client, del, getText, putBytes } from "../../aws/s3.ts";
 import type { S3Client } from "bun";
-import type { Manifest, Output } from "kit/ssg/build.ts";
-
-const { build, digest, globals, today } = await import("kit/ssg/build.ts");
+import { build, digest, globals, today, type Manifest, type Output } from "../ssg/build.ts";
 
 /* WHERE */
 

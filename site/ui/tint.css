@@ -1,0 +1,237 @@
+/* TINT */
+
+:root[data-tint="red"] {
+  --tint: var(--red);
+  --tint-light: var(--red-light);
+  --tint-dark: var(--red-dark);
+  --accent: var(--red-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="orange"] {
+  --tint: var(--orange);
+  --tint-light: var(--orange-light);
+  --tint-dark: var(--orange-dark);
+  --accent: var(--orange-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="yellow"] {
+  --tint: var(--yellow);
+  --tint-light: var(--yellow-light);
+  --tint-dark: var(--yellow-dark);
+  --accent: var(--yellow-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="green"] {
+  --tint: var(--green);
+  --tint-light: var(--green-light);
+  --tint-dark: var(--green-dark);
+  --accent: var(--green-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="mint"] {
+  --tint: var(--mint);
+  --tint-light: var(--mint-light);
+  --tint-dark: var(--mint-dark);
+  --accent: var(--mint-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="teal"] {
+  --tint: var(--teal);
+  --tint-light: var(--teal-light);
+  --tint-dark: var(--teal-dark);
+  --accent: var(--teal-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="cyan"] {
+  --tint: var(--cyan);
+  --tint-light: var(--cyan-light);
+  --tint-dark: var(--cyan-dark);
+  --accent: var(--cyan-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="blue"] {
+  --tint: var(--blue);
+  --tint-light: var(--blue-light);
+  --tint-dark: var(--blue-dark);
+  --accent: var(--blue-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="indigo"] {
+  --tint: var(--indigo);
+  --tint-light: var(--indigo-light);
+  --tint-dark: var(--indigo-dark);
+  --accent: var(--indigo-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="purple"] {
+  --tint: var(--purple);
+  --tint-light: var(--purple-light);
+  --tint-dark: var(--purple-dark);
+  --accent: var(--purple-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="pink"] {
+  --tint: var(--pink);
+  --tint-light: var(--pink-light);
+  --tint-dark: var(--pink-dark);
+  --accent: var(--pink-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="brown"] {
+  --tint: var(--brown);
+  --tint-light: var(--brown-light);
+  --tint-dark: var(--brown-dark);
+  --accent: var(--brown-dark);
+  --on-accent: var(--white);
+}
+
+:root[data-tint="gray"] {
+  --tint: var(--gray);
+  --tint-light: var(--gray-light);
+  --tint-dark: var(--gray-dark);
+  --accent: var(--gray-dark);
+  --on-accent: var(--white);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-tint="red"] {
+    --accent: var(--red-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="orange"] {
+    --accent: var(--orange-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="yellow"] {
+    --accent: var(--yellow-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="green"] {
+    --accent: var(--green-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="mint"] {
+    --accent: var(--mint-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="teal"] {
+    --accent: var(--teal-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="cyan"] {
+    --accent: var(--cyan-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="blue"] {
+    --accent: var(--blue-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="indigo"] {
+    --accent: var(--indigo-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="purple"] {
+    --accent: var(--purple-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="pink"] {
+    --accent: var(--pink-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="brown"] {
+    --accent: var(--brown-light);
+    --on-accent: var(--black);
+  }
+
+  :root:not([data-theme="light"])[data-tint="gray"] {
+    --accent: var(--gray-light);
+    --on-accent: var(--black);
+  }
+}
+
+:root[data-theme="dark"][data-tint="red"] {
+  --accent: var(--red-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="orange"] {
+  --accent: var(--orange-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="yellow"] {
+  --accent: var(--yellow-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="green"] {
+  --accent: var(--green-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="mint"] {
+  --accent: var(--mint-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="teal"] {
+  --accent: var(--teal-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="cyan"] {
+  --accent: var(--cyan-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="blue"] {
+  --accent: var(--blue-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="indigo"] {
+  --accent: var(--indigo-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="purple"] {
+  --accent: var(--purple-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="pink"] {
+  --accent: var(--pink-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="brown"] {
+  --accent: var(--brown-light);
+  --on-accent: var(--black);
+}
+
+:root[data-theme="dark"][data-tint="gray"] {
+  --accent: var(--gray-light);
+  --on-accent: var(--black);
+}

@@ -2,23 +2,7 @@
 
 Entrepreneur, inventor and CEO (or as I prefer, *Captain*) of [MrlyProd, Inc.](https://github.com/mrlyprod)
 
-Born (October 7th 1998) and raised in Brussels, Belgium — French, Italian, American, and Belgian.
-
-- `shop/` is the store pipeline and `site/` the pages of [carlomitchener.com](https://carlomitchener.com).
-- The `mrlyprod` Rust repo is the research code: the MrlyMath crates.
-
-## Commands
-
-Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
-
-- `bun run kit` - fetch `mrlyprod/sites/kit` at the sha in `kit.lock` into `site/kit/` (vendored like `node_modules`); `KIT=<path>` copies a local checkout instead.
-- `bun run snapshot` - the live Shopify products into `data/carlomitchener/site/shop.json`.
-- `bun run fake` - the same file, invented, so the site builds with no shop.
-- `bun run build` - render every page into `dist/`, `/git/` and `/raw/` too.
-- `bun run push` - upload what changed, delete what went, never touch `cdn/` or `art/`.
-- `bun run dev` - build once, then serve `dist/` on port 3000.
-- `bun aws/site.ts` - the builder Lambda: commit, snapshot, build, push, head.
-- The builder takes `{"source":"push|schedule|automator|manual","sha":"..."}`; only `automator` rebuilds a sha that has not moved.
+Born (October 7th 1998) and raised a French, Italian, American, and Belgian in Brussels.
 
 ## MrlyProd
 
@@ -34,7 +18,7 @@ The MrlyLogo has 21 fill squares and 4 void squares for a total of 25 grid squar
 
 ## MrlyFont
 
-A primitive 5x5 font can be derived from the logo. Designing it has been a fun experience that puts into question the complexity of the Latin alphabet.
+A primitive 5x5 font can be derived from the logo.
 
 ```
 11111
@@ -78,13 +62,6 @@ MrlyProd's mission is to apply MrlyMath in any way possible. Imagine a world whe
 | Religion | Pantheism |
 | Quote | *"This is the way. Why is the secret."* |
 
-## Social
-
-- [Twitter](https://twitter.com/carlomitchener)
-- [Instagram](https://www.instagram.com/carlo.mitchener)
-- [YouTube](https://www.youtube.com/@carlomitchener)
-- [Pinterest](https://www.pinterest.com/carlomitchener)
-
 ## OEIS
 
 Sequences I have published in the [On-Line Encyclopedia of Integer Sequences](https://oeis.org).
@@ -98,7 +75,17 @@ Sequences I have published in the [On-Line Encyclopedia of Integer Sequences](ht
 | [A399019](https://oeis.org/A399019) | Empty triangles in the Menger sponge cross-section |
 | [A399364](https://oeis.org/A399364) | Coprime points of the Menger sponge |
 
-Thank you, come again!
+## Social
 
-https://www.mrly.net
+- [Twitter](https://twitter.com/carlomitchener)
+- [Instagram](https://www.instagram.com/carlo.mitchener)
+- [YouTube](https://www.youtube.com/@carlomitchener)
+- [Pinterest](https://www.pinterest.com/carlomitchener)
+
+## Links
+
+- [mrly.net](https://mrly.net)
+- [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod)
+
+Thank you, come again!
 

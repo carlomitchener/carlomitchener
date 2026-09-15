@@ -1,0 +1,102 @@
+import { expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { globals, walk, type Output, type Site, type Spec } from "./build.ts";
+
+/* SITE */
+
+const site = () =>
+  ({
+    config: {
+      title: "Demo",
+      root: "https://demo.test",
+      llms: {
+        about: "A demo shop.",
+        links: [
+          { href: "/collections/", name: "Collections", note: "every design" },
+          { href: "/faq/", name: "FAQ" },
+          { href: "/nowhere/", name: "Nowhere" },
+        ],
+      },
+    },
+    routes: [
+      { route: "/", name: "Home", at: "2026-01-01" },
+      { route: "/404.html", kind: "missing", hidden: true },
+      { route: "/cart/", kind: "cart", hidden: true },
+      { route: "/collections/", kind: "collections", name: "Collections", at: "2026-02-02" },
+      { route: "/faq/", kind: "page", name: "FAQ", at: "2026-03-03" },
+      { route: "/7f3a91c0/", kind: "reel", name: "7f3a91c0", at: "2026-04-04" },
+    ],
+  }) as unknown as Site;
+
+const made = async () => {
+  const out = await globals(site(), {} as unknown as Spec);
+  const find = (path: string) => out.find((one: Output) => one.path === path)!.bytes as string;
+  return { sitemap: find("sitemap.xml"), robots: find("robots.txt"), llms: find("llms.txt") };
+};
+
+/* SITEMAP */
+
+test("the sitemap carries every shown route with its own date and no hidden one", async () => {
+  const { sitemap } = await made();
+  expect(sitemap).toContain("<loc>https://demo.test/</loc><lastmod>2026-01-01</lastmod>");
+  expect(sitemap).toContain("<loc>https://demo.test/collections/</loc><lastmod>2026-02-02</lastmod>");
+  expect(sitemap).toContain("<loc>https://demo.test/7f3a91c0/</loc><lastmod>2026-04-04</lastmod>");
+  expect(sitemap).not.toContain("404.html");
+  expect(sitemap).not.toContain("/cart/");
+  expect(sitemap.match(/<url>/g)!.length).toBe(4);
+});
+
+/* ROBOTS */
+
+test("robots names the crawlers it welcomes and points at the sitemap", async () => {
+  const { robots } = await made();
+  for (const agent of ["GPTBot", "ClaudeBot", "Claude-Web", "CCBot", "Google-Extended", "anthropic-ai", "PerplexityBot"]) {
+    expect(robots).toContain(`User-agent: ${agent}\nAllow: /`);
+  }
+  expect(robots).toContain("User-agent: *\nAllow: /");
+  expect(robots).toContain("Sitemap: https://demo.test/sitemap.xml");
+});
+
+/* LLMS */
+
+test("llms.txt says what the site is and links only what the site publishes", async () => {
+  const { llms } = await made();
+  expect(llms).toContain("# Demo");
+  expect(llms).toContain("A demo shop.");
+  expect(llms).toContain("- [Collections](https://demo.test/collections/): every design");
+  expect(llms).toContain("- [FAQ](https://demo.test/faq/)");
+  expect(llms).not.toContain("Nowhere");
+});
+
+/* CSS */
+
+const selectors = (css: string) => {
+  const out: string[] = [];
+  let depth = 0;
+  let buf = "";
+  for (const c of css.replace(/\/\*[\s\S]*?\*\//g, "")) {
+    if (c === "{") {
+      if (depth === 0) out.push(buf.trim().replace(/\s+/g, " "));
+      depth++;
+      buf = "";
+    } else if (c === "}") {
+      depth--;
+      buf = "";
+    } else if (depth === 0) buf += c;
+  }
+  return out;
+};
+
+test("the site css never repeats a top-level selector with another rule between", () => {
+  const home = join(import.meta.dir, "..", "ui");
+  for (const file of walk(home, false).filter((f) => f.endsWith(".css"))) {
+    const list = selectors(readFileSync(file, "utf8"));
+    const last = new Map<string, number>();
+    list.forEach((sel, n) => {
+      const was = last.get(sel);
+      if (was !== undefined && list.slice(was + 1, n).some((other) => other !== sel)) throw new Error(`${file}: '${sel}' at ${was} and ${n}`);
+      last.set(sel, n);
+    });
+  }
+});

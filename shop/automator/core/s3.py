@@ -12,6 +12,7 @@ s3 = boto3.client("s3")
 BUCKET = CARLOMITCHENER_BUCKET
 AUTOMATOR_KEY = "data/automator.json"
 PATHS_KEY = "data/paths.json"
+TASKS_PREFIX = "data/tasks/"
 SITE_PREFIX = "site/"
 CDN_PREFIX = f"{SITE_PREFIX}cdn/printful/"
 
@@ -24,7 +25,7 @@ def task_key(key: str) -> str:
     return f"data/tasks/{key}/{key}.json"
 
 def task_prefix(key: str) -> str:
-    return f"data/tasks/{key}/"
+    return f"{TASKS_PREFIX}{key}/"
 
 def cdn_prefix(key: str) -> str:
     return f"{CDN_PREFIX}{key}/"

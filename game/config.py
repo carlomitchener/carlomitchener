@@ -4,6 +4,7 @@ import os
 MIN_GENERATIONS = 8
 MAX_GENERATIONS = 64
 MAX_SEGMENTS = 8
+ATTEMPTS = 64
 
 # CANVAS
 MIN_CANVAS = 0
@@ -19,6 +20,10 @@ HEATMAP_FPS = 32
 FREEZE_DURATION = 0.5
 INTER_SEGMENT_FREEZE = 0.5
 SIZE = 1080
+FEED_MIN = 640
+RATE = 32
+CRF = 23
+PRESET = "medium"
 
 # OUTPUT
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -26,3 +31,15 @@ DATA_DIR = os.path.join("data", os.path.relpath(HERE))
 FORMAT = "png"
 FRAMES_DIR = "frames"
 HEATMAP_DIR = "heatmap"
+
+# GAME
+VERSION = 2
+LIVE_DAYS = 29.53
+PREFIX = "site/cdn/game"
+GAMES = "g"
+INDEX = "index.json"
+MASTER = "game-1080.mp4"
+FEED = "game.mp4"
+POSTER = "poster.webp"
+MANIFEST = "manifest.json"
+FILES = (MASTER, FEED, POSTER, MANIFEST)

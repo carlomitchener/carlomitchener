@@ -7,6 +7,7 @@ from automator import ping
 from automator import process
 from automator import product
 from automator import publish
+from automator import reap
 from automator import status
 from automator import sync
 from automator.core.api import logger, mint_token
@@ -55,6 +56,10 @@ def recover(task: Task) -> Task:
     return None
 
 def run() -> None:
+    try:
+        reap.mrly_reap()
+    except Exception as error:
+        logger.info(f"reap error: {error}")
     try:
         task = start()
     except NoTaskError as error:

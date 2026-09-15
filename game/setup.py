@@ -1,5 +1,4 @@
-from mrlypy.core.state import seed, choice
-from mrlypy.core.helpers import hex_key, random_seed
+from mrlypy.core.state import choice, randint
 from mrlypy.life.enums import Boundary
 from mrlypy.paint.enums import Ink
 from mrlypy.two import Cell2d
@@ -17,19 +16,14 @@ from variations import (
     tile_from_grid,
 )
 
+# KEYS
+
+HEX = "0123456789abcdef"
+
+def hex8() -> str:
+    return "".join(HEX[randint(0, 15)] for _ in range(8))
+
 # SAGA
-
-def setup_saga_seed(saga: Saga) -> Saga:
-    s = random_seed()
-    print(f"Setting up saga seed: {s}")
-    seed(s)
-    saga.seed = s
-    return saga
-
-def setup_saga_key(saga: Saga) -> Saga:
-    saga.key = hex_key(8)
-    print(f"Setting up saga key: {saga.key}")
-    return saga
 
 def setup_saga_boundary(saga: Saga) -> Saga:
     saga.boundary = choice(list(Boundary))
@@ -42,10 +36,10 @@ def setup_saga_colors(saga: Saga) -> Saga:
     print(f"Primary: {saga.primary}")
     return saga
 
-def setup_saga(saga: Saga) -> Saga:
-    print(f"Setting up saga")
-    saga = setup_saga_seed(saga)
-    saga = setup_saga_key(saga)
+def setup_saga(saga: Saga, seed: int, key: str) -> Saga:
+    print(f"Setting up saga {key} from seed {seed}")
+    saga.seed = seed
+    saga.key = key
     saga = setup_saga_boundary(saga)
     saga = setup_saga_colors(saga)
     return saga
@@ -114,7 +108,7 @@ def setup_segment_way(task: Task, prev_grid: Cell2d, prev_way: Way) -> Task:
 def setup_segment(saga: Saga, index: int, prev_grid: Cell2d = None) -> Task:
     print(f"Setting up segment {index}")
     task = Task()
-    task.key = hex_key(8)
+    task.key = hex8()
     task.seed = saga.seed
     task.boundary = saga.boundary
     task.primary = saga.primary

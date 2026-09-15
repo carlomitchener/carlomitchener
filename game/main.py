@@ -1,16 +1,30 @@
+import hashlib
+import json
+import os
+import random
+import shutil
+import time
+from datetime import datetime, timezone
+from typing import Any, Dict, List
 import mrlypy.life
-import subprocess
-from typing import List
-from mrlypy.core.state import choice
+import numpy as np
+from mrlypy.core.state import choice, seed as seed_state
 from mrlypy.life.crop import crop_grids
 from mrlypy.life.enums import Fate
 from mrlypy.two import Cell2d
-from config import MAX_GENERATIONS, MAX_SEGMENTS, MIN_GENERATIONS
-from frames import create_saga_frames
+from config import ATTEMPTS, DATA_DIR, FILES, FPS, FRAMES_DIR, GAMES, HEATMAP_DIR, HEATMAP_FPS, INDEX, LIVE_DAYS, MANIFEST, MAX_GENERATIONS, MAX_SEGMENTS, MIN_GENERATIONS, POSTER, RATE, VERSION
+from frames import create_saga_frames, create_saga_poster, frame_path
 from heatmap import create_saga_heatmap
 from models import Saga, Task
 from setup import setup_saga, setup_segment
-from video import create_saga_video
+from video import create_saga_videos
+
+FFMPEG = shutil.which("ffmpeg") or "/opt/bin/ffmpeg"
+
+# NAME
+
+def name_for(seed: int) -> str:
+    return hashlib.sha256(str(seed).encode()).hexdigest()[:8]
 
 # SEGMENT
 
@@ -25,10 +39,21 @@ def _segment_life_config(task: Task) -> mrlypy.life.Config:
         grid_size=task.tile.grid_size,
     )
 
+def _alive(grids: List[Cell2d]) -> List[Cell2d]:
+    for i, grid in enumerate(grids):
+        if not np.any(grid.types):
+            return grids[:i]
+    return grids
+
 def _generate_segment(saga: Saga, index: int, prev_grid: Cell2d) -> Task:
     task = setup_segment(saga, index, prev_grid)
     config = _segment_life_config(task)
     result = mrlypy.life.animate(config, grid=task.tile.cell, mask=task.mask.cell)
+    alive = _alive(result.grids)
+    if len(alive) < len(result.grids):
+        result.grids = alive
+        result.fate = Fate.DEAD
+    result.count = len(result.grids)
     task.result = result
     task.count = result.count
     print(f"Segment {index} animated ({result.fate.value}, count={result.count}).")
@@ -56,7 +81,7 @@ def _truncate_segment(segment: Task, length: int) -> Task:
 
 # SAGA
 
-def _finalize_saga(saga: Saga) -> Saga:
+def _finalize_saga(saga: Saga, attempts: int) -> Saga:
     all_grids = []
     for seg in saga.segments:
         all_grids.extend(seg.result.grids)
@@ -65,66 +90,165 @@ def _finalize_saga(saga: Saga) -> Saga:
     saga.count = len(saga.grids)
     saga.time = round(sum((s.result.time or 0.0) for s in saga.segments), 2)
     saga.fate = saga.segments[-1].result.fate if saga.segments else None
+    saga.attempts = attempts
     return saga
 
-def generate_saga() -> Saga:
-    print(f"Generating saga")
-    while True:
-        saga = Saga()
-        saga = setup_saga(saga)
+def generate_saga(seed: int, key: str) -> Saga:
+    for attempt in range(1, ATTEMPTS + 1):
+        saga = setup_saga(Saga(), seed, key)
         prev_grid = None
-        reached_life = False
         for index in range(MAX_SEGMENTS):
             segment = _generate_segment(saga, index, prev_grid)
+            if segment.count == 0:
+                break
             saga.segments.append(segment)
             if segment.result.fate == Fate.LIFE:
-                print(f"Segment {index} LIFE. Saga complete.")
-                reached_life = True
-                break
-            length = _pivot_length(segment)
-            _truncate_segment(segment, length)
-            print(f"Segment {index} non-LIFE ({segment.result.fate.value}). Pivoting at length {length}.")
+                print(f"Saga reached LIFE on attempt {attempt}.")
+                return _finalize_saga(saga, attempt)
+            _truncate_segment(segment, _pivot_length(segment))
             prev_grid = segment.result.grids[-1].copy()
-        if reached_life:
-            break
-        print(f"Saga hit MAX_SEGMENTS ({MAX_SEGMENTS}) without LIFE. Discarding and retrying...")
-    saga = _finalize_saga(saga)
-    return saga
+        print(f"Attempt {attempt} found no LIFE, retrying.")
+    raise RuntimeError(f"seed {seed} found no LIFE in {ATTEMPTS} attempts")
 
-# CLIPBOARD
+# STORY
 
-def copy_to_clipboard(text: str):
-    subprocess.run(["pbcopy"], input=text.encode(), check=True)
-    print(f"Copied to clipboard: {text}")
+def _count(n: int, word: str) -> str:
+    return f"{n} {word}" if n == 1 else f"{n} {word}s"
 
-# PIPELINE
+def _story(saga: Saga) -> str:
+    ways = " then ".join(dict.fromkeys(s.way.value for s in saga.segments))
+    cells = int(saga.grids[0].types.shape[0])
+    return (f"{_count(len(saga.segments), 'segment')}, {_count(saga.count, 'generation')} "
+            f"on a {cells} cell grid, {saga.boundary.value} boundary, {ways}, ending {saga.fate.value}")
 
-def print_social(saga: Saga):
-    print()
-    social_links = [
-        "instagram",
-        "reddit",
-        "tiktok",
-        "twitter",
-        "x",
-        "youtube",
-    ]
-    for link in social_links:
-        print(f"https://www.{link}.com")
-    print()
-    print(saga.key)
-    print()
+# MANIFEST
 
-def main():
-    saga = generate_saga()
-    create_saga_frames(saga)
-    create_saga_heatmap(saga)
-    create_saga_video(saga)
-    print_social(saga)
-    answer = input("Copy key to clipboard? (y/n): ").strip().lower()
-    if answer == "y":
-        copy_to_clipboard(saga.key)
-    return None
+def _segment_rows(saga: Saga) -> List[Dict[str, Any]]:
+    rows = []
+    for index, (seg, length) in enumerate(zip(saga.segments, saga.segment_lengths)):
+        rows.append({
+            "index": index,
+            "key": seg.key,
+            "way": seg.way.value if seg.way else None,
+            "path": seg.path.value if seg.path else None,
+            "secondary": seg.secondary.value if seg.secondary else None,
+            "fate": seg.result.fate.value if seg.result else None,
+            "generations": length,
+            "tile": seg.tile.to_dict() if seg.tile else None,
+            "mask": seg.mask.to_dict() if seg.mask else None,
+            "music": seg.music.to_dict() if seg.music else None,
+        })
+    return rows
+
+def _sizes(out_dir: str) -> Dict[str, int]:
+    return {name: os.path.getsize(f"{out_dir}/{name}") for name in FILES if name != MANIFEST}
+
+def _manifest(saga: Saga, at: str, videos: Dict[str, Any], out_dir: str) -> Dict[str, Any]:
+    first = saga.segments[0]
+    return {
+        "v": VERSION,
+        "name": saga.key,
+        "seed": saga.seed,
+        "at": at,
+        "story": _story(saga),
+        "fps": FPS,
+        "heatmap_fps": HEATMAP_FPS,
+        "rate": RATE,
+        "canvas": int(saga.grids[0].types.shape[0]),
+        "canvas_unit_width": saga.canvas_unit_width,
+        "canvas_unit_height": saga.canvas_unit_height,
+        "boundary": saga.boundary.value if saga.boundary else None,
+        "primary": saga.primary.value if saga.primary else None,
+        "fate": saga.fate.value if saga.fate else None,
+        "attempts": saga.attempts,
+        "tile": first.tile.to_dict() if first.tile else None,
+        "mask": first.mask.to_dict() if first.mask else None,
+        "segments": _segment_rows(saga),
+        "generations": saga.count,
+        "poster_generation": poster_frame(saga),
+        "frames": videos["frames"],
+        "duration": videos["duration"],
+        "size": videos["size"],
+        "steps": videos["steps"],
+        "sizes": _sizes(out_dir),
+        "files": list(FILES),
+    }
+
+def index_row(manifest: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "name": manifest["name"],
+        "seed": manifest["seed"],
+        "at": manifest["at"],
+        "duration": manifest["duration"],
+        "frames": manifest["frames"],
+        "size": manifest["size"],
+        "segments": len(manifest["segments"]),
+        "canvas": manifest["canvas"],
+        "story": manifest["story"],
+    }
+
+def expired(rows: List[Dict[str, Any]], now: datetime) -> List[Dict[str, Any]]:
+    cutoff = now.timestamp() - LIVE_DAYS * 86400
+    return [item for item in rows if datetime.fromisoformat(item["at"].replace("Z", "+00:00")).timestamp() < cutoff]
+
+def write_index(root: str, row: Dict[str, Any]) -> str:
+    path = os.path.join(root, INDEX)
+    rows = []
+    if os.path.exists(path):
+        with open(path) as handle:
+            rows = [item for item in json.load(handle) if item.get("name") != row["name"]]
+    for item in expired(rows, datetime.now(timezone.utc)):
+        shutil.rmtree(os.path.join(root, GAMES, item["name"]), ignore_errors=True)
+        rows.remove(item)
+        print(f"reap {item['name']}")
+    rows.insert(0, row)
+    with open(path, "w") as handle:
+        json.dump(rows, handle)
+    return path
+
+# POSTER
+
+def poster_frame(saga: Saga) -> int:
+    longest = max(range(len(saga.segment_lengths)), key=lambda i: saga.segment_lengths[i])
+    return sum(saga.segment_lengths[:longest + 1])
+
+# MAKE
+
+def make(seed: int, root: str) -> Dict[str, Any]:
+    marks = {}
+    clock = time.time()
+
+    def mark(stage):
+        nonlocal clock
+        now = time.time()
+        marks[stage] = int((now - clock) * 1000)
+        clock = now
+        print(f"stage {stage} {marks[stage]} ms")
+
+    at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    key = name_for(seed)
+    seed_state(seed)
+    saga = generate_saga(seed, key)
+    mark("saga")
+    work = os.path.join(root, "work", key)
+    out = os.path.join(root, GAMES, key)
+    create_saga_frames(saga, f"{work}/{FRAMES_DIR}")
+    mark("frames")
+    create_saga_heatmap(saga, f"{work}/{HEATMAP_DIR}")
+    mark("heatmap")
+    videos = create_saga_videos(saga, work, out, FFMPEG)
+    mark("videos")
+    create_saga_poster(frame_path(f"{work}/{HEATMAP_DIR}", key, poster_frame(saga)), f"{out}/{POSTER}", videos["size"])
+    mark("poster")
+    manifest = _manifest(saga, at, videos, out)
+    with open(f"{out}/{MANIFEST}", "w") as handle:
+        json.dump(manifest, handle)
+    row = index_row(manifest)
+    write_index(root, row)
+    return {"manifest": manifest, "row": row, "dir": out, "ms": marks}
 
 if __name__ == "__main__":
-    main()
+    record = make(random.getrandbits(32), DATA_DIR)
+    print()
+    print(record["manifest"]["story"])
+    print(record["dir"])

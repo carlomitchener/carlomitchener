@@ -1,0 +1,65 @@
+import { expect, test } from "bun:test";
+import { index, resolve, stamp } from "./links.ts";
+import type { Input, Route, Site } from "./build.ts";
+
+/* SITE */
+
+const home = "/repo/site";
+
+const input = (name: string, path: string): Input => ({ name, path, files: [], missing: false });
+
+const routes: Route[] = [
+  { route: "/about/", kind: "page", source: "/repo/README.md" },
+  { route: "/contact/", kind: "page", source: `${home}/pages/contact.md` },
+  { route: "/faq/", kind: "page", source: `${home}/pages/faq.md` },
+  { route: "/terms/", kind: "page", source: `${home}/pages/terms.md` },
+];
+
+function shop(): Site {
+  const one = {
+    root: home,
+    config: {},
+    inputs: {
+      pages: input("pages", `${home}/pages`),
+      readme: input("readme", "/repo/README.md"),
+    },
+    routes,
+  } as unknown as Site;
+  one.index = index(one);
+  return one;
+}
+
+const site = shop();
+
+/* ROUTES */
+
+test("a page link to a sibling page lands on that page's route", () => {
+  expect(resolve(site, "pages/contact.md", "faq.md")).toBe("/faq/");
+  expect(resolve(site, "pages/terms.md", "privacy.md")).toBe("privacy.md");
+});
+
+test("a link to the readme outside the site lands on the about route", () => {
+  expect(resolve(site, "pages/contact.md", "../../README.md")).toBe("/about/");
+});
+
+test("a fragment and a query ride along", () => {
+  expect(resolve(site, "pages/contact.md", "faq.md#returns")).toBe("/faq/#returns");
+  expect(resolve(site, "pages/contact.md", "terms.md?read=1")).toBe("/terms/?read=1");
+});
+
+test("an outside link and a rooted link pass through", () => {
+  for (const url of ["https://mrly.net", "http://mrly.net", "mailto:carlo@mrly.net", "tel:+1", "#top", "/collections/"]) {
+    expect(resolve(site, "pages/contact.md", url)).toBe(url);
+  }
+});
+
+/* STAMP */
+
+test("the stamp moves when a route a page could link to disappears", () => {
+  const gone = { ...site, routes: routes.filter((one) => one.route !== "/faq/") } as Site;
+  expect(stamp(index(gone))).not.toBe(stamp(site.index!));
+});
+
+test("a source outside the site never lands in the stamp", () => {
+  expect(stamp(site.index!)).not.toContain("/repo/README.md");
+});

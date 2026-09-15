@@ -1,0 +1,119 @@
+/* GAMES */
+
+.games {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  width: 100%;
+  background: var(--line);
+}
+
+.games .game {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--panel);
+}
+
+.games .game img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  transition: transform var(--slow) var(--ease), opacity var(--fast) var(--ease);
+}
+
+.games .game:hover img {
+  transform: scale(1.04);
+}
+
+/* PLAY */
+
+.play .frame {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-media);
+  background: var(--panel);
+  max-width: calc(100svh - 200px);
+}
+
+.play video {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.play .side h1 {
+  font-size: var(--t-h2);
+}
+
+.play .story {
+  color: var(--dim);
+  font-size: var(--t-body);
+}
+
+.play .meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s4);
+  padding-top: var(--s4);
+  border-top: var(--hair) solid var(--line);
+}
+
+.play .meta dt {
+  font-size: var(--t-fine);
+  color: var(--dim);
+}
+
+.play .meta dd {
+  margin-top: var(--s1);
+  font-family: var(--mono);
+  font-size: var(--t-small);
+}
+
+.play .keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s4);
+}
+
+.play .keys span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 20px;
+  padding: 0 var(--s1);
+  border: var(--hair) solid var(--line);
+  border-radius: 5px;
+  background: var(--panel);
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.play .get {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+}
+
+.json {
+  max-width: 100%;
+  max-height: 60vh;
+  overflow: auto;
+  padding: var(--s4);
+  border-radius: var(--r-card);
+  background: var(--panel);
+  font-family: var(--mono);
+  font-size: var(--t-fine);
+  line-height: 1.5;
+  white-space: pre;
+}

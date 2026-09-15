@@ -1,0 +1,11 @@
+# carlomitchener.com
+
+> https://carlomitchener.com
+
+carlomitchener.com is Carlo Mitchener's shop and feed. Every product is a variation of a Game of Life design, printed on demand by Printful and sold through Shopify. A variation lives one lunar month, 29.53 days, and then goes. Nothing digital is sold: every printfile and every tile on a product page is a free download. The home page is a feed of generated games, each with its own page.
+
+- [Shop](https://carlomitchener.com/shop/): every live variation, by category and by product
+- [About](https://carlomitchener.com/about/): who Carlo is
+- [FAQ](https://carlomitchener.com/faq/): printing, shipping, returns and the moon
+- [Shipping](https://carlomitchener.com/shipping/): who prints and who ships
+- [Contact](https://carlomitchener.com/contact/): where to write

@@ -164,11 +164,13 @@ class Saga:
     fate: Fate = None
     count: int = 0
     time: float = 0.0
+    attempts: int = 0
 
     def to_dict(self) -> Dict[str, Any]:
         data = {}
         data["key"] = self.key
         data["seed"] = self.seed
+        data["attempts"] = self.attempts
         data["boundary"] = self.boundary.value if self.boundary else None
         data["primary"] = self.primary.value if self.primary else None
         data["canvas_size"] = self.canvas_size
@@ -194,6 +196,7 @@ class Saga:
         saga.canvas_unit_height = data.get("canvas_unit_height")
         saga.fate = Fate(data.get("fate")) if data.get("fate") else None
         saga.count = data.get("count", 0)
+        saga.attempts = data.get("attempts", 0)
         saga.time = data.get("time", 0.0)
         saga.segment_lengths = data.get("segment_lengths", [])
         saga.segments = [Task.from_dict(s) for s in data.get("segments", [])]
