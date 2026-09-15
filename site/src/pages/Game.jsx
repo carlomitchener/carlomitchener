@@ -28,6 +28,9 @@ export function Game({ game, prev, next }) {
               <kbd>↓</kbd> game
             </span>
           </p>
+          <pre className="json" data-json>
+            <a href={gameManifest(game.name)}>manifest.json</a>
+          </pre>
         </div>
         <div className="side">
           <h1 className="mono">{game.name}</h1>
@@ -70,15 +73,6 @@ export function Game({ game, prev, next }) {
               </a>
             ) : null}
           </p>
-          <details className="drop" open>
-            <summary>
-              <span>Data</span>
-              <Icon name="expand_more" extra="small" />
-            </summary>
-            <pre className="json" data-json>
-              <a href={gameManifest(game.name)}>manifest.json</a>
-            </pre>
-          </details>
         </div>
       </article>
     </div>
