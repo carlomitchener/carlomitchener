@@ -56,14 +56,14 @@
     ]
   },
   "inputs": {
-    "shop": { "path": "data/shop.json" },
+    "shop": { "path": "../../data/carlomitchener/site/shop.json" },
     "catalog": { "path": "../shop/files/catalog.json" },
-    "tasks": { "path": "data/tasks", "deep": true, "ext": ".json" },
+    "tasks": { "path": "../../data/carlomitchener/site/tasks", "deep": true, "ext": ".json" },
     "pages": { "path": "pages", "ext": ".md" },
     "public": { "path": "public" }
   },
   "kit": {
-    "path": "data/kit/ui",
+    "path": "kit/ui",
     "out": "ui",
     "hash": false,
     "files": [

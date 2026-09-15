@@ -2,7 +2,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeF
 import { dirname, join, resolve } from "node:path";
 
 const org = resolve(import.meta.dir, "..");
-const home = join(org, "data", "kit");
+const home = join(org, "kit");
 const lock = join(org, "kit.lock");
 const REPO = "mrlyprod/mrlyprod";
 const KEEP = "sites/kit/";
@@ -72,7 +72,7 @@ async function pull(at: string) {
   const reply = await fetch(`https://codeload.github.com/${REPO}/tar.gz/${at}`);
   if (!reply.ok) throw new Error(`HTTP ${reply.status}`);
   const tar = Bun.gunzipSync(new Uint8Array(await reply.arrayBuffer()));
-  const fresh = join(org, "data", "kit.next");
+  const fresh = join(org, "kit.next");
   rmSync(fresh, { recursive: true, force: true });
   const files = untar(tar, fresh);
   if (!existsSync(join(fresh, "ui", "chrome.jsx"))) throw new Error(`${at} carries no sites/kit/ui`);

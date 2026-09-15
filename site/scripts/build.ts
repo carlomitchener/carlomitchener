@@ -185,7 +185,7 @@ function tasks(site_: Site) {
 
 function rows(site_: Site): Row[] {
   const source = site_.input("shop");
-  if (!source.files.length) throw new Error("site: data/shop.json is missing; run bun run snapshot or bun run fake");
+  if (!source.files.length) throw new Error("site: data/carlomitchener/site/shop.json is missing; run bun run snapshot or bun run fake");
   const snapshot = JSON.parse(read(source.files[0])) as { at: number; products: Row[] };
   const catalog = JSON.parse(read(site_.input("catalog").files[0])) as { id: number; category: string; title: string; link: string }[];
   const byType = new Map(catalog.map((entry) => [String(entry.id), entry]));

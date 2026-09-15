@@ -2,13 +2,12 @@ import json
 import os
 import time
 from catalog.config import DELAY, PRINTFUL_API_KEY, PRINTFUL_URL
-from catalog.helpers import ROOT
-from env import load_json, save_json
+from env import DATA_DIR, load_json, save_json
 from urllib.request import Request, urlopen
 
 HEADERS = {"Authorization": f"Bearer {PRINTFUL_API_KEY}"}
 
-RAW = os.path.join(ROOT, "data/raw")
+RAW = os.path.join(DATA_DIR, "raw")
 
 def raw_path(kind: str, id: int = None) -> str:
     if id is None:

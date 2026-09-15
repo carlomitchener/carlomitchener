@@ -1,10 +1,10 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 import site from "../site.json";
 
 const org = resolve(import.meta.dir, "..");
 const shop = resolve(org, "../shop");
-const data = join(org, "data");
+const DATA_DIR = join("data", relative(process.cwd(), org));
 const DESIGNS = Number(process.env.FAKE_DESIGNS ?? 2);
 const HOUR = 60 * 60 * 1000;
 const CDN = "https://cdn.shopify.com/s/files/1/0000/0001/files";
@@ -43,7 +43,7 @@ const products: unknown[] = [];
 let stamp = Date.now();
 
 for (const entry of catalog) {
-  const file = join(shop, "data", "products", `${entry.id}.json`);
+  const file = join("data", relative(process.cwd(), shop), "products", `${entry.id}.json`);
   if (!existsSync(file) && !entry.live) continue;
   const source = existsSync(file) ? read(file) : STUB;
   const live = (source.variants ?? []).filter((v: { is_ignored: boolean }) => !v.is_ignored);
@@ -86,7 +86,7 @@ for (const entry of catalog) {
       }),
       files: files.map((one) => one.name),
     });
-    write(join(data, "tasks", key, `${key}.json`), {
+    write(join(DATA_DIR, "tasks", key, `${key}.json`), {
       key,
       step: "ARCHIVE",
       seed: Math.floor(next() * 1000000),
@@ -103,5 +103,5 @@ for (const entry of catalog) {
   }
 }
 
-write(join(data, "shop.json"), { at: Date.now(), products });
-console.log(`fake: ${products.length} products from ${catalog.length} catalog rows into data/shop.json`);
+write(join(DATA_DIR, "shop.json"), { at: Date.now(), products });
+console.log(`fake: ${products.length} products from ${catalog.length} catalog rows into ${join(DATA_DIR, "shop.json")}`);

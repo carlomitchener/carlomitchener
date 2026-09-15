@@ -11,8 +11,8 @@ Born (October 7th 1998) and raised in Brussels, Belgium — French, Italian, Ame
 
 Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 
-- `bun run kit` - fetch `mrlyprod/sites/kit` at the sha in `kit.lock` into `data/kit/`; `KIT=<path>` copies a local checkout instead.
-- `bun run snapshot` - the live Shopify products into `data/shop.json`.
+- `bun run kit` - fetch `mrlyprod/sites/kit` at the sha in `kit.lock` into `site/kit/` (vendored like `node_modules`); `KIT=<path>` copies a local checkout instead.
+- `bun run snapshot` - the live Shopify products into `data/carlomitchener/site/shop.json`.
 - `bun run fake` - the same file, invented, so the site builds with no shop.
 - `bun run build` - render every page into `dist/`, `/git/` and `/raw/` too.
 - `bun run push` - upload what changed, delete what went, never touch `cdn/` or `art/`.

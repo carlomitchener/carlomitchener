@@ -1,0 +1,28 @@
+import os
+
+# GENERATION
+MIN_GENERATIONS = 8
+MAX_GENERATIONS = 64
+MAX_SEGMENTS = 8
+
+# CANVAS
+MIN_CANVAS = 0
+MAX_CANVAS = 256
+MIN_TILE = 0
+MAX_TILE = 128
+MIN_MASK = 0
+MAX_MASK = 64
+
+# VIDEO
+FPS = 8
+HEATMAP_FPS = 32
+FREEZE_DURATION = 0.5
+INTER_SEGMENT_FREEZE = 0.5
+SIZE = 1080
+
+# OUTPUT
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join("data", os.path.relpath(HERE))
+FORMAT = "png"
+FRAMES_DIR = "frames"
+HEATMAP_DIR = "heatmap"

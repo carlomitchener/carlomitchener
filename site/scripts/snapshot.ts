@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { feed, type ProductRow } from "../lib/shop.ts";
 import { loadEnv, need } from "../lib/env.ts";
 import { client, getText, putBytes } from "../../aws/s3.ts";
@@ -8,19 +8,19 @@ import site from "../site.json";
 loadEnv();
 
 const org = resolve(import.meta.dir, "..");
-const data = join(org, "data");
+const DATA_DIR = join("data", relative(process.cwd(), org));
 const s3 = client(need("CARLOMITCHENER_BUCKET"));
 const SHOP = "data/shop.json";
 
 async function pull(key: string): Promise<string[]> {
-  const local = join(data, "tasks", key, `${key}.json`);
+  const local = join(DATA_DIR, "tasks", key, `${key}.json`);
   if (!existsSync(local)) {
     const found = await getText(s3, `data/tasks/${key}/${key}.json`);
     if (!found) {
       console.warn(`snapshot: no task for ${key}, no printfiles listed`);
       return [];
     }
-    mkdirSync(join(data, "tasks", key), { recursive: true });
+    mkdirSync(join(DATA_DIR, "tasks", key), { recursive: true });
     writeFileSync(local, found);
   }
   try {
@@ -42,7 +42,7 @@ const rows: ProductRow[] = await feed({
 for (const row of rows) row.files = await pull(row.key);
 
 const snapshot = { at: Date.now(), products: rows };
-const path = join(data, "shop.json");
+const path = join(DATA_DIR, "shop.json");
 const body = JSON.stringify(snapshot, null, 2) + "\n";
 mkdirSync(data, { recursive: true });
 writeFileSync(path, body);

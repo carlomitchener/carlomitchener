@@ -8,7 +8,7 @@ SHOP_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(SHOP_DIR)
 DESK = os.path.dirname(REPO)
 ENV_PATH = os.path.join(DESK, ".env")
-DATA_DIR = os.path.join(SHOP_DIR, "data")
+DATA_DIR = os.path.join("data", os.path.relpath(SHOP_DIR))
 
 # ENV
 

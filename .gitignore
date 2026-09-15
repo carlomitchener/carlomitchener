@@ -30,6 +30,8 @@ target/
 
 # NODE
 node_modules/
+site/kit/
+site/kit.next/
 .astro/
 .wrangler/
 

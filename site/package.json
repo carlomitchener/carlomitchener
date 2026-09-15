@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "kit": "bun scripts/kit.ts",
-    "snapshot": "bun scripts/snapshot.ts",
-    "fake": "bun scripts/fake.ts",
+    "snapshot": "cd ../.. && bun carlomitchener/site/scripts/snapshot.ts",
+    "fake": "cd ../.. && bun carlomitchener/site/scripts/fake.ts",
     "build": "bun scripts/build.ts",
     "push": "bun scripts/push.ts",
     "dev": "bun scripts/dev.ts"
