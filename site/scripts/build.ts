@@ -293,6 +293,14 @@ function collect(site_: Site) {
     });
   });
   routes.push({ route: FEED_ROUTE, kind: "feed", name: "Feed", data: { posts: shown }, inputs: [index], at: today() });
+  const found = [
+    ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, kind: "Category" })),
+    ...catalog.filter((entry) => ofProduct(entry).length).map((entry) => ({ name: entry.title, href: shopRoute(entry), kind: "Product" })),
+    ...all.map((row) => ({ name: `${row.title} ${row.key}`, href: `/products/${row.key}/`, kind: "Variation" })),
+    ...shown.map((post) => ({ name: post.name, href: postRoute(post.name), kind: "Post" })),
+    ...site.pages.map((one) => ({ name: one.name, href: one.href, kind: "Page" })),
+  ];
+  routes.push({ route: "/search.json", kind: "search", name: "Search", hidden: true, data: { found }, inputs: [catalogFile, index] });
   routes.push({ route: "/404.html", kind: "missing", name: "Not found", hidden: true });
   return routes;
 }
@@ -326,6 +334,7 @@ function draw(site_: Site, route: Route): Output[] {
     const { posts: shown } = route.data as { posts: Post[] };
     return [{ path: at, bytes: shell(site_, { route: route.route, name: "Feed", description: `The feed: ${plural(shown.length, "post")}, newest first.` }, h(Feed, { posts: shown })) }];
   }
+  if (route.kind === "search") return [{ path: "search.json", bytes: JSON.stringify((route.data as { found: unknown[] }).found) }];
   if (route.kind === "product") return product(site_, route, at);
   if (route.kind === "post") return post(site_, route, at);
   if (route.kind === "cart") {

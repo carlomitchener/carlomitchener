@@ -1,3 +1,4 @@
+import "./header.ts";
 import "./footer.ts";
 import "./cart.ts";
 import "./gallery.ts";

@@ -46,7 +46,7 @@ export function Page({ root, route, title, description, image, type = "website",
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Header route={route} fly={fly} />
+        <Header route={route} catalog={catalog} fly={fly} />
         <main id="main">{children}</main>
         <Footer catalog={catalog} />
       </body>

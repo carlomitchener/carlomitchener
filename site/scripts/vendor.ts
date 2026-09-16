@@ -10,7 +10,7 @@ const UA =
 const CSS2 = "https://fonts.googleapis.com/css2";
 const OFL = "https://raw.githubusercontent.com/google/fonts/main/ofl";
 const APACHE = "https://raw.githubusercontent.com/google/material-design-icons/master/LICENSE";
-const ICON_AXES = "Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0";
+const ICON_AXES = "Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0..1,0";
 const ICON_FULL =
   "https://raw.githubusercontent.com/google/material-design-icons/master/variablefont/MaterialSymbolsOutlined%5BFILL%2CGRAD%2Copsz%2Cwght%5D.woff2";
 

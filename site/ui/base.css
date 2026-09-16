@@ -127,7 +127,7 @@ template {
 
 .wrap {
   width: 100%;
-  max-width: var(--w-grid);
+  max-width: var(--container);
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -174,7 +174,7 @@ main {
 
 .icon {
   font-family: "Material Symbols Outlined";
-  font-weight: 400;
+  font-weight: 300;
   font-style: normal;
   font-size: 24px;
   line-height: 1;

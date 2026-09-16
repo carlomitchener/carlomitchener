@@ -43,7 +43,7 @@
   --r-media: 18px;
   --r-pill: 980px;
   --header: 48px;
-  --w-grid: 1440px;
+  --container: 1200px;
   --w-text: 980px;
   --w-prose: 680px;
   --gutter: clamp(20px, 4vw, 32px);

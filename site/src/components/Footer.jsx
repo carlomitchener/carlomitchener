@@ -43,18 +43,18 @@ export function Footer({ catalog = [] }) {
               </a>
             </li>
           ))}
-          <li>
-            <a href={`mailto:${site.contact}`}>{site.contact}</a>
-          </li>
         </ul>
-        <p className="legal">
-          <span>{`Copyright © ${site.since}-${year} ${site.owner}. All rights reserved.`}</span>
-          {[...site.pages, ...FILES].map((one) => (
-            <a key={one.href} href={one.href}>
-              {one.name}
-            </a>
-          ))}
-        </p>
+        <div className="rule"></div>
+        <div className="legal">
+          <p className="copy">{`Copyright © ${site.since}-${year} ${site.owner}. All rights reserved.`}</p>
+          <ul className="pages">
+            {[...site.pages, ...FILES].map((one) => (
+              <li key={one.href}>
+                <a href={one.href}>{one.name}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </footer>
   );
