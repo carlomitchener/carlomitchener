@@ -5,7 +5,6 @@
   top: 0;
   z-index: 30;
   background: var(--bg);
-  border-bottom: var(--hair) solid var(--line);
 }
 
 .bar {
@@ -167,7 +166,6 @@
 
 .top[data-open] .flyout {
   grid-template-rows: 1fr;
-  border-bottom: var(--hair) solid var(--line);
 }
 
 .flyout .inside {
@@ -178,45 +176,96 @@
   padding: var(--s6) 0 var(--s8);
 }
 
+.pane[hidden] {
+  display: none;
+}
+
 .pane .fine {
   color: var(--dim);
   margin-bottom: var(--s3);
 }
 
-.pane .big {
+.explore {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: var(--s8);
+  align-items: start;
+}
+
+.explore .lead {
+  display: block;
+  margin-bottom: var(--s4);
+  font-size: var(--t-h3);
+  font-weight: 600;
+  letter-spacing: var(--track-tight);
+  color: var(--fg);
+}
+
+.explore .cols {
+  columns: 4 180px;
+  column-gap: var(--s6);
+}
+
+.explore .cols li {
+  break-inside: avoid;
+  padding: var(--s1) 0;
+}
+
+.explore .cols a,
+.explore .lead {
+  transition: color var(--fast) var(--ease);
+}
+
+.explore .cols a {
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.explore .cols a:hover,
+.explore .lead:hover {
+  color: var(--accent);
+}
+
+.explore .just .card h3 {
+  font-size: var(--t-small);
+}
+
+.big {
   display: flex;
   flex-direction: column;
   gap: var(--s2);
 }
 
-.pane .big a {
-  display: inline-flex;
+.big a {
+  display: flex;
   align-items: center;
-  gap: var(--s2);
-  font-size: var(--t-lead);
+  justify-content: space-between;
+  gap: var(--s4);
+  font-size: var(--t-h3);
   font-weight: 600;
   letter-spacing: var(--track-tight);
   color: var(--fg);
   transition: color var(--fast) var(--ease);
 }
 
-.pane .big a:hover {
+.big a:hover {
   color: var(--accent);
 }
 
-.pane .big a .icon {
+.big a .icon {
   opacity: 0;
   transition: opacity var(--fast) var(--ease);
 }
 
-.pane .big a:hover .icon {
+.big a:hover .icon {
   opacity: 1;
 }
 
 .veil {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 29;
   background: color-mix(in oklab, var(--black) 20%, transparent);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -225,7 +274,7 @@
   transition: opacity var(--slow) var(--ease);
 }
 
-.top[data-open] .veil {
+.top[data-open] + .veil {
   opacity: 1;
 }
 
@@ -319,8 +368,8 @@ html.held {
     padding: var(--s6) 0 var(--s9);
   }
 
-  .sheet .big a {
-    font-size: var(--t-h3);
+  .explore {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -331,10 +380,6 @@ html.held {
 
   .burger {
     display: none;
-  }
-
-  .pane .big a {
-    font-size: var(--t-h2);
   }
 }
 
@@ -374,9 +419,13 @@ html.held {
   padding-bottom: var(--s4);
 }
 
+.foot .catalog .col {
+  display: contents;
+}
+
 @media (min-width: 600px) {
   .foot .catalog {
-    columns: 6 150px;
+    columns: 3;
     column-gap: var(--s5);
   }
 
@@ -407,6 +456,22 @@ html.held {
   .foot .catalog ul {
     gap: var(--s1);
     padding: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .foot .catalog {
+    columns: auto;
+    display: flex;
+    gap: var(--s5);
+  }
+
+  .foot .catalog .col {
+    display: grid;
+    flex: 1;
+    gap: 0;
+    align-content: start;
+    min-width: 0;
   }
 }
 

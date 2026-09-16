@@ -1,5 +1,5 @@
 import site from "../../site.json";
-import { CATEGORIES } from "../config/shop.ts";
+import { CATEGORIES, FOOT_COLUMNS } from "../config/shop.ts";
 import { Icon } from "./Icon.jsx";
 
 const year = new Date().getUTCFullYear();
@@ -11,27 +11,41 @@ const FILES = [
   { name: "sitemap.xml", href: "/sitemap.xml" },
 ];
 
+function pack(groups, count) {
+  const columns = Array.from({ length: Math.min(count, groups.length) }, () => ({ height: 0, groups: [] }));
+  for (const group of [...groups].sort((a, b) => b.rows.length - a.rows.length)) {
+    const column = columns.reduce((low, one) => (one.height < low.height ? one : low));
+    column.groups.push(group);
+    column.height += group.rows.length + 2;
+  }
+  for (const column of columns) column.groups.sort((a, b) => groups.indexOf(a) - groups.indexOf(b));
+  return columns.filter((one) => one.groups.length).sort((a, b) => groups.indexOf(a.groups[0]) - groups.indexOf(b.groups[0]));
+}
+
 export function Footer({ catalog = [] }) {
+  const groups = CATEGORIES.map(([slug, name]) => ({ slug, name, rows: catalog.filter((row) => row.category === slug) })).filter((one) => one.rows.length);
   return (
     <footer className="foot">
       <div className="wrap">
         <nav className="catalog" aria-label="Catalog" data-catalog>
-          {CATEGORIES.map(([slug, name]) => (
-            <details key={slug} className="drop">
-              <summary>
-                <a href={`/shop/${slug}/`}>{name}</a>
-                <Icon name="expand_more" extra="small" />
-              </summary>
-              <ul>
-                {catalog
-                  .filter((row) => row.category === slug)
-                  .map((row) => (
-                    <li key={row.handle}>
-                      <a href={`/shop/${slug}/${row.handle}/`}>{row.title}</a>
-                    </li>
-                  ))}
-              </ul>
-            </details>
+          {pack(groups, FOOT_COLUMNS).map((column, i) => (
+            <div key={i} className="col">
+              {column.groups.map((group) => (
+                <details key={group.slug} className="drop">
+                  <summary>
+                    <a href={`/shop/${group.slug}/`}>{group.name}</a>
+                    <Icon name="expand_more" extra="small" />
+                  </summary>
+                  <ul>
+                    {group.rows.map((row) => (
+                      <li key={row.handle}>
+                        <a href={`/shop/${group.slug}/${row.handle}/`}>{row.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+            </div>
           ))}
         </nav>
         <div className="rule"></div>

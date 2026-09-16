@@ -5,7 +5,7 @@ import { Footer } from "./Footer.jsx";
 
 const FONTS = "/fonts/fonts.css";
 
-export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, catalog, fly = false, children }) {
+export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, catalog, latest = {}, now, fly = false, children }) {
   const url = root + route;
   return (
     <html lang="en">
@@ -46,7 +46,8 @@ export function Page({ root, route, title, description, image, type = "website",
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Header route={route} catalog={catalog} fly={fly} />
+        <Header route={route} catalog={catalog} latest={latest} now={now} fly={fly} />
+        <div className="veil" data-veil></div>
         <main id="main">{children}</main>
         <Footer catalog={catalog} />
       </body>

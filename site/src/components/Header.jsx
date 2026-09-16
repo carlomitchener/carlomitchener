@@ -1,9 +1,10 @@
 import { CATEGORIES } from "../config/shop.ts";
 import { Icon } from "./Icon.jsx";
+import { ProductCard } from "./ProductCard.jsx";
 
 const CART = "/cart/";
 
-export function Header({ route, catalog = [], fly = false }) {
+export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
   const links = [{ slug: "all", name: "All", href: "/shop/" }, ...CATEGORIES.map(([slug, name]) => ({ slug, name, href: `/shop/${slug}/` }))];
   const current = (href) => (route === href || (href !== "/shop/" && route.startsWith(href)) ? "page" : undefined);
   const rows = (slug) => (slug === "all" ? CATEGORIES.map(([s, name]) => ({ title: name, href: `/shop/${s}/` })) : catalog.filter((row) => row.category === slug).map((row) => ({ title: row.title, href: `/shop/${slug}/${row.handle}/` })));
@@ -42,18 +43,26 @@ export function Header({ route, catalog = [], fly = false }) {
         <div className="inside">
           <div className="wrap">
             {links.map((one) => (
-              <div key={one.slug} className="pane" data-pane={one.slug} hidden>
-                <p className="fine">Explore {one.name}</p>
-                <ul className="big">
-                  <li>
-                    <a href={one.href}>{one.slug === "all" ? "Explore All" : `Explore All ${one.name}`}</a>
-                  </li>
-                  {rows(one.slug).map((row) => (
-                    <li key={row.href}>
-                      <a href={row.href}>{row.title}</a>
-                    </li>
-                  ))}
-                </ul>
+              <div key={one.slug} className="pane explore" data-pane={one.slug} hidden>
+                <div className="list">
+                  <p className="fine">Explore {one.name}</p>
+                  <a className="lead" href={one.href}>
+                    {one.slug === "all" ? "Explore All" : `Explore All ${one.name}`}
+                  </a>
+                  <ul className="cols">
+                    {rows(one.slug).map((row) => (
+                      <li key={row.href}>
+                        <a href={row.href}>{row.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {latest[one.slug] ? (
+                  <div className="just">
+                    <p className="fine">Just Generated</p>
+                    <ProductCard product={latest[one.slug]} width={400} now={now} />
+                  </div>
+                ) : null}
               </div>
             ))}
             <div className="pane finder" data-pane="search" hidden>
@@ -81,7 +90,7 @@ export function Header({ route, catalog = [], fly = false }) {
                 {links.map((one) => (
                   <li key={one.href}>
                     <a href={one.href} aria-current={current(one.href)}>
-                      {one.name}
+                      <span>{one.name}</span>
                       <Icon name="chevron_right" extra="small" />
                     </a>
                   </li>
@@ -91,7 +100,6 @@ export function Header({ route, catalog = [], fly = false }) {
           </div>
         </div>
       </div>
-      <div className="veil" data-veil></div>
     </header>
   );
 }

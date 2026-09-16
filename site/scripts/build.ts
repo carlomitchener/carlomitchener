@@ -73,6 +73,8 @@ async function bundle() {
 
 let catalogRows: Catalog[] = [];
 
+let latestRows: Record<string, Row> = {};
+
 function shell(site_: Site, leaf: Leaf, body: unknown) {
   const node = h(
     Page,
@@ -89,6 +91,8 @@ function shell(site_: Site, leaf: Leaf, body: unknown) {
       data: leaf.data,
       noindex: leaf.noindex ?? false,
       catalog: catalogRows,
+      latest: latestRows,
+      now,
       fly: leaf.fly ?? false,
     },
     body as never,
@@ -181,6 +185,9 @@ function collect(site_: Site) {
   const catalog = JSON.parse(read(catalogFile)) as Catalog[];
   catalogRows = catalog;
   const all = rows(site_, catalog);
+  latestRows = {};
+  for (const row of all) if (!latestRows[row.category]) latestRows[row.category] = row;
+  if (all[0]) latestRows.all = all[0];
   const index = site_.input("feed").files[0] ?? site_.input("feed").path;
   const shown = feed(site_);
   const byType = new Map<string, Row[]>();

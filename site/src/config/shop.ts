@@ -33,3 +33,5 @@ export const ALIKE = 8;
 export const HOME_POSTS = 12;
 
 export const HOME_ROW = 8;
+
+export const FOOT_COLUMNS = 6;
