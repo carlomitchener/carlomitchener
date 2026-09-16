@@ -29,3 +29,7 @@ export type Catalog = { id: number; live: boolean; category: string; title: stri
 export const MORE_TILE = 3;
 
 export const ALIKE = 8;
+
+export const HOME_POSTS = 12;
+
+export const HOME_ROW = 8;

@@ -4,7 +4,7 @@ import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
-import { ALIKE, CATEGORIES, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
+import { ALIKE, CATEGORIES, HOME_POSTS, HOME_ROW, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
@@ -208,7 +208,8 @@ function collect(site_: Site) {
     return out;
   };
   const routes: Route[] = [];
-  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown }, inputs: [catalogFile, index], at: today() });
+  const sections = CATEGORIES.map(([slug, name]) => ({ slug, name, products: inCategory(slug).slice(0, HOME_ROW) })).filter((one) => one.products.length);
+  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown.slice(0, HOME_POSTS), sections }, inputs: [catalogFile, index], at: today() });
   routes.push({
     route: "/shop/",
     kind: "shop",
@@ -332,8 +333,8 @@ function cover(products: Row[]) {
 function draw(site_: Site, route: Route): Output[] {
   const at = route.route === "/404.html" ? "404.html" : page(route.route);
   if (route.kind === "home") {
-    const { products, posts: shown } = route.data as { products: Row[]; posts: Post[] };
-    const body = h(Home, { posts: shown });
+    const { products, posts: shown, sections } = route.data as { products: Row[]; posts: Post[]; sections: { slug: string; name: string; products: Row[] }[] };
+    const body = h(Home, { posts: shown, sections, now });
     return [{ path: at, bytes: shell(site_, { route: route.route, name: site.name, description: site.tagline, image: cover(products), fly: true }, body) }];
   }
   if (route.kind === "shop") {
