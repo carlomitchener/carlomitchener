@@ -1,0 +1,414 @@
+{
+  "id": 189,
+  "category": "women",
+  "title": "Women's Leggings",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "default",
+      "display": "Print file",
+      "width": 48.0,
+      "height": 41.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    }
+  ],
+  "variants": [
+    {
+      "id": 7676,
+      "size": "XS",
+      "color": "White",
+      "cost": "27.50",
+      "is_ignored": false
+    },
+    {
+      "id": 7677,
+      "size": "S",
+      "color": "White",
+      "cost": "27.50",
+      "is_ignored": false
+    },
+    {
+      "id": 7678,
+      "size": "M",
+      "color": "White",
+      "cost": "27.50",
+      "is_ignored": false
+    },
+    {
+      "id": 7679,
+      "size": "L",
+      "color": "White",
+      "cost": "27.50",
+      "is_ignored": false
+    },
+    {
+      "id": 7680,
+      "size": "XL",
+      "color": "White",
+      "cost": "27.50",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 14911,
+      "category": "Flat Lifestyle",
+      "title": "Flat Lifestyle",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14912,
+      "category": "Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14913,
+      "category": "Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14914,
+      "category": "Lifestyle 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14915,
+      "category": "Lifestyle 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14916,
+      "category": "Lifestyle 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14917,
+      "category": "Fitness Barefoot",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14918,
+      "category": "Fitness Barefoot",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14919,
+      "category": "Fitness Barefoot",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14920,
+      "category": "Fitness Barefoot",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14921,
+      "category": "Fitness Sneakers",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14922,
+      "category": "Fitness Sneakers",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14923,
+      "category": "Fitness Sneakers",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14924,
+      "category": "Fitness Sneakers",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14925,
+      "category": "Sports Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14926,
+      "category": "Sneakers 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14927,
+      "category": "Sneakers 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14928,
+      "category": "Sneakers 2",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14929,
+      "category": "Sneakers 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14930,
+      "category": "Sneakers 2",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14931,
+      "category": "Sneakers 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14932,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14933,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14934,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14935,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14936,
+      "category": "Holiday season",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14937,
+      "category": "Holiday season",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14938,
+      "category": "Holiday season",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14939,
+      "category": "Holiday season",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14940,
+      "category": "Holiday season",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14941,
+      "category": "Holiday season",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14943,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14944,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14945,
+      "category": "Spring/summer vibes",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14946,
+      "category": "Spring/summer vibes",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14947,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 14949,
+      "category": "Sneakers 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 14950,
+      "category": "Sneakers 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25334,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25335,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25336,
+      "category": "Women's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27555,
+      "category": "Women's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27556,
+      "category": "Women's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27557,
+      "category": "Women's 2",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27558,
+      "category": "Women's 3",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27559,
+      "category": "Women's 3",
+      "title": "Left Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27560,
+      "category": "Women's 3",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27561,
+      "category": "Women's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27562,
+      "category": "Women's 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

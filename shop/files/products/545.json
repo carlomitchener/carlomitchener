@@ -1,0 +1,169 @@
+{
+  "id": 545,
+  "category": "accessories",
+  "title": "Headband",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "default",
+      "display": "Base",
+      "width": 22.0,
+      "height": 5.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    }
+  ],
+  "variants": [
+    {
+      "id": 16363,
+      "size": "M",
+      "color": "White",
+      "cost": "7.25",
+      "is_ignored": false
+    },
+    {
+      "id": 13802,
+      "size": "L",
+      "color": "White",
+      "cost": "7.25",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 12424,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12427,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12428,
+      "category": "Ghost",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12429,
+      "category": "Ghost",
+      "title": "Right Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12430,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12431,
+      "category": "Men's",
+      "title": "Left Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12432,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12433,
+      "category": "Men's",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12434,
+      "category": "Men's",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12435,
+      "category": "Men's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12436,
+      "category": "Men's 2",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12437,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12438,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12439,
+      "category": "Women's",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12440,
+      "category": "Women's",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12441,
+      "category": "Women's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 12442,
+      "category": "Women's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

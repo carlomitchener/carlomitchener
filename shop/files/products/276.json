@@ -1,0 +1,225 @@
+{
+  "id": 276,
+  "category": "men",
+  "title": "Men's Tank Top",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 27.0,
+      "height": 34.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 27.0,
+      "height": 34.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 9049,
+      "size": "XS",
+      "color": "White",
+      "cost": "24.75",
+      "is_ignored": false
+    },
+    {
+      "id": 9050,
+      "size": "S",
+      "color": "White",
+      "cost": "24.75",
+      "is_ignored": false
+    },
+    {
+      "id": 9051,
+      "size": "M",
+      "color": "White",
+      "cost": "24.75",
+      "is_ignored": false
+    },
+    {
+      "id": 9052,
+      "size": "L",
+      "color": "White",
+      "cost": "24.75",
+      "is_ignored": false
+    },
+    {
+      "id": 9053,
+      "size": "XL",
+      "color": "White",
+      "cost": "24.75",
+      "is_ignored": false
+    },
+    {
+      "id": 9054,
+      "size": "2XL",
+      "color": "White",
+      "cost": "26.25",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 16406,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16407,
+      "category": "Man",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16409,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16410,
+      "category": "Man",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16411,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16412,
+      "category": "Men's Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16413,
+      "category": "Men's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16414,
+      "category": "Men's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16415,
+      "category": "Men's 2",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16416,
+      "category": "Men's 2",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16417,
+      "category": "Men's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16418,
+      "category": "Men's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16419,
+      "category": "Men's 3",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16420,
+      "category": "Men's 3",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16421,
+      "category": "Men's 4",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16422,
+      "category": "Men's 4",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16423,
+      "category": "Men's 4",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16424,
+      "category": "Men's 4",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29618,
+      "category": "Men's 5",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29619,
+      "category": "Men's 5",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29620,
+      "category": "Men's 5",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

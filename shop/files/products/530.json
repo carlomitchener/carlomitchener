@@ -1,0 +1,120 @@
+{
+  "id": 530,
+  "category": "accessories",
+  "title": "Scrunchie",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "default",
+      "display": "Base",
+      "width": 20.0,
+      "height": 5.0,
+      "dpi": 300,
+      "is_ignored": false
+    },
+    {
+      "name": "details",
+      "display": "Bow",
+      "width": 20.0,
+      "height": 5.0,
+      "dpi": 300,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 13350,
+      "size": "One size",
+      "color": "White",
+      "cost": "8.86",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 11911,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11914,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11915,
+      "category": "Flat 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11916,
+      "category": "Flat 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11917,
+      "category": "Flat Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11918,
+      "category": "Flat Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11919,
+      "category": "Flat Lifestyle",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11920,
+      "category": "Women's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11921,
+      "category": "Women's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11922,
+      "category": "Women's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 11923,
+      "category": "Product specs",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

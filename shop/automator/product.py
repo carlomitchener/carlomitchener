@@ -3,7 +3,7 @@ from automator.core.errors import Retry, TaskAborted
 from automator.core.models import Task, Variant
 from automator.core.steps import Step
 
-VENDOR = "carlomitchener"
+VENDOR = "Printful"
 CATEGORY = "gid://shopify/TaxonomyCategory/na"
 
 MUTATION = """
@@ -27,7 +27,7 @@ mutation productSet($input: ProductSetInput!, $synchronous: Boolean!) {
 """
 
 def set_tags(task: Task) -> list[str]:
-    return [task.product.category, task.product.title]
+    return [task.product.category.capitalize(), task.product.title]
 
 def set_sizes(task: Task) -> list[str]:
     sizes = []

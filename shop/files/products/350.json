@@ -1,0 +1,192 @@
+{
+  "id": 350,
+  "category": "bags",
+  "title": "Fanny Pack",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 19.0,
+      "height": 7.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 19.0,
+      "height": 7.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "pocket",
+      "display": "Inside Pocket",
+      "width": 9.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "top",
+      "display": "Top print",
+      "width": 19.0,
+      "height": 7.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 9986,
+      "size": "S/M",
+      "color": "White",
+      "cost": "27.25",
+      "is_ignored": false
+    },
+    {
+      "id": 9987,
+      "size": "M/L",
+      "color": "White",
+      "cost": "27.25",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 18763,
+      "category": "Default",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18764,
+      "category": "Default",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18765,
+      "category": "Default",
+      "title": "Top",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18766,
+      "category": "Default",
+      "title": "Front Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18767,
+      "category": "Default",
+      "title": "Pocket",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18772,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18773,
+      "category": "Lifestyle",
+      "title": "Lifestyle 1",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18774,
+      "category": "Lifestyle",
+      "title": "Lifestyle 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18775,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18776,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18777,
+      "category": "Men's Lifestyle 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18778,
+      "category": "Holiday season",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 18779,
+      "category": "Holiday season",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 18781,
+      "category": "Women's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18782,
+      "category": "Spring/summer vibes",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 18783,
+      "category": "Spring/summer vibes",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 20696,
+      "category": "Women's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

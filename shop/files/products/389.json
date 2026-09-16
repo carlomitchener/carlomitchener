@@ -1,0 +1,169 @@
+{
+  "id": 389,
+  "category": "bags",
+  "title": "Minimalist Backpack",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "bottom",
+      "display": "Bottom panel",
+      "width": 28.0,
+      "height": 7.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 14.0,
+      "height": 19.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "top",
+      "display": "Top panel",
+      "width": 28.0,
+      "height": 11.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 10876,
+      "size": "One size",
+      "color": "White",
+      "cost": "38.75",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 20189,
+      "category": "Default",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20190,
+      "category": "Default",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20191,
+      "category": "Default",
+      "title": "Bottom",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20192,
+      "category": "Default",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20193,
+      "category": "Default",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20194,
+      "category": "Lifestyle 1",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20195,
+      "category": "Lifestyle 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20196,
+      "category": "Boy's Lifestyle",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20197,
+      "category": "Boy's Lifestyle",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20198,
+      "category": "Boy's Lifestyle",
+      "title": "Zoomed-in",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20199,
+      "category": "Boy's Lifestyle",
+      "title": "Zoomed-in",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20200,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20201,
+      "category": "Men's Lifestyle",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20202,
+      "category": "Boy's Lifestyle 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20203,
+      "category": "Boy's Lifestyle 2",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20204,
+      "category": "Girl's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20205,
+      "category": "Girl's Lifestyle",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

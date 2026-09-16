@@ -1,0 +1,226 @@
+{
+  "id": 279,
+  "category": "bags",
+  "title": "Backpack",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "bottom",
+      "display": "Bottom panel",
+      "width": 28.0,
+      "height": 5.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front & Pocket",
+      "width": 14.5,
+      "height": 20.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "pocket",
+      "display": "Inside Pocket",
+      "width": 13.0,
+      "height": 8.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "top",
+      "display": "Top panel",
+      "width": 28.0,
+      "height": 8.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 9063,
+      "size": "One size",
+      "color": "White",
+      "cost": "38.95",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 16435,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16442,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16443,
+      "category": "Men's Lifestyle",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16444,
+      "category": "Flat Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16445,
+      "category": "Boy's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16446,
+      "category": "Boy's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16447,
+      "category": "Girl's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16448,
+      "category": "Girl's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16449,
+      "category": "Girl's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16450,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 16451,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20688,
+      "category": "Product details",
+      "title": "Product details 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20689,
+      "category": "Default",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20715,
+      "category": "Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20716,
+      "category": "Lifestyle",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20717,
+      "category": "Lifestyle",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20718,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20719,
+      "category": "Women's Lifestyle",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20720,
+      "category": "Women's Lifestyle",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20731,
+      "category": "Default",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20732,
+      "category": "Default",
+      "title": "Bottom",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20733,
+      "category": "Default",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20735,
+      "category": "Default",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20739,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

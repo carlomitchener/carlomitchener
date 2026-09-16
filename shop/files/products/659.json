@@ -1,0 +1,300 @@
+{
+  "id": 659,
+  "category": "unisex",
+  "title": "Unisex Button Shirt",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 38.0,
+      "height": 50.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "details",
+      "display": "Details",
+      "width": 38.0,
+      "height": 50.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 38.0,
+      "height": 50.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "inside_yoke",
+      "display": "Inside yoke",
+      "width": 38.0,
+      "height": 20.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 38.0,
+      "height": 20.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 38.0,
+      "height": 20.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 17117,
+      "size": "2XS",
+      "color": "White",
+      "cost": "41.50",
+      "is_ignored": false
+    },
+    {
+      "id": 17118,
+      "size": "XS",
+      "color": "White",
+      "cost": "41.50",
+      "is_ignored": false
+    },
+    {
+      "id": 17119,
+      "size": "S",
+      "color": "White",
+      "cost": "41.50",
+      "is_ignored": false
+    },
+    {
+      "id": 16400,
+      "size": "M",
+      "color": "White",
+      "cost": "41.50",
+      "is_ignored": false
+    },
+    {
+      "id": 17120,
+      "size": "L",
+      "color": "White",
+      "cost": "41.50",
+      "is_ignored": false
+    },
+    {
+      "id": 17121,
+      "size": "XL",
+      "color": "White",
+      "cost": "41.50",
+      "is_ignored": false
+    },
+    {
+      "id": 17122,
+      "size": "2XL",
+      "color": "White",
+      "cost": "42.95",
+      "is_ignored": false
+    },
+    {
+      "id": 17123,
+      "size": "3XL",
+      "color": "White",
+      "cost": "44.50",
+      "is_ignored": false
+    },
+    {
+      "id": 17124,
+      "size": "4XL",
+      "color": "White",
+      "cost": "45.95",
+      "is_ignored": false
+    },
+    {
+      "id": 17125,
+      "size": "5XL",
+      "color": "White",
+      "cost": "47.50",
+      "is_ignored": false
+    },
+    {
+      "id": 17126,
+      "size": "6XL",
+      "color": "White",
+      "cost": "48.95",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 4978,
+      "category": "Ghost",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4980,
+      "category": "Ghost",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4981,
+      "category": "Ghost",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4982,
+      "category": "Ghost",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4983,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4984,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4985,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4986,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4987,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4988,
+      "category": "Men's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4989,
+      "category": "Men's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4990,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4991,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4992,
+      "category": "Women's Lifestyle",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 4993,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25232,
+      "category": "Women's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25233,
+      "category": "Women's 2",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25234,
+      "category": "Women's 2",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25337,
+      "category": "Women's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25338,
+      "category": "Women's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 25339,
+      "category": "Women's 3",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

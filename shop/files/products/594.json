@@ -1,0 +1,159 @@
+{
+  "id": 594,
+  "category": "bags",
+  "title": "Gym Bag",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 19.0,
+      "height": 15.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "bottom",
+      "display": "Bottom print",
+      "width": 19.0,
+      "height": 15.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 19.0,
+      "height": 15.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "pocket",
+      "display": "Pocket",
+      "width": 19.0,
+      "height": 15.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "side_left",
+      "display": "Left side",
+      "width": 19.0,
+      "height": 15.5,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "side_right",
+      "display": "Right side",
+      "width": 19.0,
+      "height": 15.5,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 15155,
+      "size": "One size",
+      "color": "White",
+      "cost": "52.01",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 2562,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2569,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2570,
+      "category": "Flat",
+      "title": "Top",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2571,
+      "category": "Flat",
+      "title": "Bottom",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2572,
+      "category": "Flat",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2573,
+      "category": "Flat",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2575,
+      "category": "Product details",
+      "title": "Product details 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2576,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2577,
+      "category": "Men's Lifestyle",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2579,
+      "category": "Product specs",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 2580,
+      "category": "Product specs",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "id": 465,
+  "category": "bags",
+  "title": "Duffle Bag",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 27.0,
+      "height": 18.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "bottom",
+      "display": "Bottom print",
+      "width": 27.0,
+      "height": 18.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 27.0,
+      "height": 18.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "pocket",
+      "display": "Pocket",
+      "width": 27.0,
+      "height": 18.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sides",
+      "display": "Sides",
+      "width": 27.0,
+      "height": 18.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "top",
+      "display": "Top print",
+      "width": 27.0,
+      "height": 18.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 12021,
+      "size": "One size",
+      "color": "White",
+      "cost": "70.25",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 7220,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7222,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7223,
+      "category": "Flat",
+      "title": "Right Side",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7224,
+      "category": "Flat",
+      "title": "Left Side",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7225,
+      "category": "Flat",
+      "title": "Top",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7226,
+      "category": "Flat",
+      "title": "Bottom",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7227,
+      "category": "Flat",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7228,
+      "category": "Flat",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7229,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7230,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7231,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7232,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7233,
+      "category": "Women's Lifestyle",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7235,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7236,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7237,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7238,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7239,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7240,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7241,
+      "category": "Men's Lifestyle",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7242,
+      "category": "Product specs",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7243,
+      "category": "Product specs",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7244,
+      "category": "Product specs",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7245,
+      "category": "Product specs",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7246,
+      "category": "Product specs",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7247,
+      "category": "Product specs",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 7248,
+      "category": "Flat",
+      "title": "Inside Pocket",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

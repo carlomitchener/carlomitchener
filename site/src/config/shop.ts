@@ -21,6 +21,7 @@ export const CATEGORIES: [string, string][] = [
   ["men", "Men"],
   ["unisex", "Unisex"],
   ["women", "Women"],
+  ["youth", "Youth"],
 ];
 
 export type Catalog = { id: number; live: boolean; category: string; title: string; link: string; handle: string };

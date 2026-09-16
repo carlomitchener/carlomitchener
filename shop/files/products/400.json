@@ -1,0 +1,247 @@
+{
+  "id": 400,
+  "category": "men",
+  "title": "Men's Joggers",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "leg_left",
+      "display": "Left leg",
+      "width": 33.0,
+      "height": 50.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "leg_right",
+      "display": "Right leg",
+      "width": 33.0,
+      "height": 50.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 11033,
+      "size": "XS",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11034,
+      "size": "S",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11035,
+      "size": "M",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11036,
+      "size": "L",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11037,
+      "size": "XL",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11038,
+      "size": "2XL",
+      "color": "White",
+      "cost": "43.25",
+      "is_ignored": false
+    },
+    {
+      "id": 11039,
+      "size": "3XL",
+      "color": "White",
+      "cost": "44.75",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 3162,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3163,
+      "category": "Men's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3164,
+      "category": "Men's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3165,
+      "category": "Men's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3166,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3167,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3168,
+      "category": "Flat",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3169,
+      "category": "Flat",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3172,
+      "category": "Lifestyle",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3173,
+      "category": "Lifestyle",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3174,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3175,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3176,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3177,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3179,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3180,
+      "category": "Product specs",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23707,
+      "category": "Men's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23708,
+      "category": "Men's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23709,
+      "category": "Men's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29626,
+      "category": "Men's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29627,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29628,
+      "category": "Men's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

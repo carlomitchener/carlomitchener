@@ -1,0 +1,278 @@
+{
+  "id": 744,
+  "category": "bags",
+  "title": "Utility Crossbody Bag",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 15.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "details",
+      "display": "Details",
+      "width": 15.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 15.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "inside_pocket",
+      "display": "Inside pocket",
+      "width": 15.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "label_outside",
+      "display": "Outside label",
+      "width": 2.0,
+      "height": 2.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "pocket",
+      "display": "Pocket",
+      "width": 15.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 19256,
+      "size": "One size",
+      "color": "White",
+      "cost": "24.25",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 21376,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21377,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21387,
+      "category": "Product details",
+      "title": "Product Details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21388,
+      "category": "Ghost",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21389,
+      "category": "Ghost",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21390,
+      "category": "Product details",
+      "title": "Product Details 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21391,
+      "category": "Product specs",
+      "title": "English",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21392,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21393,
+      "category": "Men's",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21394,
+      "category": "Men's",
+      "title": "Front 3",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21395,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21396,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21397,
+      "category": "Women's",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21398,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21401,
+      "category": "Product details",
+      "title": "Product Details 3",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 21418,
+      "category": "Product specs",
+      "title": "French",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 21419,
+      "category": "Product specs",
+      "title": "German",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 21420,
+      "category": "Product specs",
+      "title": "Italian",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 21421,
+      "category": "Product specs",
+      "title": "Japanese",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 21422,
+      "category": "Product specs",
+      "title": "Spanish",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 22045,
+      "category": "Men's Lifestyle 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22168,
+      "category": "Ghost",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22169,
+      "category": "Ghost",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22170,
+      "category": "Product details",
+      "title": "Product Details 4",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23260,
+      "category": "Boy's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23261,
+      "category": "Boy's",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23262,
+      "category": "Girl's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23263,
+      "category": "Girl's",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

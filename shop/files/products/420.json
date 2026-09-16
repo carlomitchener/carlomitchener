@@ -1,0 +1,364 @@
+{
+  "id": 420,
+  "category": "accessories",
+  "title": "Neck Gaiter",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "default",
+      "display": "Print file",
+      "width": 19.0,
+      "height": 19.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 11414,
+      "size": "One size",
+      "color": "White",
+      "cost": "11.95",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 3706,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3707,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3708,
+      "category": "Flat",
+      "title": "Folded",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3709,
+      "category": "Flat",
+      "title": "On Tube",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3710,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3711,
+      "category": "Women's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3712,
+      "category": "Women's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3713,
+      "category": "Women's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3714,
+      "category": "Women's 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3716,
+      "category": "Men's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3717,
+      "category": "Men's 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3718,
+      "category": "Men's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3719,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3720,
+      "category": "Men's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3721,
+      "category": "Men's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3722,
+      "category": "Men's 4",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3723,
+      "category": "Men's 4",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3724,
+      "category": "Women's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3725,
+      "category": "Women's 3",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3726,
+      "category": "Women's 3",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3727,
+      "category": "Women's 4",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3728,
+      "category": "Women's 4",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3729,
+      "category": "Women's 4",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3730,
+      "category": "Lifestyle 1",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3731,
+      "category": "Men's 5",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3732,
+      "category": "Men's 5",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3733,
+      "category": "Men's 5",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3734,
+      "category": "Lifestyle 1",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3735,
+      "category": "Lifestyle 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3736,
+      "category": "Lifestyle 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3737,
+      "category": "Men's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3738,
+      "category": "Men's 3",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3739,
+      "category": "Men's 3",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3740,
+      "category": "Girl's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3741,
+      "category": "Girl's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3742,
+      "category": "Girl's",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3743,
+      "category": "Girl's",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3744,
+      "category": "Halloween",
+      "title": "Folded",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3745,
+      "category": "Halloween",
+      "title": "Folded",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3746,
+      "category": "Men's 6",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3747,
+      "category": "Men's 6",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3748,
+      "category": "Men's 6",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3749,
+      "category": "Holiday season",
+      "title": "Folded",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3750,
+      "category": "Holiday season",
+      "title": "Folded",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3751,
+      "category": "Women's 5",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3752,
+      "category": "Women's 5",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3753,
+      "category": "Women's 5",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

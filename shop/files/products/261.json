@@ -1,0 +1,248 @@
+{
+  "id": 261,
+  "category": "women",
+  "title": "Women's Crew Neck T-Shirt",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 26.0,
+      "height": 33.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "default",
+      "display": "Print file",
+      "width": 26.0,
+      "height": 33.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 16.5,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 16.5,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 8884,
+      "size": "XS",
+      "color": "White",
+      "cost": "25.25",
+      "is_ignored": false
+    },
+    {
+      "id": 8885,
+      "size": "S",
+      "color": "White",
+      "cost": "25.25",
+      "is_ignored": false
+    },
+    {
+      "id": 8886,
+      "size": "M",
+      "color": "White",
+      "cost": "25.25",
+      "is_ignored": false
+    },
+    {
+      "id": 8887,
+      "size": "L",
+      "color": "White",
+      "cost": "25.25",
+      "is_ignored": false
+    },
+    {
+      "id": 8888,
+      "size": "XL",
+      "color": "White",
+      "cost": "25.25",
+      "is_ignored": false
+    },
+    {
+      "id": 8889,
+      "size": "2XL",
+      "color": "White",
+      "cost": "26.75",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 15777,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15778,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15779,
+      "category": "Women's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15780,
+      "category": "Women's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15781,
+      "category": "Women's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15782,
+      "category": "Women's 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15783,
+      "category": "Flat Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15784,
+      "category": "Flat Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15785,
+      "category": "Spring/summer vibes",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 15786,
+      "category": "Spring/summer vibes",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 15787,
+      "category": "Spring/summer vibes",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 15788,
+      "category": "Spring/summer vibes",
+      "title": "Back 2",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 15789,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15790,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15791,
+      "category": "Women's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15792,
+      "category": "Women's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15793,
+      "category": "Women's 3",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15794,
+      "category": "Women's 3",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29621,
+      "category": "Women's 4",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29622,
+      "category": "Women's 4",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29623,
+      "category": "Women's 4",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29624,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

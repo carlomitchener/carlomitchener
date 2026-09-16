@@ -2,7 +2,7 @@ import json
 import os
 from enum import Enum
 from catalog.models import Product
-from env import DATA_DIR, SHOP_DIR, load_json, save_json
+from env import SHOP_DIR, load_json, save_json
 
 ROOT = SHOP_DIR
 
@@ -16,6 +16,7 @@ class Category(Enum):
     MEN = "men"
     UNISEX = "unisex"
     WOMEN = "women"
+    YOUTH = "youth"
 
 # CATALOG
 
@@ -48,8 +49,10 @@ def sort_catalog():
 
 # PRODUCTS
 
+PRODUCTS = os.path.join(ROOT, "files/products")
+
 def product_path(id: int) -> str:
-    return os.path.join(DATA_DIR, "products", f"{id}.json")
+    return os.path.join(PRODUCTS, f"{id}.json")
 
 def load_product(id: int) -> Product:
     return Product.from_dict(load_json(product_path(id)))

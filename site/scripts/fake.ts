@@ -1,6 +1,6 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { CATEGORIES, LIVE_DAYS, type Catalog } from "../src/config/shop.ts";
+import { LIVE_DAYS, type Catalog } from "../src/config/shop.ts";
 import { DEV_DIR, DEV_POSTS, DEV_SEED, DEV_VARIATIONS, PICSUM, PICSUM_POOL } from "../src/config/dev.ts";
 
 const org = resolve(import.meta.dir, "..");
@@ -36,61 +36,55 @@ const pool = Array.from({ length: between(PICSUM_POOL) }, () => hex());
 
 const picture = (size: number) => `${PICSUM}/${pick(pool)}/${size}/${size}`;
 
-/* SHAPES */
+/* SPECS */
 
-const SIZES: Record<string, string[]> = {
-  accessories: ["One Size"],
-  bags: ["One Size"],
-  kids: ["2T", "3T", "4T", "5T", "6", "8", "10", "12"],
-  men: ["XS", "S", "M", "L", "XL", "2XL"],
-  unisex: ["XS", "S", "M", "L", "XL", "2XL"],
-  women: ["XS", "S", "M", "L", "XL", "2XL"],
+type Spec = {
+  id: number;
+  variants: { id: number; size: string; cost: string; is_ignored: boolean }[];
+  mockups: { id: number; category: string; title: string; is_ignored: boolean }[];
+  placements: { width: number; height: number; dpi: number; is_ignored: boolean }[];
 };
 
-const PRICES: Record<string, [number, number]> = {
-  accessories: [18, 32],
-  bags: [24, 48],
-  kids: [20, 34],
-  men: [28, 64],
-  unisex: [28, 64],
-  women: [28, 64],
+const spec = (id: number): Spec | null => {
+  const path = join(org, "../shop/files/products", `${id}.json`);
+  return existsSync(path) ? (read(path) as Spec) : null;
 };
-
-const MOCKUPS = [
-  ["Flat", "Front"],
-  ["Flat", "Back"],
-  ["Flat", "Left"],
-  ["Flat", "Right"],
-  ["Lifestyle", "Worn"],
-  ["Lifestyle", "Outdoors"],
-  ["Detail", "Close"],
-];
 
 const STORIES = ["A still life that never settles.", "Two gliders meet and neither survives.", "The grid fills, then empties, then fills again.", "A loop of four, forever.", "Everything dies at generation ninety.", "One cell outlives them all."];
 
 /* PRODUCTS */
 
 const catalog = read(join(org, "../shop/files/catalog.json")) as Catalog[];
-const slugs = new Set(CATEGORIES.map(([slug]) => slug));
 const products: unknown[] = [];
 
 for (const entry of catalog) {
-  if (!slugs.has(entry.category)) continue;
-  const sizes = SIZES[entry.category];
-  const price = between(PRICES[entry.category]).toFixed(2);
-  const mockups = MOCKUPS.slice(0, between([3, MOCKUPS.length]));
-  const files = between([1, 3]);
+  const source = spec(entry.id);
+  if (!source) {
+    console.warn(`fake: no spec for ${entry.id} ${entry.title}, skipped`);
+    continue;
+  }
+  const variants = source.variants.filter((v) => !v.is_ignored).filter((v, i, all) => all.findIndex((o) => o.size === v.size) === i);
+  const mockups = source.mockups.filter((m) => !m.is_ignored);
+  const placements = new Map<string, { width: number; height: number; dpi: number }>();
+  for (const place of source.placements.filter((one) => !one.is_ignored)) {
+    const id = `${Math.round(place.width * 100)}-${Math.round(place.height * 100)}-${Math.round(place.dpi)}`;
+    if (!placements.has(id)) placements.set(id, place);
+  }
+  if (!variants.length || !mockups.length || !placements.size) {
+    console.warn(`fake: ${entry.id} ${entry.title} has no live variant, mockup or placement, skipped`);
+    continue;
+  }
+  const names = [...placements.keys()].map((_, i, all) => (all.length === 1 ? "printfile" : `printfile-${i + 1}`));
   for (let n = 0; n < between(DEV_VARIATIONS); n++) {
     const key = hex();
     const stamp = Date.now() - next() * LIVE_DAYS * DAY;
-    const names = Array.from({ length: files }, (_, i) => (files === 1 ? "printfile" : `printfile-${i + 1}`));
     products.push({
       key,
       type: String(entry.id),
       created: new Date(stamp).toISOString(),
       available: true,
-      variants: sizes.map((size) => ({ id: String(4000000000000 + Math.floor(next() * 1000000000)), size, price, available: next() > 0.1 })),
-      images: mockups.map(([category, title], i) => ({ url: picture(1200), alt: `${i + 1} - ${category} - ${title}`, style: String(i + 1) })),
+      variants: variants.map((v) => ({ id: String(4000000000000 + Math.floor(next() * 1000000000)), size: v.size, price: Number(v.cost).toFixed(2), available: next() > 0.1 })),
+      images: mockups.map((m) => ({ url: picture(1200), alt: `${m.id} - ${m.category} - ${m.title}`, style: String(m.id) })),
       files: names,
     });
     write(join(DATA_DIR, "tasks", key, `${key}.json`), {
@@ -101,8 +95,8 @@ for (const entry of catalog) {
       updated_at: stamp,
       product: { id: entry.id, category: entry.category, title: entry.title },
       variation: {},
-      printfiles: names.map((name, i) => ({ id: String(i), key: hex(), name, url: `/cdn/printful/${key}/${name}.png`, width: 20, height: 20, dpi: 300 })),
-      placements: [{ width: 20, height: 20, dpi: 300 }],
+      printfiles: [...placements.values()].map((place, i) => ({ id: String(i), key: hex(), name: names[i], url: `/cdn/printful/${key}/${names[i]}.png`, width: place.width, height: place.height, dpi: place.dpi })),
+      placements: [...placements.values()],
       variants: [],
       mockups: [],
       metadata: {},

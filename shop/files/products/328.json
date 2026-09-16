@@ -1,0 +1,241 @@
+{
+  "id": 328,
+  "category": "men",
+  "title": "Men's Athletic T-Shirt",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 28.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 28.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 22.0,
+      "height": 12.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 22.0,
+      "height": 12.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 9952,
+      "size": "XS",
+      "color": "White",
+      "cost": "33.00",
+      "is_ignored": false
+    },
+    {
+      "id": 9953,
+      "size": "S",
+      "color": "White",
+      "cost": "33.00",
+      "is_ignored": false
+    },
+    {
+      "id": 9954,
+      "size": "M",
+      "color": "White",
+      "cost": "33.00",
+      "is_ignored": false
+    },
+    {
+      "id": 9955,
+      "size": "L",
+      "color": "White",
+      "cost": "33.00",
+      "is_ignored": false
+    },
+    {
+      "id": 9956,
+      "size": "XL",
+      "color": "White",
+      "cost": "33.00",
+      "is_ignored": false
+    },
+    {
+      "id": 9957,
+      "size": "2XL",
+      "color": "White",
+      "cost": "35.00",
+      "is_ignored": false
+    },
+    {
+      "id": 9958,
+      "size": "3XL",
+      "color": "White",
+      "cost": "37.00",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 18574,
+      "category": "Men's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18575,
+      "category": "Men's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18576,
+      "category": "Men's 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18577,
+      "category": "Men's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18582,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18583,
+      "category": "Men's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18584,
+      "category": "Men's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18585,
+      "category": "Men's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18586,
+      "category": "Men's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18587,
+      "category": "Men's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18588,
+      "category": "Men's 3",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18589,
+      "category": "Men's 3",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18590,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18591,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18592,
+      "category": "Flat 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18593,
+      "category": "Flat 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18594,
+      "category": "On Hanger",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18595,
+      "category": "On Hanger",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18596,
+      "category": "Men's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18597,
+      "category": "Men's Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

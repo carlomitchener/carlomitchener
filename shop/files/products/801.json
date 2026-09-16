@@ -1,0 +1,301 @@
+{
+  "id": 801,
+  "category": "unisex",
+  "title": "Unisex Track Jacket",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 44.0,
+      "height": 46.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "details",
+      "display": "Details",
+      "width": 44.0,
+      "height": 46.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 44.0,
+      "height": 46.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "label_outside",
+      "display": "Outside label",
+      "width": 3.0,
+      "height": 3.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "pocket",
+      "display": "Pocket",
+      "width": 44.0,
+      "height": 46.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 44.0,
+      "height": 46.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 44.0,
+      "height": 46.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 20370,
+      "size": "2XS",
+      "color": "White",
+      "cost": "71.25",
+      "is_ignored": false
+    },
+    {
+      "id": 20371,
+      "size": "XS",
+      "color": "White",
+      "cost": "71.25",
+      "is_ignored": false
+    },
+    {
+      "id": 20372,
+      "size": "S",
+      "color": "White",
+      "cost": "71.25",
+      "is_ignored": false
+    },
+    {
+      "id": 20373,
+      "size": "M",
+      "color": "White",
+      "cost": "71.25",
+      "is_ignored": false
+    },
+    {
+      "id": 20374,
+      "size": "L",
+      "color": "White",
+      "cost": "71.25",
+      "is_ignored": false
+    },
+    {
+      "id": 20375,
+      "size": "XL",
+      "color": "White",
+      "cost": "71.25",
+      "is_ignored": false
+    },
+    {
+      "id": 20376,
+      "size": "2XL",
+      "color": "White",
+      "cost": "72.95",
+      "is_ignored": false
+    },
+    {
+      "id": 20377,
+      "size": "3XL",
+      "color": "White",
+      "cost": "74.50",
+      "is_ignored": false
+    },
+    {
+      "id": 20378,
+      "size": "4XL",
+      "color": "White",
+      "cost": "75.95",
+      "is_ignored": false
+    },
+    {
+      "id": 20379,
+      "size": "5XL",
+      "color": "White",
+      "cost": "77.50",
+      "is_ignored": false
+    },
+    {
+      "id": 20380,
+      "size": "6XL",
+      "color": "White",
+      "cost": "78.95",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 23286,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23287,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23288,
+      "category": "Ghost",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23289,
+      "category": "Ghost",
+      "title": "Right Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23294,
+      "category": "Duet",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23295,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23296,
+      "category": "Men's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23297,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23355,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23356,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23357,
+      "category": "Women's",
+      "title": "Right Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 24130,
+      "category": "Product specs",
+      "title": "English",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 24131,
+      "category": "Product specs",
+      "title": "French",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 24132,
+      "category": "Product specs",
+      "title": "German",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 24133,
+      "category": "Product specs",
+      "title": "Italian",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 24134,
+      "category": "Product specs",
+      "title": "Japanese",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 24135,
+      "category": "Product specs",
+      "title": "Spanish",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 24906,
+      "category": "Product details",
+      "title": "Product details 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 24907,
+      "category": "Product details",
+      "title": "Product details 3",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 24908,
+      "category": "Product details",
+      "title": "Product details 4",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

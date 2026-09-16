@@ -1,0 +1,235 @@
+{
+  "id": 84,
+  "category": "bags",
+  "title": "Tote Bag",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "default",
+      "display": "Print file",
+      "width": 17.0,
+      "height": 16.5,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 4533,
+      "size": "15″×15″",
+      "color": "Black",
+      "cost": "17.60",
+      "is_ignored": false
+    },
+    {
+      "id": 8904,
+      "size": "15″×15″",
+      "color": "Red",
+      "cost": "17.60",
+      "is_ignored": true
+    },
+    {
+      "id": 8905,
+      "size": "15″×15″",
+      "color": "Yellow",
+      "cost": "17.60",
+      "is_ignored": true
+    }
+  ],
+  "mockups": [
+    {
+      "id": 12763,
+      "category": "Halloween",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": true
+    },
+    {
+      "id": 12764,
+      "category": "Halloween",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": true
+    },
+    {
+      "id": 12773,
+      "category": "Holiday season",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": true
+    },
+    {
+      "id": 12774,
+      "category": "Holiday season",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": true
+    },
+    {
+      "id": 12779,
+      "category": "Spring/summer vibes",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": true
+    },
+    {
+      "id": 12780,
+      "category": "Spring/summer vibes",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": true
+    },
+    {
+      "id": 12781,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 12783,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 12785,
+      "category": "On Hanger",
+      "title": "Front",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 12787,
+      "category": "Lifestyle 5",
+      "title": "Front",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 20642,
+      "category": "Lifestyle 4",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 20645,
+      "category": "Lifestyle 3",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 20648,
+      "category": "Lifestyle 2",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 20651,
+      "category": "Lifestyle",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 20654,
+      "category": "Flat Lifestyle",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 20655,
+      "category": "Default",
+      "title": "Mockup",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    },
+    {
+      "id": 23629,
+      "category": "Multi-product",
+      "title": "Front",
+      "variant_ids": [
+        4533,
+        8904,
+        8905
+      ],
+      "is_ignored": false
+    }
+  ]
+}

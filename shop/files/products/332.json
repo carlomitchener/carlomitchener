@@ -1,0 +1,337 @@
+{
+  "id": 332,
+  "category": "unisex",
+  "title": "Unisex Athletic Long Shorts",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 52.81,
+      "height": 31.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 52.81,
+      "height": 31.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 16588,
+      "size": "2XS",
+      "color": "White",
+      "cost": "31.09",
+      "is_ignored": false
+    },
+    {
+      "id": 9811,
+      "size": "XS",
+      "color": "White",
+      "cost": "31.09",
+      "is_ignored": false
+    },
+    {
+      "id": 9812,
+      "size": "S",
+      "color": "White",
+      "cost": "31.09",
+      "is_ignored": false
+    },
+    {
+      "id": 9813,
+      "size": "M",
+      "color": "White",
+      "cost": "31.09",
+      "is_ignored": false
+    },
+    {
+      "id": 9814,
+      "size": "L",
+      "color": "White",
+      "cost": "31.09",
+      "is_ignored": false
+    },
+    {
+      "id": 9815,
+      "size": "XL",
+      "color": "White",
+      "cost": "31.09",
+      "is_ignored": false
+    },
+    {
+      "id": 9816,
+      "size": "2XL",
+      "color": "White",
+      "cost": "33.09",
+      "is_ignored": false
+    },
+    {
+      "id": 9817,
+      "size": "3XL",
+      "color": "White",
+      "cost": "35.09",
+      "is_ignored": false
+    },
+    {
+      "id": 16342,
+      "size": "4XL",
+      "color": "White",
+      "cost": "37.09",
+      "is_ignored": false
+    },
+    {
+      "id": 16343,
+      "size": "5XL",
+      "color": "White",
+      "cost": "39.09",
+      "is_ignored": false
+    },
+    {
+      "id": 16344,
+      "size": "6XL",
+      "color": "White",
+      "cost": "41.09",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 17741,
+      "category": "Barefoot",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17742,
+      "category": "Barefoot",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17743,
+      "category": "Barefoot",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17744,
+      "category": "Barefoot",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17745,
+      "category": "Sneakers",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17746,
+      "category": "Sneakers",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17747,
+      "category": "Sneakers",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17748,
+      "category": "Sneakers",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17751,
+      "category": "Sneakers 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17752,
+      "category": "Sneakers 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17753,
+      "category": "Sneakers 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17754,
+      "category": "Sneakers 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17755,
+      "category": "Flat Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17756,
+      "category": "Flat Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17757,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17758,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17759,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 17760,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 17761,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 17762,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 17763,
+      "category": "Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17764,
+      "category": "Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22522,
+      "category": "Duet",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22523,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22524,
+      "category": "Women's",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22525,
+      "category": "Women's",
+      "title": "Left Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22526,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22527,
+      "category": "Women's",
+      "title": "Back 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27289,
+      "category": "Women's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27290,
+      "category": "Women's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27291,
+      "category": "Women's 2",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 27325,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

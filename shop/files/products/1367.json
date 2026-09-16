@@ -1,0 +1,237 @@
+{
+  "id": 1367,
+  "category": "unisex",
+  "title": "Unisex Boxy Football Jersey",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 40.0,
+      "height": 40.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 40.0,
+      "height": 40.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 1.25,
+      "height": 0.5,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "label_outside_back",
+      "display": "Outside label back",
+      "width": 3.0,
+      "height": 3.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "label_outside_front",
+      "display": "Outside label front",
+      "width": 3.0,
+      "height": 3.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 40.0,
+      "height": 15.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 40.0,
+      "height": 15.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 25458,
+      "size": "2XS",
+      "color": "White",
+      "cost": "37.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25459,
+      "size": "XS",
+      "color": "White",
+      "cost": "37.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25460,
+      "size": "S",
+      "color": "White",
+      "cost": "37.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25461,
+      "size": "M",
+      "color": "White",
+      "cost": "37.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25462,
+      "size": "L",
+      "color": "White",
+      "cost": "37.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25463,
+      "size": "XL",
+      "color": "White",
+      "cost": "37.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25464,
+      "size": "2XL",
+      "color": "White",
+      "cost": "39.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25465,
+      "size": "3XL",
+      "color": "White",
+      "cost": "41.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25466,
+      "size": "4XL",
+      "color": "White",
+      "cost": "43.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25467,
+      "size": "5XL",
+      "color": "White",
+      "cost": "45.74",
+      "is_ignored": false
+    },
+    {
+      "id": 25468,
+      "size": "6XL",
+      "color": "White",
+      "cost": "47.74",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 28609,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28610,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28611,
+      "category": "Collage",
+      "title": "Front and Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28612,
+      "category": "Ghost",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28613,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28614,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28615,
+      "category": "Men's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28616,
+      "category": "Ghost",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28617,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28618,
+      "category": "Ghost",
+      "title": "Right Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28619,
+      "category": "Ghost",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 28620,
+      "category": "Duet",
+      "title": "Front and Back",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

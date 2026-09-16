@@ -1,0 +1,253 @@
+{
+  "id": 330,
+  "category": "unisex",
+  "title": "Unisex Athletic Shorts",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 46.0,
+      "height": 24.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 46.0,
+      "height": 24.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 9804,
+      "size": "XS",
+      "color": "White",
+      "cost": "29.98",
+      "is_ignored": false
+    },
+    {
+      "id": 9805,
+      "size": "S",
+      "color": "White",
+      "cost": "29.98",
+      "is_ignored": false
+    },
+    {
+      "id": 9806,
+      "size": "M",
+      "color": "White",
+      "cost": "29.98",
+      "is_ignored": false
+    },
+    {
+      "id": 9807,
+      "size": "L",
+      "color": "White",
+      "cost": "29.98",
+      "is_ignored": false
+    },
+    {
+      "id": 9808,
+      "size": "XL",
+      "color": "White",
+      "cost": "29.98",
+      "is_ignored": false
+    },
+    {
+      "id": 9809,
+      "size": "2XL",
+      "color": "White",
+      "cost": "31.98",
+      "is_ignored": false
+    },
+    {
+      "id": 9810,
+      "size": "3XL",
+      "color": "White",
+      "cost": "33.98",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 18653,
+      "category": "Barefoot",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18654,
+      "category": "Barefoot",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18655,
+      "category": "Barefoot",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18656,
+      "category": "Barefoot",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18657,
+      "category": "Sneakers",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18658,
+      "category": "Sneakers",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18659,
+      "category": "Sneakers",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18660,
+      "category": "Sneakers",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18663,
+      "category": "Sneakers 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18664,
+      "category": "Sneakers 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18665,
+      "category": "Sneakers 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18666,
+      "category": "Sneakers 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18667,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 18668,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20309,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20310,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20311,
+      "category": "Women's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20312,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22519,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22520,
+      "category": "Men's",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22521,
+      "category": "Men's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22681,
+      "category": "Men's",
+      "title": "Right Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22682,
+      "category": "Men's",
+      "title": "Zoomed-in",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22683,
+      "category": "Duet",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

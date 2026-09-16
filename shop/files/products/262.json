@@ -1,0 +1,76 @@
+{
+  "id": 262,
+  "category": "bags",
+  "title": "Drawstring Bag",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear"
+  ],
+  "placements": [
+    {
+      "name": "default",
+      "display": "Print file",
+      "width": 16.0,
+      "height": 19.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 8894,
+      "size": "15″×17″",
+      "color": "White",
+      "cost": "18.75",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 15799,
+      "category": "Default",
+      "title": "Mockup",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15801,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15803,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15805,
+      "category": "Women's Lifestyle",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15807,
+      "category": "Men's",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 15809,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

@@ -1,0 +1,341 @@
+{
+  "id": 390,
+  "category": "unisex",
+  "title": "Unisex Bomber Jacket",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 31.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "details",
+      "display": "Details",
+      "width": 53.0,
+      "height": 18.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 31.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 31.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 31.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 10877,
+      "size": "XS",
+      "color": "White",
+      "cost": "55.25",
+      "is_ignored": false
+    },
+    {
+      "id": 10878,
+      "size": "S",
+      "color": "White",
+      "cost": "55.25",
+      "is_ignored": false
+    },
+    {
+      "id": 10879,
+      "size": "M",
+      "color": "White",
+      "cost": "55.25",
+      "is_ignored": false
+    },
+    {
+      "id": 10880,
+      "size": "L",
+      "color": "White",
+      "cost": "55.25",
+      "is_ignored": false
+    },
+    {
+      "id": 10881,
+      "size": "XL",
+      "color": "White",
+      "cost": "55.25",
+      "is_ignored": false
+    },
+    {
+      "id": 10882,
+      "size": "2XL",
+      "color": "White",
+      "cost": "56.75",
+      "is_ignored": false
+    },
+    {
+      "id": 10883,
+      "size": "3XL",
+      "color": "White",
+      "cost": "58.25",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 3015,
+      "category": "Men's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3016,
+      "category": "Men's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3017,
+      "category": "Men's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3018,
+      "category": "Men's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3019,
+      "category": "Women's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3020,
+      "category": "Women's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3021,
+      "category": "Women's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3022,
+      "category": "Women's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3023,
+      "category": "Lifestyle 1",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3024,
+      "category": "Lifestyle 1",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3030,
+      "category": "Flat Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3031,
+      "category": "Flat Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3033,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3034,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3035,
+      "category": "Flat 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3036,
+      "category": "Flat 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3037,
+      "category": "Women's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3038,
+      "category": "Women's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3039,
+      "category": "Women's 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3040,
+      "category": "Women's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3041,
+      "category": "Men's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3042,
+      "category": "Men's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3043,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3044,
+      "category": "Product specs",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20441,
+      "category": "Women's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20442,
+      "category": "Women's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20443,
+      "category": "Women's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20444,
+      "category": "Women's Lifestyle",
+      "title": "Front 2",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22755,
+      "category": "Ghost",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22756,
+      "category": "Ghost",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22757,
+      "category": "Ghost",
+      "title": "Left Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 22758,
+      "category": "Ghost",
+      "title": "Right Back",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

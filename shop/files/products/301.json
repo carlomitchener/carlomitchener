@@ -1,0 +1,255 @@
+{
+  "id": 301,
+  "category": "men",
+  "title": "Men's Rash Guard",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 28.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 28.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 28.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 28.0,
+      "height": 36.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 9326,
+      "size": "XS",
+      "color": "White",
+      "cost": "38.50",
+      "is_ignored": false
+    },
+    {
+      "id": 9327,
+      "size": "S",
+      "color": "White",
+      "cost": "38.50",
+      "is_ignored": false
+    },
+    {
+      "id": 9328,
+      "size": "M",
+      "color": "White",
+      "cost": "38.50",
+      "is_ignored": false
+    },
+    {
+      "id": 9329,
+      "size": "L",
+      "color": "White",
+      "cost": "38.50",
+      "is_ignored": false
+    },
+    {
+      "id": 9330,
+      "size": "XL",
+      "color": "White",
+      "cost": "38.50",
+      "is_ignored": false
+    },
+    {
+      "id": 9331,
+      "size": "2XL",
+      "color": "White",
+      "cost": "40.25",
+      "is_ignored": false
+    },
+    {
+      "id": 9332,
+      "size": "3XL",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 17718,
+      "category": "On Model",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17719,
+      "category": "On Model",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17720,
+      "category": "On Model",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17721,
+      "category": "On Model",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17722,
+      "category": "Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17723,
+      "category": "Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17724,
+      "category": "Flat Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17725,
+      "category": "Flat Lifestyle",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17726,
+      "category": "Lifestyle 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17727,
+      "category": "Lifestyle 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17728,
+      "category": "Men's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17729,
+      "category": "Men's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17730,
+      "category": "Men's 2",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17731,
+      "category": "Men's 2",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17732,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17733,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17734,
+      "category": "On Hanger",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17735,
+      "category": "On Hanger",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17736,
+      "category": "Flat 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17737,
+      "category": "Flat 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17738,
+      "category": "Men's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 17739,
+      "category": "Men's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

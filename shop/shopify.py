@@ -54,11 +54,22 @@ query {
 }
 """
 
+VENDOR = "Printful"
+
 PRODUCTS = """
 query($cursor: String) {
     products(first: 250, after: $cursor) {
         pageInfo { hasNextPage endCursor }
-        nodes { id title }
+        nodes { id title vendor }
+    }
+}
+"""
+
+UPDATE = """
+mutation($product: ProductUpdateInput!) {
+    productUpdate(product: $product) {
+        product { id vendor }
+        userErrors { field message }
     }
 }
 """
@@ -96,18 +107,22 @@ def publications():
 
 # PURGE
 
-def purge():
-    access = token()
-    ids = []
+def products(access):
+    nodes = []
     cursor = None
     while True:
         page = graphql(access, PRODUCTS, {"cursor": cursor})["products"]
-        ids += [node["id"] for node in page["nodes"]]
+        nodes += page["nodes"]
         if not page["pageInfo"]["hasNextPage"]: break
         cursor = page["pageInfo"]["endCursor"]
+    return nodes
+
+def purge():
+    access = token()
+    ids = [node["id"] for node in products(access) if node["vendor"] == VENDOR]
     if not gate("purge", [
-        f"delete {len(ids)} products from the shop behind SHOPIFY_SHOP_URL",
-        "productDelete, one call each, no undo",
+        f"delete {len(ids)} products with vendor {VENDOR} from the shop behind SHOPIFY_SHOP_URL",
+        "productDelete, one call each, no undo; other vendors stay",
     ]): return
     for count, one in enumerate(ids, 1):
         result = graphql(access, DELETE, {"input": {"id": one}})["productDelete"]
@@ -117,11 +132,29 @@ def purge():
         say(f"  deleted {count}/{len(ids)}")
     say(f"{len(ids)} products deleted")
 
+# VENDOR
+
+def vendor():
+    access = token()
+    stale = [node for node in products(access) if node["vendor"] != VENDOR]
+    if not gate("vendor", [
+        f"set vendor {VENDOR} on {len(stale)} products that carry another vendor",
+        "productUpdate, one call each",
+    ]): return
+    for count, node in enumerate(stale, 1):
+        result = graphql(access, UPDATE, {"product": {"id": node["id"], "vendor": VENDOR}})["productUpdate"]
+        if result["userErrors"]:
+            say(f"  {node['id']} {result['userErrors']}")
+            continue
+        say(f"  {count}/{len(stale)} {node['title']} was {node['vendor']}")
+    say(f"{len(stale)} products now {VENDOR}")
+
 # MAIN
 
 VERBS = {
     "publications": publications,
     "purge": purge,
+    "vendor": vendor,
 }
 
 if __name__ == "__main__":

@@ -1,0 +1,206 @@
+{
+  "id": 385,
+  "category": "youth",
+  "title": "Youth Crew Neck T-shirt",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 21.0,
+      "height": 29.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 21.0,
+      "height": 29.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 21.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 21.0,
+      "height": 10.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 10824,
+      "size": "8",
+      "color": "White",
+      "cost": "22.95",
+      "is_ignored": false
+    },
+    {
+      "id": 10825,
+      "size": "10",
+      "color": "White",
+      "cost": "22.95",
+      "is_ignored": false
+    },
+    {
+      "id": 10826,
+      "size": "12",
+      "color": "White",
+      "cost": "22.95",
+      "is_ignored": false
+    },
+    {
+      "id": 10827,
+      "size": "14",
+      "color": "White",
+      "cost": "22.95",
+      "is_ignored": false
+    },
+    {
+      "id": 10828,
+      "size": "16",
+      "color": "White",
+      "cost": "22.95",
+      "is_ignored": false
+    },
+    {
+      "id": 10829,
+      "size": "18",
+      "color": "White",
+      "cost": "22.95",
+      "is_ignored": false
+    },
+    {
+      "id": 10830,
+      "size": "20",
+      "color": "White",
+      "cost": "22.95",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 20075,
+      "category": "Girl's ",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20076,
+      "category": "Boy's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20077,
+      "category": "Girl's ",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20078,
+      "category": "Boy's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20079,
+      "category": "Girl's ",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20080,
+      "category": "Boy's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20081,
+      "category": "Girl's ",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20082,
+      "category": "Boy's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20087,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20088,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20089,
+      "category": "Flat 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20090,
+      "category": "Flat 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20091,
+      "category": "On Hanger",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20092,
+      "category": "On Hanger",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 20229,
+      "category": "Girl's Lifestyle",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

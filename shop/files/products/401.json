@@ -1,0 +1,247 @@
+{
+  "id": 401,
+  "category": "women",
+  "title": "Women's Joggers",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "label_inside",
+      "display": "Inside label",
+      "width": 2.5,
+      "height": 1.0,
+      "dpi": 150,
+      "is_ignored": true
+    },
+    {
+      "name": "leg_left",
+      "display": "Left leg",
+      "width": 33.0,
+      "height": 50.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "leg_right",
+      "display": "Right leg",
+      "width": 33.0,
+      "height": 50.0,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 11040,
+      "size": "XS",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11041,
+      "size": "S",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11042,
+      "size": "M",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11043,
+      "size": "L",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11044,
+      "size": "XL",
+      "color": "White",
+      "cost": "41.75",
+      "is_ignored": false
+    },
+    {
+      "id": 11045,
+      "size": "2XL",
+      "color": "White",
+      "cost": "43.25",
+      "is_ignored": false
+    },
+    {
+      "id": 11046,
+      "size": "3XL",
+      "color": "White",
+      "cost": "44.75",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 3181,
+      "category": "Woman's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3182,
+      "category": "Woman's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3183,
+      "category": "Woman's",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3184,
+      "category": "Woman's",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3185,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3186,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3187,
+      "category": "Flat",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3188,
+      "category": "Flat",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3191,
+      "category": "Lifestyle",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3192,
+      "category": "Lifestyle",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3193,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3194,
+      "category": "Halloween",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3195,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3196,
+      "category": "Halloween",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3198,
+      "category": "Product details",
+      "title": "Product details",
+      "variant_ids": null,
+      "is_ignored": true
+    },
+    {
+      "id": 3199,
+      "category": "Women's 2",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3200,
+      "category": "Women's 2",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 3201,
+      "category": "Product specs",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23767,
+      "category": "Women's 3",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23768,
+      "category": "Women's 3",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23769,
+      "category": "Women's 3",
+      "title": "Right",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 23770,
+      "category": "Women's 3",
+      "title": "Left",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}

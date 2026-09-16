@@ -1,0 +1,131 @@
+{
+  "id": 944,
+  "category": "kids",
+  "title": "Kids Sports Jersey",
+  "technique": "cut-sew",
+  "primaries": [
+    "Black",
+    "White"
+  ],
+  "stitch_colors": [
+    "Black",
+    "Clear",
+    "White"
+  ],
+  "placements": [
+    {
+      "name": "back",
+      "display": "Back print",
+      "width": 18.48,
+      "height": 24.6,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "collar",
+      "display": "Collar",
+      "width": 18.97,
+      "height": 2.0,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "front",
+      "display": "Front print",
+      "width": 18.48,
+      "height": 24.6,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_left",
+      "display": "Left sleeve",
+      "width": 15.03,
+      "height": 7.75,
+      "dpi": 150,
+      "is_ignored": false
+    },
+    {
+      "name": "sleeve_right",
+      "display": "Right sleeve",
+      "width": 15.03,
+      "height": 7.75,
+      "dpi": 150,
+      "is_ignored": false
+    }
+  ],
+  "variants": [
+    {
+      "id": 24281,
+      "size": "XS",
+      "color": "White",
+      "cost": "22.58",
+      "is_ignored": false
+    },
+    {
+      "id": 24282,
+      "size": "S",
+      "color": "White",
+      "cost": "22.58",
+      "is_ignored": false
+    },
+    {
+      "id": 24283,
+      "size": "M",
+      "color": "White",
+      "cost": "22.58",
+      "is_ignored": false
+    },
+    {
+      "id": 24284,
+      "size": "L",
+      "color": "White",
+      "cost": "22.58",
+      "is_ignored": false
+    }
+  ],
+  "mockups": [
+    {
+      "id": 29466,
+      "category": "Flat",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29467,
+      "category": "Flat",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29549,
+      "category": "Boy's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29550,
+      "category": "Boy's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29551,
+      "category": "Girl's",
+      "title": "Front",
+      "variant_ids": null,
+      "is_ignored": false
+    },
+    {
+      "id": 29552,
+      "category": "Girl's",
+      "title": "Back",
+      "variant_ids": null,
+      "is_ignored": false
+    }
+  ]
+}
