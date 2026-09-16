@@ -31,7 +31,7 @@ export function Footer({ catalog = [] }) {
           {pack(groups, FOOT_COLUMNS).map((column, i) => (
             <div key={i} className="col">
               {column.groups.map((group) => (
-                <details key={group.slug} className="drop">
+                <details key={group.slug} className="drop" style={{ order: groups.indexOf(group) }}>
                   <summary>
                     <a href={`/shop/${group.slug}/`}>{group.name}</a>
                     <Icon name="expand_more" extra="small" />

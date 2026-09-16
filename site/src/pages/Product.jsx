@@ -3,7 +3,6 @@ import { FullGrid, Gallery, Mockups } from "../components/Gallery.jsx";
 import { MoreVariations } from "../components/MoreVariations.jsx";
 import { ProductDetails } from "../components/ProductDetails.jsx";
 import { ProductGrid } from "../components/ProductGrid.jsx";
-import { Siblings } from "../components/Siblings.jsx";
 
 export function Product({ trail, product, family, alike, sizes, buy, printful, shop, tiles, now }) {
   return (
@@ -19,7 +18,6 @@ export function Product({ trail, product, family, alike, sizes, buy, printful, s
           <MoreVariations family={family} current={product.key} title={product.title} shop={shop} />
         </div>
       </article>
-      <Siblings family={family} current={product.key} />
       {alike.length ? (
         <section className="alike" aria-labelledby="alike">
           <h2 id="alike">You May Also Like</h2>

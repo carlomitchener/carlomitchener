@@ -352,7 +352,7 @@ function draw(site_: Site, route: Route): Output[] {
   }
   if (route.kind === "feed") {
     const { posts: shown } = route.data as { posts: Post[] };
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Feed", description: `The feed: ${plural(shown.length, "post")}, newest first.` }, h(Feed, { posts: shown })) }];
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Feed", description: `The feed: ${plural(shown.length, "post")}, newest first.` }, h(Feed, { posts: shown, now })) }];
   }
   if (route.kind === "search") return [{ path: "search.json", bytes: JSON.stringify((route.data as { found: unknown[] }).found) }];
   if (route.kind === "product") return product(site_, route, at);

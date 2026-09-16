@@ -11,7 +11,7 @@
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   height: var(--header);
   max-width: var(--container);
@@ -20,10 +20,34 @@
   background: var(--bg);
 }
 
-.mark {
+.home {
   position: relative;
-  display: block;
-  justify-self: start;
+  width: 32px;
+  height: 32px;
+}
+
+.mark,
+.back {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition: opacity var(--fast) var(--ease);
+}
+
+.back {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.top[data-level="2"] .mark {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.top[data-level="2"] .back {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mark img {
@@ -38,14 +62,19 @@
 
 .links ul {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(var(--s5), 3vw, var(--s7));
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 0 var(--s6);
+}
+
+.links li {
+  flex: 1;
+  text-align: center;
 }
 
 .links a {
   display: block;
-  padding: var(--s3) 0;
+  padding: var(--s3) var(--s2);
   font-size: var(--t-fine);
   letter-spacing: var(--track-wide);
   color: var(--dim);
@@ -66,6 +95,10 @@
   display: flex;
   align-items: center;
   gap: var(--s2);
+}
+
+.tools .tool {
+  transition: opacity var(--fast) var(--ease);
 }
 
 .tool {
@@ -161,7 +194,7 @@
   display: grid;
   grid-template-rows: 0fr;
   background: var(--bg);
-  transition: grid-template-rows var(--slow) var(--ease);
+  transition: grid-template-rows var(--unfold) var(--ease);
 }
 
 .top[data-open] .flyout {
@@ -174,10 +207,33 @@
 
 .pane {
   padding: var(--s6) 0 var(--s8);
+  transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease);
 }
 
 .pane[hidden] {
   display: none;
+}
+
+@starting-style {
+  .pane {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.cols li,
+.big li,
+.quick li,
+.lines li {
+  animation: rise var(--slow) var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 30ms + 120ms);
 }
 
 .pane .fine {
@@ -237,7 +293,18 @@
   gap: var(--s2);
 }
 
-.big a {
+.big button {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.big a,
+.big button {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -249,17 +316,72 @@
   transition: color var(--fast) var(--ease);
 }
 
-.big a:hover {
+.big a:hover,
+.big button:hover {
   color: var(--accent);
 }
 
-.big a .icon {
+.big .icon {
   opacity: 0;
   transition: opacity var(--fast) var(--ease);
 }
 
-.big a:hover .icon {
+.big a:hover .icon,
+.big button:hover .icon {
   opacity: 1;
+}
+
+/* BAG */
+
+.purse {
+  max-width: 420px;
+}
+
+.purse .lines {
+  display: grid;
+  gap: var(--s3);
+  margin-bottom: var(--s5);
+}
+
+.purse .lines a {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--s3);
+  align-items: center;
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.purse .lines img {
+  grid-row: 1 / 3;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: var(--s2);
+  background: var(--white);
+}
+
+.purse .lines small {
+  font-size: var(--t-fine);
+  font-weight: 400;
+  color: var(--dim);
+}
+
+.purse .lead {
+  margin-bottom: var(--s5);
+  color: var(--dim);
+}
+
+.purse .lead[hidden] {
+  display: none;
+}
+
+.purse .get {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
 }
 
 .veil {
@@ -355,6 +477,29 @@ html.held {
 }
 
 @media (max-width: 767px) {
+  .top[data-open] .mark,
+  .top[data-open] .tools .tool:not(.burger) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .top[data-level="2"] .back {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .explore .cols {
+    columns: auto;
+  }
+
+  .explore .cols a {
+    font-size: var(--t-h3);
+  }
+
+  .explore .cols li {
+    padding: var(--s2) 0;
+  }
+
   .top[data-open] .flyout {
     height: calc(100dvh - var(--header));
     overflow: auto;
@@ -419,12 +564,18 @@ html.held {
   padding-bottom: var(--s4);
 }
 
+.foot .catalog {
+  display: flex;
+  flex-direction: column;
+}
+
 .foot .catalog .col {
   display: contents;
 }
 
 @media (min-width: 600px) {
   .foot .catalog {
+    display: block;
     columns: 3;
     column-gap: var(--s5);
   }
@@ -492,10 +643,6 @@ html.held {
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--s2) var(--s5);
-}
-
-.foot .copy {
-  white-space: nowrap;
 }
 
 .foot .pages {

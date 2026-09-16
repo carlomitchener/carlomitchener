@@ -1,11 +1,11 @@
 import { PostCard } from "./PostCard.jsx";
 
-export function PostGrid({ posts, eager = 6 }) {
-  if (!posts.length) return null;
+export function PostGrid({ posts, eager = 4, now }) {
+  if (!posts.length) return <p className="lead empty">No posts yet.</p>;
   return (
-    <div className="posts">
+    <div className="grid">
       {posts.map((post, i) => (
-        <PostCard key={post.name} post={post} eager={i < eager} />
+        <PostCard key={post.name} post={post} eager={i < eager} now={now} />
       ))}
     </div>
   );

@@ -11,9 +11,14 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
   return (
     <header className="top" data-header>
       <div className="bar">
-        <a className="mark" href="/" aria-label={fly ? "TheBird" : "Home"} data-fly={fly ? "" : undefined}>
-          <img src="/bird/bird-128.png" alt="TheBird" width="28" height="28" />
-        </a>
+        <div className="home">
+          <a className="mark" href="/" aria-label={fly ? "TheBird" : "Home"} data-fly={fly ? "" : undefined}>
+            <img src="/bird/bird-128.png" alt="TheBird" width="28" height="28" />
+          </a>
+          <button className="tool back" type="button" aria-label="Back" data-back>
+            <Icon name="chevron_left" />
+          </button>
+        </div>
         <nav className="links" aria-label="Shop">
           <ul>
             {links.map((one) => (
@@ -29,7 +34,7 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
           <button className="tool" type="button" aria-label="Search" data-search>
             <Icon name="search" />
           </button>
-          <a className="tool bag" href={CART} aria-label="Bag">
+          <a className="tool bag" href={CART} aria-label="Bag" data-bag>
             <Icon name="shopping_bag" />
             <span className="count" data-cart-count hidden></span>
           </a>
@@ -50,8 +55,8 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
                     {one.slug === "all" ? "Explore All" : `Explore All ${one.name}`}
                   </a>
                   <ul className="cols">
-                    {rows(one.slug).map((row) => (
-                      <li key={row.href}>
+                    {rows(one.slug).map((row, i) => (
+                      <li key={row.href} style={{ "--i": i }}>
                         <a href={row.href}>{row.title}</a>
                       </li>
                     ))}
@@ -74,8 +79,8 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
                 Quick Links
               </p>
               <ul className="quick" data-quick>
-                {links.map((one) => (
-                  <li key={one.href}>
+                {links.map((one, i) => (
+                  <li key={one.href} style={{ "--i": i }}>
                     <a href={one.href}>
                       <Icon name="arrow_forward" extra="small" />
                       {one.name}
@@ -87,15 +92,32 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
             </div>
             <div className="pane sheet" data-pane="menu" hidden>
               <ul className="big">
-                {links.map((one) => (
-                  <li key={one.href}>
-                    <a href={one.href} aria-current={current(one.href)}>
+                {links.map((one, i) => (
+                  <li key={one.href} style={{ "--i": i }}>
+                    <button type="button" data-sub={one.slug} aria-current={current(one.href)}>
                       <span>{one.name}</span>
                       <Icon name="chevron_right" extra="small" />
-                    </a>
+                    </button>
                   </li>
                 ))}
               </ul>
+            </div>
+            <div className="pane purse" data-pane="bag" hidden>
+              <p className="fine" data-bag-title>
+                Your Bag
+              </p>
+              <ul className="lines" data-bag-lines></ul>
+              <p className="lead" data-bag-empty>
+                Your bag is empty.
+              </p>
+              <p className="get">
+                <a className="pill go" href={CART}>
+                  Review Bag
+                </a>
+                <a className="pill" href={CART} data-checkout hidden>
+                  Checkout
+                </a>
+              </p>
             </div>
           </div>
         </div>

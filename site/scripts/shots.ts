@@ -54,7 +54,9 @@ for (const page of pages) {
     await send("Page.navigate", { url: base + path });
     await wait(1500);
     if (act) {
-      await send("Runtime.evaluate", { expression: act });
+      const { result: said, exceptionDetails } = await send("Runtime.evaluate", { expression: act, returnByValue: true });
+      if (exceptionDetails) console.log(`  act failed: ${exceptionDetails.text} ${exceptionDetails.exception?.description ?? ""}`);
+      else if (said?.value !== undefined && said.value !== 0) console.log(`  act: ${JSON.stringify(said.value)}`);
       await wait(600);
     }
     const { result } = await send("Runtime.evaluate", { expression: "JSON.stringify([document.documentElement.scrollWidth, document.documentElement.scrollHeight])", returnByValue: true });
@@ -67,6 +69,12 @@ for (const page of pages) {
     const name = `${path.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "home"}${act ? `-open${pages.indexOf(page)}` : ""}-${w}.png`;
     await Bun.write(`${DATA_DIR}/${name}`, Buffer.from(shot.data, "base64"));
     console.log(`shots: ${name} ${sw}x${sh}${sw > w ? " OVERFLOW" : ""}`);
+    if (sw > w) {
+      const probe = `JSON.stringify([...document.querySelectorAll("body *")].map((el) => [el, el.getBoundingClientRect()]).filter(([, r]) => r.right > innerWidth + 1 && r.width > 0).sort((a, b) => b[1].right - a[1].right).slice(0, 6).map(([el, r]) => el.tagName.toLowerCase() + (el.className && typeof el.className === "string" ? "." + el.className.trim().split(/\\s+/).join(".") : "") + " right=" + Math.round(r.right) + " width=" + Math.round(r.width)))`;
+      const { result: wide, exceptionDetails } = await send("Runtime.evaluate", { expression: probe, returnByValue: true });
+      if (exceptionDetails) console.log(`  probe failed: ${exceptionDetails.exception?.description ?? exceptionDetails.text}`);
+      else for (const line of JSON.parse(wide.value) as string[]) console.log(`  ${line}`);
+    }
   }
 }
 ws.close();

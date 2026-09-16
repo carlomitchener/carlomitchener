@@ -1,5 +1,5 @@
 import { grid, money, tileUrl } from "../lib/shop.ts";
-import { Moon } from "./Moon.jsx";
+import { Life } from "./Life.jsx";
 
 export function ProductCard({ product, width = 800, eager = false, now }) {
   const image = product.images[0];
@@ -13,9 +13,8 @@ export function ProductCard({ product, width = 800, eager = false, now }) {
         )}
       </span>
       <h3>{product.title}</h3>
-      <span className="who">
-        <span className="price">{money(product.price)}</span>
-        <Moon born={product.created} now={now} />
+      <span className="price">
+        {money(product.price)} · <Life born={product.created} now={now} />
       </span>
     </a>
   );

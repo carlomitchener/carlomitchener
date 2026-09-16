@@ -8,29 +8,13 @@ export function Post({ post, prev, next }) {
   return (
     <div className="wrap">
       <Breadcrumbs trail={[{ name: "Feed", href: FEED_ROUTE }, { name: post.name }]} />
-      <article className="play product" data-player data-manifest={postManifest(post.name)} data-prev={prev ? postRoute(prev.name) : undefined} data-next={next ? postRoute(next.name) : undefined}>
+      <article className="play product" data-player data-manifest={postManifest(post.name)}>
         <div className="left">
           <div className="frame">
             <video controls loop playsInline preload="metadata" poster={postPoster(post.name)} width={post.size || 1080} height={post.size || 1080}>
               <source src={postVideo(post.name)} type="video/mp4" />
             </video>
           </div>
-          <p className="fine keys" aria-label="Keys">
-            <span>
-              <kbd>space</kbd> pause
-            </span>
-            <span>
-              <kbd>←</kbd>
-              <kbd>→</kbd> frame
-            </span>
-            <span>
-              <kbd>↑</kbd>
-              <kbd>↓</kbd> post
-            </span>
-          </p>
-          <pre className="json" data-json>
-            <a href={postManifest(post.name)}>{post.name}.json</a>
-          </pre>
         </div>
         <div className="side">
           <h1 className="mono">{post.name}</h1>
@@ -73,6 +57,9 @@ export function Post({ post, prev, next }) {
               </a>
             ) : null}
           </p>
+          <pre className="json" data-json>
+            <a href={postManifest(post.name)}>{post.name}.json</a>
+          </pre>
         </div>
       </article>
     </div>

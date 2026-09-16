@@ -37,7 +37,7 @@ function swap(key: string) {
   }
   const downloads = document.querySelector("[data-downloads]");
   if (downloads) {
-    const list: [string, string][] = [...one.files.map((name): [string, string] => [name, cdnUrl(key, name)]), ["og", cdnUrl(key, "og")]];
+    const list: [string, string][] = one.files.map((name): [string, string] => [name, cdnUrl(key, name)]);
     downloads.replaceChildren();
     for (const [name, href] of list) downloads.append(Object.assign(document.createElement("a"), { href, download: "", textContent: name }));
   }
@@ -57,7 +57,7 @@ function swap(key: string) {
   }
   const price = document.querySelector("[data-price]");
   if (price) price.textContent = money(one.price);
-  for (const moon of document.querySelectorAll<HTMLElement>("[data-born]")) moon.dataset.born = one.created;
+  for (const life of document.querySelectorAll<HTMLElement>("[data-born]")) life.dataset.born = one.created;
   for (const tile of document.querySelectorAll<HTMLElement>("[data-siblings] a[data-key]")) {
     if (tile.dataset.key === key) tile.setAttribute("aria-current", "page");
     else tile.removeAttribute("aria-current");

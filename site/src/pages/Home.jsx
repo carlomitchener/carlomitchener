@@ -19,11 +19,9 @@ export function Home({ posts, sections, now }) {
   return (
     <>
       {posts.length ? (
-        <section className="home-feed" aria-labelledby="feed">
-          <div className="wrap">
-            <Head title="Feed" href={FEED_ROUTE} more="All posts" />
-          </div>
-          <PostGrid posts={posts} />
+        <section className="wrap home-row" aria-labelledby="feed">
+          <Head title="Feed" href={FEED_ROUTE} more="All posts" />
+          <PostGrid posts={posts} now={now} />
         </section>
       ) : null}
       {sections.map((one) => (

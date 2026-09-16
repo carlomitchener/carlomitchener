@@ -1,4 +1,4 @@
-import { countdown, left, moonName, moonPath, phase } from "../lib/moon.ts";
+import { juice, label, left } from "../lib/life.ts";
 
 function gone() {
   for (const button of document.querySelectorAll<HTMLButtonElement>("[data-add]")) button.disabled = true;
@@ -9,21 +9,18 @@ function gone() {
 }
 
 function tick() {
-  const moons = document.querySelectorAll<HTMLElement>("[data-born]");
-  if (!moons.length) return true;
+  const lives = document.querySelectorAll<HTMLElement>("[data-born]");
+  if (!lives.length) return true;
   const now = Date.now();
   let alive = false;
-  for (const moon of moons) {
-    const born = moon.dataset.born ?? "";
-    const ms = left(born, now);
-    const f = phase(born, now);
-    const lit = moon.querySelector("[data-lit]");
-    if (lit) lit.setAttribute("d", moonPath(f));
-    const time = moon.querySelector("[data-left]");
-    if (time) time.textContent = countdown(ms);
-    moon.title = `${moonName(f)}, ${countdown(ms)} left`;
-    if (ms > 0) alive = true;
-    else if (moon.dataset.gate !== undefined) gone();
+  for (const life of lives) {
+    const born = life.dataset.born ?? "";
+    const text = life.querySelector<HTMLElement>("[data-label]");
+    if (text) text.textContent = label(born, now);
+    const bar = life.querySelector<HTMLElement>("[data-juice]");
+    if (bar) bar.style.width = `${juice(born, now).toFixed(1)}%`;
+    if (left(born, now) > 0) alive = true;
+    else if (life.dataset.gate !== undefined) gone();
   }
   return !alive;
 }

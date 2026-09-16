@@ -50,5 +50,6 @@
   --hair: 1px;
   --fast: 0.2s;
   --slow: 0.4s;
+  --unfold: 0.55s;
   --ease: cubic-bezier(0.32, 0.08, 0.24, 1);
 }
