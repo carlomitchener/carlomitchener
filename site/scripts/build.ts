@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
 import { CATEGORIES, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
+import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
@@ -26,7 +27,7 @@ const org = resolve(import.meta.dir, "..");
 const dist = join(org, "dist");
 const client = join(org, ".cache", "client");
 const root = (process.env.SITE_URL ?? site.root).replace(/\/$/, "");
-const SHOP = process.env.SHOPIFY_SHOP_URL ?? "";
+const SHOP = DEV ? "" : (process.env.SHOPIFY_SHOP_URL ?? "");
 const FALLBACK = `${root}/bird/bird-512.png`;
 
 const read = (path: string) => readFileSync(path, "utf8");
@@ -116,7 +117,7 @@ function tasks(site_: Site) {
 
 function rows(site_: Site, catalog: Catalog[]): Row[] {
   const source = site_.input("shop");
-  if (!source.files.length) throw new Error("site: data/carlomitchener/site/shop.json is missing; run bun run snapshot or bun run fake");
+  if (!source.files.length) throw new Error(`site: ${site_.input("shop").path} is missing; run bun run ${DEV ? "fake" : "snapshot"}`);
   const snapshot = JSON.parse(read(source.files[0])) as { at: number; products: ProductRow[] };
   const byType = new Map(catalog.map((entry) => [String(entry.id), entry]));
   const files = tasks(site_);
@@ -395,8 +396,15 @@ function product(site_: Site, route: Route, at: string): Output[] {
 
 /* SPEC */
 
+const devInputs = (inputs: Config["inputs"]) => {
+  const out = { ...inputs };
+  for (const name of ["shop", "feed", "tasks"]) out[name] = { ...out[name], path: out[name].path.replace("/site/", `/site/${DEV_DIR}/`) };
+  return out;
+};
+
 const config: Config = {
   ...site,
+  inputs: DEV ? devInputs(site.inputs) : site.inputs,
   assets: [
     { path: "ui", out: "ui", hash: true, ext: ".css" },
     { path: ".cache/client", out: "js", hash: true, ext: ".js" },
@@ -420,5 +428,5 @@ export async function pages() {
 if (import.meta.main) {
   const done = await pages();
   const played = done.site.routes.filter((one) => one.kind === "post").length;
-  console.log(`site: ${done.site.routes.length} routes, ${played} posts, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
+  console.log(`site${DEV ? " DEV" : ""}: ${done.site.routes.length} routes, ${played} posts, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
 }

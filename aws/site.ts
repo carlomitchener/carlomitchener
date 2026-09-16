@@ -13,6 +13,7 @@ const AGENT = "carlomitchener-site";
 const SRC_DIR = "/tmp/src/carlomitchener";
 const CACHE_DIR = process.env.BUN_INSTALL_CACHE_DIR || "/tmp/bun/cache";
 const DRY = process.env.DRY === "1";
+if (DRY) process.env.DEV = "1";
 const HOLD = process.env.DRY_DIR ?? "/tmp/carlomitchener";
 const SRC = process.env.SRC ?? "";
 
