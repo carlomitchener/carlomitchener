@@ -25,7 +25,7 @@
   ],
   "inputs": {
     "shop": { "path": "../../data/carlomitchener/site/shop.json" },
-    "game": { "path": "../../data/carlomitchener/site/game.json" },
+    "feed": { "path": "../../data/carlomitchener/site/feed.json" },
     "catalog": { "path": "../shop/files/catalog.json" },
     "tasks": { "path": "../../data/carlomitchener/site/tasks", "deep": true, "ext": ".json" },
     "pages": { "path": "pages", "ext": ".md" },

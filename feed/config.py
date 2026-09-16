@@ -20,7 +20,7 @@ HEATMAP_FPS = 32
 FREEZE_DURATION = 0.5
 INTER_SEGMENT_FREEZE = 0.5
 SIZE = 1080
-FEED_MIN = 640
+WEB_MIN = 640
 RATE = 32
 CRF = 23
 PRESET = "medium"
@@ -32,14 +32,17 @@ FORMAT = "png"
 FRAMES_DIR = "frames"
 HEATMAP_DIR = "heatmap"
 
-# GAME
+# FEED
 VERSION = 2
 LIVE_DAYS = 29.53
-PREFIX = "site/cdn/game"
-GAMES = "g"
+PREFIX = "site/cdn/feed"
+POSTS = "p"
 INDEX = "index.json"
-MASTER = "game-1080.mp4"
-FEED = "game.mp4"
-POSTER = "poster.webp"
-MANIFEST = "manifest.json"
-FILES = (MASTER, FEED, POSTER, MANIFEST)
+MASTER = "-1080.mp4"
+WEB = ".mp4"
+POSTER = ".webp"
+MANIFEST = ".json"
+FILES = (MASTER, WEB, POSTER, MANIFEST)
+
+def files(name):
+    return [name + suffix for suffix in FILES]

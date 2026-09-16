@@ -4,7 +4,7 @@ import site from "../site.json";
 
 const org = resolve(import.meta.dir, "..");
 const dist = join(org, "dist");
-const games = resolve(org, "../../data/carlomitchener/game");
+const feed = resolve(org, "../../data/carlomitchener/feed");
 const root = (process.env.SITE_URL ?? site.root).replace(/\/$/, "");
 
 const done = await pages();
@@ -25,8 +25,8 @@ const server = Bun.serve({
   async fetch(request) {
     let path = decodeURIComponent(new URL(request.url).pathname);
     if (path.startsWith("/cdn/")) {
-      const local = Bun.file(join(games, path.slice("/cdn/game/".length)));
-      if (path.startsWith("/cdn/game/") && (await local.exists())) return new Response(local);
+      const local = Bun.file(join(feed, path.slice("/cdn/feed/".length)));
+      if (path.startsWith("/cdn/feed/") && (await local.exists())) return new Response(local);
       return remote(path);
     }
     if (path.endsWith("/")) path += "index.html";

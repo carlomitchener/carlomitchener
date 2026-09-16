@@ -7,13 +7,14 @@ import { resolve as resolveLink } from "../ssg/links.ts";
 import { CATEGORIES, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
-import { gameMaster, gamePoster, gameRoute, games, type Game } from "../src/lib/game.ts";
+import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
 import { grid, ogUrl, type ProductRow } from "../src/lib/shop.ts";
 import { Page } from "../src/components/Page.jsx";
 import { Home } from "../src/pages/Home.jsx";
 import { Shop } from "../src/pages/Shop.jsx";
 import { Product } from "../src/pages/Product.jsx";
-import { Game as GamePage } from "../src/pages/Game.jsx";
+import { Post as PostPage } from "../src/pages/Post.jsx";
+import { Feed } from "../src/pages/Feed.jsx";
 import { Cart } from "../src/pages/Cart.jsx";
 import { Doc } from "../src/pages/Doc.jsx";
 import { NotFound } from "../src/pages/NotFound.jsx";
@@ -160,11 +161,11 @@ const newestFirst = (list: Row[]) => {
   return [...first, ...rest];
 };
 
-function feed(site_: Site): Game[] {
-  const source = site_.input("game");
+function feed(site_: Site): Post[] {
+  const source = site_.input("feed");
   if (!source.files.length) return [];
   try {
-    return games(read(source.files[0]));
+    return posts(read(source.files[0]));
   } catch {
     return [];
   }
@@ -179,7 +180,7 @@ function collect(site_: Site) {
   const catalog = JSON.parse(read(catalogFile)) as Catalog[];
   catalogRows = catalog;
   const all = rows(site_, catalog);
-  const index = site_.input("game").files[0] ?? site_.input("game").path;
+  const index = site_.input("feed").files[0] ?? site_.input("feed").path;
   const shown = feed(site_);
   const byType = new Map<string, Row[]>();
   for (const row of all) byType.set(row.type, [...(byType.get(row.type) ?? []), row]);
@@ -194,7 +195,7 @@ function collect(site_: Site) {
       .filter((entry) => (!slug || entry.category === slug) && ofProduct(entry).length)
       .map((entry) => ({ name: entry.title, href: shopRoute(entry), count: ofProduct(entry).length }));
   const routes: Route[] = [];
-  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), games: shown }, inputs: [catalogFile, index], at: today() });
+  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown }, inputs: [catalogFile, index], at: today() });
   routes.push({
     route: "/shop/",
     kind: "shop",
@@ -279,17 +280,18 @@ function collect(site_: Site) {
     taken.add(name);
     routes.push({ route: `/${name}/`, kind: "page", name: sheet(read(file)).title || name, source: file, inputs: [file], at: today() });
   }
-  shown.forEach((game, i) => {
+  shown.forEach((post, i) => {
     routes.push({
-      route: gameRoute(game.name),
-      kind: "game",
-      name: game.name,
+      route: postRoute(post.name),
+      kind: "post",
+      name: post.name,
       hidden: true,
-      data: { game, prev: shown[i - 1] ?? null, next: shown[i + 1] ?? null },
+      data: { post, prev: shown[i - 1] ?? null, next: shown[i + 1] ?? null },
       inputs: [index],
-      at: (game.at || "").slice(0, 10) || today(),
+      at: (post.at || "").slice(0, 10) || today(),
     });
   });
+  routes.push({ route: FEED_ROUTE, kind: "feed", name: "Feed", data: { posts: shown }, inputs: [index], at: today() });
   routes.push({ route: "/404.html", kind: "missing", name: "Not found", hidden: true });
   return routes;
 }
@@ -309,8 +311,8 @@ function cover(products: Row[]) {
 function draw(site_: Site, route: Route): Output[] {
   const at = route.route === "/404.html" ? "404.html" : page(route.route);
   if (route.kind === "home") {
-    const { products, games: shown } = route.data as { products: Row[]; games: Game[] };
-    const body = h(Home, { games: shown });
+    const { products, posts: shown } = route.data as { products: Row[]; posts: Post[] };
+    const body = h(Home, { posts: shown });
     return [{ path: at, bytes: shell(site_, { route: route.route, name: site.name, description: site.tagline, image: cover(products), fly: true }, body) }];
   }
   if (route.kind === "shop") {
@@ -319,8 +321,12 @@ function draw(site_: Site, route: Route): Output[] {
     const leaf = { route: route.route, name: data.title, description: `${data.title}: ${data.lead}`, image: cover(data.products), noindex: data.noindex };
     return [{ path: at, bytes: shell(site_, leaf, body) }];
   }
+  if (route.kind === "feed") {
+    const { posts: shown } = route.data as { posts: Post[] };
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Feed", description: `The feed: ${plural(shown.length, "post")}, newest first.` }, h(Feed, { posts: shown })) }];
+  }
   if (route.kind === "product") return product(site_, route, at);
-  if (route.kind === "game") return game(site_, route, at);
+  if (route.kind === "post") return post(site_, route, at);
   if (route.kind === "cart") {
     return [{ path: at, bytes: shell(site_, { route: route.route, name: "Bag", description: "Your bag.", noindex: true }, h(Cart, {})) }];
   }
@@ -332,14 +338,14 @@ function draw(site_: Site, route: Route): Output[] {
   return [{ path: "404.html", bytes: shell(site_, { route: route.route, name: "Not found", description: "That page is gone, or its moon has passed.", noindex: true }, h(NotFound, {})) }];
 }
 
-function game(site_: Site, route: Route, at: string): Output[] {
-  const { game: one, prev, next } = route.data as { game: Game; prev: Game | null; next: Game | null };
-  const full = root + gameMaster(one.name);
+function post(site_: Site, route: Route, at: string): Output[] {
+  const { post: one, prev, next } = route.data as { post: Post; prev: Post | null; next: Post | null };
+  const full = root + postMaster(one.name);
   const leaf = {
     route: route.route,
     name: one.name,
-    description: one.story || `Game ${one.name}, seed ${one.seed}, ${one.duration}s.`,
-    image: root + gamePoster(one.name),
+    description: one.story || `Post ${one.name}, seed ${one.seed}, ${one.duration}s.`,
+    image: root + postPoster(one.name),
     type: "video.other",
     meta: [
       { property: "og:video", content: full },
@@ -347,7 +353,7 @@ function game(site_: Site, route: Route, at: string): Output[] {
     ],
     noindex: true,
   };
-  return [{ path: at, bytes: shell(site_, leaf, h(GamePage, { game: one, prev, next })) }];
+  return [{ path: at, bytes: shell(site_, leaf, h(PostPage, { post: one, prev, next })) }];
 }
 
 function product(site_: Site, route: Route, at: string): Output[] {
@@ -413,6 +419,6 @@ export async function pages() {
 
 if (import.meta.main) {
   const done = await pages();
-  const played = done.site.routes.filter((one) => one.kind === "game").length;
-  console.log(`site: ${done.site.routes.length} routes, ${played} games, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
+  const played = done.site.routes.filter((one) => one.kind === "post").length;
+  console.log(`site: ${done.site.routes.length} routes, ${played} posts, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
 }

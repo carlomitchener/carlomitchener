@@ -106,11 +106,11 @@ for (const entry of catalog) {
 write(join(DATA_DIR, "shop.json"), { at: Date.now(), products });
 console.log(`fake: ${products.length} products from ${catalog.length} catalog rows into ${join(DATA_DIR, "shop.json")}`);
 
-/* GAMES */
+/* FEED */
 
-const LOCAL = resolve(org, "../../data/carlomitchener/game/index.json");
+const LOCAL = resolve(org, "../../data/carlomitchener/feed/index.json");
 
-function game(): unknown[] {
+function feed(): unknown[] {
   try {
     const rows = existsSync(LOCAL) ? read(LOCAL) : [];
     if (Array.isArray(rows) && rows.length) return rows;
@@ -123,10 +123,10 @@ function game(): unknown[] {
     frames: 360,
     segments: 4,
     canvas: 1080,
-    story: `An invented game, number ${n + 1}.`,
+    story: `An invented post, number ${n + 1}.`,
   }));
 }
 
-const games = game();
-write(join(DATA_DIR, "game.json"), games);
-console.log(`fake: ${games.length} games into ${join(DATA_DIR, "game.json")}`);
+const posts = feed();
+write(join(DATA_DIR, "feed.json"), posts);
+console.log(`fake: ${posts.length} posts into ${join(DATA_DIR, "feed.json")}`);

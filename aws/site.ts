@@ -95,7 +95,7 @@ async function run(cmd: string[], cwd: string): Promise<string> {
 
 const SHAPE: Record<string, (body: unknown) => unknown> = {
   "shop.json": (body) => (body as { products?: unknown })?.products ?? [],
-  "game.json": (body) => body ?? [],
+  "feed.json": (body) => body ?? [],
 };
 
 function dataHash(site: string): string {

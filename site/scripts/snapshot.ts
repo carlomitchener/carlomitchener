@@ -11,8 +11,8 @@ const org = resolve(import.meta.dir, "..");
 const DATA_DIR = resolve(org, "../../data/carlomitchener/site");
 const s3 = client(need("CARLOMITCHENER_BUCKET"));
 const SHOP = "data/shop.json";
-const INDEX = "site/cdn/game/index.json";
-const LOCAL = resolve(org, "../../data/carlomitchener/game/index.json");
+const INDEX = "site/cdn/feed/index.json";
+const LOCAL = resolve(org, "../../data/carlomitchener/feed/index.json");
 
 async function pull(key: string): Promise<string[]> {
   const local = join(DATA_DIR, "tasks", key, `${key}.json`);
@@ -50,21 +50,21 @@ mkdirSync(DATA_DIR, { recursive: true });
 writeFileSync(path, body);
 console.log(`snapshot: ${rows.length} products into ${path}`);
 
-/* REELS */
+/* FEED */
 
-async function game(): Promise<unknown[]> {
+async function feed(): Promise<unknown[]> {
   const found = await getText(s3, INDEX);
   const text = found ?? (existsSync(LOCAL) ? readFileSync(LOCAL, "utf8") : "[]");
   const rows_ = JSON.parse(text);
   if (!Array.isArray(rows_)) throw new Error(`snapshot: ${found ? INDEX : LOCAL} is not an array`);
-  console.log(`snapshot: games from ${found ? `s3://${need("CARLOMITCHENER_BUCKET")}/${INDEX}` : LOCAL}`);
+  console.log(`snapshot: posts from ${found ? `s3://${need("CARLOMITCHENER_BUCKET")}/${INDEX}` : LOCAL}`);
   return rows_;
 }
 
-const games = await game();
-const index = join(DATA_DIR, "game.json");
-writeFileSync(index, JSON.stringify(games, null, 2) + "\n");
-console.log(`snapshot: ${games.length} games into ${index}`);
+const posts = await feed();
+const index = join(DATA_DIR, "feed.json");
+writeFileSync(index, JSON.stringify(posts, null, 2) + "\n");
+console.log(`snapshot: ${posts.length} posts into ${index}`);
 
 if (process.argv.includes("--upload")) {
   await putBytes(s3, SHOP, body, { type: "application/json", cacheControl: "no-store" });

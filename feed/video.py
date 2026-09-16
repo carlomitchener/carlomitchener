@@ -1,7 +1,7 @@
 import glob
 import os
 import subprocess
-from config import CRF, FEED, FEED_MIN, FORMAT, FPS, FRAMES_DIR, FREEZE_DURATION, HEATMAP_DIR, HEATMAP_FPS, INTER_SEGMENT_FREEZE, MASTER, PRESET, RATE, SIZE
+from config import CRF, WEB, WEB_MIN, FORMAT, FPS, FRAMES_DIR, FREEZE_DURATION, HEATMAP_DIR, HEATMAP_FPS, INTER_SEGMENT_FREEZE, MASTER, PRESET, RATE, SIZE
 from music import compose_saga_audio
 
 # FFMPEG
@@ -49,8 +49,8 @@ def _steps(entries):
 
 # SIZE
 
-def feed_size(canvas):
-    scale = -(-FEED_MIN // canvas)
+def web_size(canvas):
+    scale = -(-WEB_MIN // canvas)
     if canvas * scale % 2:
         scale += 1
     return canvas * scale
@@ -76,8 +76,8 @@ def create_saga_videos(saga, work_dir, out_dir, ffmpeg):
     concat = _write_concat(entries, f"{work_dir}/concat.txt")
     duration = round(sum(duration for _, duration in entries), 3)
     frames = round(duration * RATE)
-    size = feed_size(int(saga.grids[0].types.shape[0]))
-    _encode(ffmpeg, concat, audio, frames, SIZE, f"{out_dir}/{MASTER}")
-    _encode(ffmpeg, concat, audio, frames, size, f"{out_dir}/{FEED}")
-    print(f"videos {duration} s, {frames} frames, feed {size} px -> {out_dir}")
+    size = web_size(int(saga.grids[0].types.shape[0]))
+    _encode(ffmpeg, concat, audio, frames, SIZE, f"{out_dir}/{saga.key}{MASTER}")
+    _encode(ffmpeg, concat, audio, frames, size, f"{out_dir}/{saga.key}{WEB}")
+    print(f"videos {duration} s, {frames} frames, web {size} px -> {out_dir}")
     return {"duration": duration, "frames": frames, "size": size, "steps": _steps(entries)}

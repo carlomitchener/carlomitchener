@@ -1,4 +1,4 @@
-export type Game = {
+export type Post = {
   name: string;
   seed: number;
   at: string;
@@ -12,23 +12,25 @@ export type Game = {
 
 /* URLS */
 
-const BASE = "/cdn/game/g";
+const BASE = "/cdn/feed/p";
 
-export const gameName = (name: string) => /^[0-9a-f]{8}$/.test(String(name ?? ""));
+export const postName = (name: string) => /^[0-9a-f]{8}$/.test(String(name ?? ""));
 
-export const gameVideo = (name: string) => `${BASE}/${name}/game.mp4`;
+export const postVideo = (name: string) => `${BASE}/${name}/${name}.mp4`;
 
-export const gameMaster = (name: string) => `${BASE}/${name}/game-1080.mp4`;
+export const postMaster = (name: string) => `${BASE}/${name}/${name}-1080.mp4`;
 
-export const gamePoster = (name: string) => `${BASE}/${name}/poster.webp`;
+export const postPoster = (name: string) => `${BASE}/${name}/${name}.webp`;
 
-export const gameManifest = (name: string) => `${BASE}/${name}/manifest.json`;
+export const postManifest = (name: string) => `${BASE}/${name}/${name}.json`;
 
-export const gameRoute = (name: string) => `/games/${name}/`;
+export const postRoute = (name: string) => `/feed/${name}/`;
+
+export const FEED_ROUTE = "/feed/";
 
 /* INDEX */
 
-export function games(text: string): Game[] {
+export function posts(text: string): Post[] {
   let rows: unknown = null;
   try {
     rows = JSON.parse(text);
@@ -36,9 +38,9 @@ export function games(text: string): Game[] {
     return [];
   }
   if (!Array.isArray(rows)) return [];
-  const out: Game[] = [];
+  const out: Post[] = [];
   for (const one of rows as Record<string, unknown>[]) {
-    if (!one || !gameName(one.name as string)) continue;
+    if (!one || !postName(one.name as string)) continue;
     out.push({
       name: String(one.name),
       seed: Number(one.seed ?? 0),

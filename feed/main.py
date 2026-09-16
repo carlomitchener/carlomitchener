@@ -12,7 +12,7 @@ from mrlypy.core.state import choice, seed as seed_state
 from mrlypy.life.crop import crop_grids
 from mrlypy.life.enums import Fate
 from mrlypy.two import Cell2d
-from config import ATTEMPTS, DATA_DIR, FILES, FPS, FRAMES_DIR, GAMES, HEATMAP_DIR, HEATMAP_FPS, INDEX, LIVE_DAYS, MANIFEST, MAX_GENERATIONS, MAX_SEGMENTS, MIN_GENERATIONS, POSTER, RATE, VERSION
+from config import ATTEMPTS, DATA_DIR, FPS, FRAMES_DIR, POSTS, HEATMAP_DIR, HEATMAP_FPS, INDEX, LIVE_DAYS, MANIFEST, MAX_GENERATIONS, MAX_SEGMENTS, MIN_GENERATIONS, POSTER, RATE, VERSION, files
 from frames import create_saga_frames, create_saga_poster, frame_path
 from heatmap import create_saga_heatmap
 from models import Saga, Task
@@ -140,8 +140,8 @@ def _segment_rows(saga: Saga) -> List[Dict[str, Any]]:
         })
     return rows
 
-def _sizes(out_dir: str) -> Dict[str, int]:
-    return {name: os.path.getsize(f"{out_dir}/{name}") for name in FILES if name != MANIFEST}
+def _sizes(out_dir: str, key: str) -> Dict[str, int]:
+    return {name: os.path.getsize(f"{out_dir}/{name}") for name in files(key) if not name.endswith(MANIFEST)}
 
 def _manifest(saga: Saga, at: str, videos: Dict[str, Any], out_dir: str) -> Dict[str, Any]:
     first = saga.segments[0]
@@ -170,8 +170,8 @@ def _manifest(saga: Saga, at: str, videos: Dict[str, Any], out_dir: str) -> Dict
         "duration": videos["duration"],
         "size": videos["size"],
         "steps": videos["steps"],
-        "sizes": _sizes(out_dir),
-        "files": list(FILES),
+        "sizes": _sizes(out_dir, saga.key),
+        "files": files(saga.key),
     }
 
 def index_row(manifest: Dict[str, Any]) -> Dict[str, Any]:
@@ -198,7 +198,7 @@ def write_index(root: str, row: Dict[str, Any]) -> str:
         with open(path) as handle:
             rows = [item for item in json.load(handle) if item.get("name") != row["name"]]
     for item in expired(rows, datetime.now(timezone.utc)):
-        shutil.rmtree(os.path.join(root, GAMES, item["name"]), ignore_errors=True)
+        shutil.rmtree(os.path.join(root, POSTS, item["name"]), ignore_errors=True)
         rows.remove(item)
         print(f"reap {item['name']}")
     rows.insert(0, row)
@@ -231,17 +231,17 @@ def make(seed: int, root: str) -> Dict[str, Any]:
     saga = generate_saga(seed, key)
     mark("saga")
     work = os.path.join(root, "work", key)
-    out = os.path.join(root, GAMES, key)
+    out = os.path.join(root, POSTS, key)
     create_saga_frames(saga, f"{work}/{FRAMES_DIR}")
     mark("frames")
     create_saga_heatmap(saga, f"{work}/{HEATMAP_DIR}")
     mark("heatmap")
     videos = create_saga_videos(saga, work, out, FFMPEG)
     mark("videos")
-    create_saga_poster(frame_path(f"{work}/{HEATMAP_DIR}", key, poster_frame(saga)), f"{out}/{POSTER}", videos["size"])
+    create_saga_poster(frame_path(f"{work}/{HEATMAP_DIR}", key, poster_frame(saga)), f"{out}/{key}{POSTER}", videos["size"])
     mark("poster")
     manifest = _manifest(saga, at, videos, out)
-    with open(f"{out}/{MANIFEST}", "w") as handle:
+    with open(f"{out}/{key}{MANIFEST}", "w") as handle:
         json.dump(manifest, handle)
     row = index_row(manifest)
     write_index(root, row)

@@ -6,13 +6,13 @@ import shutil
 import time
 from datetime import datetime, timezone
 from typing import Any, Dict
-from config import DATA_DIR, FILES, GAMES, INDEX, PREFIX
+from config import DATA_DIR, INDEX, POSTS, PREFIX, files
 from main import expired, make
 
 # PLACE
 
 LAMBDA = "AWS_LAMBDA_FUNCTION_NAME"
-TMP = "/tmp/game"
+TMP = "/tmp/feed"
 IMMUTABLE = "public, max-age=31536000, immutable"
 NO_CACHE = "no-cache"
 TYPES = {".mp4": "video/mp4", ".webp": "image/webp", ".json": "application/json"}
@@ -37,9 +37,9 @@ def upload(base: str, name: str, row: Dict[str, Any]) -> int:
     s3 = boto3.client("s3")
     bucket = os.environ["CARLOMITCHENER_BUCKET"]
     count = 0
-    for file in FILES:
+    for file in files(name):
         s3.upload_file(
-            os.path.join(base, GAMES, name, file), bucket, f"{PREFIX}/{GAMES}/{name}/{file}",
+            os.path.join(base, POSTS, name, file), bucket, f"{PREFIX}/{POSTS}/{name}/{file}",
             ExtraArgs={"ContentType": content_type(file), "CacheControl": IMMUTABLE},
         )
         count += 1
@@ -51,7 +51,7 @@ def upload(base: str, name: str, row: Dict[str, Any]) -> int:
         if error.response["Error"]["Code"] not in ("NoSuchKey", "404"):
             raise
     for item in expired(rows, datetime.now(timezone.utc)):
-        keys = [{"Key": f"{PREFIX}/{GAMES}/{item['name']}/{file}"} for file in FILES]
+        keys = [{"Key": f"{PREFIX}/{POSTS}/{item['name']}/{file}"} for file in files(item["name"])]
         s3.delete_objects(Bucket=bucket, Delete={"Objects": keys})
         rows.remove(item)
         print(f"reap {item['name']}")
@@ -60,7 +60,7 @@ def upload(base: str, name: str, row: Dict[str, Any]) -> int:
         Bucket=bucket, Key=f"{PREFIX}/{INDEX}", Body=json.dumps(rows).encode(),
         ContentType="application/json", CacheControl=NO_CACHE,
     )
-    print(f"upload {count + 1} keys to s3://{bucket}/{PREFIX}/ ({len(rows)} games)")
+    print(f"upload {count + 1} keys to s3://{bucket}/{PREFIX}/ ({len(rows)} posts)")
     return count + 1
 
 # RUN

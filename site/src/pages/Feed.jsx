@@ -1,5 +1,5 @@
 import { PostGrid } from "../components/PostGrid.jsx";
 
-export function Home({ posts }) {
+export function Feed({ posts }) {
   return <PostGrid posts={posts} />;
 }
