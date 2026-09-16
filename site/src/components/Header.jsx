@@ -52,12 +52,6 @@ export function Header({ route, fly = false }) {
           </ul>
         </nav>
         <div className="tools">
-          <button className="tool" type="button" data-theme-button aria-label="Theme: auto" title="Theme: auto">
-            <Icon name="brightness_auto" />
-          </button>
-          <button className="tool tint" type="button" data-tint-button aria-label="Tint" title="Tint">
-            <Icon name="palette" />
-          </button>
           <a className="tool bag" href={CART} aria-label="Bag">
             <Icon name="shopping_bag" />
             <span className="count" data-cart-count hidden></span>

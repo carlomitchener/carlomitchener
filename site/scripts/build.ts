@@ -2,10 +2,9 @@ import { readFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { build, digest, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
+import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
 import { CATEGORIES, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
-import { DEFAULTS } from "../src/config/tint.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
 import { gameMaster, gamePoster, gameRoute, games, type Game } from "../src/lib/game.ts";
@@ -70,8 +69,6 @@ async function bundle() {
 
 /* SHELL */
 
-let tint = DEFAULTS[0];
-
 let catalogRows: Catalog[] = [];
 
 function shell(site_: Site, leaf: Leaf, body: unknown) {
@@ -89,7 +86,6 @@ function shell(site_: Site, leaf: Leaf, body: unknown) {
       scripts: [site_.asset("main.js")],
       data: leaf.data,
       noindex: leaf.noindex ?? false,
-      tint,
       catalog: catalogRows,
       fly: leaf.fly ?? false,
     },
@@ -174,12 +170,6 @@ function feed(site_: Site): Game[] {
   }
 }
 
-function pickTint(site_: Site) {
-  const parts = ["shop", "game"].flatMap((name) => site_.input(name).files.map((file) => site_.bytes(file)));
-  const n = parseInt(digest(parts).slice(0, 8), 16);
-  return DEFAULTS[n % DEFAULTS.length];
-}
-
 /* COLLECT */
 
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
@@ -188,7 +178,6 @@ function collect(site_: Site) {
   const catalogFile = site_.input("catalog").files[0];
   const catalog = JSON.parse(read(catalogFile)) as Catalog[];
   catalogRows = catalog;
-  tint = pickTint(site_);
   const all = rows(site_, catalog);
   const index = site_.input("game").files[0] ?? site_.input("game").path;
   const shown = feed(site_);
@@ -425,5 +414,5 @@ export async function pages() {
 if (import.meta.main) {
   const done = await pages();
   const played = done.site.routes.filter((one) => one.kind === "game").length;
-  console.log(`site: ${done.site.routes.length} routes, ${played} games, tint ${tint}, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
+  console.log(`site: ${done.site.routes.length} routes, ${played} games, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
 }

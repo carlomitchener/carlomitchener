@@ -49,20 +49,17 @@ const send = (method: string, params = {}) =>
 await send("Page.enable");
 for (const path of pages) {
   for (const [w, h, mobile] of SIZES) {
-    for (const dark of [false, true]) {
-      await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile });
-      await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: dark ? "dark" : "light" }] });
-      await send("Page.navigate", { url: base + path });
-      await wait(1500);
-      const { result } = await send("Runtime.evaluate", { expression: "JSON.stringify([document.documentElement.scrollWidth, document.documentElement.scrollHeight])", returnByValue: true });
-      const [sw, sh] = JSON.parse(result.value) as [number, number];
-      await send("Emulation.setDeviceMetricsOverride", { width: w, height: Math.min(sh, 6000), deviceScaleFactor: 1, mobile });
-      await wait(300);
-      const shot = await send("Page.captureScreenshot", { format: "png" });
-      const name = `${path.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "home"}-${w}${dark ? "-dark" : ""}.png`;
-      await Bun.write(`${DATA_DIR}/${name}`, Buffer.from(shot.data, "base64"));
-      console.log(`shots: ${name} ${sw}x${sh}${sw > w ? " OVERFLOW" : ""}`);
-    }
+    await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile });
+    await send("Page.navigate", { url: base + path });
+    await wait(1500);
+    const { result } = await send("Runtime.evaluate", { expression: "JSON.stringify([document.documentElement.scrollWidth, document.documentElement.scrollHeight])", returnByValue: true });
+    const [sw, sh] = JSON.parse(result.value) as [number, number];
+    await send("Emulation.setDeviceMetricsOverride", { width: w, height: Math.min(sh, 6000), deviceScaleFactor: 1, mobile });
+    await wait(300);
+    const shot = await send("Page.captureScreenshot", { format: "png" });
+    const name = `${path.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "home"}-${w}.png`;
+    await Bun.write(`${DATA_DIR}/${name}`, Buffer.from(shot.data, "base64"));
+    console.log(`shots: ${name} ${sw}x${sh}${sw > w ? " OVERFLOW" : ""}`);
   }
 }
 ws.close();

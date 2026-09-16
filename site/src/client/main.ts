@@ -1,5 +1,3 @@
-import "./theme.ts";
-import "./tint.ts";
 import "./footer.ts";
 import "./cart.ts";
 import "./gallery.ts";

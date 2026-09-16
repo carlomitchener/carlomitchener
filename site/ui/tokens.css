@@ -1,3 +1,18 @@
+/* THEME */
+
+:root {
+  color-scheme: light;
+  --ground: var(--white);
+  --bg: #f8f8f9;
+  --panel: #f1f1f2;
+  --deep: #e8e8e9;
+  --line: #dddddf;
+  --fg: var(--black);
+  --dim: #555558;
+  --accent: var(--blue);
+  --on-accent: var(--white);
+}
+
 /* TOKENS */
 
 :root {

@@ -4,63 +4,29 @@ import os
 
 FONT = "Helvetica,Arial,sans-serif"
 # PALETTE
-INK = "#000000"
-MUTED = "#8e8e93"
-PALE = "#bababf"
-PAPER = "#ffffff"
-CONCEPT = {
-    "gasket": "#00cad8",
-    "carpet": "#008cff",
-    "sponge": "#6768fa",
-    "prime": "#ff325a",
-    "bound": "#ff8f2c",
-    "window": "#ff3d40",
-    "control": "#8e8e93",
-}
 PALETTE = {
     "black": "#000000",
     "white": "#ffffff",
     "red": "#ff3d40",
-    "red-light": "#ff9d95",
-    "red-dark": "#a80016",
     "orange": "#ff8f2c",
-    "orange-light": "#ffc093",
-    "orange-dark": "#a25400",
     "yellow": "#ffd100",
-    "yellow-light": "#ffe591",
-    "yellow-dark": "#9e8100",
     "green": "#32cc58",
-    "green-light": "#5eee79",
-    "green-dark": "#007f2c",
     "mint": "#00d1bb",
-    "mint-light": "#48efd8",
-    "mint-dark": "#008173",
     "teal": "#00cad8",
-    "teal-light": "#48e9f7",
-    "teal-dark": "#007c85",
     "cyan": "#1ec9f3",
-    "cyan-light": "#86e2ff",
-    "cyan-dark": "#007c98",
     "blue": "#008cff",
-    "blue-light": "#84bdff",
-    "blue-dark": "#00559f",
     "indigo": "#6768fa",
-    "indigo-light": "#9ea9ff",
-    "indigo-dark": "#3c2abc",
     "purple": "#d332e9",
-    "purple-light": "#f08aff",
-    "purple-dark": "#870097",
     "pink": "#ff325a",
-    "pink-light": "#ff9a9f",
-    "pink-dark": "#a50030",
     "brown": "#b18462",
-    "brown-light": "#dfaf8c",
-    "brown-dark": "#754c2b",
     "gray": "#8e8e93",
-    "gray-light": "#bababf",
-    "gray-dark": "#56565a",
 }
 # PALETTE END
+INK = PALETTE["black"]
+MUTED = PALETTE["gray"]
+PALE = "#c6c6c9"
+PAPER = PALETTE["white"]
+CONCEPT = {"gasket": PALETTE["teal"], "carpet": PALETTE["blue"], "sponge": PALETTE["indigo"], "prime": PALETTE["pink"], "bound": PALETTE["orange"], "window": PALETTE["red"], "control": PALETTE["gray"]}
 STROKE = 1.2
 THIN = 0.6
 MARGIN = 36

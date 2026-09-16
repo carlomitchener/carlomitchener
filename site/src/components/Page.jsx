@@ -1,23 +1,19 @@
 import site from "../../site.json";
 import { SHOPIFY_CDN } from "../config/shop.ts";
-import { THEME_KEY, TINT_KEY } from "../config/tint.ts";
 import { Header } from "./Header.jsx";
 import { Footer } from "./Footer.jsx";
 
 const FONTS = "/fonts/fonts.css";
 
-const EARLY = `(()=>{try{const r=document.documentElement,t=localStorage.getItem(${JSON.stringify(THEME_KEY)}),c=localStorage.getItem(${JSON.stringify(TINT_KEY)});if(t)r.dataset.theme=t;if(c)r.dataset.tint=c}catch{}})()`;
-
-export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, tint, catalog, fly = false, children }) {
+export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, catalog, fly = false, children }) {
   const url = root + route;
   return (
-    <html lang="en" data-tint={tint}>
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="color-scheme" content="light dark" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="color-scheme" content="light" />
+        <meta name="theme-color" content="#f8f8f9" />
         <title>{title === site.name ? site.name : `${title} · ${site.name}`}</title>
         <meta name="description" content={description} />
         {noindex ? <meta name="robots" content="noindex" /> : null}
@@ -37,7 +33,6 @@ export function Page({ root, route, title, description, image, type = "website",
         <link rel="icon" href="/bird/bird-64.png" type="image/png" />
         <link rel="apple-touch-icon" href="/bird/square-180.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
-        <script dangerouslySetInnerHTML={{ __html: EARLY }} />
         <link rel="stylesheet" href={FONTS} />
         {sheets.map((href) => (
           <link key={href} rel="stylesheet" href={href} />
