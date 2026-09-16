@@ -25,3 +25,7 @@ export const CATEGORIES: [string, string][] = [
 ];
 
 export type Catalog = { id: number; live: boolean; category: string; title: string; link: string; handle: string };
+
+export const MORE_TILE = 3;
+
+export const ALIKE = 8;

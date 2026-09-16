@@ -1,4 +1,4 @@
-import { cdnUrl, tileUrl } from "../lib/shop.ts";
+import { tileUrl } from "../lib/shop.ts";
 import { Carousel } from "./Gallery.jsx";
 import { Icon } from "./Icon.jsx";
 
@@ -18,16 +18,6 @@ export function Downloads({ product, tiles }) {
             <span>
               Download <span data-download-name>{`${tiles[0]}x${tiles[0]}`}</span>
             </span>
-          </a>
-        </p>
-        <p className="fine more" data-downloads>
-          {product.files.map((name) => (
-            <a key={name} href={cdnUrl(product.key, name)} download>
-              {name}
-            </a>
-          ))}
-          <a href={cdnUrl(product.key, "og")} download>
-            og
           </a>
         </p>
       </div>

@@ -4,7 +4,7 @@ import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
-import { CATEGORIES, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
+import { ALIKE, CATEGORIES, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
@@ -195,6 +195,18 @@ function collect(site_: Site) {
     catalog
       .filter((entry) => (!slug || entry.category === slug) && ofProduct(entry).length)
       .map((entry) => ({ name: entry.title, href: shopRoute(entry), count: ofProduct(entry).length }));
+  const alike = (row: Row): Row[] => {
+    const seen = new Set<string>([row.type]);
+    const out: Row[] = [];
+    const ranked = all.filter((one) => one.type !== row.type).sort((a, b) => Number(b.category === row.category) - Number(a.category === row.category) || (a.created < b.created ? 1 : -1));
+    for (const one of ranked) {
+      if (seen.has(one.type)) continue;
+      seen.add(one.type);
+      out.push(one);
+      if (out.length === ALIKE) break;
+    }
+    return out;
+  };
   const routes: Route[] = [];
   routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown }, inputs: [catalogFile, index], at: today() });
   routes.push({
@@ -263,7 +275,7 @@ function collect(site_: Site) {
       kind: "product",
       name: row.title,
       hidden: true,
-      data: { product: row, family: byType.get(row.type) ?? [row] },
+      data: { product: row, family: byType.get(row.type) ?? [row], alike: alike(row) },
       inputs: [catalogFile],
       at: row.created.slice(0, 10),
     });
@@ -367,7 +379,7 @@ function post(site_: Site, route: Route, at: string): Output[] {
 }
 
 function product(site_: Site, route: Route, at: string): Output[] {
-  const { product: row, family } = route.data as { product: Row; family: Row[] };
+  const { product: row, family, alike } = route.data as { product: Row; family: Row[]; alike: Row[] };
   const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
   const siblings: Record<string, unknown> = {};
   for (const one of family) {
@@ -381,7 +393,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
     { name: row.key },
   ];
   const body = [
-    h(Product, { key: "product", trail, product: row, family, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now }),
+    h(Product, { key: "product", trail, product: row, family, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now }),
     h("script", { key: "siblings", type: "application/json", id: "siblings", dangerouslySetInnerHTML: { __html: JSON.stringify(siblings) } }),
   ];
   const data = {

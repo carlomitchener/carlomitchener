@@ -24,7 +24,7 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: var(--r-media);
-  background: var(--panel);
+  background: var(--white);
 }
 
 .card .shot img {
@@ -188,6 +188,7 @@
 /* PRODUCT */
 
 .product {
+  --media: calc(100dvh - var(--header) - 200px);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--s7);
@@ -200,6 +201,10 @@
   min-width: 0;
 }
 
+.left .shots {
+  display: none;
+}
+
 .shots {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -210,7 +215,7 @@
   display: block;
   overflow: hidden;
   border-radius: var(--r-media);
-  background: var(--panel);
+  background: var(--white);
   cursor: zoom-in;
 }
 
@@ -219,6 +224,7 @@
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
+  background: var(--white);
   transition: transform var(--slow) var(--ease);
 }
 
@@ -228,21 +234,40 @@
 
 @media (min-width: 900px) {
   .product {
-    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-columns: fit-content(var(--media)) minmax(360px, 1fr);
     gap: var(--s8);
     align-items: start;
-    max-width: 1180px;
-    margin-inline: auto;
+    height: calc(100dvh - var(--header));
   }
 
-  div.side {
-    position: sticky;
-    top: calc(var(--header) + var(--s5));
-    max-width: none;
+  .left,
+  .side {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding-bottom: var(--s8);
+  }
+
+  .left::-webkit-scrollbar,
+  .side::-webkit-scrollbar {
+    display: none;
+  }
+
+  .left {
+    display: block;
+    width: var(--media);
+    max-width: 100%;
   }
 
   .left .shots {
+    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: var(--s5);
+  }
+
+  .gallery {
+    max-width: none;
   }
 }
 
@@ -263,7 +288,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--r-media);
-  background: var(--panel);
+  background: var(--white);
   aspect-ratio: 1;
 }
 
@@ -347,7 +372,7 @@
   padding: 0;
   overflow: hidden;
   border-radius: var(--r-card);
-  background: var(--panel);
+  background: var(--white);
   opacity: 0.6;
   transition: opacity var(--fast) var(--ease), outline-color var(--fast) var(--ease);
   outline: 2px solid transparent;
@@ -412,18 +437,61 @@
 }
 .side {
   display: grid;
+  gap: var(--s7);
+  min-width: 0;
+  align-content: start;
+}
+
+.details {
+  display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
   min-width: 0;
   max-width: 520px;
 }
 
-.side h1 {
+.details h1 {
   font-size: var(--t-h2);
 }
 
-.side .price {
+.details .price {
   font-size: var(--t-lead);
+}
+
+.drop .inside .fine a {
+  text-decoration: underline;
+}
+
+.variations .fine a {
+  color: var(--dim);
+}
+
+.variations .tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: var(--s2);
+  margin-top: var(--s3);
+  max-width: 520px;
+}
+
+.variations .tiles a {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--panel);
+}
+
+.variations .tiles img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  transition: transform var(--slow) var(--ease);
+}
+
+.variations .tiles a:hover img {
+  transform: scale(1.06);
 }
 
 .sizes {
@@ -488,10 +556,15 @@
 
 /* ALSO */
 
-.also {
-  grid-column: 1 / -1;
+.also,
+.alike {
   padding-top: var(--s7);
+  margin-top: var(--s7);
   border-top: var(--hair) solid var(--line);
+}
+
+.alike .grid {
+  margin-top: var(--s5);
 }
 
 .siblings {
