@@ -52,7 +52,7 @@ console.log(`snapshot: ${rows.length} products into ${path}`);
 
 /* FEED */
 
-async function feed(): Promise<unknown[]> {
+async function readFeed(): Promise<unknown[]> {
   const found = await getText(s3, INDEX);
   const text = found ?? (existsSync(LOCAL) ? readFileSync(LOCAL, "utf8") : "[]");
   const rows_ = JSON.parse(text);
@@ -61,7 +61,7 @@ async function feed(): Promise<unknown[]> {
   return rows_;
 }
 
-const posts = await feed();
+const posts = await readFeed();
 const index = join(DATA_DIR, "feed.json");
 writeFileSync(index, JSON.stringify(posts, null, 2) + "\n");
 console.log(`snapshot: ${posts.length} posts into ${index}`);
