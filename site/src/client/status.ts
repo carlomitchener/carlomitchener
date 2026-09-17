@@ -8,7 +8,7 @@ type Automator = {
   error: string | null;
   design: { key: string; created_at: number; group: string; edition: string; primary: string; secondary: string[]; scheme: string } | null;
   task: { key: string; step: string; product: { title: string }; created_at: number; updated_at: number; mockups: number; variants: number; metadata: Record<string, unknown> } | null;
-  paths: { open: number; used: number; quarantined: number } | null;
+  paths: { open: number; used: number; quarantined: number; strikes?: Record<string, number> } | null;
   live: { products: number; expiring: number; newest: number | null; oldest: number | null };
   log: string[];
 };
@@ -62,7 +62,7 @@ function automator(data: Automator | null) {
     ["Design", data.design ? `${data.design.key}, ${data.design.group} ${data.design.edition} ${data.design.scheme}, ${data.design.primary} with ${data.design.secondary.join(", ")}, ${ago(data.design.created_at)}` : "none"],
     ["Task", task ? `${task.key} at ${task.step}, ${task.mockups} mockups, ${task.variants} variants, started ${ago(task.created_at)}${waiting ? `, waiting ${ago(waiting).replace(" ago", "")}` : ""}` : "idle"],
     ["Counters", task ? JSON.stringify(task.metadata) : ""],
-    ["Round", data.paths ? `${data.paths.open} open, ${data.paths.used} used, ${data.paths.quarantined} quarantined` : "no paths"],
+    ["Round", data.paths ? `${data.paths.open} open, ${data.paths.used} used, ${data.paths.quarantined} quarantined${Object.keys(data.paths.strikes ?? {}).length ? `, strikes ${Object.entries(data.paths.strikes ?? {}).map(([id, n]) => `${id}x${n}`).join(" ")}` : ""}` : "no paths"],
     ["Live", `${data.live.products} products, ${data.live.expiring} expiring within a day, newest ${ago(data.live.newest)}, oldest ${ago(data.live.oldest)}`],
   ];
   box.innerHTML = `<h2>Automator</h2>${rows(list)}`;

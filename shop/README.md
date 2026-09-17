@@ -34,7 +34,7 @@
 - COMPLETE `complete.py` - archives the task to `data/automator/tasks/<key>.json`, clears `task.json`, wakes `carlomitchener-site`; ARCHIVE reruns it if a tick died between the two.
 - FAILED `run.py` - any other exception parks the task; the next tick sends it back to the failing step; three strikes abort. The counter resets whenever a step advances.
 - REAP `reap.py` - before every task, the oldest archive past `LIVE_DAYS` (by S3 LastModified) loses its Shopify product, CDN folder and archive, then the site wakes.
-- Abort deletes the Shopify product or its files and the CDN folder, marks the product used (`false`) so the next round retries it, and clears the task. Only a missing catalog json quarantines (`null`).
+- Abort deletes the Shopify product or its files and the CDN folder, clears the task and counts a strike in `strikes.json`; the product stays open, and at `MAX_STRIKES` (3) it is benched (`false`) for the rest of the batch. A new design resets the strikes. Only a missing catalog json quarantines (`null`).
 - Every tick ends by writing `site/status/automator.json`: design, task, counters, paths, live count and the last 300 log lines. It is public.
 
 ## S3
@@ -42,6 +42,7 @@
 - `data/automator/design.json` - the current design: key, seed, created_at, tiles, variation.
 - `data/automator/task.json` - the task in flight, `{}` when idle.
 - `data/automator/paths.json` - product id to `true` open, `false` used this round, `null` quarantined.
+- `data/automator/strikes.json` - product id to aborts this batch.
 - `data/automator/tasks/<key>.json` - one archive per live product.
 - `data/catalog/<id>.json` - the parsed catalog, uploaded by `catalog/s3.py`.
 - `site/cdn/printful/<design>/` - `tile-1.png` to `tile-9.png`, `og.png`.

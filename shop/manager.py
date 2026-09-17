@@ -10,6 +10,7 @@ from automator.core.s3 import (
     DESIGN_KEY,
     PATHS_KEY,
     STATUS_KEY,
+    STRIKES_KEY,
     TASK_KEY,
     abort_task,
     archive_key,
@@ -19,6 +20,7 @@ from automator.core.s3 import (
     get_json,
     load_design,
     load_paths,
+    load_strikes,
     load_task,
     put_json,
     save_paths,
@@ -53,6 +55,7 @@ def init():
     put_json(TASK_KEY, {})
     save_paths({str(id): True for id in ids})
     delete_key(DESIGN_KEY)
+    delete_key(STRIKES_KEY)
     say(f"init wrote {TASK_KEY} and {PATHS_KEY} with {len(ids)} ids")
 
 # READ
@@ -88,6 +91,8 @@ def paths():
     used = [id for id, state in data.items() if state is False]
     dead = [id for id, state in data.items() if state is None]
     say(f"open {len(open_ids)}, used {len(used)}, quarantined {len(dead)}, total {len(data)}")
+    strikes = load_strikes()
+    if strikes: say("strikes: " + " ".join(f"{id}x{count}" for id, count in sorted(strikes.items())))
     if not dead: return
     say("quarantined: " + " ".join(sorted(dead)))
     if not gate("manager paths", [f"reopen {len(dead)} quarantined ids in {PATHS_KEY}"]): return

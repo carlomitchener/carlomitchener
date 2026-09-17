@@ -3,7 +3,7 @@ import json
 import time
 from botocore.exceptions import ClientError
 from .api import delete_files, delete_product, logger
-from .config import CARLOMITCHENER_BUCKET, SITE_FUNCTION, SITE_URL
+from .config import CARLOMITCHENER_BUCKET, MAX_STRIKES, SITE_FUNCTION, SITE_URL
 from .errors import NoTaskError
 from .models import Design, Task
 
@@ -15,6 +15,7 @@ AUTOMATOR_PREFIX = "data/automator/"
 DESIGN_KEY = f"{AUTOMATOR_PREFIX}design.json"
 TASK_KEY = f"{AUTOMATOR_PREFIX}task.json"
 PATHS_KEY = f"{AUTOMATOR_PREFIX}paths.json"
+STRIKES_KEY = f"{AUTOMATOR_PREFIX}strikes.json"
 TASKS_PREFIX = f"{AUTOMATOR_PREFIX}tasks/"
 CATALOG_PREFIX = "data/catalog/"
 SITE_PREFIX = "site/"
@@ -109,6 +110,15 @@ def load_paths() -> dict:
 def save_paths(data: dict) -> None:
     put_json(PATHS_KEY, data)
 
+def load_strikes() -> dict:
+    try:
+        return get_json(STRIKES_KEY) or {}
+    except NoTaskError:
+        return {}
+
+def save_strikes(data: dict) -> None:
+    put_json(STRIKES_KEY, data)
+
 # DESIGN
 
 def load_design() -> Design:
@@ -155,8 +165,14 @@ def abort_task(task: Task) -> None:
             logger.warning(f"{task.desc} fileDelete failed during abort: {error}")
     delete_folder(cdn_prefix(task.key))
     delete_key(archive_key(task.key))
+    strikes = load_strikes()
+    count = strikes.get(str(task.product.id), 0) + 1
+    strikes[str(task.product.id)] = count
+    save_strikes(strikes)
+    out = count >= MAX_STRIKES
     paths = load_paths()
-    paths[str(task.product.id)] = False
+    paths[str(task.product.id)] = False if out else True
     save_paths(paths)
     clear_task()
-    logger.error(f"{task.desc} aborted at {task.step}, product {task.product.id} waits for the next round: {task.metadata.get('failed_error') or ''}")
+    fate = f"strike {count}/{MAX_STRIKES}, " + ("out for this batch" if out else "open again")
+    logger.error(f"{task.desc} aborted at {task.step}, product {task.product.id} {fate}: {task.metadata.get('failed_error') or ''}")

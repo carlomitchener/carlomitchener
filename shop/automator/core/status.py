@@ -4,7 +4,7 @@ from .api import logger
 from .config import LIVE_DAYS
 from .errors import NoTaskError
 from .models import Design, Task
-from .s3 import STATUS_KEY, TASKS_PREFIX, get_json, list_objects, load_paths, put_json
+from .s3 import STATUS_KEY, TASKS_PREFIX, get_json, list_objects, load_paths, load_strikes, put_json
 
 LINES = 300
 ERROR_LIMIT = 300
@@ -68,6 +68,7 @@ def paths_summary() -> dict:
         "open": sum(1 for state in paths.values() if state is True),
         "used": sum(1 for state in paths.values() if state is False),
         "quarantined": sum(1 for state in paths.values() if state is None),
+        "strikes": load_strikes(),
     }
 
 def live_summary(now: float) -> dict:

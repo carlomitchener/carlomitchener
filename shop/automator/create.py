@@ -8,7 +8,7 @@ from automator.core.api import logger
 from automator.core.config import PRIMARIES
 from automator.core.errors import NoTaskError
 from automator.core.models import Design, Mockup, Placement, Printfile, Task, Variant
-from automator.core.s3 import archive_exists, load_design, load_paths, load_product, save_design, save_paths
+from automator.core.s3 import archive_exists, load_design, load_paths, load_product, save_design, save_paths, save_strikes
 from automator.core.steps import Step
 from mrlypy.core.helpers import hex_key
 from mrlypy.paint.colors import get_primary_inks
@@ -51,6 +51,7 @@ def choose_path(task: Task, design: Design) -> tuple[Task, Design]:
         open_products = [product for product, state in paths.items() if state is True]
         if open_products:
             logger.info(f"round complete, reopened {len(open_products)} products")
+            save_strikes({})
             design = new_design()
     if not open_products:
         raise NoTaskError("every path is quarantined")
