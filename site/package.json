@@ -2,7 +2,7 @@
   "name": "carlomitchener-site",
   "private": true,
   "type": "module",
-  "dev": true,
+  "dev": false,
   "scripts": {
     "snapshot": "bun scripts/snapshot.ts",
     "fake": "bun scripts/fake.ts",

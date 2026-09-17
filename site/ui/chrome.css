@@ -614,6 +614,7 @@ html.held {
   .foot .catalog {
     columns: auto;
     display: flex;
+    flex-direction: row;
     gap: var(--s5);
   }
 

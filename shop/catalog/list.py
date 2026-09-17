@@ -1,6 +1,5 @@
-import argparse
-from catalog.helpers import all_ids, live_ids, load_product
-from catalog.models import Product
+from helpers import all_ids, load_product
+from models import Product
 from typing import Any, Callable
 
 def listattr(ids: list[int], title: str, extractor: Callable[[Product], Any]):
@@ -8,9 +7,7 @@ def listattr(ids: list[int], title: str, extractor: Callable[[Product], Any]):
     for id in ids:
         product = load_product(id)
         extracted = extractor(product)
-        if isinstance(extracted, list):
-            values.update(extracted)
-        elif isinstance(extracted, set):
+        if isinstance(extracted, (list, set)):
             values.update(extracted)
         elif extracted is not None:
             values.add(extracted)
@@ -40,53 +37,41 @@ def list_stitch_colors(ids: list[int]):
 # VARIANTS
 
 def list_sizes(ids: list[int]):
-    def extractor(p: Product):
-        return {v.size for v in p.variants}
-    listattr(ids, "Variant Sizes", extractor)
+    listattr(ids, "Variant Sizes", lambda p: {v.size for v in p.variants})
 
 def list_colors(ids: list[int]):
-    def extractor(p: Product):
-        return {v.color for v in p.variants}
-    listattr(ids, "Variant Colors", extractor)
+    listattr(ids, "Variant Colors", lambda p: {v.color for v in p.variants})
 
 def list_costs(ids: list[int]):
-    def extractor(p: Product):
-        return {v.cost for v in p.variants}
-    listattr(ids, "Variant Costs", extractor)
+    listattr(ids, "Variant Costs", lambda p: {v.cost for v in p.variants})
 
 # PLACEMENTS
 
+def live_placements(p: Product):
+    return [x for x in p.placements if not x.is_ignored]
+
 def list_placements(ids: list[int]):
-    def extractor(p: Product):
-        return {placement.name for placement in p.placements if not placement.is_ignored}
-    listattr(ids, "Placement Names", extractor)
+    listattr(ids, "Placement Names", lambda p: {x.name for x in live_placements(p)})
 
 def list_dimensions(ids: list[int]):
-    def extractor(p: Product):
-        return {placement.dims for placement in p.placements if not placement.is_ignored}
-    listattr(ids, "Placement Dimensions", extractor)
+    listattr(ids, "Placement Dimensions", lambda p: {x.dims for x in live_placements(p)})
 
 def list_dpis(ids: list[int]):
-    def extractor(p: Product):
-        return {placement.dpi for placement in p.placements if not placement.is_ignored}
-    listattr(ids, "Placement DPIs", extractor)
+    listattr(ids, "Placement DPIs", lambda p: {x.dpi for x in live_placements(p)})
 
 def list_ids(ids: list[int]):
-    def extractor(p: Product):
-        return {placement.id for placement in p.placements if not placement.is_ignored}
-    listattr(ids, "Placement IDs", extractor)
+    listattr(ids, "Placement IDs", lambda p: {x.id for x in live_placements(p)})
 
 # MOCKUPS
 
+def live_mockups(p: Product):
+    return [m for m in p.mockups if not m.is_ignored]
+
 def list_mockup_categories(ids: list[int]):
-    def extractor(p: Product):
-        return {m.category for m in p.mockups if not m.is_ignored}
-    listattr(ids, "Mockup Categories", extractor)
+    listattr(ids, "Mockup Categories", lambda p: {m.category for m in live_mockups(p)})
 
 def list_mockup_titles(ids: list[int]):
-    def extractor(p: Product):
-        return {m.title for m in p.mockups if not m.is_ignored}
-    listattr(ids, "Mockup Titles", extractor)
+    listattr(ids, "Mockup Titles", lambda p: {m.title for m in live_mockups(p)})
 
 # EXTRAS
 
@@ -106,15 +91,8 @@ def average_variants(ids: list[int]):
     print(f"Average variants per product: {average:.2f}")
 
 def average_costs(ids: list[int]):
-    total_cost = 0
-    variant_count = 0
-    for id in ids:
-        product = load_product(id)
-        for variant in product.variants:
-            total_cost += float(variant.cost)
-            variant_count += 1
-    average = total_cost / variant_count
-    print(f"Average cost per variant: ${average:.2f}")
+    costs = [float(v.cost) for id in ids for v in load_product(id).variants]
+    print(f"Average cost per variant: ${sum(costs) / len(costs):.2f}")
 
 def average_placements(ids: list[int]):
     average = sum(len(load_product(id).placements) for id in ids) / len(ids)
@@ -124,32 +102,23 @@ def average_mockups(ids: list[int]):
     average = sum(len(load_product(id).mockups) for id in ids) / len(ids)
     print(f"Average mockups per product: {average:.2f}")
 
-# COMMANDS
-
-GROUPS = {
-    "products": [list_titles, list_categories, list_techniques, list_stitch_colors],
-    "variants": [list_sizes, list_colors, list_costs],
-    "placements": [list_placements, list_dimensions, list_dpis, list_ids],
-    "mockups": [list_mockup_categories, list_mockup_titles],
-    "extras": [list_variants],
-    "averages": [average_variants, average_costs, average_placements, average_mockups],
-}
-
-def run(groups: list[str], ids: list[int]):
-    for group in groups:
-        for fn in GROUPS[group]:
-            fn(ids)
-
-def main():
-    p = argparse.ArgumentParser(prog="catalog.list")
-    p.add_argument("group", nargs="?", default="all", choices=["all"] + list(GROUPS))
-    p.add_argument("--all", action="store_true")
-    p.add_argument("--id", type=int, nargs="+")
-    args = p.parse_args()
-    ids = args.id or (all_ids() if args.all else live_ids())
-    groups = list(GROUPS) if args.group == "all" else [args.group]
-    print(f"Listing {groups} for {len(ids)} products")
-    run(groups, ids)
-
 if __name__ == "__main__":
-    main()
+    ids = all_ids()
+    list_titles(ids)
+    list_categories(ids)
+    list_techniques(ids)
+    list_stitch_colors(ids)
+    list_sizes(ids)
+    list_colors(ids)
+    list_costs(ids)
+    list_placements(ids)
+    list_dimensions(ids)
+    list_dpis(ids)
+    list_ids(ids)
+    list_mockup_categories(ids)
+    list_mockup_titles(ids)
+    list_variants(ids)
+    average_variants(ids)
+    average_costs(ids)
+    average_placements(ids)
+    average_mockups(ids)

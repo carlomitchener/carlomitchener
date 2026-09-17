@@ -1,13 +1,9 @@
 import json
 import os
+from config import CATALOG, DICTIONARY, PRODUCTS
 from enum import Enum
-from catalog.models import Product
-from env import SHOP_DIR, load_json, save_json
-
-ROOT = SHOP_DIR
-
-CATALOG = os.path.join(ROOT, "files/catalog.json")
-CORRECTIONS = os.path.join(ROOT, "files/corrections.json")
+from env import load_json, save_json
+from models import Product
 
 class Category(Enum):
     ACCESSORIES = "accessories"
@@ -23,9 +19,6 @@ class Category(Enum):
 def load_catalog() -> list[dict]:
     return load_json(CATALOG)
 
-def load_corrections() -> dict:
-    return load_json(CORRECTIONS)
-
 def catalog_map() -> dict:
     return {row["id"]: row for row in load_catalog()}
 
@@ -35,21 +28,22 @@ def all_ids(category: Category = None) -> list[int]:
         rows = [r for r in rows if r["category"] == category.value]
     return [r["id"] for r in rows]
 
-def live_ids() -> list[int]:
-    return [r["id"] for r in load_catalog() if r.get("live")]
-
 def sort_catalog():
     rows = load_catalog()
-    ordered = sorted(rows, key=lambda r: (not r.get("live"), r["category"], r["title"]))
+    ordered = sorted(rows, key=lambda r: (r["category"], r["title"]))
     if rows != ordered:
         save_json(CATALOG, ordered)
-        print(f"Sorted {len(ordered)} catalog rows, live first")
+        print(f"Sorted {len(ordered)} products alphabetically")
     else:
-        print("Catalog rows are already sorted, live first")
+        print("Products are already sorted alphabetically")
+
+def create_dictionary():
+    rows = load_catalog()
+    dictionary = {r["id"]: f"{r['category']}, {r['title']}, {r['technique']}" for r in rows}
+    save_json(DICTIONARY, dictionary)
+    print(f"Created dictionary with {len(dictionary)} products")
 
 # PRODUCTS
-
-PRODUCTS = os.path.join(ROOT, "files/products")
 
 def product_path(id: int) -> str:
     return os.path.join(PRODUCTS, f"{id}.json")
@@ -62,3 +56,7 @@ def save_product(product: Product):
 
 def print_product(id: int):
     print(json.dumps(load_json(product_path(id)), indent=2))
+
+if __name__ == "__main__":
+    sort_catalog()
+    create_dictionary()

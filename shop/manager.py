@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from automator.core.api import delete_product, mint_token
 from automator.core.errors import NoTaskError
@@ -22,8 +23,7 @@ from automator.core.s3 import (
     task_prefix,
 )
 from automator.core.steps import Step
-from catalog.helpers import all_ids
-from env import gate, say, verb
+from env import SHOP_DIR, gate, load_json, say, verb
 
 VERBS = ["init", "show", "paths", "reset", "abort", "reap", "wipe"]
 COUNTERS = [
@@ -37,6 +37,10 @@ COUNTERS = [
     "status_count",
 ]
 DATA_PREFIX = "data/"
+CATALOG = os.path.join(SHOP_DIR, "files", "catalog.json")
+
+def all_ids() -> list[int]:
+    return [row["id"] for row in load_json(CATALOG)]
 
 # OLD ART
 

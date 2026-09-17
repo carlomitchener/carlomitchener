@@ -53,7 +53,8 @@ def save_json(path, data, indent=2):
     if parent:
         os.makedirs(parent, exist_ok=True)
     with open(path, "w") as handle:
-        json.dump(data, handle, indent=indent)
+        json.dump(data, handle, indent=indent, ensure_ascii=False)
+        handle.write("\n")
 
 # SAY
 

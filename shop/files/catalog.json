@@ -1,497 +1,479 @@
 [
   {
     "id": 630,
-    "live": true,
     "category": "accessories",
     "title": "Bandana",
+    "technique": "cut-sew",
     "link": "all-over-print-bandana",
     "handle": "bandana",
     "primaries": "Both"
   },
   {
     "id": 458,
-    "live": true,
     "category": "accessories",
     "title": "Beanie",
+    "technique": "cut-sew",
     "link": "all-over-print-beanie",
     "handle": "beanie",
     "primaries": "Both"
   },
   {
     "id": 545,
-    "live": true,
     "category": "accessories",
     "title": "Headband",
+    "technique": "cut-sew",
     "link": "all-over-print-headband",
     "handle": "headband",
     "primaries": "Both"
   },
   {
     "id": 420,
-    "live": false,
     "category": "accessories",
     "title": "Neck Gaiter",
+    "technique": "cut-sew",
     "link": "all-over-print-neck-gaiter",
     "handle": "neck-gaiter",
     "primaries": "Both"
   },
   {
     "id": 654,
-    "live": false,
     "category": "accessories",
     "title": "Reversible Bucket Hat",
+    "technique": "cut-sew",
     "link": "all-over-print-reversible-bucket-hat",
     "handle": "reversible-bucket-hat",
     "primaries": "Both"
   },
   {
     "id": 530,
-    "live": false,
     "category": "accessories",
     "title": "Scrunchie",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-scrunchie",
     "handle": "scrunchie",
     "primaries": "Both"
   },
   {
     "id": 279,
-    "live": false,
     "category": "bags",
     "title": "Backpack",
+    "technique": "cut-sew",
     "link": "all-over-print-backpack",
     "handle": "backpack",
     "primaries": "Black"
   },
   {
     "id": 262,
-    "live": false,
     "category": "bags",
     "title": "Drawstring Bag",
+    "technique": "cut-sew",
     "link": "all-over-print-drawstring-bag",
     "handle": "drawstring-bag",
     "primaries": "Black"
   },
   {
     "id": 465,
-    "live": false,
     "category": "bags",
     "title": "Duffle Bag",
+    "technique": "cut-sew",
     "link": "all-over-print-duffle-bag",
     "handle": "duffle-bag",
     "primaries": "Black"
   },
   {
     "id": 350,
-    "live": false,
     "category": "bags",
     "title": "Fanny Pack",
+    "technique": "cut-sew",
     "link": "all-over-print-fanny-pack",
     "handle": "fanny-pack",
     "primaries": "Black"
   },
   {
     "id": 594,
-    "live": false,
     "category": "bags",
     "title": "Gym Bag",
+    "technique": "cut-sew",
     "link": "all-over-print-gym-bag",
     "handle": "gym-bag",
     "primaries": "Black"
   },
   {
     "id": 274,
-    "live": false,
     "category": "bags",
     "title": "Large Tote Bag w/ Pocket",
+    "technique": "cut-sew",
     "link": "all-over-print-large-tote-bag",
     "handle": "large-tote-bag",
     "primaries": "Black"
   },
   {
     "id": 389,
-    "live": false,
     "category": "bags",
     "title": "Minimalist Backpack",
+    "technique": "cut-sew",
     "link": "all-over-print-minimalist-backpack",
     "handle": "minimalist-backpack",
     "primaries": "Black"
   },
   {
     "id": 84,
-    "live": false,
     "category": "bags",
     "title": "Tote Bag",
+    "technique": "cut-sew",
     "link": "all-over-print-tote",
     "handle": "tote-bag",
     "primaries": "Black"
   },
   {
     "id": 744,
-    "live": false,
     "category": "bags",
     "title": "Utility Crossbody Bag",
+    "technique": "cut-sew",
     "link": "all-over-print-utility-crossbody-bag",
     "handle": "utility-crossbody-bag",
     "primaries": "Black"
   },
   {
     "id": 384,
-    "live": false,
     "category": "kids",
     "title": "Kids Crew Neck T-Shirt",
+    "technique": "cut-sew",
     "link": "all-over-print-kids-crew-neck",
     "handle": "kids-crew-neck-t-shirt",
     "primaries": "Both"
   },
   {
     "id": 322,
-    "live": false,
     "category": "kids",
     "title": "Kids Leggings",
+    "technique": "cut-sew",
     "link": "all-over-print-kids-leggings",
     "handle": "kids-leggings",
     "primaries": "Both"
   },
   {
     "id": 368,
-    "live": false,
     "category": "kids",
     "title": "Kids Rash Guard",
+    "technique": "cut-sew",
     "link": "all-over-print-kids-rash-guard",
     "handle": "kids-rash-guard",
     "primaries": "Both"
   },
   {
     "id": 944,
-    "live": false,
     "category": "kids",
     "title": "Kids Sports Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-kids-sports-jersey",
     "handle": "kids-sports-jersey",
     "primaries": "Both"
   },
   {
-    "id": 1644,
-    "live": false,
-    "category": "youth",
-    "title": "Youth Basketball Jersey",
-    "link": "all-over-print-youth-recycled-basketball-jersey",
-    "handle": "youth-basketball-jersey",
-    "primaries": "Both"
-  },
-  {
-    "id": 385,
-    "live": false,
-    "category": "youth",
-    "title": "Youth Crew Neck T-shirt",
-    "link": "all-over-print-youth-crew-neck-t-shirt",
-    "handle": "youth-crew-neck-t-shirt",
-    "primaries": "Both"
-  },
-  {
-    "id": 323,
-    "live": false,
-    "category": "youth",
-    "title": "Youth Leggings",
-    "link": "all-over-print-youth-leggings",
-    "handle": "youth-leggings",
-    "primaries": "Both"
-  },
-  {
-    "id": 1645,
-    "live": false,
-    "category": "youth",
-    "title": "Youth Mesh Shorts",
-    "link": "all-over-print-youth-recycled-mesh-shorts",
-    "handle": "youth-mesh-shorts",
-    "primaries": "Both"
-  },
-  {
-    "id": 369,
-    "live": false,
-    "category": "youth",
-    "title": "Youth Rash Guard",
-    "link": "all-over-print-youth-rash-guard",
-    "handle": "youth-rash-guard",
-    "primaries": "Both"
-  },
-  {
-    "id": 1646,
-    "live": false,
-    "category": "youth",
-    "title": "Youth Sports Jersey",
-    "link": "all-over-print-youth-recycled-sports-jersey",
-    "handle": "youth-sports-jersey",
-    "primaries": "Both"
-  },
-  {
     "id": 328,
-    "live": false,
     "category": "men",
     "title": "Men's Athletic T-Shirt",
+    "technique": "cut-sew",
     "link": "all-over-print-mens-athletic-t-shirt",
     "handle": "mens-athletic-t-shirt",
     "primaries": "Both"
   },
   {
     "id": 257,
-    "live": false,
     "category": "men",
     "title": "Men's Crew Neck T-Shirt",
+    "technique": "cut-sew",
     "link": "all-over-print-mens-crew-neck",
     "handle": "mens-crew-neck-t-shirt",
     "primaries": "Both"
   },
   {
     "id": 400,
-    "live": false,
     "category": "men",
     "title": "Men's Joggers",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-mens-joggers",
     "handle": "mens-joggers",
     "primaries": "Both"
   },
   {
     "id": 288,
-    "live": false,
     "category": "men",
     "title": "Men's Leggings",
+    "technique": "cut-sew",
     "link": "all-over-print-mens-leggings",
     "handle": "mens-leggings",
     "primaries": "Both"
   },
   {
     "id": 301,
-    "live": false,
     "category": "men",
     "title": "Men's Rash Guard",
+    "technique": "cut-sew",
     "link": "all-over-print-mens-rash-guard",
     "handle": "mens-rash-guard",
     "primaries": "Both"
   },
   {
     "id": 276,
-    "live": false,
     "category": "men",
     "title": "Men's Tank Top",
+    "technique": "cut-sew",
     "link": "all-over-print-mens-tank-top",
     "handle": "mens-tank-top",
     "primaries": "Both"
   },
   {
     "id": 918,
-    "live": false,
     "category": "unisex",
     "title": "Unisex American Football Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-american-football-jersey",
     "handle": "unisex-american-football-jersey",
     "primaries": "Both"
   },
   {
     "id": 332,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Athletic Long Shorts",
+    "technique": "cut-sew",
     "link": "all-over-print-unisex-athletic-long-shorts",
     "handle": "unisex-athletic-long-shorts",
     "primaries": "Both"
   },
   {
     "id": 330,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Athletic Shorts",
+    "technique": "cut-sew",
     "link": "all-over-print-unisex-athletic-shorts",
     "handle": "unisex-athletic-shorts",
     "primaries": "Both"
   },
   {
     "id": 792,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Baseball Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-baseball-jersey",
     "handle": "unisex-baseball-jersey",
     "primaries": "Both"
   },
   {
     "id": 676,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Basketball Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-basketball-jersey",
     "handle": "unisex-basketball-jersey",
     "primaries": "Both"
   },
   {
     "id": 390,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Bomber Jacket",
+    "technique": "cut-sew",
     "link": "all-over-print-unisex-bomber-jacket",
     "handle": "unisex-bomber-jacket",
     "primaries": "Both"
   },
   {
     "id": 1367,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Boxy Football Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-boxy-football-jersey",
     "handle": "unisex-boxy-football-jersey",
     "primaries": "Both"
   },
   {
     "id": 659,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Button Shirt",
+    "technique": "cut-sew",
     "link": "all-over-print-unisex-hawaiian-shirt",
     "handle": "unisex-button-shirt",
     "primaries": "Both"
   },
   {
     "id": 730,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Hockey Fan Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-hockey-fan-jersey",
     "handle": "unisex-hockey-fan-jersey",
     "primaries": "Both"
   },
   {
     "id": 388,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Hoodie",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-hoodie",
     "handle": "unisex-hoodie",
     "primaries": "Both"
   },
   {
     "id": 693,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Mesh Shorts",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-mesh-shorts",
     "handle": "unisex-mesh-shorts",
     "primaries": "Both"
   },
   {
     "id": 835,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Premium Basketball Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-premium-basketball-jersey",
     "handle": "unisex-premium-basketball-jersey",
     "primaries": "Both"
   },
   {
     "id": 644,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Sports Jersey",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-sports-jersey",
     "handle": "unisex-sports-jersey",
     "primaries": "Both"
   },
   {
     "id": 320,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Sweatshirt",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-sweatshirt",
     "handle": "unisex-sweatshirt",
     "primaries": "Both"
   },
   {
     "id": 801,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Track Jacket",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-track-jacket",
     "handle": "unisex-track-jacket",
     "primaries": "Both"
   },
   {
     "id": 784,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Wide-Leg Joggers",
+    "technique": "cut-sew",
     "link": "all-over-print-unisex-wide-leg-joggers",
     "handle": "unisex-wide-leg-joggers",
     "primaries": "Both"
   },
   {
     "id": 604,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Wide-Leg Pants",
+    "technique": "cut-sew",
     "link": "all-over-print-unisex-wide-leg-pants",
     "handle": "unisex-wide-leg-pants",
     "primaries": "Both"
   },
   {
     "id": 717,
-    "live": false,
     "category": "unisex",
     "title": "Unisex Zip Hoodie",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-zip-hoodie",
     "handle": "unisex-zip-hoodie",
     "primaries": "Both"
   },
   {
     "id": 329,
-    "live": false,
     "category": "women",
     "title": "Women's Athletic T-Shirt",
+    "technique": "cut-sew",
     "link": "all-over-print-womens-athletic-t-shirt",
     "handle": "womens-athletic-t-shirt",
     "primaries": "Both"
   },
   {
     "id": 261,
-    "live": false,
     "category": "women",
     "title": "Women's Crew Neck T-Shirt",
+    "technique": "cut-sew",
     "link": "all-over-print-womens-crew-neck",
     "handle": "womens-crew-neck-t-shirt",
     "primaries": "Both"
   },
   {
     "id": 401,
-    "live": false,
     "category": "women",
     "title": "Women's Joggers",
+    "technique": "cut-sew",
     "link": "all-over-print-recycled-womens-joggers",
     "handle": "womens-joggers",
     "primaries": "Both"
   },
   {
     "id": 189,
-    "live": false,
     "category": "women",
     "title": "Women's Leggings",
+    "technique": "cut-sew",
     "link": "all-over-print-leggings",
     "handle": "womens-leggings",
     "primaries": "Both"
   },
   {
     "id": 302,
-    "live": false,
     "category": "women",
     "title": "Women's Rash Guard",
+    "technique": "cut-sew",
     "link": "all-over-print-womens-rash-guard",
     "handle": "womens-rash-guard",
     "primaries": "Both"
   },
   {
     "id": 202,
-    "live": false,
     "category": "women",
     "title": "Women's Tank Top",
+    "technique": "cut-sew",
     "link": "all-over-print-womens-tank-top",
     "handle": "womens-tank-top",
+    "primaries": "Both"
+  },
+  {
+    "id": 385,
+    "category": "youth",
+    "title": "Youth Crew Neck T-shirt",
+    "technique": "cut-sew",
+    "link": "all-over-print-youth-crew-neck-t-shirt",
+    "handle": "youth-crew-neck-t-shirt",
+    "primaries": "Both"
+  },
+  {
+    "id": 323,
+    "category": "youth",
+    "title": "Youth Leggings",
+    "technique": "cut-sew",
+    "link": "all-over-print-youth-leggings",
+    "handle": "youth-leggings",
+    "primaries": "Both"
+  },
+  {
+    "id": 369,
+    "category": "youth",
+    "title": "Youth Rash Guard",
+    "technique": "cut-sew",
+    "link": "all-over-print-youth-rash-guard",
+    "handle": "youth-rash-guard",
+    "primaries": "Both"
+  },
+  {
+    "id": 1646,
+    "category": "youth",
+    "title": "Youth Sports Jersey",
+    "technique": "cut-sew",
+    "link": "all-over-print-youth-recycled-sports-jersey",
+    "handle": "youth-sports-jersey",
     "primaries": "Both"
   }
 ]

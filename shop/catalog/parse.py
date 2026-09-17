@@ -1,7 +1,6 @@
-from catalog.fetch import raw_path
-from catalog.helpers import catalog_map, save_product
-from catalog.models import Mockup, Placement, Product, Variant
-from env import load_json
+from fetch import raw_path
+from helpers import all_ids, catalog_map, load_json, save_product
+from models import Mockup, Placement, Product, Variant
 
 def get_primaries(data):
     if data == "Black":
@@ -22,12 +21,6 @@ def get_stitch_colors(product_data):
                 values = list(values.values())
             return sorted([v.capitalize() for v in values])
     return []
-
-def get_technique(product_data):
-    techniques = [t["key"] for t in product_data["data"]["techniques"]]
-    if len(techniques) > 1:
-        raise Exception("Multiple techniques found for product")
-    return techniques[0]
 
 def parse_placements(mockup_data):
     placements = [
@@ -92,7 +85,6 @@ def parse_products(ids: list[int]):
     rows = catalog_map()
     for id in ids:
         row = rows[id]
-        print(f"Parsing: {id} - {row['title']}")
         product_data = load_json(raw_path("products", id))
         variant_data = load_json(raw_path("variants", id))
         price_data = load_json(raw_path("prices", id))
@@ -101,7 +93,7 @@ def parse_products(ids: list[int]):
             id=id,
             category=row["category"],
             title=row["title"],
-            technique=get_technique(product_data),
+            technique=row["technique"],
             primaries=get_primaries(row["primaries"]),
             stitch_colors=get_stitch_colors(product_data),
             placements=parse_placements(mockup_data),
@@ -111,3 +103,7 @@ def parse_products(ids: list[int]):
         save_product(product)
         print(f"Parsed: {product.desc}")
     print(f"Parsed {len(ids)} products")
+
+if __name__ == "__main__":
+    ids = all_ids()
+    parse_products(ids)

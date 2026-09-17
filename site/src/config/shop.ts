@@ -24,7 +24,7 @@ export const CATEGORIES: [string, string][] = [
   ["youth", "Youth"],
 ];
 
-export type Catalog = { id: number; live: boolean; category: string; title: string; link: string; handle: string };
+export type Catalog = { id: number; category: string; title: string; technique: string; link: string; handle: string };
 
 export const MORE_TILE = 3;
 

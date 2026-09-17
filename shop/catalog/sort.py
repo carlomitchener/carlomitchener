@@ -1,5 +1,5 @@
-from catalog.helpers import load_product, save_product
-from catalog.models import Variant
+from helpers import all_ids, load_product, save_product
+from models import Variant
 from typing import Tuple
 
 STANDARD_SIZES = [
@@ -24,8 +24,8 @@ SIZE_CATEGORIES = {
 def clean_size(size: str) -> str:
     if not size:
         return ""
-    size = size.replace("\u2033", "")
-    size = size.replace("\u00d7", "x")
+    size = size.replace("″", "")
+    size = size.replace("×", "x")
     size = size.replace(" ", "")
     return size
 
@@ -90,3 +90,7 @@ def sort_products(ids: list[int]):
         print(f"Sorted: {product.desc} - {size_type.upper()}")
         save_product(product)
     print(f"Sorted {len(ids)} products")
+
+if __name__ == "__main__":
+    ids = all_ids()
+    sort_products(ids)
