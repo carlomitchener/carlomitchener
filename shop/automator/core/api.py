@@ -1,4 +1,5 @@
 import json
+import re
 from mrlypy.core.helpers import create_logger
 from . import http
 from .config import (
@@ -13,6 +14,7 @@ from .errors import PrintfulError, Retry, ShopifyError, TaskAborted
 from .models import Task
 
 BODY_LIMIT = 300
+OPERATION = re.compile(r"^\s*(?:mutation|query)\s+(\w+)")
 
 logger = create_logger("carlomitchener-automator")
 
@@ -24,8 +26,8 @@ def extract_gid(gid: str) -> str:
 def clip(text: str) -> str:
     return text[:BODY_LIMIT].replace("\n", " ")
 
-def log(task: Task, method: str, url: str, status: int) -> None:
-    logger.info(f"{task.desc} {task.step} {method} {url} {status}")
+def log(task: Task, method: str, target: str, status: int) -> None:
+    logger.info(f"{task.desc} {task.step} {method} {target} {status}")
 
 # TOKEN
 
@@ -42,7 +44,7 @@ def mint_token() -> None:
     if "access_token" not in result:
         raise ShopifyError("admin token refused")
     TOKEN["admin"] = result["access_token"]
-    logger.info(f"admin token minted for {SHOPIFY_ADMIN_URL}")
+    logger.info("admin token minted")
 
 # PRINTFUL
 
@@ -54,29 +56,38 @@ def printful_request(task: Task, method: str, path: str, data: dict = None, allo
     if response.status_code == 429:
         raise Retry("printful 429")
     if response.status_code == 400:
-        raise TaskAborted(f"printful 400 {clip(response.text)}")
+        raise TaskAborted(f"printful 400 on {method} {path}: {clip(response.text)}")
     if response.status_code == 404:
         if allow_404:
             return {}
-        raise TaskAborted(f"printful 404 {clip(response.text)}")
-    if response.status_code != 200:
-        raise PrintfulError(f"printful {response.status_code} {clip(response.text)}")
+        raise TaskAborted(f"printful 404 on {method} {path}: {clip(response.text)}")
+    if not 200 <= response.status_code < 300:
+        raise PrintfulError(f"printful {response.status_code} on {method} {path}: {clip(response.text)}")
     return response.json()
 
 # SHOPIFY
+
+def operation(query: str) -> str:
+    found = OPERATION.match(query)
+    return found.group(1) if found else "graphql"
+
+def throttled(errors: list) -> bool:
+    return any((error.get("extensions") or {}).get("code") == "THROTTLED" for error in errors if isinstance(error, dict))
 
 def shopify_request(task: Task, query: str, variables: dict = None) -> dict:
     headers = {"X-Shopify-Access-Token": TOKEN["admin"]}
     payload = {"query": query, "variables": variables}
     response = http.request("POST", SHOPIFY_ADMIN_URL, headers=headers, json_data=payload)
-    log(task, "POST", SHOPIFY_ADMIN_URL, response.status_code)
+    log(task, "POST", f"shopify {operation(query)}", response.status_code)
     if response.status_code == 429:
         raise Retry("shopify 429")
     if response.status_code != 200:
-        raise ShopifyError(f"shopify {response.status_code}")
+        raise ShopifyError(f"shopify {response.status_code} on {operation(query)}")
     result = response.json()
     if "errors" in result:
-        raise ShopifyError(f"shopify errors {clip(json.dumps(result['errors']))}")
+        if throttled(result["errors"]):
+            raise Retry("shopify throttled")
+        raise ShopifyError(f"shopify {operation(query)} errors {clip(json.dumps(result['errors']))}")
     return result
 
 def check_errors(result: dict, name: str) -> dict:
@@ -98,8 +109,29 @@ mutation productDelete($input: ProductDeleteInput!) {
 }
 """
 
+DELETE_FILES = """
+mutation fileDelete($ids: [ID!]!) {
+    fileDelete(fileIds: $ids) {
+        deletedFileIds
+        userErrors {
+            field
+            message
+        }
+    }
+}
+"""
+
 def delete_product(task: Task) -> None:
     variables = {"input": {"id": task.product.shopify_id}}
     result = shopify_request(task, DELETE_PRODUCT, variables)
     check_errors(result, "productDelete")
     logger.info(f"{task.desc} deleted shopify product {task.product.shopify_id}")
+
+def delete_files(task: Task, ids: list[str]) -> None:
+    if not ids:
+        return
+    result = shopify_request(task, DELETE_FILES, {"ids": ids})
+    data = result["data"]["fileDelete"]
+    if data["userErrors"]:
+        logger.warning(f"{task.desc} fileDelete userErrors {clip(json.dumps(data['userErrors']))}")
+    logger.info(f"{task.desc} deleted {len(data.get('deletedFileIds') or [])} shopify files")

@@ -126,3 +126,39 @@
   justify-content: center;
   margin-top: var(--s6);
 }
+
+.status table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0.75rem 0;
+}
+
+.status th {
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 0.35rem 0.75rem 0.35rem 0;
+  vertical-align: top;
+  width: 7rem;
+}
+
+.status td {
+  padding: 0.35rem 0;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.status tr + tr th,
+.status tr + tr td {
+  border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.status pre {
+  max-height: 28rem;
+  overflow: auto;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

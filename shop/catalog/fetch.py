@@ -78,8 +78,9 @@ def fetch_product(id: int) -> None:
     variants = get_pages(f"{base}/catalog-variants?limit=100")
     save_json(raw_path("variants", id), {"data": variants})
     prices = get(f"{base}/prices?limit=100")
-    while "next" in prices.get("_links", {}):
-        page = get(prices["_links"]["next"]["href"])
+    page = prices
+    while "next" in page.get("_links", {}):
+        page = get(page["_links"]["next"]["href"])
         prices["data"]["variants"].extend(page["data"]["variants"])
     save_json(raw_path("prices", id), prices)
     save_json(raw_path("mockups", id), get(f"{base}/mockup-styles?limit=100"))

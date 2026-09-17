@@ -6,7 +6,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-bandana",
     "handle": "bandana",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 458,
@@ -15,7 +15,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-beanie",
     "handle": "beanie",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 545,
@@ -24,7 +24,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-headband",
     "handle": "headband",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 420,
@@ -33,7 +33,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-neck-gaiter",
     "handle": "neck-gaiter",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 654,
@@ -42,7 +42,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-reversible-bucket-hat",
     "handle": "reversible-bucket-hat",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 530,
@@ -51,7 +51,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-scrunchie",
     "handle": "scrunchie",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 279,
@@ -60,7 +60,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-backpack",
     "handle": "backpack",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 262,
@@ -69,7 +69,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-drawstring-bag",
     "handle": "drawstring-bag",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 465,
@@ -78,7 +78,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-duffle-bag",
     "handle": "duffle-bag",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 350,
@@ -87,7 +87,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-fanny-pack",
     "handle": "fanny-pack",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 594,
@@ -96,7 +96,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-gym-bag",
     "handle": "gym-bag",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 274,
@@ -105,7 +105,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-large-tote-bag",
     "handle": "large-tote-bag",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 389,
@@ -114,7 +114,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-minimalist-backpack",
     "handle": "minimalist-backpack",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 84,
@@ -123,7 +123,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-tote",
     "handle": "tote-bag",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 744,
@@ -132,7 +132,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-utility-crossbody-bag",
     "handle": "utility-crossbody-bag",
-    "primaries": "Black"
+    "primaries": "White"
   },
   {
     "id": 384,
@@ -141,7 +141,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-kids-crew-neck",
     "handle": "kids-crew-neck-t-shirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 322,
@@ -150,7 +150,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-kids-leggings",
     "handle": "kids-leggings",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 368,
@@ -159,7 +159,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-kids-rash-guard",
     "handle": "kids-rash-guard",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 944,
@@ -168,7 +168,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-kids-sports-jersey",
     "handle": "kids-sports-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 328,
@@ -177,7 +177,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-mens-athletic-t-shirt",
     "handle": "mens-athletic-t-shirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 257,
@@ -186,7 +186,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-mens-crew-neck",
     "handle": "mens-crew-neck-t-shirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 400,
@@ -195,7 +195,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-mens-joggers",
     "handle": "mens-joggers",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 288,
@@ -204,7 +204,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-mens-leggings",
     "handle": "mens-leggings",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 301,
@@ -213,7 +213,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-mens-rash-guard",
     "handle": "mens-rash-guard",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 276,
@@ -222,7 +222,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-mens-tank-top",
     "handle": "mens-tank-top",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 918,
@@ -231,7 +231,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-american-football-jersey",
     "handle": "unisex-american-football-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 332,
@@ -240,7 +240,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-unisex-athletic-long-shorts",
     "handle": "unisex-athletic-long-shorts",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 330,
@@ -249,7 +249,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-unisex-athletic-shorts",
     "handle": "unisex-athletic-shorts",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 792,
@@ -258,7 +258,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-baseball-jersey",
     "handle": "unisex-baseball-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 676,
@@ -267,7 +267,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-basketball-jersey",
     "handle": "unisex-basketball-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 390,
@@ -276,7 +276,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-unisex-bomber-jacket",
     "handle": "unisex-bomber-jacket",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 1367,
@@ -285,7 +285,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-boxy-football-jersey",
     "handle": "unisex-boxy-football-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 659,
@@ -294,7 +294,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-unisex-hawaiian-shirt",
     "handle": "unisex-button-shirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 730,
@@ -303,7 +303,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-hockey-fan-jersey",
     "handle": "unisex-hockey-fan-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 388,
@@ -312,7 +312,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-hoodie",
     "handle": "unisex-hoodie",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 693,
@@ -321,7 +321,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-mesh-shorts",
     "handle": "unisex-mesh-shorts",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 835,
@@ -330,7 +330,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-premium-basketball-jersey",
     "handle": "unisex-premium-basketball-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 644,
@@ -339,7 +339,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-sports-jersey",
     "handle": "unisex-sports-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 320,
@@ -348,7 +348,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-sweatshirt",
     "handle": "unisex-sweatshirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 801,
@@ -357,7 +357,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-track-jacket",
     "handle": "unisex-track-jacket",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 784,
@@ -366,7 +366,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-unisex-wide-leg-joggers",
     "handle": "unisex-wide-leg-joggers",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 604,
@@ -375,7 +375,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-unisex-wide-leg-pants",
     "handle": "unisex-wide-leg-pants",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 717,
@@ -384,7 +384,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-unisex-zip-hoodie",
     "handle": "unisex-zip-hoodie",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 329,
@@ -393,7 +393,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-womens-athletic-t-shirt",
     "handle": "womens-athletic-t-shirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 261,
@@ -402,7 +402,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-womens-crew-neck",
     "handle": "womens-crew-neck-t-shirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 401,
@@ -411,7 +411,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-recycled-womens-joggers",
     "handle": "womens-joggers",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 189,
@@ -420,7 +420,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-leggings",
     "handle": "womens-leggings",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 302,
@@ -429,7 +429,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-womens-rash-guard",
     "handle": "womens-rash-guard",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 202,
@@ -438,7 +438,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-womens-tank-top",
     "handle": "womens-tank-top",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 385,
@@ -447,7 +447,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-youth-crew-neck-t-shirt",
     "handle": "youth-crew-neck-t-shirt",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 323,
@@ -456,7 +456,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-youth-leggings",
     "handle": "youth-leggings",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 369,
@@ -465,7 +465,7 @@
     "technique": "cut-sew",
     "link": "all-over-print-youth-rash-guard",
     "handle": "youth-rash-guard",
-    "primaries": "Both"
+    "primaries": "White"
   },
   {
     "id": 1646,
@@ -474,6 +474,6 @@
     "technique": "cut-sew",
     "link": "all-over-print-youth-recycled-sports-jersey",
     "handle": "youth-sports-jersey",
-    "primaries": "Both"
+    "primaries": "White"
   }
 ]

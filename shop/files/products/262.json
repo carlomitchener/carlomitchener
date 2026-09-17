@@ -2,9 +2,10 @@
   "id": 262,
   "category": "bags",
   "title": "Drawstring Bag",
+  "handle": "drawstring-bag",
   "technique": "cut-sew",
   "primaries": [
-    "Black"
+    "White"
   ],
   "stitch_colors": [
     "Black",

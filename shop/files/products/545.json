@@ -2,9 +2,9 @@
   "id": 545,
   "category": "accessories",
   "title": "Headband",
+  "handle": "headband",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

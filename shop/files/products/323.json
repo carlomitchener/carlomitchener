@@ -2,9 +2,9 @@
   "id": 323,
   "category": "youth",
   "title": "Youth Leggings",
+  "handle": "youth-leggings",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

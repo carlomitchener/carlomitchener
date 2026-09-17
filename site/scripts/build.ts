@@ -9,7 +9,7 @@ import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
-import { grid, ogUrl, type ProductRow } from "../src/lib/shop.ts";
+import { facetsOf, grid, ogUrl, type Facets, type ProductRow } from "../src/lib/shop.ts";
 import { Page } from "../src/components/Page.jsx";
 import { Home } from "../src/pages/Home.jsx";
 import { Shop } from "../src/pages/Shop.jsx";
@@ -17,6 +17,7 @@ import { Product } from "../src/pages/Product.jsx";
 import { Post as PostPage } from "../src/pages/Post.jsx";
 import { Feed } from "../src/pages/Feed.jsx";
 import { Cart } from "../src/pages/Cart.jsx";
+import { Status } from "../src/pages/Status.jsx";
 import { Doc } from "../src/pages/Doc.jsx";
 import { NotFound } from "../src/pages/NotFound.jsx";
 import site from "../site.json";
@@ -107,11 +108,11 @@ const buyUrl = (id: string) => (SHOP ? `https://${SHOP}/cart/${id}:1` : "/cart/"
 const shopRoute = (row: { category: string; handle: string }) => `/shop/${row.category}/${row.handle}/`;
 
 function tasks(site_: Site) {
-  const found = new Map<string, string[]>();
+  const found = new Map<string, Facets>();
   for (const file of site_.input("tasks").files) {
     try {
       const task = JSON.parse(read(file));
-      if (task.key) found.set(task.key, (task.printfiles ?? []).map((p: { name: string }) => p.name).filter(Boolean));
+      if (task.key) found.set(task.key, facetsOf(task));
     } catch {
       console.warn(`site: ${file} is not a task, skipped`);
     }
@@ -137,9 +138,11 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
       console.warn(`site: ${product.key} has no variant, skipped`);
       continue;
     }
+    const facets = files.get(product.key);
     out.push({
       ...product,
-      files: files.get(product.key) ?? product.files ?? [],
+      ...(facets ?? {}),
+      files: facets?.files ?? product.files ?? [],
       title: entry.title,
       category: entry.category,
       handle: entry.handle,
@@ -289,6 +292,7 @@ function collect(site_: Site) {
     });
   }
   routes.push({ route: "/cart/", kind: "cart", name: "Bag", at: today(), hidden: true });
+  routes.push({ route: "/status/", kind: "status", name: "Status", at: today(), hidden: true });
   const taken = new Set<string>();
   const readme = site_.input("readme").files[0];
   if (readme) {
@@ -327,7 +331,7 @@ function collect(site_: Site) {
 
 /* RENDER */
 
-const ogFor = (row: Row) => root + ogUrl(row.key);
+const ogFor = (row: Row) => root + ogUrl(row.design);
 
 const describe = (row: Row) => `${row.title} by ${site.name}. USD ${Number(row.price).toFixed(2)}. One design, one moon of ${Math.round(LIVE_DAYS)} days.`;
 
@@ -357,6 +361,9 @@ function draw(site_: Site, route: Route): Output[] {
   if (route.kind === "search") return [{ path: "search.json", bytes: JSON.stringify((route.data as { found: unknown[] }).found) }];
   if (route.kind === "product") return product(site_, route, at);
   if (route.kind === "post") return post(site_, route, at);
+  if (route.kind === "status") {
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Status", description: "The automator, the CDN and the Lambdas.", noindex: true }, h(Status, {})) }];
+  }
   if (route.kind === "cart") {
     return [{ path: at, bytes: shell(site_, { route: route.route, name: "Bag", description: "Your bag.", noindex: true }, h(Cart, {})) }];
   }
@@ -391,7 +398,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
   const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
   const siblings: Record<string, unknown> = {};
   for (const one of family) {
-    siblings[one.key] = { created: one.created, price: one.price, variants: one.variants, images: one.images, files: one.files, available: one.available, buy: buyUrl(one.variants[0]?.id ?? "") };
+    siblings[one.key] = { design: one.design, created: one.created, price: one.price, variants: one.variants, images: one.images, files: one.files, available: one.available };
   }
   const names = new Map(CATEGORIES);
   const trail: Crumb[] = [

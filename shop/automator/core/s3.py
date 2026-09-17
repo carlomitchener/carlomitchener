@@ -2,36 +2,42 @@ import boto3
 import json
 import time
 from botocore.exceptions import ClientError
-from .api import delete_product, logger
-from .config import CARLOMITCHENER_BUCKET, SITE_URL
+from .api import delete_files, delete_product, logger
+from .config import CARLOMITCHENER_BUCKET, SITE_FUNCTION, SITE_URL
 from .errors import NoTaskError
-from .models import Task
+from .models import Design, Task
 
 s3 = boto3.client("s3")
+lam = boto3.client("lambda")
 
 BUCKET = CARLOMITCHENER_BUCKET
-AUTOMATOR_KEY = "data/automator.json"
-PATHS_KEY = "data/paths.json"
-TASKS_PREFIX = "data/tasks/"
+AUTOMATOR_PREFIX = "data/automator/"
+DESIGN_KEY = f"{AUTOMATOR_PREFIX}design.json"
+TASK_KEY = f"{AUTOMATOR_PREFIX}task.json"
+PATHS_KEY = f"{AUTOMATOR_PREFIX}paths.json"
+TASKS_PREFIX = f"{AUTOMATOR_PREFIX}tasks/"
+CATALOG_PREFIX = "data/catalog/"
 SITE_PREFIX = "site/"
 CDN_PREFIX = f"{SITE_PREFIX}cdn/printful/"
+LABELS_PREFIX = f"{SITE_PREFIX}cdn/labels/"
+STATUS_KEY = f"{SITE_PREFIX}status/automator.json"
 
 # KEYS
 
-def product_key(id: int) -> str:
-    return f"data/products/{id}.json"
+def catalog_key(id: int) -> str:
+    return f"{CATALOG_PREFIX}{id}.json"
 
-def task_key(key: str) -> str:
-    return f"data/tasks/{key}/{key}.json"
-
-def task_prefix(key: str) -> str:
-    return f"{TASKS_PREFIX}{key}/"
+def archive_key(key: str) -> str:
+    return f"{TASKS_PREFIX}{key}.json"
 
 def cdn_prefix(key: str) -> str:
     return f"{CDN_PREFIX}{key}/"
 
 def cdn_key(key: str, name: str) -> str:
     return f"{CDN_PREFIX}{key}/{name}.png"
+
+def label_key(name: str) -> str:
+    return f"{LABELS_PREFIX}{name}.png"
 
 def s3_url(key: str) -> str:
     if key.startswith(SITE_PREFIX):
@@ -40,12 +46,14 @@ def s3_url(key: str) -> str:
 
 # OBJECTS
 
-def put_json(key: str, data) -> None:
+def put_json(key: str, data, cache: str = None) -> None:
+    extra = {"CacheControl": cache} if cache else {}
     s3.put_object(
         Bucket=BUCKET,
         Key=key,
         Body=json.dumps(data),
         ContentType="application/json",
+        **extra,
     )
 
 def get_json(key: str) -> dict:
@@ -71,6 +79,9 @@ def list_objects(prefix: str) -> list[dict]:
         results.extend(page.get("Contents", []))
     return results
 
+def delete_key(key: str) -> None:
+    s3.delete_object(Bucket=BUCKET, Key=key)
+
 def delete_folder(prefix: str) -> int:
     objects = list_objects(prefix)
     for i in range(0, len(objects), 1000):
@@ -78,13 +89,19 @@ def delete_folder(prefix: str) -> int:
         s3.delete_objects(Bucket=BUCKET, Delete={"Objects": batch})
     return len(objects)
 
+# SITE
+
+def wake_site(reason: str) -> None:
+    try:
+        lam.invoke(FunctionName=SITE_FUNCTION, InvocationType="Event", Payload=json.dumps({"source": "manual", "reason": reason}).encode())
+        logger.info(f"woke {SITE_FUNCTION}: {reason}")
+    except Exception as error:
+        logger.warning(f"could not wake {SITE_FUNCTION}: {error}")
+
 # CATALOG
 
-def task_exists(key: str) -> bool:
-    return key_exists(task_key(key))
-
 def load_product(id: int) -> dict:
-    return get_json(product_key(id))
+    return get_json(catalog_key(id))
 
 def load_paths() -> dict:
     return get_json(PATHS_KEY)
@@ -92,34 +109,54 @@ def load_paths() -> dict:
 def save_paths(data: dict) -> None:
     put_json(PATHS_KEY, data)
 
+# DESIGN
+
+def load_design() -> Design:
+    try:
+        data = get_json(DESIGN_KEY)
+    except NoTaskError:
+        return None
+    return Design.from_dict(data) if data else None
+
+def save_design(design: Design) -> None:
+    put_json(DESIGN_KEY, design.to_dict())
+
 # TASK
 
+def archive_exists(key: str) -> bool:
+    return key_exists(archive_key(key))
+
 def load_task() -> Task:
-    data = get_json(AUTOMATOR_KEY)
+    data = get_json(TASK_KEY)
     if not data:
-        raise NoTaskError(AUTOMATOR_KEY)
+        raise NoTaskError(TASK_KEY)
     return Task.from_dict(data)
 
 def save_task(task: Task) -> None:
     task.updated_at = int(time.time())
-    put_json(AUTOMATOR_KEY, task.to_dict())
+    put_json(TASK_KEY, task.to_dict())
 
 def archive_task(task: Task) -> None:
-    put_json(task_key(task.key), task.to_dict())
+    put_json(archive_key(task.key), task.to_dict())
 
 def clear_task() -> None:
-    put_json(AUTOMATOR_KEY, {})
+    put_json(TASK_KEY, {})
 
 def abort_task(task: Task) -> None:
     if task.product.shopify_id:
         try:
             delete_product(task)
         except Exception as error:
-            logger.info(f"{task.desc} productDelete failed during abort: {error}")
-    delete_folder(task_prefix(task.key))
+            logger.warning(f"{task.desc} productDelete failed during abort: {error}")
+    else:
+        try:
+            delete_files(task, [m.shopify_id for m in task.mockups if m.shopify_id])
+        except Exception as error:
+            logger.warning(f"{task.desc} fileDelete failed during abort: {error}")
     delete_folder(cdn_prefix(task.key))
+    delete_key(archive_key(task.key))
     paths = load_paths()
-    paths[str(task.product.id)] = None
+    paths[str(task.product.id)] = False
     save_paths(paths)
     clear_task()
-    logger.info(f"{task.desc} quarantined product {task.product.id}")
+    logger.error(f"{task.desc} aborted at {task.step}, product {task.product.id} waits for the next round: {task.metadata.get('failed_error') or ''}")

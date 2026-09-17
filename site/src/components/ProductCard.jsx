@@ -9,7 +9,7 @@ export function ProductCard({ product, width = 800, eager = false, now }) {
         {image ? (
           <img src={grid(image.url, width)} alt={image.alt || product.title} width={width} height={width} loading={eager ? "eager" : "lazy"} decoding="async" />
         ) : (
-          <img className="tile" src={tileUrl(product.key, 3)} alt={product.title} width="88" height="88" loading="lazy" decoding="async" />
+          <img className="tile" src={tileUrl(product.design, 3)} alt={product.title} width="88" height="88" loading="lazy" decoding="async" />
         )}
       </span>
       <h3>{product.title}</h3>

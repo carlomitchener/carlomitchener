@@ -2,9 +2,10 @@
   "id": 744,
   "category": "bags",
   "title": "Utility Crossbody Bag",
+  "handle": "utility-crossbody-bag",
   "technique": "cut-sew",
   "primaries": [
-    "Black"
+    "White"
   ],
   "stitch_colors": [
     "Black",

@@ -2,7 +2,6 @@ from enum import Enum
 
 class Step(Enum):
     FAILED = "failed"
-    CREATE = "create"
     GENERATE = "generate"
     MOCKUP = "mockup"
     PROCESS = "process"

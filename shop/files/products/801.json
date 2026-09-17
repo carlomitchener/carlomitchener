@@ -2,9 +2,9 @@
   "id": 801,
   "category": "unisex",
   "title": "Unisex Track Jacket",
+  "handle": "unisex-track-jacket",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

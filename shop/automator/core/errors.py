@@ -6,9 +6,6 @@ class NoTaskError(Exception):
 class Retry(Exception):
     pass
 
-class TaskFailed(Exception):
-    pass
-
 class TaskAborted(Exception):
     pass
 

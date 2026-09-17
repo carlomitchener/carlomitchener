@@ -2,9 +2,9 @@
   "id": 401,
   "category": "women",
   "title": "Women's Joggers",
+  "handle": "womens-joggers",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

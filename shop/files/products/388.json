@@ -2,9 +2,9 @@
   "id": 388,
   "category": "unisex",
   "title": "Unisex Hoodie",
+  "handle": "unisex-hoodie",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

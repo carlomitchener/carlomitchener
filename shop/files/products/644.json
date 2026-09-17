@@ -2,9 +2,9 @@
   "id": 644,
   "category": "unisex",
   "title": "Unisex Sports Jersey",
+  "handle": "unisex-sports-jersey",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

@@ -1,6 +1,6 @@
 import { cdnUrl, grid, money, type Picture, type Variant } from "../lib/shop.ts";
 
-type Sibling = { created: string; price: string; variants: Variant[]; images: Picture[]; files: string[]; available: boolean };
+type Sibling = { design: string; created: string; price: string; variants: Variant[]; images: Picture[]; files: string[]; available: boolean };
 
 const node = document.getElementById("siblings");
 const siblings: Record<string, Sibling> = node ? JSON.parse(node.textContent ?? "{}") : {};
@@ -30,10 +30,10 @@ function swap(key: string) {
   }
   for (const image of document.querySelectorAll<HTMLImageElement>("[data-files] img[data-style]")) {
     const n = image.dataset.style?.replace("tile-", "") ?? "";
-    image.src = cdnUrl(key, `tile-${n}`);
+    image.src = cdnUrl(one.design, `tile-${n}`);
     image.dataset.full = image.src;
     image.dataset.link = image.src;
-    image.dataset.alt = `${key} ${n}x${n}`;
+    image.dataset.alt = `${one.design} ${n}x${n}`;
   }
   const downloads = document.querySelector("[data-downloads]");
   if (downloads) {
@@ -41,13 +41,13 @@ function swap(key: string) {
     downloads.replaceChildren();
     for (const [name, href] of list) downloads.append(Object.assign(document.createElement("a"), { href, download: "", textContent: name }));
   }
-  document.querySelectorAll<HTMLElement>(".sizes button").forEach((button, i) => {
-    const variant = one.variants[i];
-    if (!variant) return;
+  for (const button of document.querySelectorAll<HTMLElement>(".sizes button")) {
+    const variant = one.variants.find((each) => each.size === button.dataset.size);
+    button.hidden = !variant;
+    if (!variant) continue;
     button.dataset.variant = variant.id;
     button.dataset.price = variant.price;
-    button.dataset.size = variant.size;
-  });
+  }
   if (add) {
     add.dataset.key = key;
     add.dataset.variant = one.variants[0]?.id ?? "";
@@ -63,7 +63,7 @@ function swap(key: string) {
     else tile.removeAttribute("aria-current");
   }
   const fine = document.querySelector("[data-design]");
-  if (fine) fine.textContent = `Design ${key}`;
+  if (fine) fine.textContent = `Design ${one.design}`;
   if (old !== key) history.pushState({ key }, "", `/products/${key}/`);
   window.dispatchEvent(new CustomEvent("flip", { detail: key }));
 }

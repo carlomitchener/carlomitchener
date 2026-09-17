@@ -2,9 +2,9 @@
   "id": 390,
   "category": "unisex",
   "title": "Unisex Bomber Jacket",
+  "handle": "unisex-bomber-jacket",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

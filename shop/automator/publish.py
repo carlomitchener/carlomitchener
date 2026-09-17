@@ -36,3 +36,11 @@ def mrly_publish(task: Task) -> Task:
     check_errors(result, "publishablePublish")
     task.place(Step.COMPLETE)
     return task
+
+if __name__ == "__main__":
+    from automator.core.api import mint_token
+    from automator.core.s3 import load_task, save_task
+    mint_token()
+    task = load_task()
+    save_task(mrly_publish(task))
+    print(task.key, task.step)

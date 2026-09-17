@@ -2,9 +2,9 @@
   "id": 630,
   "category": "accessories",
   "title": "Bandana",
+  "handle": "bandana",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

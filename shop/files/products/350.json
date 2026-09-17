@@ -2,9 +2,10 @@
   "id": 350,
   "category": "bags",
   "title": "Fanny Pack",
+  "handle": "fanny-pack",
   "technique": "cut-sew",
   "primaries": [
-    "Black"
+    "White"
   ],
   "stitch_colors": [
     "Black",

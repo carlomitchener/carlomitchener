@@ -21,7 +21,7 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
   return (
     <div className="details">
       <h1>{product.title}</h1>
-      <p className="fine" data-design>{`Design ${product.key}`}</p>
+      <p className="fine" data-design>{`Design ${product.design}`}</p>
       <p className="price" data-price>
         {money(product.price)}
       </p>

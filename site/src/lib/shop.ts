@@ -6,13 +6,32 @@ export type Picture = { url: string; alt: string; style: string };
 
 export type ProductRow = {
   key: string;
+  design: string;
   type: string;
   created: string;
   available: boolean;
   variants: Variant[];
   images: Picture[];
   files: string[];
+  group: string;
+  primary: string;
+  secondary: string[];
 };
+
+export type Facets = { files: string[]; design: string; group: string; primary: string; secondary: string[] };
+
+export const designOf = (handle: string) => String(handle ?? "").split("-")[0];
+
+export function facetsOf(task: any): Facets {
+  const variation = task?.variation ?? {};
+  return {
+    files: (task?.printfiles ?? []).map((one: { name: string }) => one.name).filter(Boolean),
+    design: task?.design ?? designOf(task?.key ?? ""),
+    group: variation.tile?.group ?? "",
+    primary: variation.paint?.primary ?? "",
+    secondary: variation.paint?.secondary ?? [],
+  };
+}
 
 export type Snapshot = { at: number; products: ProductRow[] };
 
@@ -34,7 +53,7 @@ query Feed($first: Int!, $after: String, $country: CountryCode) @inContext(count
           selectedOptions { name value }
         }
       }
-      media(first: 50) {
+      media(first: 250) {
         nodes {
           mediaContentType
           ... on MediaImage { image { url altText } }
@@ -70,12 +89,16 @@ export function picturesOf(nodes: any[]): Picture[] {
 export function rowOf(node: any): ProductRow {
   return {
     key: node.handle,
+    design: designOf(node.handle),
     type: String(node.productType ?? ""),
     created: node.createdAt,
     available: node.availableForSale !== false,
     variants: (node.variants?.nodes ?? []).map(variantOf),
     images: picturesOf(node.media?.nodes ?? []),
     files: [],
+    group: "",
+    primary: "",
+    secondary: [],
   };
 }
 

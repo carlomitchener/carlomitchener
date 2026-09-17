@@ -2,9 +2,9 @@
   "id": 202,
   "category": "women",
   "title": "Women's Tank Top",
+  "handle": "womens-tank-top",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

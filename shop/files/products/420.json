@@ -2,9 +2,9 @@
   "id": 420,
   "category": "accessories",
   "title": "Neck Gaiter",
+  "handle": "neck-gaiter",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

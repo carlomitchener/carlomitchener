@@ -2,9 +2,9 @@
   "id": 717,
   "category": "unisex",
   "title": "Unisex Zip Hoodie",
+  "handle": "unisex-zip-hoodie",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

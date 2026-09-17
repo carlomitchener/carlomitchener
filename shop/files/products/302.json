@@ -2,9 +2,9 @@
   "id": 302,
   "category": "women",
   "title": "Women's Rash Guard",
+  "handle": "womens-rash-guard",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

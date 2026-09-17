@@ -78,6 +78,7 @@ class Product:
     id: int = None
     category: str = None
     title: str = None
+    handle: str = None
     technique: str = None
     primaries: list[str] = field(default_factory=list)
     stitch_colors: list[str] = field(default_factory=list)

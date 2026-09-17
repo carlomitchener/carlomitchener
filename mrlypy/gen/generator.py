@@ -35,6 +35,7 @@ def create(config: Config) -> Gen:
 # GENERATE
 
 def generate(v: Gen) -> Gen:
+    seed(v.seed)
     v.tile = mrlypy.tile.build(v.tile)
     if v.mask:
         v.mask = mrlypy.tile.build(v.mask)

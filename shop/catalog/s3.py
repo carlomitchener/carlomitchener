@@ -6,7 +6,7 @@ from helpers import all_ids, load_json, product_path
 
 s3 = boto3.client("s3")
 
-PREFIX = "data/products/"
+PREFIX = "data/catalog/"
 
 def product_key(id: int) -> str:
     return f"{PREFIX}{id}.json"

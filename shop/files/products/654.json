@@ -2,9 +2,9 @@
   "id": 654,
   "category": "accessories",
   "title": "Reversible Bucket Hat",
+  "handle": "reversible-bucket-hat",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

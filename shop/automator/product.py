@@ -7,8 +7,8 @@ VENDOR = "Printful"
 CATEGORY = "gid://shopify/TaxonomyCategory/na"
 
 MUTATION = """
-mutation productSet($input: ProductSetInput!, $synchronous: Boolean!) {
-    productSet(synchronous: $synchronous, input: $input) {
+mutation productSet($input: ProductSetInput!, $identifier: ProductSetIdentifiers!, $synchronous: Boolean!) {
+    productSet(synchronous: $synchronous, identifier: $identifier, input: $input) {
         product {
             id
             variants(first: 100) {
@@ -27,7 +27,15 @@ mutation productSet($input: ProductSetInput!, $synchronous: Boolean!) {
 """
 
 def set_tags(task: Task) -> list[str]:
-    return [task.product.category.capitalize(), task.product.title]
+    tags = [task.product.category.capitalize(), task.product.title, f"design:{task.design}"]
+    group = (task.variation.get("tile") or {}).get("group")
+    if group:
+        tags.append(f"group:{group}")
+    if task.paint.get("primary"):
+        tags.append(f"primary:{task.paint['primary']}")
+    for ink in task.paint.get("secondary") or []:
+        tags.append(f"secondary:{ink}")
+    return tags
 
 def set_sizes(task: Task) -> list[str]:
     sizes = []
@@ -40,7 +48,7 @@ def set_product_options(task: Task) -> list[dict]:
     values = [{"name": size} for size in set_sizes(task)]
     return [{"name": "Size", "position": 1, "values": values}]
 
-def create_variant_payload(variant: Variant) -> dict:
+def variant_payload(variant: Variant) -> dict:
     return {
         "inventoryItem": {"requiresShipping": True, "tracked": False},
         "optionValues": [{"optionName": "Size", "name": variant.size}],
@@ -49,7 +57,7 @@ def create_variant_payload(variant: Variant) -> dict:
         "taxable": False,
     }
 
-def create_product_payload(task: Task) -> dict:
+def product_payload(task: Task) -> dict:
     return {
         "category": CATEGORY,
         "descriptionHtml": "",
@@ -60,12 +68,12 @@ def create_product_payload(task: Task) -> dict:
         "status": "ACTIVE",
         "tags": set_tags(task),
         "title": task.product.title,
-        "variants": [create_variant_payload(v) for v in task.variants],
+        "variants": [variant_payload(v) for v in task.variants],
         "vendor": VENDOR,
     }
 
 def create_product(task: Task) -> dict:
-    variables = {"input": create_product_payload(task), "synchronous": True}
+    variables = {"input": product_payload(task), "identifier": {"handle": task.key}, "synchronous": True}
     result = shopify_request(task, MUTATION, variables)
     return check_errors(result, "productSet")
 
@@ -80,7 +88,17 @@ def parse_result(task: Task, data: dict) -> Task:
     return task
 
 def mrly_product(task: Task) -> Task:
-    data = create_product(task)
-    task = parse_result(task, data)
+    task = parse_result(task, create_product(task))
     task.place(Step.PING)
-    raise Retry(f"Current: {Step.PRODUCT}. Next: {Step.PING}")
+    raise Retry(f"shopify product {task.product.shopify_id} set")
+
+if __name__ == "__main__":
+    from automator.core.api import mint_token
+    from automator.core.s3 import load_task, save_task
+    mint_token()
+    task = load_task()
+    try:
+        mrly_product(task)
+    except Retry as note:
+        print(note)
+    save_task(task)

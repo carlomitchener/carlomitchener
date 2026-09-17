@@ -2,9 +2,9 @@
   "id": 530,
   "category": "accessories",
   "title": "Scrunchie",
+  "handle": "scrunchie",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

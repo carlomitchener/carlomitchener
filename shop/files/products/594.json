@@ -2,9 +2,10 @@
   "id": 594,
   "category": "bags",
   "title": "Gym Bag",
+  "handle": "gym-bag",
   "technique": "cut-sew",
   "primaries": [
-    "Black"
+    "White"
   ],
   "stitch_colors": [
     "Black",

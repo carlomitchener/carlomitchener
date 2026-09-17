@@ -1,4 +1,7 @@
-from automator.core.api import check_errors, shopify_request
+import json
+import time
+from automator.core.api import clip, logger, shopify_request
+from automator.core.config import FILE_ROUNDS
 from automator.core.errors import Retry, TaskAborted
 from automator.core.models import Mockup, Task
 from automator.core.steps import Step
@@ -38,10 +41,16 @@ def create_file(mockup: Mockup) -> dict:
         "originalSource": mockup.url,
     }
 
+def pending(task: Task) -> list[Mockup]:
+    return [m for m in task.mockups if not m.shopify_id]
+
 def send_batch(task: Task, batch: list[Mockup]) -> list[dict]:
     variables = {"files": [create_file(mockup) for mockup in batch]}
     result = shopify_request(task, MUTATION, variables)
-    return check_errors(result, "fileCreate")["files"]
+    data = result["data"]["fileCreate"]
+    if data["userErrors"]:
+        logger.warning(f"{task.desc} fileCreate userErrors {clip(json.dumps(data['userErrors']))}")
+    return data.get("files") or []
 
 def match(mockup: Mockup, files: list[dict]) -> str:
     for file in files:
@@ -51,17 +60,33 @@ def match(mockup: Mockup, files: list[dict]) -> str:
         source = (file.get("image") or {}).get("url") or ""
         if mockup.name in source:
             return file["id"]
-    raise TaskAborted(f"no shopify file for {mockup.alt}")
+    return None
 
-def send_files(task: Task) -> Task:
-    for start in range(0, len(task.mockups), BATCH):
-        batch = task.mockups[start:start + BATCH]
+def mrly_files(task: Task) -> Task:
+    round = task.metadata.get("files_round", 0) + 1
+    task.metadata["files_round"] = round
+    if round > FILE_ROUNDS:
+        raise TaskAborted(f"files round {round} for task {task.key}")
+    todo = pending(task)
+    for start in range(0, len(todo), BATCH):
+        batch = todo[start:start + BATCH]
         files = send_batch(task, batch)
         for mockup in batch:
             mockup.shopify_id = match(mockup, files)
-    return task
-
-def mrly_files(task: Task) -> Task:
-    task = send_files(task)
+    still = pending(task)
+    if still:
+        logger.warning(f"{task.desc} round {round}: {len(still)} of {len(todo)} files not created")
+    task.metadata["waiting_since"] = int(time.time())
     task.place(Step.STATUS)
-    raise Retry(f"Current: {Step.FILES}. Next: {Step.STATUS}")
+    raise Retry(f"round {round}: {len(todo) - len(still)} files requested")
+
+if __name__ == "__main__":
+    from automator.core.api import mint_token
+    from automator.core.s3 import load_task, save_task
+    mint_token()
+    task = load_task()
+    try:
+        mrly_files(task)
+    except Retry as note:
+        print(note)
+    save_task(task)

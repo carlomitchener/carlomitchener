@@ -16,7 +16,6 @@ IGNORED_PLACEMENTS = [
     "label_outside",
     "label_outside_back",
     "label_outside_front",
-    "label_inside_dtfabric",
 ]
 
 # VARIANTS

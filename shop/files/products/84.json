@@ -2,9 +2,10 @@
   "id": 84,
   "category": "bags",
   "title": "Tote Bag",
+  "handle": "tote-bag",
   "technique": "cut-sew",
   "primaries": [
-    "Black"
+    "White"
   ],
   "stitch_colors": [
     "Black",

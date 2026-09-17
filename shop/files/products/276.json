@@ -2,9 +2,9 @@
   "id": 276,
   "category": "men",
   "title": "Men's Tank Top",
+  "handle": "mens-tank-top",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

@@ -3,7 +3,7 @@ import { Carousel } from "./Gallery.jsx";
 import { Icon } from "./Icon.jsx";
 
 export function Downloads({ product, tiles }) {
-  const slides = tiles.map((n) => ({ style: `tile-${n}`, thumb: tileUrl(product.key, n), full: tileUrl(product.key, n), link: tileUrl(product.key, n), alt: `${product.key} ${n}x${n}`, name: `${n}x${n}` }));
+  const slides = tiles.map((n) => ({ style: `tile-${n}`, thumb: tileUrl(product.design, n), full: tileUrl(product.design, n), link: tileUrl(product.design, n), alt: `${product.design} ${n}x${n}`, name: `${n}x${n}` }));
   return (
     <details className="drop files" data-files>
       <summary>
@@ -13,7 +13,7 @@ export function Downloads({ product, tiles }) {
       <div className="inside">
         <Carousel slides={slides} pixel download label="Tile" />
         <p className="get">
-          <a className="pill go wide" href={tileUrl(product.key, tiles[0])} download data-download>
+          <a className="pill go wide" href={tileUrl(product.design, tiles[0])} download data-download>
             <Icon name="download" />
             <span>
               Download <span data-download-name>{`${tiles[0]}x${tiles[0]}`}</span>

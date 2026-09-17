@@ -56,6 +56,15 @@ const STORIES = ["A still life that never settles.", "Two gliders meet and neith
 
 const catalog = read(join(org, "../shop/files/catalog.json")) as Catalog[];
 const products: unknown[] = [];
+const GROUPS = ["General", "Fractal", "Magic", "Special", "Mosaic"];
+const INKS = ["Red", "Orange", "Yellow", "Green", "Mint", "Teal", "Cyan", "Blue", "Indigo", "Purple", "Pink", "Brown", "Gray"];
+const designs = Array.from({ length: DEV_VARIATIONS[1] }, (_, i) => ({
+  key: hex(),
+  stamp: Date.now() - (i / DEV_VARIATIONS[1]) * LIVE_DAYS * DAY,
+  group: pick(GROUPS),
+  primary: "White",
+  secondary: Array.from({ length: between([1, 4]) }, () => pick(INKS)),
+}));
 
 for (const entry of catalog) {
   const source = spec(entry.id);
@@ -75,11 +84,15 @@ for (const entry of catalog) {
     continue;
   }
   const names = [...placements.keys()].map((_, i, all) => (all.length === 1 ? "printfile" : `printfile-${i + 1}`));
-  for (let n = 0; n < between(DEV_VARIATIONS); n++) {
-    const key = hex();
-    const stamp = Date.now() - next() * LIVE_DAYS * DAY;
+  for (const design of designs.slice(0, between(DEV_VARIATIONS))) {
+    const key = `${design.key}-${entry.handle}`;
+    const stamp = design.stamp - next() * DAY;
     products.push({
       key,
+      design: design.key,
+      group: design.group,
+      primary: design.primary,
+      secondary: design.secondary,
       type: String(entry.id),
       created: new Date(stamp).toISOString(),
       available: true,
@@ -87,14 +100,15 @@ for (const entry of catalog) {
       images: mockups.map((m) => ({ url: picture(1200), alt: `${m.id} - ${m.category} - ${m.title}`, style: String(m.id) })),
       files: names,
     });
-    write(join(DATA_DIR, "tasks", key, `${key}.json`), {
+    write(join(DATA_DIR, "tasks", `${key}.json`), {
       key,
-      step: "ARCHIVE",
+      step: "archive",
+      design: design.key,
       seed: Math.floor(next() * 1000000),
       created_at: stamp,
       updated_at: stamp,
-      product: { id: entry.id, category: entry.category, title: entry.title },
-      variation: {},
+      product: { id: entry.id, category: entry.category, title: entry.title, handle: entry.handle },
+      variation: { tile: { group: design.group }, paint: { primary: design.primary, secondary: design.secondary } },
       printfiles: [...placements.values()].map((place, i) => ({ id: String(i), key: hex(), name: names[i], url: `/cdn/printful/${key}/${names[i]}.png`, width: place.width, height: place.height, dpi: place.dpi })),
       placements: [...placements.values()],
       variants: [],

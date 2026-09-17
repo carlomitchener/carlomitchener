@@ -2,9 +2,10 @@
   "id": 465,
   "category": "bags",
   "title": "Duffle Bag",
+  "handle": "duffle-bag",
   "technique": "cut-sew",
   "primaries": [
-    "Black"
+    "White"
   ],
   "stitch_colors": [
     "Black",

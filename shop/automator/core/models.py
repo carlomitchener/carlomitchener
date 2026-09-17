@@ -1,7 +1,33 @@
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from .steps import Step
 
-TILE = "Tile"
+def known(cls, data: dict) -> dict:
+    names = {one.name for one in fields(cls)}
+    return {key: value for key, value in data.items() if key in names}
+
+@dataclass
+class Design:
+
+    key: str = None
+    seed: int = None
+    created_at: int = None
+    tiles: bool = False
+    variation: dict = field(default_factory=dict)
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Design":
+        return cls(**known(cls, data))
+
+    @property
+    def paint(self) -> dict:
+        return self.variation.get("paint") or {}
+
+    @property
+    def group(self) -> str:
+        return (self.variation.get("tile") or {}).get("group")
 
 @dataclass
 class Product:
@@ -12,8 +38,8 @@ class Product:
     synced: bool = None
     category: str = None
     title: str = None
+    handle: str = None
     technique: str = None
-    primaries: list[str] = field(default_factory=list)
     stitch_colors: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -21,13 +47,12 @@ class Product:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Product":
-        return cls(**data)
+        return cls(**known(cls, data))
 
 @dataclass
 class Printfile:
 
     id: str = None
-    key: str = None
     name: str = None
     url: str = None
     width: float = None
@@ -39,7 +64,7 @@ class Printfile:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Printfile":
-        return cls(**data)
+        return cls(**known(cls, data))
 
 @dataclass
 class Placement:
@@ -54,7 +79,7 @@ class Placement:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Placement":
-        return cls(**data)
+        return cls(**known(cls, data))
 
     @property
     def id(self) -> str:
@@ -67,7 +92,6 @@ class Placement:
 class Variant:
 
     id: int = None
-    key: str = None
     name: str = None
     shopify_id: str = None
     printful_id: int = None
@@ -81,13 +105,12 @@ class Variant:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Variant":
-        return cls(**data)
+        return cls(**known(cls, data))
 
 @dataclass
 class Mockup:
 
     id: int = None
-    key: str = None
     name: str = None
     shopify_id: str = None
     category: str = None
@@ -100,15 +123,11 @@ class Mockup:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Mockup":
-        return cls(**data)
+        return cls(**known(cls, data))
 
     @property
     def alt(self) -> str:
         return f"{self.id} - {self.category} - {self.title}"
-
-    @property
-    def is_tile(self) -> bool:
-        return self.category == TILE
 
     @property
     def extension(self) -> str:
@@ -119,6 +138,7 @@ class Task:
 
     key: str = None
     step: str = None
+    design: str = None
     seed: int = None
     created_at: int = None
     updated_at: int = None
@@ -134,6 +154,7 @@ class Task:
         data = {}
         data["key"] = self.key
         data["step"] = self.step
+        data["design"] = self.design
         data["seed"] = self.seed
         data["created_at"] = self.created_at
         data["updated_at"] = self.updated_at
@@ -148,12 +169,13 @@ class Task:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Task":
+        data = dict(data)
         data["product"] = Product.from_dict(data["product"])
         data["printfiles"] = [Printfile.from_dict(p) for p in data["printfiles"]]
         data["placements"] = [Placement.from_dict(p) for p in data["placements"]]
         data["variants"] = [Variant.from_dict(v) for v in data["variants"]]
         data["mockups"] = [Mockup.from_dict(m) for m in data["mockups"]]
-        return cls(**data)
+        return cls(**known(cls, data))
 
     @property
     def desc(self) -> str:
@@ -162,8 +184,18 @@ class Task:
         return f"({self.key})"
 
     @property
+    def paint(self) -> dict:
+        return self.variation.get("paint") or {}
+
+    @property
     def stitch_color(self) -> str:
-        return self.variation["paint"]["primary"].lower()
+        offered = [color.lower() for color in self.product.stitch_colors]
+        primary = str(self.paint.get("primary") or "").lower()
+        if primary in offered:
+            return primary
+        if "clear" in offered:
+            return "clear"
+        return offered[0] if offered else None
 
     def place(self, step: Step) -> None:
         self.step = step.value

@@ -24,4 +24,5 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 
-include = ["mrlypy", "mrlypy.*"]
+where = [".", "shop"]
+include = ["mrlypy*", "automator*"]

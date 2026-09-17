@@ -1,50 +1,39 @@
 import json
-import os
 import sys
 from automator.core.api import delete_product, mint_token
 from automator.core.errors import NoTaskError
 from automator.core.models import Task
 from automator.core.s3 import (
-    AUTOMATOR_KEY,
+    AUTOMATOR_PREFIX,
     BUCKET,
     CDN_PREFIX,
+    DESIGN_KEY,
     PATHS_KEY,
-    SITE_PREFIX,
+    STATUS_KEY,
+    TASK_KEY,
     abort_task,
+    archive_key,
     cdn_prefix,
     delete_folder,
+    delete_key,
     get_json,
+    load_design,
     load_paths,
     load_task,
     put_json,
     save_paths,
     save_task,
-    task_key,
-    task_prefix,
 )
 from automator.core.steps import Step
 from env import SHOP_DIR, gate, load_json, say, verb
+import os
 
-VERBS = ["init", "show", "paths", "reset", "abort", "reap", "wipe"]
-COUNTERS = [
-    "failed_at",
-    "failed_error",
-    "failed_count",
-    "files_retried",
-    "mockup_pending_count",
-    "ping_count",
-    "render_count",
-    "status_count",
-]
-DATA_PREFIX = "data/"
+VERBS = ["init", "show", "design", "status", "paths", "reset", "abort", "reap", "redo", "wipe"]
+COUNTERS = ["failed_at", "failed_error", "failed_count", "files_round", "render_count", "waiting_since"]
 CATALOG = os.path.join(SHOP_DIR, "files", "catalog.json")
 
 def all_ids() -> list[int]:
     return [row["id"] for row in load_json(CATALOG)]
-
-# OLD ART
-
-OLD_PREFIX = f"{SITE_PREFIX}art/"
 
 def argument(index: int, name: str) -> str:
     if len(sys.argv) <= index or sys.argv[index].startswith("--"):
@@ -56,13 +45,15 @@ def argument(index: int, name: str) -> str:
 def init():
     ids = all_ids()
     steps = [
-        f"put {BUCKET}/{AUTOMATOR_KEY} = {{}}",
+        f"put {BUCKET}/{TASK_KEY} = {{}}",
         f"put {BUCKET}/{PATHS_KEY} = {len(ids)} ids, all open",
+        f"delete {BUCKET}/{DESIGN_KEY}, the first tick rolls a design",
     ]
     if not gate("manager init", steps): return
-    put_json(AUTOMATOR_KEY, {})
+    put_json(TASK_KEY, {})
     save_paths({str(id): True for id in ids})
-    say(f"init wrote {AUTOMATOR_KEY} and {PATHS_KEY} with {len(ids)} ids")
+    delete_key(DESIGN_KEY)
+    say(f"init wrote {TASK_KEY} and {PATHS_KEY} with {len(ids)} ids")
 
 # READ
 
@@ -73,6 +64,23 @@ def show():
         say("no task in flight")
         return
     say(json.dumps(task.to_dict(), indent=2))
+
+def design():
+    found = load_design()
+    if not found:
+        say("no design yet")
+        return
+    say(json.dumps(found.to_dict(), indent=2))
+
+def status():
+    try:
+        data = get_json(STATUS_KEY)
+    except NoTaskError:
+        say("no status yet")
+        return
+    log = data.pop("log", [])
+    say(json.dumps(data, indent=2))
+    for line in log[-40:]: say(line)
 
 def paths():
     data = load_paths()
@@ -107,10 +115,10 @@ def reset():
 def abort():
     task = load_task()
     steps = [
-        f"delete shopify product {task.product.shopify_id}",
-        f"delete {BUCKET}/{task_prefix(task.key)}",
+        f"delete shopify product {task.product.shopify_id} or its files",
         f"delete {BUCKET}/{cdn_prefix(task.key)}",
-        f"quarantine {task.product.id} in {PATHS_KEY}",
+        f"delete {BUCKET}/{archive_key(task.key)}",
+        f"mark {task.product.id} used in {PATHS_KEY}",
     ]
     if not gate("manager abort", steps): return
     mint_token()
@@ -119,39 +127,67 @@ def abort():
 
 def reap():
     key = argument(2, "key")
-    task = Task.from_dict(get_json(task_key(key)))
+    task = Task.from_dict(get_json(archive_key(key)))
     steps = [
         f"delete shopify product {task.product.shopify_id}",
         f"delete {BUCKET}/{cdn_prefix(key)}",
-        f"delete {BUCKET}/{OLD_PREFIX}{key}/",
-        f"delete {BUCKET}/{task_prefix(key)}",
+        f"delete {BUCKET}/{archive_key(key)}",
     ]
     if not gate("manager reap", steps): return
     if task.product.shopify_id:
         mint_token()
         delete_product(task)
-    files = delete_folder(cdn_prefix(key)) + delete_folder(f"{OLD_PREFIX}{key}/")
-    say(f"deleted {files} product files")
-    say(f"deleted {delete_folder(task_prefix(key))} task objects")
+    say(f"deleted {delete_folder(cdn_prefix(key))} product files")
+    delete_key(archive_key(key))
+    say(f"deleted {archive_key(key)}")
+
+def reopen(id: int) -> None:
+    data = load_paths()
+    data[str(id)] = True
+    save_paths(data)
+
+def redo():
+    key = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith("--") else None
+    task = Task.from_dict(get_json(archive_key(key))) if key else load_task()
+    steps = [
+        f"{'reap archive' if key else 'abort the task in flight'} {task.key}",
+        f"delete shopify product {task.product.shopify_id} or its files, the CDN folder and the archive",
+        f"reopen {task.product.id} in {PATHS_KEY} so this round remakes it",
+    ]
+    if not gate("manager redo", steps): return
+    mint_token()
+    if key:
+        if task.product.shopify_id:
+            delete_product(task)
+        delete_folder(cdn_prefix(key))
+        delete_key(archive_key(key))
+    else:
+        abort_task(task)
+    reopen(task.product.id)
+    say(f"redo {task.key}: product {task.product.id} reopened")
 
 def wipe():
     steps = [
-        f"delete every object under {BUCKET}/{DATA_PREFIX}",
+        f"delete every object under {BUCKET}/{AUTOMATOR_PREFIX}",
         f"delete every object under {BUCKET}/{CDN_PREFIX}",
-        f"delete every object under {BUCKET}/{OLD_PREFIX}",
+        f"delete {BUCKET}/{STATUS_KEY}",
+        "shopify products stay; run shopify.py purge for those",
     ]
     if not gate("manager wipe", steps): return
-    say(f"deleted {delete_folder(DATA_PREFIX)} objects under {DATA_PREFIX}")
+    say(f"deleted {delete_folder(AUTOMATOR_PREFIX)} objects under {AUTOMATOR_PREFIX}")
     say(f"deleted {delete_folder(CDN_PREFIX)} objects under {CDN_PREFIX}")
-    say(f"deleted {delete_folder(OLD_PREFIX)} objects under {OLD_PREFIX}")
+    delete_key(STATUS_KEY)
 
 ACTIONS = {
     "init": init,
     "show": show,
+    "design": design,
+    "status": status,
     "paths": paths,
     "reset": reset,
     "abort": abort,
     "reap": reap,
+    "redo": redo,
     "wipe": wipe,
 }
 

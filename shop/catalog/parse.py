@@ -93,6 +93,7 @@ def parse_products(ids: list[int]):
             id=id,
             category=row["category"],
             title=row["title"],
+            handle=row["handle"],
             technique=row["technique"],
             primaries=get_primaries(row["primaries"]),
             stitch_colors=get_stitch_colors(product_data),

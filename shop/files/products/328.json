@@ -2,9 +2,9 @@
   "id": 328,
   "category": "men",
   "title": "Men's Athletic T-Shirt",
+  "handle": "mens-athletic-t-shirt",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

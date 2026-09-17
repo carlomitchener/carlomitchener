@@ -2,9 +2,9 @@
   "id": 288,
   "category": "men",
   "title": "Men's Leggings",
+  "handle": "mens-leggings",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

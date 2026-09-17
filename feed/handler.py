@@ -17,6 +17,8 @@ IMMUTABLE = "public, max-age=31536000, immutable"
 NO_CACHE = "no-cache"
 TYPES = {".mp4": "video/mp4", ".webp": "image/webp", ".json": "application/json"}
 
+SITE_FUNCTION = "carlomitchener-site"
+
 def in_lambda() -> bool:
     return bool(os.environ.get(LAMBDA))
 
@@ -30,6 +32,14 @@ def content_type(name: str) -> str:
     return TYPES.get(os.path.splitext(name)[1], "application/octet-stream")
 
 # S3
+
+def wake_site(name: str) -> None:
+    import boto3
+    try:
+        boto3.client("lambda").invoke(FunctionName=SITE_FUNCTION, InvocationType="Event", Payload=json.dumps({"source": "manual", "reason": f"post {name}"}).encode())
+        print(f"woke {SITE_FUNCTION}")
+    except Exception as error:
+        print(f"could not wake {SITE_FUNCTION}: {error}")
 
 def upload(base: str, name: str, row: Dict[str, Any]) -> int:
     import boto3
@@ -79,6 +89,7 @@ def run(seed: int = None) -> Dict[str, Any]:
         print("dry, nothing uploaded")
     else:
         upload(base, manifest["name"], record["row"])
+        wake_site(manifest["name"])
     answer = {
         "name": manifest["name"],
         "seed": seed,

@@ -2,9 +2,9 @@
   "id": 189,
   "category": "women",
   "title": "Women's Leggings",
+  "handle": "womens-leggings",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

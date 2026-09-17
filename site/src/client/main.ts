@@ -6,3 +6,4 @@ import "./flip.ts";
 import "./expiry.ts";
 import "./bird.ts";
 import "./player.ts";
+import "./status.ts";

@@ -2,9 +2,10 @@
   "id": 279,
   "category": "bags",
   "title": "Backpack",
+  "handle": "backpack",
   "technique": "cut-sew",
   "primaries": [
-    "Black"
+    "White"
   ],
   "stitch_colors": [
     "Black",

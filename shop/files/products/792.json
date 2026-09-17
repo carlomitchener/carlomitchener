@@ -2,9 +2,9 @@
   "id": 792,
   "category": "unisex",
   "title": "Unisex Baseball Jersey",
+  "handle": "unisex-baseball-jersey",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

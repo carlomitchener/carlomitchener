@@ -2,9 +2,9 @@
   "id": 320,
   "category": "unisex",
   "title": "Unisex Sweatshirt",
+  "handle": "unisex-sweatshirt",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

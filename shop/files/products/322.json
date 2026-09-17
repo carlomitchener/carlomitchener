@@ -2,9 +2,9 @@
   "id": 322,
   "category": "kids",
   "title": "Kids Leggings",
+  "handle": "kids-leggings",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

@@ -2,9 +2,9 @@
   "id": 257,
   "category": "men",
   "title": "Men's Crew Neck T-Shirt",
+  "handle": "mens-crew-neck-t-shirt",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

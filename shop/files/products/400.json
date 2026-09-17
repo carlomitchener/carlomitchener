@@ -2,9 +2,9 @@
   "id": 400,
   "category": "men",
   "title": "Men's Joggers",
+  "handle": "mens-joggers",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { feed, type ProductRow } from "../src/lib/shop.ts";
+import { facetsOf, feed, type Facets, type ProductRow } from "../src/lib/shop.ts";
 import { loadEnv, need } from "../src/lib/env.ts";
 import { client, getText, putBytes } from "../../aws/s3.ts";
 import { API, COUNTRY, LIVE_DAYS } from "../src/config/shop.ts";
@@ -14,22 +14,21 @@ const SHOP = "data/shop.json";
 const INDEX = "site/cdn/feed/index.json";
 const LOCAL = resolve(org, "../../data/carlomitchener/feed/index.json");
 
-async function pull(key: string): Promise<string[]> {
-  const local = join(DATA_DIR, "tasks", key, `${key}.json`);
+async function pull(key: string): Promise<Facets | null> {
+  const local = join(DATA_DIR, "tasks", `${key}.json`);
   if (!existsSync(local)) {
-    const found = await getText(s3, `data/tasks/${key}/${key}.json`);
+    const found = await getText(s3, `data/automator/tasks/${key}.json`);
     if (!found) {
       console.warn(`snapshot: no task for ${key}, no printfiles listed`);
-      return [];
+      return null;
     }
-    mkdirSync(join(DATA_DIR, "tasks", key), { recursive: true });
+    mkdirSync(join(DATA_DIR, "tasks"), { recursive: true });
     writeFileSync(local, found);
   }
   try {
-    const task = JSON.parse(readFileSync(local, "utf8"));
-    return (task.printfiles ?? []).map((one: { name: string }) => one.name).filter(Boolean);
+    return facetsOf(JSON.parse(readFileSync(local, "utf8")));
   } catch {
-    return [];
+    return null;
   }
 }
 
@@ -41,7 +40,12 @@ const rows: ProductRow[] = await feed({
   live: LIVE_DAYS,
 });
 
-for (const row of rows) row.files = await pull(row.key);
+await Promise.all(
+  rows.map(async (row) => {
+    const facets = await pull(row.key);
+    if (facets) Object.assign(row, facets);
+  }),
+);
 
 const snapshot = { at: Date.now(), products: rows };
 const path = join(DATA_DIR, "shop.json");

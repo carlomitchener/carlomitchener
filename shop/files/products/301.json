@@ -2,9 +2,9 @@
   "id": 301,
   "category": "men",
   "title": "Men's Rash Guard",
+  "handle": "mens-rash-guard",
   "technique": "cut-sew",
   "primaries": [
-    "Black",
     "White"
   ],
   "stitch_colors": [

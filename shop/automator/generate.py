@@ -1,25 +1,22 @@
 import math
 import mrlypy.gen
 from automator.core.api import logger
+from automator.core.config import MAX_RENDERS, TILES
 from automator.core.errors import TaskAborted
-from automator.core.models import Mockup, Task
-from automator.core.s3 import cdn_key, put_png, s3_url, save_task
+from automator.core.models import Design, Task
+from automator.core.s3 import cdn_key, load_design, put_png, s3_url, save_design, save_task
 from automator.core.steps import Step
 from io import BytesIO
-from mrlypy.core.state import seed
 from PIL import Image, ImageCms
 
 FORMAT = "PNG"
 UNIT_SCALE = 1
 TILE_SCALE = 10
 UNIT_IN = 0.25
-DPI = 300
-TILES = [1, 3, 5, 7, 9]
 TILE_NAME = "tile"
 OG_TILE = 3
 OG_NAME = "og"
 OG_SIZE = 1200
-MAX_RENDERS = 3
 
 PROFILE = ImageCms.createProfile("sRGB")
 SRGB = ImageCms.ImageCmsProfile(PROFILE).tobytes()
@@ -37,22 +34,21 @@ def crop(image: Image.Image, width: int, height: int) -> Image.Image:
 def guard_renders(task: Task) -> Task:
     count = task.metadata.get("render_count", 0) + 1
     task.metadata["render_count"] = count
-    if count >= MAX_RENDERS:
+    if count > MAX_RENDERS:
         raise TaskAborted(f"render_count {count} for task {task.key}")
     save_task(task)
     return task
 
-def prepare_printfiles(task: Task, gen: mrlypy.gen.Gen) -> mrlypy.gen.Gen:
+def prepare(task: Task, gen: mrlypy.gen.Gen, tiles: bool) -> mrlypy.gen.Gen:
     tile_width, tile_height = gen.tile.unit_width, gen.tile.unit_height
+    gen.files = []
     for pf in task.printfiles:
         grid_width = math.ceil(pf.width / (tile_width * UNIT_IN))
         grid_height = math.ceil(pf.height / (tile_height * UNIT_IN))
         gen.files.append(mrlypy.gen.File(width=grid_width, height=grid_height))
-    return gen
-
-def prepare_tiles(task: Task, gen: mrlypy.gen.Gen) -> mrlypy.gen.Gen:
-    for size in TILES:
-        gen.files.append(mrlypy.gen.File(width=size, height=size))
+    if tiles:
+        for size in TILES:
+            gen.files.append(mrlypy.gen.File(width=size, height=size))
     return gen
 
 def save_png(key: str, image: Image.Image, dpi: int = None) -> str:
@@ -65,60 +61,50 @@ def save_png(key: str, image: Image.Image, dpi: int = None) -> str:
         put_png(key, data)
     return s3_url(key)
 
-def process_printfiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> Task:
+def process_printfiles(task: Task, gen: mrlypy.gen.Gen) -> Task:
     for i, pf in enumerate(task.printfiles):
-        pf.dpi = DPI
-        image = gen.files[start + i].data
+        image = gen.files[i].data
         full_width = round(image.width * UNIT_IN * pf.dpi)
         full_height = round(image.height * UNIT_IN * pf.dpi)
-        image = image.resize(
-            size=(full_width, full_height),
-            resample=Image.Resampling.NEAREST,
-        )
+        image = image.resize(size=(full_width, full_height), resample=Image.Resampling.NEAREST)
         image = crop(image, round(pf.width * pf.dpi), round(pf.height * pf.dpi))
         pf.url = save_png(cdn_key(task.key, pf.name), image, pf.dpi)
-        logger.info(f"{task.desc} uploaded_printfile {pf.url}")
+        logger.info(f"{task.desc} uploaded printfile {image.width}x{image.height} {pf.url}")
     return task
 
-def process_og(task: Task, image: Image.Image) -> None:
+def process_og(design: Design, image: Image.Image) -> None:
     og = image.resize(size=(OG_SIZE, OG_SIZE), resample=Image.Resampling.NEAREST)
-    url = save_png(cdn_key(task.key, OG_NAME), og)
-    logger.info(f"{task.desc} uploaded_og {url}")
+    url = save_png(cdn_key(design.key, OG_NAME), og)
+    logger.info(f"design {design.key} uploaded og {url}")
 
-def process_tiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> Task:
+def process_tiles(design: Design, gen: mrlypy.gen.Gen, start: int) -> None:
     for i, size in enumerate(TILES):
         raw = gen.files[start + i].data
-        image = raw.resize(
-            size=(raw.width * TILE_SCALE, raw.height * TILE_SCALE),
-            resample=Image.Resampling.NEAREST,
-        )
-        name = f"{task.key}-{size}"
-        url = save_png(cdn_key(task.key, f"{TILE_NAME}-{size}"), image)
-        logger.info(f"{task.desc} uploaded_tile {url}")
-        task.mockups.append(
-            Mockup(
-                id=size,
-                key=task.key,
-                name=name,
-                category="Tile",
-                title=f"{size}x{size}",
-                url=url,
-            )
-        )
+        image = raw.resize(size=(raw.width * TILE_SCALE, raw.height * TILE_SCALE), resample=Image.Resampling.NEAREST)
+        url = save_png(cdn_key(design.key, f"{TILE_NAME}-{size}"), image)
+        logger.info(f"design {design.key} uploaded tile {url}")
         if size == OG_TILE:
-            process_og(task, raw)
-    return task
+            process_og(design, raw)
 
 def mrly_generate(task: Task) -> Task:
+    design = load_design()
+    tiles = bool(design) and design.key == task.design and not design.tiles
     gen = mrlypy.gen.Gen.from_dict(task.variation)
-    seed(gen.seed)
-    gen = prepare_printfiles(task, gen)
-    gen = prepare_tiles(task, gen)
+    gen = prepare(task, gen, tiles)
     task = guard_renders(task)
     gen = mrlypy.gen.generate(gen)
     gen = mrlypy.gen.render(gen, scale=UNIT_SCALE)
-    task = process_printfiles(task, gen, 0)
-    task = process_tiles(task, gen, len(task.printfiles))
+    task = process_printfiles(task, gen)
+    if tiles:
+        process_tiles(design, gen, len(task.printfiles))
+        design.tiles = True
+        save_design(design)
     task.variation = gen.to_dict()
     task.place(Step.MOCKUP)
     return task
+
+if __name__ == "__main__":
+    from automator.core.s3 import load_task
+    task = load_task()
+    save_task(mrly_generate(task))
+    print(task.key, task.step)
