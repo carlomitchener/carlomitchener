@@ -20,7 +20,7 @@ export function ProductCard({ product, width = 800, eager = false, tiles = false
       </span>
       <h3 className={tiles ? "mono" : undefined}>{tiles ? product.design : product.title}</h3>
       <span className="price">
-        {money(product.price)} · <Life born={product.released} now={now} />
+        {money(product.price)} · {product.released ? <Life born={product.released} now={now} /> : "in the batch"}
       </span>
     </a>
   );

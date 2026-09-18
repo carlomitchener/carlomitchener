@@ -67,6 +67,7 @@ const designs = Array.from({ length: DEV_VARIATIONS[1] }, (_, i) => ({
   secondary: Array.from({ length: between([1, 4]) }, () => pick(INKS)),
 }));
 const iso = (stamp: number) => new Date(stamp).toISOString();
+const pendingDesign = designs[0];
 
 for (const entry of catalog) {
   const source = spec(entry.id);
@@ -88,6 +89,7 @@ for (const entry of catalog) {
   const names = [...placements.keys()].map((_, i, all) => (all.length === 1 ? "printfile" : `printfile-${i + 1}`));
   for (const design of designs.slice(0, between(DEV_VARIATIONS))) {
     for (const primary of PRIMARIES) {
+      if (design === pendingDesign && primary === "dark" && next() < 0.5) continue;
       const key = `${primary}-${entry.handle}-${design.key}`;
       const stamp = design.stamp - (1 + next() * 3) * DAY;
       products.push({
@@ -98,7 +100,7 @@ for (const entry of catalog) {
         secondary: design.secondary,
         type: String(entry.id),
         created: iso(stamp),
-        released: iso(design.stamp),
+        released: design === pendingDesign ? "" : iso(design.stamp),
         available: true,
         variants: variants.map((v) => ({ id: String(4000000000000 + Math.floor(next() * 1000000000)), size: v.size, price: Number(v.cost).toFixed(2), available: next() > 0.1 })),
         images: mockups.map((m) => ({ url: picture(1200), alt: `${m.id} - ${m.category} - ${m.title}`, style: String(m.id) })),
@@ -124,7 +126,7 @@ for (const entry of catalog) {
   }
 }
 
-const batches = designs.map((design) => ({ design: design.key, created: iso(design.stamp - 4 * DAY), released: iso(design.stamp) }));
+const batches = designs.filter((design) => design !== pendingDesign).map((design) => ({ design: design.key, created: iso(design.stamp - 4 * DAY), released: iso(design.stamp) }));
 write(join(DATA_DIR, "shop.json"), { at: Date.now(), products, batches });
 console.log(`fake: ${products.length} products in ${batches.length} batches from ${catalog.length} catalog rows into ${join(DATA_DIR, "shop.json")}`);
 

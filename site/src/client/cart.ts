@@ -70,7 +70,7 @@ function stock() {
   if (price) price.textContent = money(button.dataset.price ?? 0);
   const face = one<HTMLElement>("[data-face]");
   if (face) face.textContent = String(Math.round(Number(button.dataset.price ?? 0)));
-  if (buy) buy.href = SHOP ? `https://${SHOP}/cart/${button.dataset.variant}:1` : "/cart/";
+  if (buy && buy.getAttribute("aria-disabled") !== "true") buy.href = SHOP ? `https://${SHOP}/cart/${button.dataset.variant}:1` : "/cart/";
 }
 
 function pick(button: Element) {

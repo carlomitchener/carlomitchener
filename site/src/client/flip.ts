@@ -61,7 +61,15 @@ function swap(design: string, primary: Primary) {
     add.dataset.variant = one.variants[0]?.id ?? "";
     add.dataset.price = one.price;
     add.dataset.size = one.variants[0]?.size ?? "";
-    add.disabled = !one.available;
+    add.disabled = !one.available || !one.released;
+  }
+  const buy = document.querySelector<HTMLAnchorElement>("[data-buy]");
+  if (buy) {
+    if (one.released) buy.removeAttribute("aria-disabled");
+    else {
+      buy.removeAttribute("href");
+      buy.setAttribute("aria-disabled", "true");
+    }
   }
   const price = document.querySelector("[data-price]");
   if (price) price.textContent = money(one.price);

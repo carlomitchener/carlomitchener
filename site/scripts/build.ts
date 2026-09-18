@@ -219,7 +219,7 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
 
 const newest = (a: Row, b: Row) => (a.created < b.created ? 1 : a.created > b.created ? -1 : a.key < b.key ? 1 : -1);
 
-function pairs(list: Row[]): Pair[] {
+function pairs(list: Row[], lone = false): Pair[] {
   const halves = new Map<string, Partial<Record<Primary, Row>>>();
   for (const row of list) {
     const id = `${row.type}-${row.design}`;
@@ -228,12 +228,12 @@ function pairs(list: Row[]): Pair[] {
   const out: Pair[] = [];
   for (const [id, half] of halves) {
     const missing = PRIMARIES.filter((primary) => !half[primary]);
-    if (missing.length) {
+    if (missing.length && !lone) {
       console.warn(`site: ${id} has no ${missing.join(" or ")} sibling, skipped`);
       continue;
     }
-    const light = half.light as Row;
-    const dark = half.dark as Row;
+    const light = (half.light ?? half.dark) as Row;
+    const dark = (half.dark ?? half.light) as Row;
     out.push({ ...light, secondary: [...new Set([...light.secondary, ...dark.secondary])], light, dark });
   }
   return out.sort(newest);
@@ -273,7 +273,9 @@ function collect(site_: Site) {
   const rated = reviews(site_);
   const catalog = JSON.parse(read(catalogFile)) as Catalog[];
   catalogRows = catalog;
-  const all = pairs(rows(site_, catalog));
+  const every = rows(site_, catalog);
+  const all = pairs(every.filter((row) => row.released));
+  const pending = pairs(every.filter((row) => !row.released), true);
   latestRows = {};
   for (const row of all) if (!latestRows[row.category]) latestRows[row.category] = row;
   if (all[0]) latestRows.all = all[0];
@@ -281,6 +283,8 @@ function collect(site_: Site) {
   const shown = feed(site_);
   const byType = new Map<string, Pair[]>();
   for (const row of all) byType.set(row.type, [...(byType.get(row.type) ?? []), row]);
+  const pendingByType = new Map<string, Pair[]>();
+  for (const row of pending) pendingByType.set(row.type, [...(pendingByType.get(row.type) ?? []), row]);
   const inCategory = (slug: string) => all.filter((row) => row.category === slug);
   const ofProduct = (entry: Catalog) => byType.get(String(entry.id)) ?? [];
   const categoryCards: Card[] = [
@@ -384,13 +388,24 @@ function collect(site_: Site) {
       kind: "product",
       name: row.title,
       hidden: true,
-      data: { product: row, family: byType.get(row.type) ?? [row], alike: alike(row), review: rated[row.type] ?? null },
+      data: { product: row, family: byType.get(row.type) ?? [row], alike: alike(row), review: rated[row.type] ?? null, preview: false },
+      inputs: reviewsFile ? [catalogFile, reviewsFile] : [catalogFile],
+      at: row.created.slice(0, 10),
+    });
+  }
+  for (const row of pending) {
+    routes.push({
+      route: productUrl(row.key),
+      kind: "product",
+      name: row.title,
+      hidden: true,
+      data: { product: row, family: pendingByType.get(row.type) ?? [row], alike: alike(row), review: rated[row.type] ?? null, preview: true },
       inputs: reviewsFile ? [catalogFile, reviewsFile] : [catalogFile],
       at: row.created.slice(0, 10),
     });
   }
   routes.push({ route: "/cart/", kind: "cart", name: "Bag", at: today(), hidden: true });
-  routes.push({ route: "/status/", kind: "status", name: "Status", at: today(), hidden: true });
+  routes.push({ route: "/status/", kind: "status", name: "Status", at: today(), hidden: true, data: { pending } });
   const notes: Record<string, string> = {};
   const readme = site_.input("readme").files[0];
   if (readme) {
@@ -487,7 +502,8 @@ function draw(site_: Site, route: Route): Output[] {
   if (route.kind === "product") return product(site_, route, at);
   if (route.kind === "post") return post(site_, route, at);
   if (route.kind === "status") {
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Status", description: "The automator, the CDN and the Lambdas.", noindex: true }, h(Status, {})) }];
+    const { pending } = route.data as { pending: Pair[] };
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Status", description: "The automator, the CDN and the Lambdas.", noindex: true }, h(Status, { pending, now })) }];
   }
   if (route.kind === "cart") {
     return [{ path: at, bytes: shell(site_, { route: route.route, name: "Bag", description: "Your bag.", noindex: true }, h(Cart, {})) }];
@@ -534,7 +550,7 @@ function post(site_: Site, route: Route, at: string): Output[] {
 const sibling = (one: Row) => ({ key: one.key, created: one.created, released: one.released, price: one.price, variants: one.variants, images: one.images, files: one.files, available: one.available });
 
 function product(site_: Site, route: Route, at: string): Output[] {
-  const { product: row, family, alike, review } = route.data as { product: Pair; family: Pair[]; alike: Pair[]; review: Review | null };
+  const { product: row, family, alike, review, preview } = route.data as { product: Pair; family: Pair[]; alike: Pair[]; review: Review | null; preview: boolean };
   const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
   const siblings: Record<string, unknown> = {};
   for (const one of family) siblings[one.design] = { light: sibling(one.light), dark: sibling(one.dark) };
@@ -546,7 +562,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
     { name: row.design },
   ];
   const body = [
-    h(Product, { key: "product", trail, product: row, family, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now, review }),
+    h(Product, { key: "product", trail, product: row, family, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now, review, preview }),
     h("script", { key: "siblings", type: "application/json", id: "siblings", dangerouslySetInnerHTML: { __html: JSON.stringify(siblings) } }),
   ];
   const data = {

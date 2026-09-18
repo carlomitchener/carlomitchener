@@ -19,7 +19,7 @@ function Drop({ name, children }) {
   );
 }
 
-export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now, review }) {
+export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now, review, preview = false }) {
   const first = product.variants[0];
   return (
     <div className="details">
@@ -41,15 +41,15 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
           data-variant={product.variant}
           data-price={product.price}
           data-size={first ? first.size : ""}
-          disabled={!product.available}
+          disabled={preview || !product.available}
         >
           Add to Bag
         </button>
-        <a className="pill wide" href={buy} data-buy rel="noopener">
+        <a className="pill wide" href={preview ? undefined : buy} aria-disabled={preview ? "true" : undefined} data-buy rel="noopener">
           Buy now
         </a>
       </div>
-      <Life born={product.released} gate bar now={now} />
+      {preview ? <p className="fine pending">{`In batch ${product.design}, not released. The whole batch goes on sale at once.`}</p> : <Life born={product.released} gate bar now={now} />}
       <p className="fine">
         <a href={shop}>{`More ${product.title}`}</a>
       </p>

@@ -58,13 +58,14 @@ const all: ProductRow[] = await feed({
   live: LIVE_DAYS * 2,
 });
 
-const rows = all.filter((row) => {
-  if (row.key.startsWith(GIFT_PREFIX)) return true;
+let pending = 0;
+for (const row of all) {
   const batch = byDesign.get(row.design);
-  if (batch) row.released = batch.released;
-  return Boolean(batch);
-});
-console.log(`snapshot: ${released.length} released batches, ${all.length - rows.length} unreleased products skipped`);
+  row.released = batch ? batch.released : "";
+  if (!batch && !row.key.startsWith(GIFT_PREFIX)) pending += 1;
+}
+const rows = all;
+console.log(`snapshot: ${released.length} released batches, ${pending} products pending`);
 
 await Promise.all(
   rows.map(async (row) => {
