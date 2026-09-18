@@ -2,7 +2,7 @@ import { Breadcrumbs } from "../components/Breadcrumbs.jsx";
 import { Chips } from "../components/Chips.jsx";
 import { ProductGrid } from "../components/ProductGrid.jsx";
 
-export function Shop({ trail, title, lead, chips, current, products, now }) {
+export function Shop({ trail, title, lead, chips, current, products, tiles = false, now }) {
   return (
     <div className="wrap">
       <Breadcrumbs trail={trail} />
@@ -13,7 +13,7 @@ export function Shop({ trail, title, lead, chips, current, products, now }) {
       {chips.map((group) => (
         <Chips key={group.label} label={group.label} cards={group.cards} current={current} />
       ))}
-      <ProductGrid products={products} eager={4} now={now} />
+      <ProductGrid products={products} eager={4} tiles={tiles} now={now} />
     </div>
   );
 }

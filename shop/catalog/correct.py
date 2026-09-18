@@ -51,6 +51,9 @@ IGNORED_MOCKUPS = [
     {"id": 400, "title": "Men's Joggers", "mockups": [3179]},
     {"id": 401, "title": "Women's Joggers", "mockups": [3198]},
     {"id": 458, "title": "Beanie", "mockups": [6328]},
+    {"id": 630, "title": "Bandana", "mockups": [
+        4350, 4353, 4356, 4357, 4359, 4360, 4362, 4363, 4365, 4366,
+    ]},
     {"id": 654, "title": "Reversible Bucket Hat", "mockups": [
         4865, 4873, 4875, 4877, 4884, 4885, 4886, 4887,
         4888, 4889, 4894, 4895, 4896, 4897, 4898, 4900,

@@ -1,9 +1,10 @@
-import { cdnUrl, grid, money, type Picture, type Variant } from "../lib/shop.ts";
+import { cdnUrl, grid, money, productUrl, type Picture, type Variant } from "../lib/shop.ts";
 
 type Sibling = { design: string; created: string; price: string; variants: Variant[]; images: Picture[]; files: string[]; available: boolean };
 
 const node = document.getElementById("siblings");
 const siblings: Record<string, Sibling> = node ? JSON.parse(node.textContent ?? "{}") : {};
+const byDesign = new Map(Object.entries(siblings).map(([key, one]) => [one.design, key]));
 
 const style = (list: Picture[], want: string) => list.find((image) => image.style === want) ?? list[0];
 
@@ -64,7 +65,7 @@ function swap(key: string) {
   }
   const fine = document.querySelector("[data-design]");
   if (fine) fine.textContent = `Design ${one.design}`;
-  if (old !== key) history.pushState({ key }, "", `/products/${key}/`);
+  if (old !== key) history.pushState({ key }, "", productUrl(key));
   window.dispatchEvent(new CustomEvent("flip", { detail: key }));
 }
 
@@ -76,7 +77,7 @@ if (Object.keys(siblings).length) {
     swap(target.dataset.key ?? "");
   });
   window.addEventListener("popstate", () => {
-    const key = location.pathname.split("/").filter(Boolean).pop() ?? "";
-    if (siblings[key]) swap(key);
+    const key = byDesign.get(location.pathname.split("/").filter(Boolean).pop() ?? "");
+    if (key) swap(key);
   });
 }

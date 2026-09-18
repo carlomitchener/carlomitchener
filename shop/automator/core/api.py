@@ -90,9 +90,9 @@ def shopify_request(task: Task, query: str, variables: dict = None) -> dict:
         raise ShopifyError(f"shopify {operation(query)} errors {clip(json.dumps(result['errors']))}")
     return result
 
-def check_errors(result: dict, name: str) -> dict:
+def check_errors(result: dict, name: str, key: str = "userErrors") -> dict:
     data = result["data"][name]
-    errors = data["userErrors"]
+    errors = data[key]
     if errors:
         raise TaskAborted(f"{name} userErrors {clip(json.dumps(errors))}")
     return data

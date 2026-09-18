@@ -1,5 +1,5 @@
 import { checkoutUrl, count, load, total } from "./cart.ts";
-import { money } from "../lib/shop.ts";
+import { money, productUrl } from "../lib/shop.ts";
 
 const header = document.querySelector<HTMLElement>("[data-header]");
 
@@ -101,7 +101,7 @@ if (header) {
       ...items.map((item) => {
         const li = document.createElement("li");
         const a = document.createElement("a");
-        a.href = `/products/${item.key}/`;
+        a.href = productUrl(item.key);
         const img = document.createElement("img");
         img.src = item.image;
         img.alt = item.key;

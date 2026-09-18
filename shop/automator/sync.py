@@ -59,7 +59,7 @@ def mrly_sync(task: Task) -> Task:
             time.sleep(DELAY)
     if unsynced(task):
         raise Retry(f"{len(unsynced(task))} variants left")
-    task.place(Step.PUBLISH)
+    task.place(Step.PREVIEW)
     return task
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ from automator import files
 from automator import generate
 from automator import mockup
 from automator import ping
+from automator import preview
 from automator import process
 from automator import product
 from automator import publish
@@ -29,6 +30,7 @@ STEPS = {
     Step.PRODUCT: product.mrly_product,
     Step.PING: ping.mrly_ping,
     Step.SYNC: sync.mrly_sync,
+    Step.PREVIEW: preview.mrly_preview,
     Step.PUBLISH: publish.mrly_publish,
     Step.COMPLETE: complete.mrly_complete,
     Step.ARCHIVE: complete.mrly_complete,

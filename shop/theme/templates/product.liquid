@@ -1,2 +1,4 @@
 <h1>{{ product.title }}</h1>
-<p><a href="https://carlomitchener.com/products/{{ product.handle }}/">See it on carlomitchener.com</a></p>
+{% assign design = product.handle | split: "-" | first %}
+{% assign slug = product.handle | remove_first: design | remove_first: "-" %}
+<p><a href="https://carlomitchener.com/{{ slug }}/{{ design }}/">See it on carlomitchener.com</a></p>

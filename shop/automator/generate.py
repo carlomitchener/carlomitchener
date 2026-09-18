@@ -14,9 +14,6 @@ UNIT_SCALE = 1
 TILE_SCALE = 10
 UNIT_IN = 0.25
 TILE_NAME = "tile"
-OG_TILE = 3
-OG_NAME = "og"
-OG_SIZE = 1200
 
 PROFILE = ImageCms.createProfile("sRGB")
 SRGB = ImageCms.ImageCmsProfile(PROFILE).tobytes()
@@ -72,19 +69,12 @@ def process_printfiles(task: Task, gen: mrlypy.gen.Gen) -> Task:
         logger.info(f"{task.desc} uploaded printfile {image.width}x{image.height} {pf.url}")
     return task
 
-def process_og(design: Design, image: Image.Image) -> None:
-    og = image.resize(size=(OG_SIZE, OG_SIZE), resample=Image.Resampling.NEAREST)
-    url = save_png(cdn_key(design.key, OG_NAME), og)
-    logger.info(f"design {design.key} uploaded og {url}")
-
 def process_tiles(design: Design, gen: mrlypy.gen.Gen, start: int) -> None:
     for i, size in enumerate(TILES):
         raw = gen.files[start + i].data
         image = raw.resize(size=(raw.width * TILE_SCALE, raw.height * TILE_SCALE), resample=Image.Resampling.NEAREST)
         url = save_png(cdn_key(design.key, f"{TILE_NAME}-{size}"), image)
         logger.info(f"design {design.key} uploaded tile {url}")
-        if size == OG_TILE:
-            process_og(design, raw)
 
 def mrly_generate(task: Task) -> Task:
     design = load_design()

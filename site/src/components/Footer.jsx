@@ -39,7 +39,7 @@ export function Footer({ catalog = [] }) {
                   <ul>
                     {group.rows.map((row) => (
                       <li key={row.handle}>
-                        <a href={`/shop/${group.slug}/${row.handle}/`}>{row.title}</a>
+                        <a href={`/${row.handle}/`}>{row.title}</a>
                       </li>
                     ))}
                   </ul>

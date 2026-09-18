@@ -22,6 +22,12 @@ export type Facets = { files: string[]; design: string; group: string; primary: 
 
 export const designOf = (handle: string) => String(handle ?? "").split("-")[0];
 
+export const handleOf = (key: string) => String(key ?? "").split("-").slice(1).join("-");
+
+export const productUrl = (key: string) => `/${handleOf(key)}/${designOf(key)}/`;
+
+export const collectionUrl = (handle: string) => `/${handle}/`;
+
 export function facetsOf(task: any): Facets {
   const variation = task?.variation ?? {};
   return {
@@ -141,8 +147,6 @@ export async function feed(wire: Wire): Promise<ProductRow[]> {
 export const cdnUrl = (key: string, name: string) => (key ? `${CDN}/${key}/${name}.png` : "");
 
 export const tileUrl = (key: string, n: number) => cdnUrl(key, `tile-${n}`);
-
-export const ogUrl = (key: string) => cdnUrl(key, "og");
 
 export const grid = (url: string, width: number) => `${url}${url.includes("?") ? "&" : "?"}width=${width}&format=auto`;
 

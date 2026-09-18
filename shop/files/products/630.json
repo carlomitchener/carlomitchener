@@ -61,7 +61,7 @@
       "variant_ids": [
         16031
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4353,
@@ -70,7 +70,7 @@
       "variant_ids": [
         16032
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4355,
@@ -88,7 +88,7 @@
       "variant_ids": [
         16031
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4357,
@@ -97,7 +97,7 @@
       "variant_ids": [
         16032
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4358,
@@ -115,7 +115,7 @@
       "variant_ids": [
         16031
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4360,
@@ -124,7 +124,7 @@
       "variant_ids": [
         16032
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4361,
@@ -142,7 +142,7 @@
       "variant_ids": [
         16031
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4363,
@@ -151,7 +151,7 @@
       "variant_ids": [
         16032
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4364,
@@ -169,7 +169,7 @@
       "variant_ids": [
         16031
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4366,
@@ -178,7 +178,7 @@
       "variant_ids": [
         16032
       ],
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 4367,

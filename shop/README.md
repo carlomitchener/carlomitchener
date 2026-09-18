@@ -22,14 +22,15 @@
 
 - Each tick loads `data/automator/task.json` or creates a task, then runs steps until one yields (`Retry`), fails, or completes.
 - CREATE `create.py` - picks an open product in `paths.json`; when none is open, reopens all and rolls a new design; the task key is `{design}-{handle}`.
-- GENERATE `generate.py` - renders the printfiles at the placement dpi, and once per design the tiles 1/3/5/7/9 and `og`.
-- MOCKUP `mockup.py` - posts one v2 mockup task for the last variant with every mockup style and every placement, keeps the task id, yields.
-- PROCESS `process.py` - polls the mockup task within `MOCKUP_BUDGET`; completed stores the mockup URLs; unknown styles are skipped; no mockup aborts.
+- GENERATE `generate.py` - renders the printfiles at the placement dpi, and once per design the tiles 1/3/5/7/9.
+- MOCKUP `mockup.py` - keeps the styles the last variant allows and posts the first v2 mockup tasks: `MOCKUP_RENDERS` renders (styles x placements) per task, `MOCKUP_INFLIGHT` tasks in flight, `MOCKUP_POSTS` posts per tick (the store's limit is 2 a minute); every placement rides on every task; a mockup's `job` is its task id, its `url` arrives later, like `variant.synced`.
+- PROCESS `process.py` - one GET polls every task in flight; completed stores the URLs and drops styles that came back empty; failed clears the `job` so those styles get reposted and counts a failure on each, `MOCKUP_ROUNDS` failures drop the style; then it tops up the tasks in flight and waits within `MOCKUP_BUDGET`; no style left aborts. Printful 500s about 4 in 10 of the track jacket's tasks (6 placements of 44x46 in) whatever their size, so the retries carry it.
 - FILES `files.py` - `fileCreate` in batches of 25 from the Printful URLs, filename `{key}-{style}.png`, alt `{style} - {category} - {title}`; only missing files are resent, `FILE_ROUNDS` rounds.
 - STATUS `status.py` - reads every file's status; FAILED or missing files go back to FILES; after the rounds they are dropped; not READY waits within `STATUS_BUDGET`.
 - PRODUCT `product.py` - one `productSet` with `identifier: {handle}`, so a retry updates instead of duplicating; vendor Printful, tags Category, Title, `design:`, `group:`, `primary:`, `secondary:`; yields.
 - PING `ping.py` - `GET sync/products/@{shopify id}` until Printful's app has pulled the product and every sku, within `PING_BUDGET`.
 - SYNC `sync.py` - `PUT sync/variant/{id}` with the printfiles and the stitch colour, 30 variants per tick, stops before the tick reserve.
+- PREVIEW `preview.py` - reads Printful's own mockup (`sync_variants[].files[]` of type `preview`) once it exists, adds it to the product with `productCreateMedia`, alt `preview - Preview - {title}`, and moves it to position 0 when READY, so Shopify, Printful, emails and checkout show the same image; within `PREVIEW_BUDGET`, then it skips with a warning, never a strike.
 - PUBLISH `publish.py` - publishes to Online Store and Headless.
 - COMPLETE `complete.py` - archives the task to `data/automator/tasks/<key>.json`, clears `task.json`, wakes `carlomitchener-site`; ARCHIVE reruns it if a tick died between the two.
 - FAILED `run.py` - any other exception parks the task; the next tick sends it back to the failing step; three strikes abort. The counter resets whenever a step advances.
@@ -45,7 +46,7 @@
 - `data/automator/strikes.json` - product id to aborts this batch.
 - `data/automator/tasks/<key>.json` - one archive per live product.
 - `data/catalog/<id>.json` - the parsed catalog, uploaded by `catalog/s3.py`.
-- `site/cdn/printful/<design>/` - `tile-1.png` to `tile-9.png`, `og.png`.
+- `site/cdn/printful/<design>/` - `tile-1.png` to `tile-9.png`.
 - `site/cdn/printful/<design>-<handle>/` - `printfile.png` (or `-1`, `-2`).
 - `site/status/automator.json` - the public status, `no-cache`. `site/status/stats.json` is `carlomitchener-stats`' every 15 minutes: CDN, Lambdas, errors, bucket counts. The site renders both at `/status/`.
 - Nothing under `data/` is served; `site/` is the CloudFront origin.
@@ -54,6 +55,7 @@
 
 - Prices: the variant price is Printful's cost. Shopify Markets adds the margin per market; the site reads market prices through the Storefront API with `@inContext(country)`.
 - Vendor Printful on every automator product; `shopify.py purge` and `vendor` key on it, so paintings and prints can share the shop.
+- Shopify title = `{title} ({design})`, e.g. `Tote Bag (08c92015)`, so cart lines and emails tell variations apart; the site reads its titles from `catalog.json`, never from Shopify.
 - Handle = `{design}-{handle}`, e.g. `08c92015-unisex-hoodie`. Variant sku = `{handle}-{size slug}`. Mockup file = `{handle}-{style}.png`; the style id also leads the alt, and the site's flip keys on the alt (`lib/shop.ts styleOf`, `client/flip.ts`).
 - The site takes the design key from the handle and reads group, primary and secondary from the archived task (`scripts/snapshot.ts`).
 - The design paints White (`PRIMARIES` in `core/config.py`): AOP prints on white fabric, so white areas never show as bleed when stretched. The `primaries` column in `catalog.json` is informational.
@@ -62,6 +64,6 @@
 - The task json holds no secret: ids, costs, CDN URLs, the variation and counters. The status file carries none of the costs or Printful URLs.
 - The site rebuilds when woken: COMPLETE, REAP and a new feed post invoke `carlomitchener-site` with `{"source": "manual"}`; it rebuilds only if the Shopify snapshot or the feed index changed.
 - `Retry` ends the tick and saves; `TaskAborted` aborts; anything else is a strike. Printful 429, 5xx after backoff and network errors retry; 400 and 404 abort; Shopify THROTTLED retries.
-- Budgets in `core/config.py`: mockup 30 min, status 20 min, ping 60 min, 3 file rounds, 3 renders, 3 strikes, 25 s tick reserve.
+- Budgets in `core/config.py`: mockup 30 min and 12 renders per task, status 20 min, ping 60 min, preview 20 min, 3 file rounds, 3 renders, 3 strikes, 25 s tick reserve.
 - `requests` is not needed: `core/http.py` is a small shim with backoff and `Retry-After`.
 - Secrets live in `Developer/.env` on the desk and in the Lambda env in the cloud; the row is `carlomitchener-automator` in `aws/common.py`.

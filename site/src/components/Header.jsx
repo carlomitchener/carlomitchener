@@ -7,7 +7,7 @@ const CART = "/cart/";
 export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
   const links = [{ slug: "all", name: "All", href: "/shop/" }, ...CATEGORIES.map(([slug, name]) => ({ slug, name, href: `/shop/${slug}/` }))];
   const current = (href) => (route === href || (href !== "/shop/" && route.startsWith(href)) ? "page" : undefined);
-  const rows = (slug) => (slug === "all" ? CATEGORIES.map(([s, name]) => ({ title: name, href: `/shop/${s}/` })) : catalog.filter((row) => row.category === slug).map((row) => ({ title: row.title, href: `/shop/${slug}/${row.handle}/` })));
+  const rows = (slug) => (slug === "all" ? CATEGORIES.map(([s, name]) => ({ title: name, href: `/shop/${s}/` })) : catalog.filter((row) => row.category === slug).map((row) => ({ title: row.title, href: `/${row.handle}/` })));
   return (
     <header className="top" data-header>
       <div className="bar">

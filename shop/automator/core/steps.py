@@ -10,6 +10,7 @@ class Step(Enum):
     PRODUCT = "product"
     PING = "ping"
     SYNC = "sync"
+    PREVIEW = "preview"
     PUBLISH = "publish"
     COMPLETE = "complete"
     ARCHIVE = "archive"

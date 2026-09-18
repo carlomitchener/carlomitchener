@@ -31,7 +31,7 @@ from env import SHOP_DIR, gate, load_json, say, verb
 import os
 
 VERBS = ["init", "show", "design", "status", "paths", "reset", "abort", "reap", "redo", "wipe"]
-COUNTERS = ["failed_at", "failed_error", "failed_count", "files_round", "render_count", "waiting_since"]
+COUNTERS = ["failed_at", "failed_error", "failed_count", "files_round", "preview_media", "render_count", "waiting_since"]
 CATALOG = os.path.join(SHOP_DIR, "files", "catalog.json")
 
 def all_ids() -> list[int]:

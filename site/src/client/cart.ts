@@ -1,5 +1,5 @@
 import { CART_KEY } from "../config/shop.ts";
-import { money } from "../lib/shop.ts";
+import { money, productUrl } from "../lib/shop.ts";
 
 declare const SHOP: string;
 
@@ -133,12 +133,12 @@ function lines() {
   for (const item of items) {
     const node = template.content.cloneNode(true) as DocumentFragment;
     const q = <T extends Element>(s: string) => node.querySelector(s) as T;
-    q<HTMLAnchorElement>("[data-href]").href = `/products/${item.key}/`;
+    q<HTMLAnchorElement>("[data-href]").href = productUrl(item.key);
     const image = q<HTMLImageElement>("img");
     image.src = item.image;
     image.alt = item.key;
     const title = q<HTMLAnchorElement>("[data-title]");
-    title.href = `/products/${item.key}/`;
+    title.href = productUrl(item.key);
     title.textContent = `${item.title} (${item.key})`;
     q<HTMLElement>("[data-size]").textContent = `${item.size} · ${money(item.price)}`;
     q<HTMLElement>("[data-qty]").textContent = String(item.qty);

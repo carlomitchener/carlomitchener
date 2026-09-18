@@ -116,6 +116,8 @@ class Mockup:
     category: str = None
     title: str = None
     variant_ids: list[int] = None
+    job: str = None
+    failures: int = 0
     url: str = None
 
     def to_dict(self) -> dict:

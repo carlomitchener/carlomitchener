@@ -9,7 +9,7 @@ import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
-import { facetsOf, grid, ogUrl, type Facets, type ProductRow } from "../src/lib/shop.ts";
+import { collectionUrl, facetsOf, grid, handleOf, productUrl, type Facets, type ProductRow } from "../src/lib/shop.ts";
 import { Page } from "../src/components/Page.jsx";
 import { Home } from "../src/pages/Home.jsx";
 import { Shop } from "../src/pages/Shop.jsx";
@@ -105,7 +105,11 @@ function shell(site_: Site, leaf: Leaf, body: unknown) {
 
 const buyUrl = (id: string) => (SHOP ? `https://${SHOP}/cart/${id}:1` : "/cart/");
 
-const shopRoute = (row: { category: string; handle: string }) => `/shop/${row.category}/${row.handle}/`;
+const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
+
+const PREVIEW = "preview";
+
+const RESERVED = new Set(["shop", "feed", "cart", "status", "about", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
 
 function tasks(site_: Site) {
   const found = new Map<string, Facets>();
@@ -136,6 +140,10 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
     const variant = product.variants[0];
     if (!variant) {
       console.warn(`site: ${product.key} has no variant, skipped`);
+      continue;
+    }
+    if (!handleOf(product.key)) {
+      console.warn(`site: ${product.key} has no handle in its key, skipped`);
       continue;
     }
     const facets = files.get(product.key);
@@ -260,7 +268,10 @@ function collect(site_: Site) {
     });
   }
   const names = new Map(CATEGORIES);
+  const taken = new Set<string>(RESERVED);
+  for (const file of site_.input("pages").files) taken.add(basename(file, ".md"));
   for (const entry of catalog) {
+    if (taken.has(entry.handle)) throw new Error(`site: product handle ${entry.handle} collides with a page`);
     const list = ofProduct(entry);
     routes.push({
       route: shopRoute(entry),
@@ -274,6 +285,7 @@ function collect(site_: Site) {
         chips: [{ label: "Products", cards: productCards(entry.category) }],
         current: shopRoute(entry),
         products: list,
+        tiles: true,
         noindex: !list.length,
       },
       inputs: [catalogFile],
@@ -282,7 +294,7 @@ function collect(site_: Site) {
   }
   for (const row of all) {
     routes.push({
-      route: `/products/${row.key}/`,
+      route: productUrl(row.key),
       kind: "product",
       name: row.title,
       hidden: true,
@@ -293,16 +305,13 @@ function collect(site_: Site) {
   }
   routes.push({ route: "/cart/", kind: "cart", name: "Bag", at: today(), hidden: true });
   routes.push({ route: "/status/", kind: "status", name: "Status", at: today(), hidden: true });
-  const taken = new Set<string>();
   const readme = site_.input("readme").files[0];
   if (readme) {
-    taken.add("about");
     routes.push({ route: "/about/", kind: "page", name: sheet(read(readme)).title || "About", source: readme, inputs: [readme], at: today() });
   }
   for (const file of site_.input("pages").files) {
     const name = basename(file, ".md");
-    if (taken.has(name)) throw new Error(`site: two pages want /${name}/`);
-    taken.add(name);
+    if (RESERVED.has(name)) throw new Error(`site: page ${name} wants a reserved route`);
     routes.push({ route: `/${name}/`, kind: "page", name: sheet(read(file)).title || name, source: file, inputs: [file], at: today() });
   }
   shown.forEach((post, i) => {
@@ -320,7 +329,7 @@ function collect(site_: Site) {
   const found = [
     ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, kind: "Category" })),
     ...catalog.filter((entry) => ofProduct(entry).length).map((entry) => ({ name: entry.title, href: shopRoute(entry), kind: "Product" })),
-    ...all.map((row) => ({ name: `${row.title} ${row.key}`, href: `/products/${row.key}/`, kind: "Variation" })),
+    ...all.map((row) => ({ name: `${row.title} ${row.design}`, href: productUrl(row.key), kind: "Variation" })),
     ...shown.map((post) => ({ name: post.name, href: postRoute(post.name), kind: "Post" })),
     ...site.pages.map((one) => ({ name: one.name, href: one.href, kind: "Page" })),
   ];
@@ -331,14 +340,17 @@ function collect(site_: Site) {
 
 /* RENDER */
 
-const ogFor = (row: Row) => root + ogUrl(row.design);
+const previewOf = (row: Row) => {
+  const preview = row.images.find((image) => image.style === PREVIEW);
+  return preview ? `${preview.url}${preview.url.includes("?") ? "&" : "?"}width=1200` : undefined;
+};
 
 const describe = (row: Row) => `${row.title} by ${site.name}. USD ${Number(row.price).toFixed(2)}. One design, one moon of ${Math.round(LIVE_DAYS)} days.`;
 
 function cover(products: Row[]) {
   const first = products[0];
   if (!first) return FALLBACK;
-  return first.images[0] ? grid(first.images[0].url, 1200) : ogFor(first);
+  return first.images[0] ? grid(first.images[0].url, 1200) : FALLBACK;
 }
 
 function draw(site_: Site, route: Route): Output[] {
@@ -405,7 +417,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
     { name: "Shop", href: "/shop/" },
     { name: names.get(row.category) ?? row.category, href: `/shop/${row.category}/` },
     { name: row.title, href: shopRoute(row) },
-    { name: row.key },
+    { name: row.design },
   ];
   const body = [
     h(Product, { key: "product", trail, product: row, family, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now }),
@@ -416,7 +428,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
     "@type": "Product",
     name: row.title,
     sku: row.key,
-    image: ogFor(row),
+    image: previewOf(row),
     description: describe(row),
     brand: { "@type": "Brand", name: site.name },
     offers: {
@@ -427,7 +439,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
       availability: row.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
     },
   };
-  return [{ path: at, bytes: shell(site_, { route: route.route, name: row.title, description: describe(row), image: ogFor(row), data, noindex: true }, body) }];
+  return [{ path: at, bytes: shell(site_, { route: route.route, name: row.title, description: describe(row), image: previewOf(row), data, noindex: true }, body) }];
 }
 
 /* SPEC */
