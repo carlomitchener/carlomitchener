@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { LIVE_DAYS, type Catalog } from "../src/config/shop.ts";
+import { PRIMARIES } from "../src/lib/shop.ts";
 import { DEV_DIR, DEV_POSTS, DEV_SEED, DEV_VARIATIONS, PICSUM, PICSUM_POOL } from "../src/config/dev.ts";
 
 const org = resolve(import.meta.dir, "..");
@@ -58,13 +59,14 @@ const catalog = read(join(org, "../shop/files/catalog.json")) as Catalog[];
 const products: unknown[] = [];
 const GROUPS = ["General", "Fractal", "Magic", "Special", "Mosaic"];
 const INKS = ["Red", "Orange", "Yellow", "Green", "Mint", "Teal", "Cyan", "Blue", "Indigo", "Purple", "Pink", "Brown", "Gray"];
+const INK = { light: "White", dark: "Black" };
 const designs = Array.from({ length: DEV_VARIATIONS[1] }, (_, i) => ({
   key: hex(),
   stamp: Date.now() - (i / DEV_VARIATIONS[1]) * LIVE_DAYS * DAY,
   group: pick(GROUPS),
-  primary: "White",
   secondary: Array.from({ length: between([1, 4]) }, () => pick(INKS)),
 }));
+const iso = (stamp: number) => new Date(stamp).toISOString();
 
 for (const entry of catalog) {
   const source = spec(entry.id);
@@ -85,41 +87,46 @@ for (const entry of catalog) {
   }
   const names = [...placements.keys()].map((_, i, all) => (all.length === 1 ? "printfile" : `printfile-${i + 1}`));
   for (const design of designs.slice(0, between(DEV_VARIATIONS))) {
-    const key = `${design.key}-${entry.handle}`;
-    const stamp = design.stamp - next() * DAY;
-    products.push({
-      key,
-      design: design.key,
-      group: design.group,
-      primary: design.primary,
-      secondary: design.secondary,
-      type: String(entry.id),
-      created: new Date(stamp).toISOString(),
-      available: true,
-      variants: variants.map((v) => ({ id: String(4000000000000 + Math.floor(next() * 1000000000)), size: v.size, price: Number(v.cost).toFixed(2), available: next() > 0.1 })),
-      images: mockups.map((m) => ({ url: picture(1200), alt: `${m.id} - ${m.category} - ${m.title}`, style: String(m.id) })),
-      files: names,
-    });
-    write(join(DATA_DIR, "tasks", `${key}.json`), {
-      key,
-      step: "archive",
-      design: design.key,
-      seed: Math.floor(next() * 1000000),
-      created_at: stamp,
-      updated_at: stamp,
-      product: { id: entry.id, category: entry.category, title: entry.title, handle: entry.handle },
-      variation: { tile: { group: design.group }, paint: { primary: design.primary, secondary: design.secondary } },
-      printfiles: [...placements.values()].map((place, i) => ({ id: String(i), key: hex(), name: names[i], url: `/cdn/printful/${key}/${names[i]}.png`, width: place.width, height: place.height, dpi: place.dpi })),
-      placements: [...placements.values()],
-      variants: [],
-      mockups: [],
-      metadata: {},
-    });
+    for (const primary of PRIMARIES) {
+      const key = `${primary}-${entry.handle}-${design.key}`;
+      const stamp = design.stamp - (1 + next() * 3) * DAY;
+      products.push({
+        key,
+        design: design.key,
+        primary,
+        group: design.group,
+        secondary: design.secondary,
+        type: String(entry.id),
+        created: iso(stamp),
+        released: iso(design.stamp),
+        available: true,
+        variants: variants.map((v) => ({ id: String(4000000000000 + Math.floor(next() * 1000000000)), size: v.size, price: Number(v.cost).toFixed(2), available: next() > 0.1 })),
+        images: mockups.map((m) => ({ url: picture(1200), alt: `${m.id} - ${m.category} - ${m.title}`, style: String(m.id) })),
+        files: names,
+      });
+      write(join(DATA_DIR, "tasks", `${key}.json`), {
+        key,
+        step: "archive",
+        design: design.key,
+        primary,
+        seed: Math.floor(next() * 1000000),
+        created_at: stamp,
+        updated_at: stamp,
+        product: { id: entry.id, category: entry.category, title: entry.title, handle: entry.handle },
+        variation: { tile: { group: design.group }, paint: { primary: INK[primary], secondary: design.secondary } },
+        printfiles: [...placements.values()].map((place, i) => ({ id: String(i), key: hex(), name: names[i], url: `/cdn/printful/${key}/${names[i]}.png`, width: place.width, height: place.height, dpi: place.dpi })),
+        placements: [...placements.values()],
+        variants: [],
+        mockups: [],
+        metadata: {},
+      });
+    }
   }
 }
 
-write(join(DATA_DIR, "shop.json"), { at: Date.now(), products });
-console.log(`fake: ${products.length} products from ${catalog.length} catalog rows into ${join(DATA_DIR, "shop.json")}`);
+const batches = designs.map((design) => ({ design: design.key, created: iso(design.stamp - 4 * DAY), released: iso(design.stamp) }));
+write(join(DATA_DIR, "shop.json"), { at: Date.now(), products, batches });
+console.log(`fake: ${products.length} products in ${batches.length} batches from ${catalog.length} catalog rows into ${join(DATA_DIR, "shop.json")}`);
 
 /* FEED */
 

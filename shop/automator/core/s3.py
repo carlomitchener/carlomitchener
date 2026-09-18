@@ -4,23 +4,22 @@ import time
 from botocore.exceptions import ClientError
 from .api import delete_files, delete_product, logger
 from .config import CARLOMITCHENER_BUCKET, MAX_STRIKES, SITE_FUNCTION, SITE_URL
-from .errors import NoTaskError
-from .models import Design, Task
+from .errors import NoTaskError, TaskAborted
+from .models import OPEN, Batch, Task
 
 s3 = boto3.client("s3")
 lam = boto3.client("lambda")
 
 BUCKET = CARLOMITCHENER_BUCKET
 AUTOMATOR_PREFIX = "data/automator/"
-DESIGN_KEY = f"{AUTOMATOR_PREFIX}design.json"
+BATCH_KEY = f"{AUTOMATOR_PREFIX}batch.json"
 TASK_KEY = f"{AUTOMATOR_PREFIX}task.json"
-PATHS_KEY = f"{AUTOMATOR_PREFIX}paths.json"
 STRIKES_KEY = f"{AUTOMATOR_PREFIX}strikes.json"
 TASKS_PREFIX = f"{AUTOMATOR_PREFIX}tasks/"
+BATCHES_PREFIX = f"{AUTOMATOR_PREFIX}batches/"
 CATALOG_PREFIX = "data/catalog/"
 SITE_PREFIX = "site/"
 CDN_PREFIX = f"{SITE_PREFIX}cdn/printful/"
-LABELS_PREFIX = f"{SITE_PREFIX}cdn/labels/"
 STATUS_KEY = f"{SITE_PREFIX}status/automator.json"
 
 # KEYS
@@ -31,14 +30,14 @@ def catalog_key(id: int) -> str:
 def archive_key(key: str) -> str:
     return f"{TASKS_PREFIX}{key}.json"
 
+def batch_key(design: str) -> str:
+    return f"{BATCHES_PREFIX}{design}.json"
+
 def cdn_prefix(key: str) -> str:
     return f"{CDN_PREFIX}{key}/"
 
 def cdn_key(key: str, name: str) -> str:
     return f"{CDN_PREFIX}{key}/{name}.png"
-
-def label_key(name: str) -> str:
-    return f"{LABELS_PREFIX}{name}.png"
 
 def s3_url(key: str) -> str:
     if key.startswith(SITE_PREFIX):
@@ -104,11 +103,9 @@ def wake_site(reason: str) -> None:
 def load_product(id: int) -> dict:
     return get_json(catalog_key(id))
 
-def load_paths() -> dict:
-    return get_json(PATHS_KEY)
-
-def save_paths(data: dict) -> None:
-    put_json(PATHS_KEY, data)
+def catalog_ids() -> list[str]:
+    keys = [obj["Key"] for obj in list_objects(CATALOG_PREFIX)]
+    return sorted(key[len(CATALOG_PREFIX):-5] for key in keys if key.endswith(".json"))
 
 def load_strikes() -> dict:
     try:
@@ -119,17 +116,21 @@ def load_strikes() -> dict:
 def save_strikes(data: dict) -> None:
     put_json(STRIKES_KEY, data)
 
-# DESIGN
+# BATCH
 
-def load_design() -> Design:
+def load_batch() -> Batch:
     try:
-        data = get_json(DESIGN_KEY)
+        data = get_json(BATCH_KEY)
     except NoTaskError:
         return None
-    return Design.from_dict(data) if data else None
+    return Batch.from_dict(data) if data else None
 
-def save_design(design: Design) -> None:
-    put_json(DESIGN_KEY, design.to_dict())
+def save_batch(batch: Batch) -> None:
+    put_json(BATCH_KEY, batch.to_dict())
+
+def list_batches() -> list[Batch]:
+    keys = [obj["Key"] for obj in list_objects(BATCHES_PREFIX) if obj["Key"].endswith(".json")]
+    return [Batch.from_dict(get_json(key)) for key in keys]
 
 # TASK
 
@@ -152,6 +153,24 @@ def archive_task(task: Task) -> None:
 def clear_task() -> None:
     put_json(TASK_KEY, {})
 
+def remove_product(task: Task) -> None:
+    if task.product.shopify_id:
+        try:
+            delete_product(task)
+        except TaskAborted as error:
+            logger.warning(f"{task.desc} productDelete refused, product left behind: {error}")
+    delete_folder(cdn_prefix(task.key))
+    delete_key(archive_key(task.key))
+
+def drop_pair(task: Task, batch: Batch) -> None:
+    batch.drop(task.product.id)
+    sibling = task.sibling
+    if not archive_exists(sibling):
+        return
+    other = Task.from_dict(get_json(archive_key(sibling)))
+    remove_product(other)
+    logger.warning(f"{other.desc} removed with its dropped pair")
+
 def abort_task(task: Task) -> None:
     if task.product.shopify_id:
         try:
@@ -170,9 +189,13 @@ def abort_task(task: Task) -> None:
     strikes[str(task.product.id)] = count
     save_strikes(strikes)
     out = count >= MAX_STRIKES
-    paths = load_paths()
-    paths[str(task.product.id)] = False if out else True
-    save_paths(paths)
+    batch = load_batch()
+    if batch and batch.design == task.design:
+        if out:
+            drop_pair(task, batch)
+        else:
+            batch.mark(task.product.id, task.primary, OPEN)
+        save_batch(batch)
     clear_task()
-    fate = f"strike {count}/{MAX_STRIKES}, " + ("out for this batch" if out else "open again")
+    fate = f"strike {count}/{MAX_STRIKES}, " + ("pair dropped for this batch" if out else "open again")
     logger.error(f"{task.desc} aborted at {task.step}, product {task.product.id} {fate}: {task.metadata.get('failed_error') or ''}")

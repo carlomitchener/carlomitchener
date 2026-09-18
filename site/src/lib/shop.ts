@@ -4,26 +4,42 @@ export type Variant = { id: string; size: string; price: string; available: bool
 
 export type Picture = { url: string; alt: string; style: string };
 
+export type Primary = "light" | "dark";
+
+export const PRIMARIES: Primary[] = ["light", "dark"];
+
 export type ProductRow = {
   key: string;
   design: string;
+  primary: Primary | "";
   type: string;
   vendor: string;
   created: string;
+  released: string;
   available: boolean;
   variants: Variant[];
   images: Picture[];
   files: string[];
   group: string;
-  primary: string;
   secondary: string[];
 };
 
-export type Facets = { files: string[]; design: string; group: string; primary: string; secondary: string[] };
+export type Facets = { files: string[]; design: string; group: string; secondary: string[] };
 
-export const designOf = (handle: string) => String(handle ?? "").split("-")[0];
+export type Batch = { design: string; created: string; released: string };
 
-export const handleOf = (key: string) => String(key ?? "").split("-").slice(1).join("-");
+export const primaryOf = (key: string): Primary | "" => {
+  const first = String(key ?? "").split("-")[0];
+  return first === "light" || first === "dark" ? first : "";
+};
+
+export const primaryName = (primary: Primary) => (primary === "dark" ? "Dark" : "Light");
+
+export const designOf = (key: string) => String(key ?? "").split("-").pop() ?? "";
+
+export const isDesign = (text: string) => /^[0-9a-f]{8}$/.test(text);
+
+export const handleOf = (key: string) => String(key ?? "").split("-").slice(1, -1).join("-");
 
 export const productUrl = (key: string) => `/${handleOf(key)}/${designOf(key)}/`;
 
@@ -43,12 +59,11 @@ export function facetsOf(task: any): Facets {
     files: (task?.printfiles ?? []).map((one: { name: string }) => one.name).filter(Boolean),
     design: task?.design ?? designOf(task?.key ?? ""),
     group: variation.tile?.group ?? "",
-    primary: variation.paint?.primary ?? "",
     secondary: variation.paint?.secondary ?? [],
   };
 }
 
-export type Snapshot = { at: number; products: ProductRow[] };
+export type Snapshot = { at: number; products: ProductRow[]; batches: Batch[] };
 
 export const QUERY = `
 query Feed($first: Int!, $after: String, $country: CountryCode) @inContext(country: $country) {
@@ -106,15 +121,16 @@ export function rowOf(node: any): ProductRow {
   return {
     key: node.handle,
     design: designOf(node.handle),
+    primary: primaryOf(node.handle),
     type: String(node.productType ?? ""),
     vendor: String(node.vendor ?? ""),
     created: node.createdAt,
+    released: "",
     available: node.availableForSale !== false,
     variants: (node.variants?.nodes ?? []).map(variantOf),
     images: picturesOf(node.media?.nodes ?? []),
     files: [],
     group: "",
-    primary: "",
     secondary: [],
   };
 }
@@ -157,7 +173,7 @@ export async function feed(wire: Wire): Promise<ProductRow[]> {
 
 export const cdnUrl = (key: string, name: string) => (key ? `${CDN}/${key}/${name}.png` : "");
 
-export const tileUrl = (key: string, n: number) => cdnUrl(key, `tile-${n}`);
+export const tileUrl = (design: string, primary: Primary, n: number) => cdnUrl(design, `${primary}-tile-${n}`);
 
 export const grid = (url: string, width: number) => `${url}${url.includes("?") ? "&" : "?"}width=${width}&format=auto`;
 

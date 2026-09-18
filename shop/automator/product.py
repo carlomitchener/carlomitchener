@@ -67,7 +67,7 @@ def product_payload(task: Task) -> dict:
         "productType": str(task.product.id),
         "status": "ACTIVE",
         "tags": set_tags(task),
-        "title": f"{task.product.title} ({task.design})",
+        "title": f"{task.primary.capitalize()} {task.product.title} ({task.design})",
         "variants": [variant_payload(v) for v in task.variants],
         "vendor": VENDOR,
     }

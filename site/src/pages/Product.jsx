@@ -8,14 +8,14 @@ export function Product({ trail, product, family, alike, sizes, buy, printful, s
   return (
     <div className="wrap">
       <Breadcrumbs trail={trail} />
-      <article className="product">
+      <article className="product" data-primary={product.primary}>
         <div className="left">
           <Gallery product={product} />
           <Mockups product={product} />
         </div>
         <div className="side">
           <ProductDetails product={product} sizes={sizes} buy={buy} printful={printful} shop={shop} tiles={tiles} now={now} review={review} />
-          <MoreVariations family={family} current={product.key} title={product.title} shop={shop} />
+          <MoreVariations family={family} current={product.design} title={product.title} shop={shop} />
         </div>
       </article>
       {alike.length ? (

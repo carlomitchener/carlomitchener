@@ -1,5 +1,5 @@
 import { MORE_TILE } from "../config/shop.ts";
-import { productUrl, tileUrl } from "../lib/shop.ts";
+import { PRIMARIES, productUrl, tileUrl } from "../lib/shop.ts";
 
 export function MoreVariations({ family, current, title, shop }) {
   if (family.length < 2) return null;
@@ -10,8 +10,10 @@ export function MoreVariations({ family, current, title, shop }) {
       </h2>
       <div className="tiles" data-siblings>
         {family.map((one) => (
-          <a key={one.key} href={productUrl(one.key)} aria-label={`${title} ${one.design}`} aria-current={one.key === current ? "page" : undefined} data-key={one.key}>
-            <img src={tileUrl(one.design, MORE_TILE)} alt="" width="88" height="88" loading="lazy" decoding="async" />
+          <a key={one.design} href={productUrl(one.key)} aria-label={`${title} ${one.design}`} aria-current={one.design === current ? "page" : undefined} data-design={one.design}>
+            {PRIMARIES.map((primary) => (
+              <img key={primary} className={primary} src={tileUrl(one.design, primary, MORE_TILE)} alt="" width="88" height="88" loading="lazy" decoding="async" />
+            ))}
           </a>
         ))}
       </div>

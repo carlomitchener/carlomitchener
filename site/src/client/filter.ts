@@ -1,7 +1,7 @@
 const host = document.querySelector<HTMLElement>("[data-facets]");
 const cards = document.querySelector<HTMLElement>("main [data-cards]");
 
-const KEYS = ["design", "group", "primary", "secondary"] as const;
+const KEYS = ["design", "group", "secondary"] as const;
 
 type Key = (typeof KEYS)[number];
 
@@ -15,7 +15,7 @@ if (host && cards) {
   const none = document.querySelector<HTMLElement>("[data-none]");
   const items = [...cards.querySelectorAll<HTMLElement>("[data-design]")];
   const first = sort.options[0]?.value ?? "newest";
-  const picked: Record<Key, Set<string>> = { design: new Set(), group: new Set(), primary: new Set(), secondary: new Set() };
+  const picked: Record<Key, Set<string>> = { design: new Set(), group: new Set(), secondary: new Set() };
 
   const rank: Record<string, (a: HTMLElement, b: HTMLElement) => number> = {
     expiring: (a, b) => (a.dataset.created ?? "").localeCompare(b.dataset.created ?? ""),

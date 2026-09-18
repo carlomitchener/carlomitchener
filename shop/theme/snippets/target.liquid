@@ -2,9 +2,11 @@
   assign site = "https://carlomitchener.com"
   case template.name
     when "product"
-      assign design = product.handle | split: "-" | first
-      assign slug = product.handle | remove_first: design | remove_first: "-"
-      if design.size == 8 and slug != blank
+      assign parts = product.handle | split: "-"
+      assign primary = parts | first
+      assign design = parts | last
+      assign slug = product.handle | remove_first: primary | remove_first: "-" | remove_last: design | remove_last: "-"
+      if design.size == 8 and slug != blank and parts.size > 2
         echo site | append: "/" | append: slug | append: "/" | append: design | append: "/"
       else
         echo site | append: "/"

@@ -57,7 +57,7 @@ query {
 """
 
 VENDOR = "Printful"
-AUTOMATOR = re.compile(r"^[0-9a-f]{8}-")
+AUTOMATOR = re.compile(r"^(?:[0-9a-f]{8}-|(?:dark|light)-.+-[0-9a-f]{8}$)")
 CATALOG_PATH = os.path.join(SHOP_DIR, "files", "catalog.json")
 
 PRODUCTS = """

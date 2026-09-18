@@ -40,7 +40,7 @@ SITE_FUNCTION = "carlomitchener-site"
 
 # DESIGN
 
-PRIMARIES = ["White"]
+PRIMARIES = {"light": "White", "dark": "Black"}
 TILES = [1, 3, 5, 7, 9]
 
 # BUDGETS
@@ -57,6 +57,7 @@ MAX_FAILURES = 3
 MAX_STRIKES = 3
 MAX_RENDERS = 3
 TICK_RESERVE = 25
+REAP_RESERVE = 60
 
 # PRINTFUL
 

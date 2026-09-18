@@ -53,6 +53,20 @@
   transform: scale(1.04);
 }
 
+.shot img.dark,
+.product[data-primary="light"] .tiles img.dark,
+.product[data-primary="dark"] .tiles img.light {
+  display: none;
+}
+
+:root[data-mode="dark"] .shot img.light {
+  display: none;
+}
+
+:root[data-mode="dark"] .shot img.dark {
+  display: block;
+}
+
 .card h3 {
   margin-top: var(--s3);
   overflow: hidden;

@@ -1,8 +1,9 @@
 import { LIVE_DAYS } from "../config/shop.ts";
-import { cdnUrl, money } from "../lib/shop.ts";
+import { cdnUrl, money, primaryName } from "../lib/shop.ts";
 import { Downloads } from "./Downloads.jsx";
 import { Icon } from "./Icon.jsx";
 import { Life } from "./Life.jsx";
+import { PrimaryPills } from "./PrimaryPills.jsx";
 import { Reviews } from "./Reviews.jsx";
 import { VariantPills } from "./VariantPills.jsx";
 
@@ -27,6 +28,7 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
       <p className="price" data-price>
         {money(product.price)}
       </p>
+      <PrimaryPills picked={product.primary} />
       <VariantPills sizes={sizes} picked={product.variant} />
       <div className="buy">
         <button
@@ -34,7 +36,8 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
           type="button"
           data-add
           data-key={product.key}
-          data-title={product.title}
+          data-name={product.title}
+          data-title={`${primaryName(product.primary)} ${product.title}`}
           data-variant={product.variant}
           data-price={product.price}
           data-size={first ? first.size : ""}
@@ -46,7 +49,7 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
           Buy now
         </a>
       </div>
-      <Life born={product.created} gate bar now={now} />
+      <Life born={product.released} gate bar now={now} />
       <p className="fine">
         <a href={shop}>{`More ${product.title}`}</a>
       </p>
@@ -70,7 +73,7 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
       ) : null}
       <Drop name="Expiration">
         <p className="fine">
-          {`Every product here lives one lunar month, ${LIVE_DAYS} days from the day it was made. When its moon has passed, the reaper deletes the product, its printfiles and its design's tiles, and nobody prints it again. The countdown above is the truth. Two days means two days.`}
+          {`Every product here lives one lunar month, ${LIVE_DAYS} days from the day its batch went live. When its moon has passed, the reaper deletes the whole batch: the products, their printfiles and the design's tiles, and nobody prints it again. The countdown above is the truth. Two days means two days.`}
         </p>
       </Drop>
       <a className="pill wide" href={printful} rel="noopener">

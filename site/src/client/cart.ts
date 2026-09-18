@@ -1,5 +1,5 @@
 import { CART_KEY } from "../config/shop.ts";
-import { GIFT_PREFIX, lineUrl, money } from "../lib/shop.ts";
+import { designOf, GIFT_PREFIX, lineUrl, money } from "../lib/shop.ts";
 
 declare const SHOP: string;
 
@@ -141,7 +141,7 @@ function lines() {
     image.alt = item.key;
     const title = q<HTMLAnchorElement>("[data-title]");
     title.href = lineUrl(item.key);
-    title.textContent = item.key.startsWith(GIFT_PREFIX) ? item.title : `${item.title} (${item.key})`;
+    title.textContent = item.key.startsWith(GIFT_PREFIX) ? item.title : `${item.title} (${designOf(item.key)})`;
     q<HTMLElement>("[data-size]").textContent = `${item.size} · ${money(item.price)}`;
     q<HTMLElement>("[data-qty]").textContent = String(item.qty);
     q<HTMLElement>("[data-total]").textContent = money(Number(item.price) * item.qty);

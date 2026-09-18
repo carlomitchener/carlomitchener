@@ -6,7 +6,7 @@
 
 ## Catalog
 
-- `files/catalog.json` is the hand-kept product list: id, category, title, technique, link, handle, primaries. Every row is live; `primaries` is informational, the automator paints White.
+- `files/catalog.json` is the hand-kept product list: id, category, title, technique, link, handle, primaries. Every row is live; `primaries` is informational, every row gets a light and a dark product.
 - `files/products/<id>.json` is the parsed product. `files/dictionary.json` maps id to "category, title, technique".
 - `catalog/main.py` - the whole pipeline: sort, dictionary, check, fetch, parse, sort sizes, correct, check, upload.
 - `catalog/fetch.py` - Printful raw data into `data/carlomitchener/shop/catalog/raw/`; skips products already fetched. `raw/catalog.json` is the whole Printful catalog as `id: "title - technique"`, discontinued dropped, with product counts per technique in `raw/stats.json`; `new_products()` prints the All-Over Print ones missing from `catalog.json`.
@@ -22,6 +22,6 @@
 
 ## Shopify
 
-- `manager.py <verb>` - verbs: init, show, design, status, paths, reset, abort, reap, redo, wipe. `redo [key]` remakes a live product (or the task in flight) this round.
+- `manager.py <verb>` - verbs: init, show, batch, status, rows, reset, abort, reap, redo, release, wipe. `rows` counts the cells and reopens dropped rows; `reap <design>` reaps a released batch now; `redo [key]` remakes a live product (or the task in flight) this batch; `release` closes the batch in flight whatever is open.
 - `automator/run.py` runs one tick from the desk against the real bucket and shops; every step file runs alone on the task in flight.
 - `shopify.py <verb>` - verbs: publications, purge, vendor.

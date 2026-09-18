@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { facetsOf, feed, type Facets, type ProductRow } from "../src/lib/shop.ts";
+import { facetsOf, feed, GIFT_PREFIX, type Batch, type Facets, type ProductRow } from "../src/lib/shop.ts";
 import { loadEnv, need } from "../src/lib/env.ts";
-import { client, getText, putBytes } from "../../aws/s3.ts";
+import { client, getText, list, putBytes } from "../../aws/s3.ts";
 import { API, COUNTRY, LIVE_DAYS } from "../src/config/shop.ts";
 
 loadEnv();
@@ -11,6 +11,7 @@ const org = resolve(import.meta.dir, "..");
 const DATA_DIR = resolve(org, "../../data/carlomitchener/site");
 const s3 = client(need("CARLOMITCHENER_BUCKET"));
 const SHOP = "data/shop.json";
+const BATCHES = "data/automator/batches/";
 const INDEX = "site/cdn/feed/index.json";
 const LOCAL = resolve(org, "../../data/carlomitchener/feed/index.json");
 
@@ -32,13 +33,38 @@ async function pull(key: string): Promise<Facets | null> {
   }
 }
 
-const rows: ProductRow[] = await feed({
+const stamp = (seconds: number) => new Date(seconds * 1000).toISOString();
+
+async function batches(): Promise<Batch[]> {
+  const keys = (await list(s3, BATCHES)).filter((key) => key.endsWith(".json"));
+  const out: Batch[] = [];
+  for (const key of keys) {
+    const text = await getText(s3, key);
+    const data = text ? JSON.parse(text) : null;
+    if (!data?.design || !data.released_at) continue;
+    out.push({ design: data.design, created: stamp(data.created_at), released: stamp(data.released_at) });
+  }
+  return out.sort((a, b) => (a.released < b.released ? 1 : -1));
+}
+
+const released = await batches();
+const byDesign = new Map(released.map((batch) => [batch.design, batch]));
+
+const all: ProductRow[] = await feed({
   shop: need("SHOPIFY_SHOP_URL"),
   token: need("SHOPIFY_PUBLIC_ACCESS_TOKEN"),
   api: API,
   country: COUNTRY,
-  live: LIVE_DAYS,
+  live: LIVE_DAYS * 2,
 });
+
+const rows = all.filter((row) => {
+  if (row.key.startsWith(GIFT_PREFIX)) return true;
+  const batch = byDesign.get(row.design);
+  if (batch) row.released = batch.released;
+  return Boolean(batch);
+});
+console.log(`snapshot: ${released.length} released batches, ${all.length - rows.length} unreleased products skipped`);
 
 await Promise.all(
   rows.map(async (row) => {
@@ -47,7 +73,7 @@ await Promise.all(
   }),
 );
 
-const snapshot = { at: Date.now(), products: rows };
+const snapshot = { at: Date.now(), products: rows, batches: released };
 const path = join(DATA_DIR, "shop.json");
 const body = JSON.stringify(snapshot, null, 2) + "\n";
 mkdirSync(DATA_DIR, { recursive: true });

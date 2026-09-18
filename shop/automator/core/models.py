@@ -1,24 +1,31 @@
 from dataclasses import asdict, dataclass, field, fields
+from .config import PRIMARIES
 from .steps import Step
 
 def known(cls, data: dict) -> dict:
     names = {one.name for one in fields(cls)}
     return {key: value for key, value in data.items() if key in names}
 
-@dataclass
-class Design:
+OPEN = "open"
+USED = "used"
+DROPPED = "dropped"
 
-    key: str = None
+@dataclass
+class Batch:
+
+    design: str = None
     seed: int = None
     created_at: int = None
-    tiles: bool = False
+    released_at: int = None
     variation: dict = field(default_factory=dict)
+    tiles: dict = field(default_factory=dict)
+    rows: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Design":
+    def from_dict(cls, data: dict) -> "Batch":
         return cls(**known(cls, data))
 
     @property
@@ -28,6 +35,23 @@ class Design:
     @property
     def group(self) -> str:
         return (self.variation.get("tile") or {}).get("group")
+
+    @property
+    def complete(self) -> bool:
+        return not self.cells(OPEN)
+
+    def cells(self, state: str) -> list[tuple[str, str]]:
+        return [(id, primary) for id, row in self.rows.items() for primary, one in row.items() if one == state]
+
+    def row(self, id: int) -> dict:
+        return self.rows.setdefault(str(id), {primary: OPEN for primary in PRIMARIES})
+
+    def mark(self, id: int, primary: str, state: str) -> None:
+        self.row(id)[primary] = state
+
+    def drop(self, id: int) -> None:
+        for primary in self.row(id):
+            self.mark(id, primary, DROPPED)
 
 @dataclass
 class Product:
@@ -141,6 +165,7 @@ class Task:
     key: str = None
     step: str = None
     design: str = None
+    primary: str = None
     seed: int = None
     created_at: int = None
     updated_at: int = None
@@ -157,6 +182,7 @@ class Task:
         data["key"] = self.key
         data["step"] = self.step
         data["design"] = self.design
+        data["primary"] = self.primary
         data["seed"] = self.seed
         data["created_at"] = self.created_at
         data["updated_at"] = self.updated_at
@@ -188,6 +214,18 @@ class Task:
     @property
     def paint(self) -> dict:
         return self.variation.get("paint") or {}
+
+    @property
+    def ink(self) -> str:
+        return PRIMARIES.get(self.primary)
+
+    def key_for(self, primary: str) -> str:
+        return f"{primary}-{self.product.handle}-{self.design}"
+
+    @property
+    def sibling(self) -> str:
+        other = next(one for one in PRIMARIES if one != self.primary)
+        return self.key_for(other)
 
     @property
     def stitch_color(self) -> str:

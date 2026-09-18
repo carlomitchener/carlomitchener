@@ -9,7 +9,7 @@ import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
-import { collectionUrl, facetsOf, GIFT, GIFT_PREFIX, giftUrl, grid, handleOf, productUrl, type Facets, type ProductRow } from "../src/lib/shop.ts";
+import { collectionUrl, designOf, facetsOf, GIFT, GIFT_PREFIX, giftUrl, grid, handleOf, isDesign, PRIMARIES, primaryOf, productUrl, type Facets, type Primary, type ProductRow } from "../src/lib/shop.ts";
 import { Page } from "../src/components/Page.jsx";
 import { Designs } from "../src/pages/Designs.jsx";
 import { Home } from "../src/pages/Home.jsx";
@@ -43,6 +43,8 @@ const now = Date.now();
 /* TYPES */
 
 type Row = ProductRow & { title: string; category: string; handle: string; link: string; price: string; variant: string };
+
+type Pair = Row & Record<Primary, Row>;
 
 type Crumb = { name: string; href?: string };
 
@@ -122,8 +124,8 @@ type Facet = { key: string; label: string; values: { name: string; n: number }[]
 
 const FACET_CAP = 12;
 
-function facetsFor(list: ProductRow[]): Facet[] {
-  const count = (pick: (row: ProductRow) => string[]) => {
+function facetsFor(list: Pair[]): Facet[] {
+  const count = (pick: (row: Pair) => string[]) => {
     const seen = new Map<string, number>();
     for (const row of list) for (const value of pick(row)) if (value) seen.set(value, (seen.get(value) ?? 0) + 1);
     return [...seen]
@@ -133,7 +135,6 @@ function facetsFor(list: ProductRow[]): Facet[] {
   const out: Facet[] = [
     { key: "design", label: "Design", values: count((row) => [row.design]) },
     { key: "group", label: "Group", values: count((row) => [row.group]) },
-    { key: "primary", label: "Primary", values: count((row) => [row.primary]) },
     { key: "secondary", label: "Secondary", values: count((row) => row.secondary ?? []) },
   ];
   return out.filter((facet) => facet.values.length > 1 && (facet.key !== "design" || (facet.values.length <= FACET_CAP && facet.values.length < list.length)));
@@ -192,14 +193,18 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
       console.warn(`site: ${product.key} has no variant, skipped`);
       continue;
     }
-    if (!handleOf(product.key)) {
-      console.warn(`site: ${product.key} has no handle in its key, skipped`);
+    const primary = primaryOf(product.key);
+    const design = designOf(product.key);
+    if (!primary || !handleOf(product.key) || !isDesign(design)) {
+      console.warn(`site: ${product.key} is not a {primary}-{slug}-{design} key, skipped`);
       continue;
     }
     const facets = files.get(product.key);
     out.push({
       ...product,
       ...(facets ?? {}),
+      primary,
+      design,
       files: facets?.files ?? product.files ?? [],
       title: entry.title,
       category: entry.category,
@@ -209,14 +214,35 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
       variant: variant.id,
     });
   }
-  out.sort((a, b) => (a.created < b.created ? 1 : a.created > b.created ? -1 : a.key < b.key ? 1 : -1));
   return out;
 }
 
-const newestFirst = (list: Row[]) => {
+const newest = (a: Row, b: Row) => (a.created < b.created ? 1 : a.created > b.created ? -1 : a.key < b.key ? 1 : -1);
+
+function pairs(list: Row[]): Pair[] {
+  const halves = new Map<string, Partial<Record<Primary, Row>>>();
+  for (const row of list) {
+    const id = `${row.type}-${row.design}`;
+    halves.set(id, { ...(halves.get(id) ?? {}), [row.primary]: row });
+  }
+  const out: Pair[] = [];
+  for (const [id, half] of halves) {
+    const missing = PRIMARIES.filter((primary) => !half[primary]);
+    if (missing.length) {
+      console.warn(`site: ${id} has no ${missing.join(" or ")} sibling, skipped`);
+      continue;
+    }
+    const light = half.light as Row;
+    const dark = half.dark as Row;
+    out.push({ ...light, secondary: [...new Set([...light.secondary, ...dark.secondary])], light, dark });
+  }
+  return out.sort(newest);
+}
+
+const newestFirst = (list: Pair[]) => {
   const seen = new Set<string>();
-  const first: Row[] = [];
-  const rest: Row[] = [];
+  const first: Pair[] = [];
+  const rest: Pair[] = [];
   for (const row of list) {
     if (seen.has(row.type)) rest.push(row);
     else {
@@ -247,13 +273,13 @@ function collect(site_: Site) {
   const rated = reviews(site_);
   const catalog = JSON.parse(read(catalogFile)) as Catalog[];
   catalogRows = catalog;
-  const all = rows(site_, catalog);
+  const all = pairs(rows(site_, catalog));
   latestRows = {};
   for (const row of all) if (!latestRows[row.category]) latestRows[row.category] = row;
   if (all[0]) latestRows.all = all[0];
   const index = site_.input("feed").files[0] ?? site_.input("feed").path;
   const shown = feed(site_);
-  const byType = new Map<string, Row[]>();
+  const byType = new Map<string, Pair[]>();
   for (const row of all) byType.set(row.type, [...(byType.get(row.type) ?? []), row]);
   const inCategory = (slug: string) => all.filter((row) => row.category === slug);
   const ofProduct = (entry: Catalog) => byType.get(String(entry.id)) ?? [];
@@ -265,9 +291,9 @@ function collect(site_: Site) {
     catalog
       .filter((entry) => (!slug || entry.category === slug) && ofProduct(entry).length)
       .map((entry) => ({ name: entry.title, href: shopRoute(entry), count: ofProduct(entry).length }));
-  const alike = (row: Row): Row[] => {
+  const alike = (row: Pair): Pair[] => {
     const seen = new Set<string>([row.type]);
-    const out: Row[] = [];
+    const out: Pair[] = [];
     const ranked = all.filter((one) => one.type !== row.type).sort((a, b) => Number(b.category === row.category) - Number(a.category === row.category) || (a.created < b.created ? 1 : -1));
     for (const one of ranked) {
       if (seen.has(one.type)) continue;
@@ -281,7 +307,7 @@ function collect(site_: Site) {
   const sections = CATEGORIES.map(([slug, name]) => ({ slug, name, products: inCategory(slug).slice(0, HOME_ROW) })).filter((one) => one.products.length);
   const designs = [...new Set(all.map((row) => row.design))].map((design) => {
     const mine = all.filter((row) => row.design === design);
-    return { design, count: mine.length, created: mine[0].created };
+    return { design, count: mine.length, created: mine[0].created, released: mine[0].released };
   });
   routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown.slice(0, HOME_POSTS), designs, sections }, inputs: [catalogFile, index], at: today() });
   routes.push({ route: "/shop/designs/", kind: "designs", name: "Designs", data: { trail: [{ name: "Shop", href: "/shop/" }, { name: "Designs" }], title: "Designs", lead: `${plural(designs.length, "design")}, one moon each.`, designs }, inputs: [catalogFile, index], at: today() });
@@ -410,7 +436,7 @@ function collect(site_: Site) {
   const found = [
     ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, kind: "Category" })),
     ...catalog.filter((entry) => ofProduct(entry).length).map((entry) => ({ name: entry.title, href: shopRoute(entry), kind: "Product" })),
-    ...all.map((row) => ({ name: `${row.title} ${row.design}`, href: productUrl(row.key), kind: "Variation", tags: [row.group, row.primary, ...(row.secondary ?? [])].filter(Boolean).join(" ") })),
+    ...all.map((row) => ({ name: `${row.title} ${row.design}`, href: productUrl(row.key), kind: "Variation", tags: [row.group, ...(row.secondary ?? [])].filter(Boolean).join(" ") })),
     ...shown.map((post) => ({ name: post.name, href: postRoute(post.name), kind: "Post" })),
     ...site.pages.map((one) => ({ name: one.name, href: one.href, kind: "Page" })),
     { name: "Pages", href: "/pages/", kind: "Page" },
@@ -422,14 +448,14 @@ function collect(site_: Site) {
 
 /* RENDER */
 
-const previewOf = (row: Row) => {
+const previewOf = (row: Pair) => {
   const image = row.images[0];
   return image ? `${image.url}${image.url.includes("?") ? "&" : "?"}width=1200` : undefined;
 };
 
-const describe = (row: Row) => `${row.title} by ${site.name}. USD ${Number(row.price).toFixed(2)}. One design, one moon of ${Math.round(LIVE_DAYS)} days.`;
+const describe = (row: Pair) => `${row.title} by ${site.name}. USD ${Number(row.price).toFixed(2)}. One design, one moon of ${Math.round(LIVE_DAYS)} days.`;
 
-function cover(products: Row[]) {
+function cover(products: Pair[]) {
   const first = products[0];
   if (!first) return FALLBACK;
   return first.images[0] ? grid(first.images[0].url, 1200) : FALLBACK;
@@ -438,18 +464,18 @@ function cover(products: Row[]) {
 function draw(site_: Site, route: Route): Output[] {
   const at = route.route === "/404.html" ? "404.html" : page(route.route);
   if (route.kind === "home") {
-    const { products, posts: shown, designs, sections } = route.data as { products: Row[]; posts: Post[]; designs: { design: string; count: number; created: string }[]; sections: { slug: string; name: string; products: Row[] }[] };
+    const { products, posts: shown, designs, sections } = route.data as { products: Pair[]; posts: Post[]; designs: { design: string; count: number; created: string; released: string }[]; sections: { slug: string; name: string; products: Pair[] }[] };
     const body = h(Home, { posts: shown, designs, sections, now });
     return [{ path: at, bytes: shell(site_, { route: route.route, name: site.name, description: site.tagline, image: cover(products), fly: true }, body) }];
   }
   if (route.kind === "shop") {
-    const data = route.data as { trail: Crumb[]; title: string; lead: string; chips: { label: string; cards: Card[] }[]; current: string; products: Row[]; noindex?: boolean };
+    const data = route.data as { trail: Crumb[]; title: string; lead: string; chips: { label: string; cards: Card[] }[]; current: string; products: Pair[]; noindex?: boolean };
     const body = h(Shop, { ...data, now });
     const leaf = { route: route.route, name: data.title, description: `${data.title}: ${data.lead}`, image: cover(data.products), noindex: data.noindex };
     return [{ path: at, bytes: shell(site_, leaf, body) }];
   }
   if (route.kind === "designs") {
-    const data = route.data as { trail: Crumb[]; title: string; lead: string; designs: { design: string; count: number; created: string }[] };
+    const data = route.data as { trail: Crumb[]; title: string; lead: string; designs: { design: string; count: number; created: string; released: string }[] };
     const body = h(Designs, { ...data, now });
     return [{ path: at, bytes: shell(site_, { route: route.route, name: data.title, description: `${data.title}: ${data.lead}` }, body) }];
   }
@@ -505,13 +531,13 @@ function post(site_: Site, route: Route, at: string): Output[] {
   return [{ path: at, bytes: shell(site_, leaf, h(PostPage, { post: one, prev, next })) }];
 }
 
+const sibling = (one: Row) => ({ key: one.key, created: one.created, released: one.released, price: one.price, variants: one.variants, images: one.images, files: one.files, available: one.available });
+
 function product(site_: Site, route: Route, at: string): Output[] {
-  const { product: row, family, alike, review } = route.data as { product: Row; family: Row[]; alike: Row[]; review: Review | null };
+  const { product: row, family, alike, review } = route.data as { product: Pair; family: Pair[]; alike: Pair[]; review: Review | null };
   const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
   const siblings: Record<string, unknown> = {};
-  for (const one of family) {
-    siblings[one.key] = { design: one.design, created: one.created, price: one.price, variants: one.variants, images: one.images, files: one.files, available: one.available };
-  }
+  for (const one of family) siblings[one.design] = { light: sibling(one.light), dark: sibling(one.dark) };
   const names = new Map(CATEGORIES);
   const trail: Crumb[] = [
     { name: "Shop", href: "/shop/" },

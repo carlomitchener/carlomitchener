@@ -25,6 +25,7 @@ if (button) {
     root.dataset.mode = mode;
     if (meta) meta.content = THEME_COLORS[mode];
     button.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
+    window.dispatchEvent(new CustomEvent("mode", { detail: mode }));
   };
 
   paint(clean(root.dataset.mode ?? null) ?? stored() ?? system());

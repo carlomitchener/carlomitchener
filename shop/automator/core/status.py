@@ -2,9 +2,8 @@ import logging
 import time
 from .api import logger
 from .config import LIVE_DAYS
-from .errors import NoTaskError
-from .models import Design, Task
-from .s3 import STATUS_KEY, TASKS_PREFIX, get_json, list_objects, load_paths, load_strikes, put_json
+from .models import DROPPED, OPEN, USED, Batch, Task
+from .s3 import STATUS_KEY, TASKS_PREFIX, get_json, list_batches, list_objects, load_strikes, put_json
 
 LINES = 300
 ERROR_LIMIT = 300
@@ -46,40 +45,41 @@ def task_summary(task: Task) -> dict:
         "metadata": metadata,
     }
 
-def design_summary(design: Design) -> dict:
-    if not design:
+def design_summary(batch: Batch) -> dict:
+    if not batch:
         return None
     return {
-        "key": design.key,
-        "created_at": design.created_at,
-        "group": design.group,
-        "edition": design.variation.get("edition"),
-        "primary": design.paint.get("primary"),
-        "secondary": design.paint.get("secondary"),
-        "scheme": design.paint.get("scheme"),
+        "key": batch.design,
+        "created_at": batch.created_at,
+        "group": batch.group,
+        "edition": batch.variation.get("edition"),
+        "secondary": batch.paint.get("secondary"),
+        "scheme": batch.paint.get("scheme"),
     }
 
-def paths_summary() -> dict:
-    try:
-        paths = load_paths()
-    except NoTaskError:
+def batch_summary(batch: Batch) -> dict:
+    if not batch:
         return None
     return {
-        "open": sum(1 for state in paths.values() if state is True),
-        "used": sum(1 for state in paths.values() if state is False),
-        "quarantined": sum(1 for state in paths.values() if state is None),
+        "open": len(batch.cells(OPEN)),
+        "used": len(batch.cells(USED)),
+        "dropped": len(batch.cells(DROPPED)),
+        "tiles": batch.tiles,
         "strikes": load_strikes(),
     }
 
 def live_summary(now: float) -> dict:
-    objects = list_objects(TASKS_PREFIX)
+    keys = [obj["Key"] for obj in list_objects(TASKS_PREFIX)]
+    batches = [batch for batch in list_batches() if batch.released_at]
     cutoff = now - LIVE_DAYS * 86400
-    stamps = [obj["LastModified"].timestamp() for obj in objects]
+    counts = {batch.design: sum(1 for key in keys if key.endswith(f"-{batch.design}.json")) for batch in batches}
+    stamps = [batch.released_at for batch in batches]
     return {
-        "products": len(objects),
-        "expiring": sum(1 for stamp in stamps if stamp < cutoff + 86400),
-        "newest": int(max(stamps)) if stamps else None,
-        "oldest": int(min(stamps)) if stamps else None,
+        "products": len(keys),
+        "batches": len(batches),
+        "expiring": sum(counts[batch.design] for batch in batches if batch.released_at < cutoff + 86400),
+        "newest": max(stamps) if stamps else None,
+        "oldest": min(stamps) if stamps else None,
     }
 
 def previous_log() -> list[str]:
@@ -88,16 +88,16 @@ def previous_log() -> list[str]:
     except Exception:
         return []
 
-def write(journal: Journal, task: Task, design: Design, seconds: float, error: str = None) -> None:
+def write(journal: Journal, task: Task, batch: Batch, seconds: float, error: str = None) -> None:
     now = time.time()
     log = (previous_log() + journal.lines)[-LINES:]
     data = {
         "at": int(now),
         "seconds": round(seconds, 1),
         "error": error,
-        "design": design_summary(design),
+        "design": design_summary(batch),
+        "batch": batch_summary(batch),
         "task": task_summary(task),
-        "paths": paths_summary(),
         "live": live_summary(now),
         "log": log,
     }

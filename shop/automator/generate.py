@@ -3,10 +3,11 @@ import mrlypy.gen
 from automator.core.api import logger
 from automator.core.config import MAX_RENDERS, TILES
 from automator.core.errors import TaskAborted
-from automator.core.models import Design, Task
-from automator.core.s3 import cdn_key, load_design, put_png, s3_url, save_design, save_task
+from automator.core.models import Task
+from automator.core.s3 import cdn_key, load_batch, put_png, s3_url, save_batch, save_task
 from automator.core.steps import Step
 from io import BytesIO
+from mrlypy.paint.colors import get_primary_inks
 from PIL import Image, ImageCms
 
 FORMAT = "PNG"
@@ -69,26 +70,27 @@ def process_printfiles(task: Task, gen: mrlypy.gen.Gen) -> Task:
         logger.info(f"{task.desc} uploaded printfile {image.width}x{image.height} {pf.url}")
     return task
 
-def process_tiles(design: Design, gen: mrlypy.gen.Gen, start: int) -> None:
+def process_tiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> None:
     for i, size in enumerate(TILES):
         raw = gen.files[start + i].data
         image = raw.resize(size=(raw.width * TILE_SCALE, raw.height * TILE_SCALE), resample=Image.Resampling.NEAREST)
-        url = save_png(cdn_key(design.key, f"{TILE_NAME}-{size}"), image)
-        logger.info(f"design {design.key} uploaded tile {url}")
+        url = save_png(cdn_key(task.design, f"{task.primary}-{TILE_NAME}-{size}"), image)
+        logger.info(f"design {task.design} uploaded {task.primary} tile {url}")
 
 def mrly_generate(task: Task) -> Task:
-    design = load_design()
-    tiles = bool(design) and design.key == task.design and not design.tiles
+    batch = load_batch()
+    tiles = bool(batch) and batch.design == task.design and not batch.tiles.get(task.primary)
     gen = mrlypy.gen.Gen.from_dict(task.variation)
+    gen.primaries = get_primary_inks([task.ink])
     gen = prepare(task, gen, tiles)
     task = guard_renders(task)
     gen = mrlypy.gen.generate(gen)
     gen = mrlypy.gen.render(gen, scale=UNIT_SCALE)
     task = process_printfiles(task, gen)
     if tiles:
-        process_tiles(design, gen, len(task.printfiles))
-        design.tiles = True
-        save_design(design)
+        process_tiles(task, gen, len(task.printfiles))
+        batch.tiles[task.primary] = True
+        save_batch(batch)
     task.variation = gen.to_dict()
     task.place(Step.MOCKUP)
     return task

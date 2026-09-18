@@ -4,11 +4,12 @@ import mrlypy.tile
 import random
 import re
 import time
+from automator import release
 from automator.core.api import logger
 from automator.core.config import PRIMARIES
 from automator.core.errors import NoTaskError
-from automator.core.models import Design, Mockup, Placement, Printfile, Task, Variant
-from automator.core.s3 import archive_exists, load_design, load_paths, load_product, save_design, save_paths, save_strikes
+from automator.core.models import OPEN, USED, Batch, Mockup, Placement, Printfile, Task, Variant
+from automator.core.s3 import archive_exists, catalog_ids, load_batch, load_product, save_batch, save_strikes
 from automator.core.steps import Step
 from mrlypy.core.helpers import hex_key
 from mrlypy.paint.colors import get_primary_inks
@@ -21,50 +22,57 @@ PRINTFILE = "printfile"
 def slugify(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-") or "one-size"
 
-# DESIGN
+# BATCH
 
-def new_design() -> Design:
+def new_batch(ids: list[str]) -> Batch:
+    if not ids:
+        raise NoTaskError("no catalog products in the bucket")
+    first = next(iter(PRIMARIES.values()))
     config = mrlypy.gen.Config(
         tile=mrlypy.tile.Config(min_size=3, max_size=9, anti=False),
-        paint=mrlypy.paint.Config(primaries=get_primary_inks(PRIMARIES)),
+        paint=mrlypy.paint.Config(primaries=get_primary_inks([first])),
         files=[],
     )
     gen = mrlypy.gen.create(config)
     gen = mrlypy.gen.generate(gen)
-    design = Design(key=gen.key, seed=gen.seed, created_at=int(time.time()), variation=gen.to_dict())
-    save_design(design)
-    logger.info(f"design {design.key} rolled: {design.group} {design.variation.get('edition')} {design.paint.get('primary')} {design.paint.get('secondary')}")
-    return design
+    rows = {id: {primary: OPEN for primary in PRIMARIES} for id in ids}
+    batch = Batch(design=gen.key, seed=gen.seed, created_at=int(time.time()), variation=gen.to_dict(), rows=rows)
+    save_batch(batch)
+    save_strikes({})
+    logger.info(f"batch {batch.design} rolled over {len(rows)} products: {batch.group} {batch.variation.get('edition')} {batch.paint.get('secondary')}")
+    return batch
 
-def current_design() -> Design:
-    return load_design() or new_design()
+def current_batch() -> Batch:
+    batch = load_batch()
+    if batch and not batch.complete:
+        return batch
+    if batch:
+        release.mrly_release(batch)
+    return new_batch(catalog_ids())
 
-# PATHS
+# ROWS
 
-def choose_path(task: Task, design: Design) -> tuple[Task, Design]:
-    paths = load_paths()
-    open_products = [product for product, state in paths.items() if state is True]
-    if not open_products:
-        for product, state in paths.items():
-            if state is False:
-                paths[product] = True
-        open_products = [product for product, state in paths.items() if state is True]
-        if open_products:
-            logger.info(f"round complete, reopened {len(open_products)} products")
-            save_strikes({})
-            design = new_design()
-    if not open_products:
-        raise NoTaskError("every path is quarantined")
-    product = random.choice(open_products)
-    paths[product] = False
-    save_paths(paths)
-    task.product.id = int(product)
-    return task, design
+def next_cell(batch: Batch) -> tuple[str, str]:
+    open_cells = batch.cells(OPEN)
+    if not open_cells:
+        raise NoTaskError(f"batch {batch.design} has no open cell")
+    halves = [(id, primary) for id, primary in open_cells if USED in batch.rows[id].values()]
+    if halves:
+        return halves[0]
+    id = random.choice(sorted({id for id, _ in open_cells}))
+    return id, next(primary for primary, state in batch.rows[id].items() if state == OPEN)
 
-def quarantine(task: Task) -> None:
-    paths = load_paths()
-    paths[str(task.product.id)] = None
-    save_paths(paths)
+def choose_row(task: Task, batch: Batch) -> Task:
+    id, primary = next_cell(batch)
+    batch.mark(id, primary, USED)
+    save_batch(batch)
+    task.product.id = int(id)
+    task.primary = primary
+    return task
+
+def quarantine(task: Task, batch: Batch) -> None:
+    batch.drop(task.product.id)
+    save_batch(batch)
 
 # PRODUCT
 
@@ -155,34 +163,34 @@ def parse_printfiles(task: Task) -> Task:
 def parse_product(task: Task) -> Task:
     data = load_product(task.product.id)
     task = parse_basics(task, data)
-    task.key = f"{task.design}-{task.product.handle}"
+    task.key = task.key_for(task.primary)
     task = parse_placements(task, data)
     task = parse_variants(task, data)
     task = parse_mockups(task, data)
     task = parse_printfiles(task)
     return task
 
-def open_product(task: Task, design: Design) -> Task:
+def open_product(task: Task, batch: Batch) -> Task:
     for _ in range(MAX_PATHS):
-        task, design = choose_path(task, design)
-        task.design = design.key
-        task.seed = design.seed
-        task.variation = dict(design.variation)
+        task = choose_row(task, batch)
+        task.design = batch.design
+        task.seed = batch.seed
+        task.variation = dict(batch.variation)
         try:
             task = parse_product(task)
         except NoTaskError as error:
-            quarantine(task)
-            logger.warning(f"quarantined product {task.product.id}: {error}")
+            quarantine(task, batch)
+            logger.warning(f"dropped product {task.product.id}: {error}")
             continue
         if archive_exists(task.key):
-            logger.warning(f"{task.key} already archived, skipped this round")
+            logger.warning(f"{task.key} already archived, skipped this batch")
             continue
         return task
-    raise NoTaskError(f"no product opened under {MAX_PATHS} paths")
+    raise NoTaskError(f"no product opened under {MAX_PATHS} rows")
 
 def mrly_create() -> Task:
     task = Task(created_at=int(time.time()))
-    task = open_product(task, current_design())
+    task = open_product(task, current_batch())
     task.place(Step.GENERATE)
     return task
 

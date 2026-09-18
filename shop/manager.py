@@ -1,62 +1,66 @@
 import json
 import sys
-from automator.core.api import delete_product, mint_token
+from automator.core.api import mint_token
 from automator.core.errors import NoTaskError
-from automator.core.models import Task
+from automator.core.models import DROPPED, OPEN, USED, Task
 from automator.core.s3 import (
     AUTOMATOR_PREFIX,
+    BATCH_KEY,
     BUCKET,
     CDN_PREFIX,
-    DESIGN_KEY,
-    PATHS_KEY,
     STATUS_KEY,
     STRIKES_KEY,
     TASK_KEY,
     abort_task,
+    archive_exists,
     archive_key,
+    batch_key,
+    catalog_ids,
     cdn_prefix,
     delete_folder,
     delete_key,
     get_json,
-    load_design,
-    load_paths,
+    list_batches,
+    load_batch,
     load_strikes,
     load_task,
     put_json,
-    save_paths,
+    remove_product,
+    save_batch,
     save_task,
 )
 from automator.core.steps import Step
-from env import SHOP_DIR, gate, load_json, say, verb
-import os
+from automator.reap import archives, reap_batch
+from automator.release import mrly_release
+from env import gate, say, verb
 
-VERBS = ["init", "show", "design", "status", "paths", "reset", "abort", "reap", "redo", "wipe"]
+VERBS = ["init", "show", "batch", "status", "rows", "reset", "abort", "reap", "redo", "release", "wipe"]
 COUNTERS = ["failed_at", "failed_error", "failed_count", "files_round", "render_count", "waiting_since"]
-CATALOG = os.path.join(SHOP_DIR, "files", "catalog.json")
-
-def all_ids() -> list[int]:
-    return [row["id"] for row in load_json(CATALOG)]
 
 def argument(index: int, name: str) -> str:
     if len(sys.argv) <= index or sys.argv[index].startswith("--"):
         raise SystemExit(f"refuse: {name} is required")
     return sys.argv[index]
 
+def current():
+    batch = load_batch()
+    if not batch:
+        raise SystemExit("refuse: no batch in flight")
+    return batch
+
 # INIT
 
 def init():
-    ids = all_ids()
+    ids = catalog_ids()
     steps = [
         f"put {BUCKET}/{TASK_KEY} = {{}}",
-        f"put {BUCKET}/{PATHS_KEY} = {len(ids)} ids, all open",
-        f"delete {BUCKET}/{DESIGN_KEY}, the first tick rolls a design",
+        f"delete {BUCKET}/{BATCH_KEY} and {STRIKES_KEY}; the first tick rolls a batch over {len(ids)} catalog products",
     ]
     if not gate("manager init", steps): return
     put_json(TASK_KEY, {})
-    save_paths({str(id): True for id in ids})
-    delete_key(DESIGN_KEY)
+    delete_key(BATCH_KEY)
     delete_key(STRIKES_KEY)
-    say(f"init wrote {TASK_KEY} and {PATHS_KEY} with {len(ids)} ids")
+    say(f"init cleared the task and the batch; {len(ids)} products in {BUCKET}/data/catalog/")
 
 # READ
 
@@ -68,12 +72,14 @@ def show():
         return
     say(json.dumps(task.to_dict(), indent=2))
 
-def design():
-    found = load_design()
+def batch():
+    found = load_batch()
     if not found:
-        say("no design yet")
+        say("no batch in flight")
         return
-    say(json.dumps(found.to_dict(), indent=2))
+    data = found.to_dict()
+    data.pop("variation")
+    say(json.dumps(data, indent=2))
 
 def status():
     try:
@@ -85,20 +91,20 @@ def status():
     say(json.dumps(data, indent=2))
     for line in log[-40:]: say(line)
 
-def paths():
-    data = load_paths()
-    open_ids = [id for id, state in data.items() if state is True]
-    used = [id for id, state in data.items() if state is False]
-    dead = [id for id, state in data.items() if state is None]
-    say(f"open {len(open_ids)}, used {len(used)}, quarantined {len(dead)}, total {len(data)}")
+def rows():
+    found = current()
+    counts = {state: len(found.cells(state)) for state in (OPEN, USED, DROPPED)}
+    say(f"batch {found.design}: " + ", ".join(f"{state} {count}" for state, count in counts.items()) + f", rows {len(found.rows)}")
     strikes = load_strikes()
     if strikes: say("strikes: " + " ".join(f"{id}x{count}" for id, count in sorted(strikes.items())))
+    dead = sorted({id for id, _ in found.cells(DROPPED)})
     if not dead: return
-    say("quarantined: " + " ".join(sorted(dead)))
-    if not gate("manager paths", [f"reopen {len(dead)} quarantined ids in {PATHS_KEY}"]): return
-    for id in dead: data[id] = True
-    save_paths(data)
-    say(f"reopened {len(dead)} ids")
+    say("dropped: " + " ".join(dead))
+    if not gate("manager rows", [f"reopen {len(dead)} dropped rows in {BATCH_KEY}"]): return
+    for id in dead:
+        for primary in found.row(id): found.mark(id, primary, OPEN)
+    save_batch(found)
+    say(f"reopened {len(dead)} rows")
 
 # WRITE
 
@@ -123,7 +129,7 @@ def abort():
         f"delete shopify product {task.product.shopify_id} or its files",
         f"delete {BUCKET}/{cdn_prefix(task.key)}",
         f"delete {BUCKET}/{archive_key(task.key)}",
-        f"mark {task.product.id} used in {PATHS_KEY}",
+        f"strike product {task.product.id}; reopen its {task.primary} cell, or drop the pair at three strikes",
     ]
     if not gate("manager abort", steps): return
     mint_token()
@@ -131,25 +137,31 @@ def abort():
     say(f"aborted {task.key}")
 
 def reap():
-    key = argument(2, "key")
-    task = Task.from_dict(get_json(archive_key(key)))
+    design = argument(2, "design")
+    found = next((one for one in list_batches() if one.design == design), None)
+    if not found:
+        raise SystemExit(f"refuse: no released batch {design}")
+    keys = archives(design)
     steps = [
-        f"delete shopify product {task.product.shopify_id}",
-        f"delete {BUCKET}/{cdn_prefix(key)}",
-        f"delete {BUCKET}/{archive_key(key)}",
+        f"delete {len(keys)} shopify products, their CDN folders and archives",
+        f"delete {BUCKET}/{cdn_prefix(design)}",
+        f"delete {BUCKET}/{batch_key(design)}",
     ]
     if not gate("manager reap", steps): return
-    if task.product.shopify_id:
-        mint_token()
-        delete_product(task)
-    say(f"deleted {delete_folder(cdn_prefix(key))} product files")
-    delete_key(archive_key(key))
-    say(f"deleted {archive_key(key)}")
+    mint_token()
+    reap_batch(found)
+    say(f"reaped batch {design}, {len(keys)} products")
 
-def reopen(id: int) -> None:
-    data = load_paths()
-    data[str(id)] = True
-    save_paths(data)
+def reopen(task: Task) -> None:
+    found = current()
+    if found.design != task.design:
+        raise SystemExit(f"refuse: {task.key} is not in batch {found.design}")
+    found.mark(task.product.id, task.primary, OPEN)
+    row = found.row(task.product.id)
+    for primary, state in row.items():
+        if state == DROPPED and not archive_exists(task.key_for(primary)):
+            row[primary] = OPEN
+    save_batch(found)
 
 def redo():
     key = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith("--") else None
@@ -157,19 +169,27 @@ def redo():
     steps = [
         f"{'reap archive' if key else 'abort the task in flight'} {task.key}",
         f"delete shopify product {task.product.shopify_id} or its files, the CDN folder and the archive",
-        f"reopen {task.product.id} in {PATHS_KEY} so this round remakes it",
+        f"reopen {task.product.id} {task.primary} in {BATCH_KEY} so this batch remakes it",
     ]
     if not gate("manager redo", steps): return
     mint_token()
     if key:
-        if task.product.shopify_id:
-            delete_product(task)
-        delete_folder(cdn_prefix(key))
-        delete_key(archive_key(key))
+        remove_product(task)
     else:
         abort_task(task)
-    reopen(task.product.id)
-    say(f"redo {task.key}: product {task.product.id} reopened")
+    reopen(task)
+    say(f"redo {task.key}: product {task.product.id} {task.primary} reopened")
+
+def release():
+    found = current()
+    open_cells = len(found.cells(OPEN))
+    steps = [
+        f"move {BUCKET}/{BATCH_KEY} to {batch_key(found.design)} with {open_cells} cells still open",
+        "wake carlomitchener-site; the next tick rolls a new batch",
+    ]
+    if not gate("manager release", steps): return
+    mrly_release(found)
+    say(f"released batch {found.design}")
 
 def wipe():
     steps = [
@@ -186,13 +206,14 @@ def wipe():
 ACTIONS = {
     "init": init,
     "show": show,
-    "design": design,
+    "batch": batch,
     "status": status,
-    "paths": paths,
+    "rows": rows,
     "reset": reset,
     "abort": abort,
     "reap": reap,
     "redo": redo,
+    "release": release,
     "wipe": wipe,
 }
 

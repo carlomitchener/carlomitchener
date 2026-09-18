@@ -17,7 +17,7 @@ from automator.core.api import logger, mint_token
 from automator.core.config import MAX_FAILURES, TICK_RESERVE
 from automator.core.errors import NoTaskError, Retry, TaskAborted
 from automator.core.models import Task
-from automator.core.s3 import abort_task, load_design, load_task, save_task
+from automator.core.s3 import abort_task, load_batch, load_task, save_task
 from automator.core.steps import Step
 
 STEPS = {
@@ -131,7 +131,7 @@ def handler(event, context):
                 current = load_task()
             except NoTaskError:
                 pass
-            status.write(journal, current, load_design(), time.time() - started, error)
+            status.write(journal, current, load_batch(), time.time() - started, error)
         except Exception as caught:
             logger.error(f"status write failed: {caught}")
         status.detach(journal)
