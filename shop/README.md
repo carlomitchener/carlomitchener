@@ -13,6 +13,7 @@
 - `handler.py` - the Lambda entry; it re-exports `automator.run.handler`.
 - `manager.py` - the automator console: init, show, batch, status, rows, reset, abort, reap, redo, release, wipe.
 - `shopify.py` - the shop console: publications, purge, vendor. Purge and vendor touch only automator products (handle `{dark|light}-...-{8 hex}`, or the old `{8 hex}-...` until the cutover purge, productType in `catalog.json`) and print every other product as skipped, so the gift cards stay.
+- `theme.py` - the theme console: list, push, publish. The theme lives in `theme/` as plain files; no zip, no CLI. It is already the live theme, so `push --yes` edits the storefront directly.
 - `env.py` - `.env`, json, say, gate and verb for the desk scripts.
 - `files/` - `catalog.json`, `dictionary.json`, `reviews.json`, `products/`. Kept forever.
 - `theme/`, `theme.zip` - the Online Store theme; the site is headless, the theme only backs checkout. Rebuild with `(cd carlomitchener/shop/theme && zip -X -D -r -FS ../theme.zip .)`, upload by hand in Shopify admin.
@@ -29,7 +30,7 @@
 - STATUS `status.py` - reads every file's status; FAILED or missing files go back to FILES; after the rounds they are dropped; not READY waits within `STATUS_BUDGET`.
 - PRODUCT `product.py` - one `productSet` with `identifier: {handle}`, so a retry updates instead of duplicating; title `{Light|Dark} {Title} ({design})`, vendor Printful, tags Category, Title, `design:`, `group:`, `primary:` (the ink, White or Black), `secondary:`; yields.
 - PING `ping.py` - `GET sync/products/@{shopify id}` until Printful's app has pulled the product and every sku, within `PING_BUDGET`.
-- SYNC `sync.py` - `PUT sync/variant/{id}` with the printfiles and the stitch colour, 30 variants per tick, stops before the tick reserve.
+- SYNC `sync.py` - `PUT sync/variant/{id}` with the printfiles and the stitch colour, `SYNC_BATCH` 9 variants per tick because Printful allows 10 variant syncs a minute, stops before the tick reserve.
 - PUBLISH `publish.py` - publishes to Online Store and Headless.
 - COMPLETE `complete.py` - archives the task to `data/automator/tasks/<key>.json`, clears `task.json` and wakes the site, which shows the product on `/status/` and at its own URL as a preview, nothing buyable, until the batch is released; ARCHIVE reruns it if a tick died between the two.
 - RELEASE `release.py` - when CREATE finds no open cell: stamps `released_at`, moves `batch.json` to `batches/{design}.json`, wakes `carlomitchener-site` once, and CREATE rolls the next batch. Design GIFs may join here later.

@@ -25,3 +25,4 @@
 - `manager.py <verb>` - verbs: init, show, batch, status, rows, reset, abort, reap, redo, release, wipe. `rows` counts the cells and reopens dropped rows; `reap <design>` reaps a released batch now; `redo [key]` remakes a live product (or the task in flight) this batch; `release` closes the batch in flight whatever is open.
 - `automator/run.py` runs one tick from the desk against the real bucket and shops; every step file runs alone on the task in flight.
 - `shopify.py <verb>` - verbs: publications, purge, vendor.
+- `theme.py <verb>` - verbs: list, push, publish. `push` upserts every file under `theme/` into the theme named `theme` and deletes remote files not on disk; `publish` makes it live. Both plan first, apply with `--yes`.

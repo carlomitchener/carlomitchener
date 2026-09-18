@@ -1,7 +1,7 @@
 import time
 from automator.core import clock
 from automator.core.api import printful_request
-from automator.core.config import TICK_RESERVE
+from automator.core.config import SYNC_BATCH, TICK_RESERVE
 from automator.core.errors import Retry, TaskAborted
 from automator.core.models import Task, Variant
 from automator.core.steps import Step
@@ -9,7 +9,6 @@ from automator.core.steps import Step
 PRINTFUL_SYNC_URL = "sync/variant/"
 VISIBLE = False
 DELAY = 0.6
-BATCH = 30
 
 def placement_files(task: Task) -> list[dict]:
     files: list[dict] = []
@@ -50,7 +49,7 @@ def unsynced(task: Task) -> list[Variant]:
     return [v for v in task.variants if not v.synced]
 
 def mrly_sync(task: Task) -> Task:
-    batch = unsynced(task)[:BATCH]
+    batch = unsynced(task)[:SYNC_BATCH]
     for i, variant in enumerate(batch):
         if clock.remaining() < TICK_RESERVE:
             raise Retry(f"tick reserve, {len(unsynced(task))} variants left")
