@@ -28,7 +28,7 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: var(--r-media);
-  background: var(--white);
+  background: var(--plate);
 }
 
 .card .shot img {
@@ -217,7 +217,7 @@
   display: block;
   overflow: hidden;
   border-radius: var(--r-media);
-  background: var(--white);
+  background: var(--plate);
   cursor: zoom-in;
 }
 
@@ -226,7 +226,7 @@
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
-  background: var(--white);
+  background: var(--plate);
   transition: transform var(--slow) var(--ease);
 }
 
@@ -279,7 +279,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--r-media);
-  background: var(--white);
+  background: var(--plate);
   aspect-ratio: 1;
 }
 
@@ -363,7 +363,7 @@
   padding: 0;
   overflow: hidden;
   border-radius: var(--r-card);
-  background: var(--white);
+  background: var(--plate);
   opacity: 0.6;
   transition: opacity var(--fast) var(--ease), outline-color var(--fast) var(--ease);
   outline: 2px solid transparent;

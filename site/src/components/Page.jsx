@@ -1,9 +1,11 @@
 import site from "../../site.json";
-import { SHOPIFY_CDN } from "../config/shop.ts";
+import { MODE_KEY, SHOPIFY_CDN, THEME_COLORS } from "../config/shop.ts";
 import { Header } from "./Header.jsx";
 import { Footer } from "./Footer.jsx";
 
 const FONTS = "/fonts/fonts.css";
+
+const MODE_SCRIPT = `(function(){try{var r=document.documentElement,k="${MODE_KEY}",c={light:"${THEME_COLORS.light}",dark:"${THEME_COLORS.dark}"},m=new URLSearchParams(location.search).get("mode");if(m!=="dark"&&m!=="light"){m=null;try{m=localStorage.getItem(k)}catch(e){}}if(m!=="dark"&&m!=="light")m=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";r.dataset.mode=m;var t=document.querySelector('meta[name="theme-color"]');if(t)t.content=c[m]}catch(e){}})();`;
 
 export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, catalog, latest = {}, now, fly = false, children }) {
   const url = root + route;
@@ -12,8 +14,9 @@ export function Page({ root, route, title, description, image, type = "website",
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="color-scheme" content="light" />
-        <meta name="theme-color" content="#f8f8f9" />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" content={THEME_COLORS.light} />
+        <script dangerouslySetInnerHTML={{ __html: MODE_SCRIPT }} />
         <title>{title === site.name ? site.name : `${title} · ${site.name}`}</title>
         <meta name="description" content={description} />
         {noindex ? <meta name="robots" content="noindex" /> : null}

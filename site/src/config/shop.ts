@@ -14,6 +14,10 @@ export const TILES = [1, 3, 5, 7, 9];
 
 export const CART_KEY = "cm-cart";
 
+export const MODE_KEY = "cm-mode";
+
+export const THEME_COLORS = { light: "#f8f8f9", dark: "#0b0b0c" };
+
 export const CATEGORIES: [string, string][] = [
   ["accessories", "Accessories"],
   ["bags", "Bags"],

@@ -5,12 +5,13 @@
   --ground: var(--white);
   --bg: #f8f8f9;
   --panel: #f1f1f2;
-  --deep: #e8e8e9;
   --line: #dddddf;
   --fg: var(--black);
   --dim: #555558;
   --accent: var(--blue);
   --on-accent: var(--white);
+  --plate: var(--white);
+  --veil: color-mix(in oklab, var(--black) 20%, transparent);
 }
 
 /* TOKENS */
@@ -52,4 +53,17 @@
   --slow: 0.4s;
   --unfold: 0.55s;
   --ease: cubic-bezier(0.32, 0.08, 0.24, 1);
+}
+
+/* DARK */
+
+:root[data-mode="dark"] {
+  color-scheme: dark;
+  --ground: var(--black);
+  --bg: #0b0b0c;
+  --panel: #151517;
+  --line: #2a2a2e;
+  --fg: var(--white);
+  --dim: #a3a3a8;
+  --veil: color-mix(in oklab, var(--black) 55%, transparent);
 }

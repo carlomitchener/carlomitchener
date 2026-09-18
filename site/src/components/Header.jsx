@@ -40,6 +40,10 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
           <button className="tool" type="button" aria-label="Search" data-search>
             <Icon name="search" />
           </button>
+          <button className="tool mode" type="button" aria-label="Switch to dark mode" data-mode>
+            <Icon name="dark_mode" extra="moon" />
+            <Icon name="light_mode" extra="sun" />
+          </button>
           <a className="tool bag" href={CART} aria-label="Bag" data-bag>
             <Icon name="shopping_bag" />
             <span className="count" data-cart-count hidden></span>

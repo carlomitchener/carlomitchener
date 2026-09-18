@@ -30,7 +30,6 @@
 - PRODUCT `product.py` - one `productSet` with `identifier: {handle}`, so a retry updates instead of duplicating; vendor Printful, tags Category, Title, `design:`, `group:`, `primary:`, `secondary:`; yields.
 - PING `ping.py` - `GET sync/products/@{shopify id}` until Printful's app has pulled the product and every sku, within `PING_BUDGET`.
 - SYNC `sync.py` - `PUT sync/variant/{id}` with the printfiles and the stitch colour, 30 variants per tick, stops before the tick reserve.
-- PREVIEW `preview.py` - reads Printful's own mockup (`sync_variants[].files[]` of type `preview`) once it exists, adds it to the product with `productCreateMedia`, alt `preview - Preview - {title}`, and moves it to position 0 when READY, so Shopify, Printful, emails and checkout show the same image; within `PREVIEW_BUDGET`, then it skips with a warning, never a strike.
 - PUBLISH `publish.py` - publishes to Online Store and Headless.
 - COMPLETE `complete.py` - archives the task to `data/automator/tasks/<key>.json`, clears `task.json`, wakes `carlomitchener-site`; ARCHIVE reruns it if a tick died between the two.
 - FAILED `run.py` - any other exception parks the task; the next tick sends it back to the failing step; three strikes abort. The counter resets whenever a step advances.
@@ -65,6 +64,6 @@
 - The task json holds no secret: ids, costs, CDN URLs, the variation and counters. The status file carries none of the costs or Printful URLs.
 - The site rebuilds when woken: COMPLETE, REAP and a new feed post invoke `carlomitchener-site` with `{"source": "manual"}`; it rebuilds only if the Shopify snapshot or the feed index changed.
 - `Retry` ends the tick and saves; `TaskAborted` aborts; anything else is a strike. Printful 429, 5xx after backoff and network errors retry; 400 and 404 abort; Shopify THROTTLED retries.
-- Budgets in `core/config.py`: mockup 30 min and 12 renders per task, status 20 min, ping 60 min, preview 20 min, 3 file rounds, 3 renders, 3 strikes, 25 s tick reserve.
+- Budgets in `core/config.py`: mockup 30 min and 12 renders per task, status 20 min, ping 60 min, 3 file rounds, 3 renders, 3 strikes, 25 s tick reserve.
 - `requests` is not needed: `core/http.py` is a small shim with backoff and `Retry-After`.
 - Secrets live in `Developer/.env` on the desk and in the Lambda env in the cloud; the row is `carlomitchener-automator` in `aws/common.py`.

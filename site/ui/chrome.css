@@ -133,6 +133,15 @@
   display: inline-block;
 }
 
+.mode .sun,
+:root[data-mode="dark"] .mode .moon {
+  display: none;
+}
+
+:root[data-mode="dark"] .mode .sun {
+  display: inline-block;
+}
+
 .mark[data-fly]::after {
   content: "";
   position: absolute;
@@ -360,7 +369,7 @@
   height: 48px;
   object-fit: cover;
   border-radius: var(--s2);
-  background: var(--white);
+  background: var(--plate);
 }
 
 .purse .lines small {
@@ -388,7 +397,7 @@
   position: fixed;
   inset: 0;
   z-index: 29;
-  background: color-mix(in oklab, var(--black) 20%, transparent);
+  background: var(--veil);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   opacity: 0;

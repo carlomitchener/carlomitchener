@@ -110,8 +110,6 @@ const buyUrl = (id: string) => (SHOP ? `https://${SHOP}/cart/${id}:1` : "/cart/"
 
 const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
 
-const PREVIEW = "preview";
-
 const RESERVED = new Set(["shop", "feed", "cart", "status", "about", "pages", "gift-card", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
 
 const VENDOR = "Printful";
@@ -425,8 +423,8 @@ function collect(site_: Site) {
 /* RENDER */
 
 const previewOf = (row: Row) => {
-  const preview = row.images.find((image) => image.style === PREVIEW);
-  return preview ? `${preview.url}${preview.url.includes("?") ? "&" : "?"}width=1200` : undefined;
+  const image = row.images[0];
+  return image ? `${image.url}${image.url.includes("?") ? "&" : "?"}width=1200` : undefined;
 };
 
 const describe = (row: Row) => `${row.title} by ${site.name}. USD ${Number(row.price).toFixed(2)}. One design, one moon of ${Math.round(LIVE_DAYS)} days.`;
