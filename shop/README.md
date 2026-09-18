@@ -66,6 +66,7 @@
 - The task json holds no secret: ids, costs, CDN URLs, the variation and counters. The status file carries none of the costs or Printful URLs.
 - The site rebuilds when woken: RELEASE, REAP and a new feed post invoke `carlomitchener-site` with `{"source": "manual"}`; it rebuilds only if the Shopify snapshot or the feed index changed.
 - `Retry` ends the tick and saves; `TaskAborted` aborts; anything else is a strike. Printful 429, 5xx after backoff and network errors retry; 400 and 404 abort; Shopify THROTTLED retries.
+- Printful rate limits, the two walls the pace is built on: 2 mockup requests a minute per store, `MOCKUP_POSTS` caps at 1; 10 variant syncs a minute, `SYNC_BATCH` caps at 9. Both live in `core/config.py`; a 429 past either retries next tick.
 - Budgets in `core/config.py`: mockup 30 min and 12 renders per task, status 20 min, ping 60 min, 3 file rounds, 3 renders, 3 strikes, 25 s tick reserve, 60 s reap reserve.
 - `requests` is not needed: `core/http.py` is a small shim with backoff and `Retry-After`.
 - Secrets live in `Developer/.env` on the desk and in the Lambda env in the cloud; the row is `carlomitchener-automator` in `aws/common.py`.
