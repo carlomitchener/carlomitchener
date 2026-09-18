@@ -1,0 +1,143 @@
+/* GIFT */
+
+.gift {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s7);
+  padding-top: var(--s6);
+}
+
+.gift .left {
+  align-content: start;
+}
+
+.gift .sizes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 360px;
+}
+
+.gift .sizes button {
+  min-height: 56px;
+  font-size: var(--t-h3);
+}
+
+.gift .sizes button[disabled] {
+  opacity: 0.4;
+}
+
+.tiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.tiers a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 var(--s3);
+  border-radius: var(--r-pill);
+  background: var(--panel);
+  font-size: var(--t-fine);
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.tiers a:hover {
+  background: color-mix(in oklab, var(--panel) 70%, var(--fg));
+}
+
+.tiers a[aria-current="page"] {
+  background: var(--fg);
+  color: var(--ground);
+}
+
+/* FACE */
+
+.face {
+  --tint: var(--accent);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  aspect-ratio: 1.586;
+  width: 100%;
+  padding: var(--s5);
+  border-radius: var(--r-media);
+  background: linear-gradient(135deg, color-mix(in oklab, var(--tint) 72%, var(--white)) 0%, var(--tint) 55%, color-mix(in oklab, var(--tint) 78%, var(--black)) 100%);
+  color: var(--white);
+  box-shadow: 0 24px 48px -24px color-mix(in oklab, var(--tint) 60%, transparent);
+  transition: transform var(--slow) var(--ease);
+}
+
+.face-top,
+.face-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  font-size: var(--t-fine);
+  font-weight: 600;
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+}
+
+.face-top img {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+}
+
+.face-amount {
+  align-self: center;
+  font-size: clamp(48px, 9vw, 96px);
+  line-height: 1;
+  letter-spacing: var(--track-tight);
+  text-align: center;
+  text-shadow: 0 2px 12px color-mix(in oklab, var(--black) 25%, transparent);
+}
+
+/* ROW */
+
+.gift-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s6);
+}
+
+.gift-pick {
+  display: block;
+}
+
+.gift-pick:hover .face {
+  transform: translateY(-4px);
+}
+
+.gift-pick h3 {
+  margin-top: var(--s3);
+}
+
+.gift-pick .price {
+  display: block;
+  margin-top: var(--s1);
+  font-size: var(--t-small);
+  color: var(--dim);
+}
+
+@media (min-width: 700px) {
+  .gift-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s5);
+  }
+}
+
+@media (min-width: 900px) {
+  .gift {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
+    gap: var(--s8);
+    align-items: start;
+  }
+
+  .gift .left {
+    position: sticky;
+    top: calc(var(--header) + var(--s5));
+  }
+}

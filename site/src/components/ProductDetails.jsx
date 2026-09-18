@@ -1,7 +1,9 @@
+import { LIVE_DAYS } from "../config/shop.ts";
 import { cdnUrl, money } from "../lib/shop.ts";
 import { Downloads } from "./Downloads.jsx";
 import { Icon } from "./Icon.jsx";
 import { Life } from "./Life.jsx";
+import { Reviews } from "./Reviews.jsx";
 import { VariantPills } from "./VariantPills.jsx";
 
 function Drop({ name, children }) {
@@ -16,7 +18,7 @@ function Drop({ name, children }) {
   );
 }
 
-export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now }) {
+export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now, review }) {
   const first = product.variants[0];
   return (
     <div className="details">
@@ -46,13 +48,14 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
       </div>
       <Life born={product.created} gate bar now={now} />
       <p className="fine">
-        <a href={shop}>{`More ${product.title}`}</a> · <a href={printful} rel="noopener">View on Printful</a>
+        <a href={shop}>{`More ${product.title}`}</a>
       </p>
       <Drop name="Size Guide">
         <p className="fine">
           Please use Printful's official size guide on their website. Tap <a href={printful} rel="noopener">View on Printful</a>.
         </p>
       </Drop>
+      <Reviews review={review} printful={printful} />
       <Downloads product={product} tiles={tiles} />
       {product.files.length ? (
         <Drop name="Printfiles">
@@ -65,6 +68,15 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
           </p>
         </Drop>
       ) : null}
+      <Drop name="Expiration">
+        <p className="fine">
+          {`Every product here lives one lunar month, ${LIVE_DAYS} days from the day it was made. When its moon has passed, the reaper deletes the product, its printfiles and its design's tiles, and nobody prints it again. The countdown above is the truth. Two days means two days.`}
+        </p>
+      </Drop>
+      <a className="pill wide" href={printful} rel="noopener">
+        <Icon name="open_in_new" />
+        <span>View on Printful</span>
+      </a>
     </div>
   );
 }

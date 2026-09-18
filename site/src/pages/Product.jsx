@@ -4,7 +4,7 @@ import { MoreVariations } from "../components/MoreVariations.jsx";
 import { ProductDetails } from "../components/ProductDetails.jsx";
 import { ProductGrid } from "../components/ProductGrid.jsx";
 
-export function Product({ trail, product, family, alike, sizes, buy, printful, shop, tiles, now }) {
+export function Product({ trail, product, family, alike, sizes, buy, printful, shop, tiles, now, review }) {
   return (
     <div className="wrap">
       <Breadcrumbs trail={trail} />
@@ -14,7 +14,7 @@ export function Product({ trail, product, family, alike, sizes, buy, printful, s
           <Mockups product={product} />
         </div>
         <div className="side">
-          <ProductDetails product={product} sizes={sizes} buy={buy} printful={printful} shop={shop} tiles={tiles} now={now} />
+          <ProductDetails product={product} sizes={sizes} buy={buy} printful={printful} shop={shop} tiles={tiles} now={now} review={review} />
           <MoreVariations family={family} current={product.key} title={product.title} shop={shop} />
         </div>
       </article>

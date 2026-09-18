@@ -9,8 +9,9 @@ import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
-import { collectionUrl, facetsOf, grid, handleOf, productUrl, type Facets, type ProductRow } from "../src/lib/shop.ts";
+import { collectionUrl, facetsOf, GIFT, GIFT_PREFIX, giftUrl, grid, handleOf, productUrl, type Facets, type ProductRow } from "../src/lib/shop.ts";
 import { Page } from "../src/components/Page.jsx";
+import { Designs } from "../src/pages/Designs.jsx";
 import { Home } from "../src/pages/Home.jsx";
 import { Shop } from "../src/pages/Shop.jsx";
 import { Product } from "../src/pages/Product.jsx";
@@ -20,6 +21,8 @@ import { Cart } from "../src/pages/Cart.jsx";
 import { Status } from "../src/pages/Status.jsx";
 import { Doc } from "../src/pages/Doc.jsx";
 import { NotFound } from "../src/pages/NotFound.jsx";
+import { FILES, PAGES, Pages } from "../src/pages/Pages.jsx";
+import { GiftCard, GiftCards, TIERS } from "../src/pages/GiftCard.jsx";
 import site from "../site.json";
 
 loadEnv();
@@ -109,7 +112,47 @@ const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
 
 const PREVIEW = "preview";
 
-const RESERVED = new Set(["shop", "feed", "cart", "status", "about", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
+const RESERVED = new Set(["shop", "feed", "cart", "status", "about", "pages", "gift-card", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
+
+const VENDOR = "Printful";
+
+let giftRows: ProductRow[] = [];
+
+type Gift = (typeof TIERS)[number] & { product: ProductRow };
+
+type Facet = { key: string; label: string; values: { name: string; n: number }[] };
+
+const FACET_CAP = 12;
+
+function facetsFor(list: ProductRow[]): Facet[] {
+  const count = (pick: (row: ProductRow) => string[]) => {
+    const seen = new Map<string, number>();
+    for (const row of list) for (const value of pick(row)) if (value) seen.set(value, (seen.get(value) ?? 0) + 1);
+    return [...seen]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([name, n]) => ({ name, n }));
+  };
+  const out: Facet[] = [
+    { key: "design", label: "Design", values: count((row) => [row.design]) },
+    { key: "group", label: "Group", values: count((row) => [row.group]) },
+    { key: "primary", label: "Primary", values: count((row) => [row.primary]) },
+    { key: "secondary", label: "Secondary", values: count((row) => row.secondary ?? []) },
+  ];
+  return out.filter((facet) => facet.values.length > 1 && (facet.key !== "design" || (facet.values.length <= FACET_CAP && facet.values.length < list.length)));
+}
+
+type Review = { title: string; link: string; status: string; rating: number; count: number };
+
+function reviews(site_: Site): Record<string, Review> {
+  const file = site_.input("reviews").files[0];
+  if (!file) return {};
+  try {
+    return JSON.parse(read(file));
+  } catch {
+    console.warn(`site: ${file} is not a reviews file, skipped`);
+    return {};
+  }
+}
 
 function tasks(site_: Site) {
   const found = new Map<string, Facets>();
@@ -131,7 +174,16 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
   const byType = new Map(catalog.map((entry) => [String(entry.id), entry]));
   const files = tasks(site_);
   const out: Row[] = [];
+  giftRows = [];
   for (const product of snapshot.products ?? []) {
+    if (product.key.startsWith(GIFT_PREFIX)) {
+      giftRows.push(product);
+      continue;
+    }
+    if (product.vendor && product.vendor !== VENDOR) {
+      console.warn(`site: vendor ${product.vendor} is unknown, ${product.key} skipped`);
+      continue;
+    }
     const entry = byType.get(String(product.type));
     if (!entry) {
       console.warn(`site: product type ${product.type} is not in catalog.json, ${product.key} skipped`);
@@ -193,6 +245,8 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
 function collect(site_: Site) {
   const catalogFile = site_.input("catalog").files[0];
+  const reviewsFile = site_.input("reviews").files[0];
+  const rated = reviews(site_);
   const catalog = JSON.parse(read(catalogFile)) as Catalog[];
   catalogRows = catalog;
   const all = rows(site_, catalog);
@@ -227,7 +281,12 @@ function collect(site_: Site) {
   };
   const routes: Route[] = [];
   const sections = CATEGORIES.map(([slug, name]) => ({ slug, name, products: inCategory(slug).slice(0, HOME_ROW) })).filter((one) => one.products.length);
-  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown.slice(0, HOME_POSTS), sections }, inputs: [catalogFile, index], at: today() });
+  const designs = [...new Set(all.map((row) => row.design))].map((design) => {
+    const mine = all.filter((row) => row.design === design);
+    return { design, count: mine.length, created: mine[0].created };
+  });
+  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown.slice(0, HOME_POSTS), designs, sections }, inputs: [catalogFile, index], at: today() });
+  routes.push({ route: "/shop/designs/", kind: "designs", name: "Designs", data: { trail: [{ name: "Shop", href: "/shop/" }, { name: "Designs" }], title: "Designs", lead: `${plural(designs.length, "design")}, one moon each.`, designs }, inputs: [catalogFile, index], at: today() });
   routes.push({
     route: "/shop/",
     kind: "shop",
@@ -242,6 +301,7 @@ function collect(site_: Site) {
       ],
       current: "/shop/",
       products: newestFirst(all),
+      facets: facetsFor(all),
     },
     inputs: [catalogFile],
     at: today(),
@@ -262,6 +322,7 @@ function collect(site_: Site) {
         ],
         current: `/shop/${slug}/`,
         products: newestFirst(list),
+        facets: facetsFor(list),
       },
       inputs: [catalogFile],
       at: today(),
@@ -285,6 +346,7 @@ function collect(site_: Site) {
         chips: [{ label: "Products", cards: productCards(entry.category) }],
         current: shopRoute(entry),
         products: list,
+        facets: facetsFor(list),
         tiles: true,
         noindex: !list.length,
       },
@@ -298,22 +360,43 @@ function collect(site_: Site) {
       kind: "product",
       name: row.title,
       hidden: true,
-      data: { product: row, family: byType.get(row.type) ?? [row], alike: alike(row) },
-      inputs: [catalogFile],
+      data: { product: row, family: byType.get(row.type) ?? [row], alike: alike(row), review: rated[row.type] ?? null },
+      inputs: reviewsFile ? [catalogFile, reviewsFile] : [catalogFile],
       at: row.created.slice(0, 10),
     });
   }
   routes.push({ route: "/cart/", kind: "cart", name: "Bag", at: today(), hidden: true });
   routes.push({ route: "/status/", kind: "status", name: "Status", at: today(), hidden: true });
+  const notes: Record<string, string> = {};
   const readme = site_.input("readme").files[0];
   if (readme) {
-    routes.push({ route: "/about/", kind: "page", name: sheet(read(readme)).title || "About", source: readme, inputs: [readme], at: today() });
+    const doc = sheet(read(readme));
+    notes["/about/"] = doc.text;
+    routes.push({ route: "/about/", kind: "page", name: doc.title || "About", source: readme, inputs: [readme], at: today() });
   }
   for (const file of site_.input("pages").files) {
     const name = basename(file, ".md");
     if (RESERVED.has(name)) throw new Error(`site: page ${name} wants a reserved route`);
-    routes.push({ route: `/${name}/`, kind: "page", name: sheet(read(file)).title || name, source: file, inputs: [file], at: today() });
+    const doc = sheet(read(file));
+    notes[`/${name}/`] = doc.text;
+    routes.push({ route: `/${name}/`, kind: "page", name: doc.title || name, source: file, inputs: [file], at: today() });
   }
+  const gifts: Gift[] = [];
+  for (const tier of TIERS) {
+    const found = giftRows.find((row) => row.key === `${GIFT_PREFIX}${tier.tier}`);
+    if (found && found.variants.length) gifts.push({ ...tier, product: found });
+    else console.warn(`site: no ${GIFT_PREFIX}${tier.tier} product with variants, skipped`);
+  }
+  if (gifts.length) {
+    routes.push({ route: GIFT, kind: "gifts", name: "Gift Card", data: { cards: gifts }, at: today() });
+    for (const card of gifts) routes.push({ route: giftUrl(card.tier), kind: "gift", name: `${card.name} Gift Card`, data: { card, cards: gifts }, at: card.product.created.slice(0, 10) });
+  }
+  const groups = [
+    { name: "Pages", rows: PAGES.filter((one) => one.href !== GIFT || gifts.length).map((one) => ({ ...one, note: one.note || notes[one.href] || "" })) },
+    { name: "Shop", rows: [{ name: "All", href: "/shop/", note: "Every live variation." }, { name: "Designs", href: "/shop/designs/", note: "One tile per design." }, ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, note: `${name} variations.` }))] },
+    { name: "Files", rows: FILES },
+  ];
+  routes.push({ route: "/pages/", kind: "pages", name: "Pages", data: { groups }, inputs: [...site_.input("pages").files, ...(readme ? [readme] : [])], at: today() });
   shown.forEach((post, i) => {
     routes.push({
       route: postRoute(post.name),
@@ -329,9 +412,10 @@ function collect(site_: Site) {
   const found = [
     ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, kind: "Category" })),
     ...catalog.filter((entry) => ofProduct(entry).length).map((entry) => ({ name: entry.title, href: shopRoute(entry), kind: "Product" })),
-    ...all.map((row) => ({ name: `${row.title} ${row.design}`, href: productUrl(row.key), kind: "Variation" })),
+    ...all.map((row) => ({ name: `${row.title} ${row.design}`, href: productUrl(row.key), kind: "Variation", tags: [row.group, row.primary, ...(row.secondary ?? [])].filter(Boolean).join(" ") })),
     ...shown.map((post) => ({ name: post.name, href: postRoute(post.name), kind: "Post" })),
     ...site.pages.map((one) => ({ name: one.name, href: one.href, kind: "Page" })),
+    { name: "Pages", href: "/pages/", kind: "Page" },
   ];
   routes.push({ route: "/search.json", kind: "search", name: "Search", hidden: true, data: { found }, inputs: [catalogFile, index] });
   routes.push({ route: "/404.html", kind: "missing", name: "Not found", hidden: true });
@@ -356,8 +440,8 @@ function cover(products: Row[]) {
 function draw(site_: Site, route: Route): Output[] {
   const at = route.route === "/404.html" ? "404.html" : page(route.route);
   if (route.kind === "home") {
-    const { products, posts: shown, sections } = route.data as { products: Row[]; posts: Post[]; sections: { slug: string; name: string; products: Row[] }[] };
-    const body = h(Home, { posts: shown, sections, now });
+    const { products, posts: shown, designs, sections } = route.data as { products: Row[]; posts: Post[]; designs: { design: string; count: number; created: string }[]; sections: { slug: string; name: string; products: Row[] }[] };
+    const body = h(Home, { posts: shown, designs, sections, now });
     return [{ path: at, bytes: shell(site_, { route: route.route, name: site.name, description: site.tagline, image: cover(products), fly: true }, body) }];
   }
   if (route.kind === "shop") {
@@ -365,6 +449,11 @@ function draw(site_: Site, route: Route): Output[] {
     const body = h(Shop, { ...data, now });
     const leaf = { route: route.route, name: data.title, description: `${data.title}: ${data.lead}`, image: cover(data.products), noindex: data.noindex };
     return [{ path: at, bytes: shell(site_, leaf, body) }];
+  }
+  if (route.kind === "designs") {
+    const data = route.data as { trail: Crumb[]; title: string; lead: string; designs: { design: string; count: number; created: string }[] };
+    const body = h(Designs, { ...data, now });
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: data.title, description: `${data.title}: ${data.lead}` }, body) }];
   }
   if (route.kind === "feed") {
     const { posts: shown } = route.data as { posts: Post[] };
@@ -378,6 +467,19 @@ function draw(site_: Site, route: Route): Output[] {
   }
   if (route.kind === "cart") {
     return [{ path: at, bytes: shell(site_, { route: route.route, name: "Bag", description: "Your bag.", noindex: true }, h(Cart, {})) }];
+  }
+  if (route.kind === "pages") {
+    const { groups } = route.data as { groups: { name: string; rows: { name: string; href: string; note: string }[] }[] };
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Pages", description: "Every route this site serves." }, h(Pages, { groups })) }];
+  }
+  if (route.kind === "gifts") {
+    const { cards } = route.data as { cards: Gift[] };
+    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Gift Card", description: "Three sizes, nine angel numbers each. Sent by email, never expires." }, h(GiftCards, { cards })) }];
+  }
+  if (route.kind === "gift") {
+    const { card, cards } = route.data as { card: Gift; cards: Gift[] };
+    const leaf = { route: route.route, name: `${card.name} Gift Card`, description: `${card.name} gift card, angel numbers from $${card.from} to $${card.to}. Sent by email, never expires.` };
+    return [{ path: at, bytes: shell(site_, leaf, h(GiftCard, { card, cards, product: card.product, buy: buyUrl(card.product.variants[0].id) })) }];
   }
   if (route.kind === "page") {
     const source = route.source as string;
@@ -406,7 +508,7 @@ function post(site_: Site, route: Route, at: string): Output[] {
 }
 
 function product(site_: Site, route: Route, at: string): Output[] {
-  const { product: row, family, alike } = route.data as { product: Row; family: Row[]; alike: Row[] };
+  const { product: row, family, alike, review } = route.data as { product: Row; family: Row[]; alike: Row[]; review: Review | null };
   const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
   const siblings: Record<string, unknown> = {};
   for (const one of family) {
@@ -420,7 +522,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
     { name: row.design },
   ];
   const body = [
-    h(Product, { key: "product", trail, product: row, family, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now }),
+    h(Product, { key: "product", trail, product: row, family, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now, review }),
     h("script", { key: "siblings", type: "application/json", id: "siblings", dangerouslySetInnerHTML: { __html: JSON.stringify(siblings) } }),
   ];
   const data = {

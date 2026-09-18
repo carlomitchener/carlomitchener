@@ -8,6 +8,7 @@ export type ProductRow = {
   key: string;
   design: string;
   type: string;
+  vendor: string;
   created: string;
   available: boolean;
   variants: Variant[];
@@ -27,6 +28,14 @@ export const handleOf = (key: string) => String(key ?? "").split("-").slice(1).j
 export const productUrl = (key: string) => `/${handleOf(key)}/${designOf(key)}/`;
 
 export const collectionUrl = (handle: string) => `/${handle}/`;
+
+export const GIFT = "/gift-card/";
+
+export const GIFT_PREFIX = "gift-card-";
+
+export const giftUrl = (tier: string) => `${GIFT}${tier}/`;
+
+export const lineUrl = (key: string) => (key.startsWith(GIFT_PREFIX) ? giftUrl(key.slice(GIFT_PREFIX.length)) : productUrl(key));
 
 export function facetsOf(task: any): Facets {
   const variation = task?.variation ?? {};
@@ -51,6 +60,7 @@ query Feed($first: Int!, $after: String, $country: CountryCode) @inContext(count
       createdAt
       availableForSale
       productType
+      vendor
       variants(first: 100) {
         nodes {
           id
@@ -97,6 +107,7 @@ export function rowOf(node: any): ProductRow {
     key: node.handle,
     design: designOf(node.handle),
     type: String(node.productType ?? ""),
+    vendor: String(node.vendor ?? ""),
     created: node.createdAt,
     available: node.availableForSale !== false,
     variants: (node.variants?.nodes ?? []).map(variantOf),

@@ -39,6 +39,17 @@ const esc = (text: unknown) => String(text ?? "").replace(/[&<>"]/g, (c) => ({ "
 
 const rows = (list: [string, unknown][]) => `<table>${list.map(([name, value]) => `<tr><th>${esc(name)}</th><td>${esc(value)}</td></tr>`).join("")}</table>`;
 
+const LINE = /^(\S+)\s+(DEBUG|INFO|WARNING|ERROR|CRITICAL)\s+(.*)$/;
+
+const paint = (line: string) => {
+  const hit = LINE.exec(line);
+  if (!hit) return `<span class="text">${esc(line)}</span>`;
+  const level = hit[2].toLowerCase();
+  return `<span class="${level}"><span class="time">${esc(hit[1])}</span> <span class="level">${esc(hit[2].padEnd(7))}</span> <span class="text">${esc(hit[3])}</span></span>`;
+};
+
+const code = (lines: string[]) => `<pre><code>${lines.map(paint).join("\n")}</code></pre>`;
+
 async function fetchJson<T>(path: string): Promise<T | null> {
   try {
     const reply = await fetch(path, { cache: "no-store" });
@@ -88,14 +99,14 @@ function cloud(data: Stats | null) {
 function errors(data: Stats | null) {
   const box = root?.querySelector("[data-errors]");
   if (!box) return;
-  const found = Object.entries(data?.errors ?? {}).flatMap(([name, list]) => list.map((one) => `${one.at ?? ""} ${name} ${one.level} ${one.message}`));
-  box.innerHTML = `<h2>Errors</h2>${found.length ? `<pre>${esc(found.join("\n"))}</pre>` : "<p class=\"fine\">None in the window.</p>"}`;
+  const found = Object.entries(data?.errors ?? {}).flatMap(([name, list]) => list.map((one) => `${one.at ?? "sometime"} ${one.level} ${name} ${one.message}`));
+  box.innerHTML = `<h2>Errors</h2>${found.length ? code(found) : "<p class=\"fine\">None in the window.</p>"}`;
 }
 
 function log(data: Automator | null) {
-  const pre = root?.querySelector("[data-lines]");
-  if (!pre) return;
-  pre.textContent = data?.log?.length ? data.log.slice(-80).join("\n") : "No log yet.";
+  const box = root?.querySelector("[data-log]");
+  if (!box) return;
+  box.innerHTML = `<h2>Log</h2>${data?.log?.length ? code(data.log.slice(-120)) : "<p class=\"fine\">No log yet.</p>"}`;
 }
 
 async function refresh() {

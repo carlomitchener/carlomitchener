@@ -20,7 +20,7 @@ export function Status() {
         </section>
         <section data-log>
           <h2>Log</h2>
-          <pre data-lines>Loading</pre>
+          <p className="fine">Loading</p>
         </section>
       </article>
     </div>

@@ -1,8 +1,18 @@
 import site from "../../site.json";
 import { CATEGORIES, FOOT_COLUMNS } from "../config/shop.ts";
+import { FEED_ROUTE } from "../lib/feed.ts";
 import { Icon } from "./Icon.jsx";
 
 const year = new Date().getUTCFullYear();
+
+const SITE = [
+  { name: "About", href: "/about/" },
+  { name: "Feed", href: FEED_ROUTE },
+  { name: "Status", href: "/status/" },
+  { name: "Bag", href: "/cart/" },
+  { name: "Pages", href: "/pages/" },
+  { name: "Gift Card", href: "/gift-card/" },
+];
 
 const FILES = [
   { name: "404", href: "/404.html" },
@@ -10,6 +20,8 @@ const FILES = [
   { name: "llms.txt", href: "/llms.txt" },
   { name: "sitemap.xml", href: "/sitemap.xml" },
 ];
+
+const HELP = site.pages.filter((one) => one.href !== "/about/");
 
 function pack(groups, count) {
   const columns = Array.from({ length: Math.min(count, groups.length) }, () => ({ height: 0, groups: [] }));
@@ -22,12 +34,29 @@ function pack(groups, count) {
   return columns.filter((one) => one.groups.length).sort((a, b) => groups.indexOf(a.groups[0]) - groups.indexOf(b.groups[0]));
 }
 
+function Group({ name, links, rel }) {
+  return (
+    <div className="group">
+      <h3>{name}</h3>
+      <ul>
+        {links.map((one) => (
+          <li key={one.href}>
+            <a href={one.href} rel={rel}>
+              {one.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function Footer({ catalog = [] }) {
   const groups = CATEGORIES.map(([slug, name]) => ({ slug, name, rows: catalog.filter((row) => row.category === slug) })).filter((one) => one.rows.length);
   return (
     <footer className="foot">
       <div className="wrap">
-        <nav className="catalog" aria-label="Catalog" data-catalog>
+        <nav className="catalog" aria-label="Shop" data-catalog>
           {pack(groups, FOOT_COLUMNS).map((column, i) => (
             <div key={i} className="col">
               {column.groups.map((group) => (
@@ -49,25 +78,15 @@ export function Footer({ catalog = [] }) {
           ))}
         </nav>
         <div className="rule"></div>
-        <ul className="socials">
-          {site.socials.map((one) => (
-            <li key={one.href}>
-              <a href={one.href} rel="me noopener">
-                {one.name}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <nav className="sections" aria-label="Site">
+          <Group name="Site" links={SITE} />
+          <Group name="Help" links={HELP} />
+          <Group name="Files" links={FILES} />
+          <Group name="Socials" links={site.socials} rel="me noopener" />
+        </nav>
         <div className="rule"></div>
         <div className="legal">
           <p className="copy">{`Copyright © ${site.since}-${year} ${site.owner}. All rights reserved.`}</p>
-          <ul className="pages">
-            {[...site.pages, ...FILES].map((one) => (
-              <li key={one.href}>
-                <a href={one.href}>{one.name}</a>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </footer>

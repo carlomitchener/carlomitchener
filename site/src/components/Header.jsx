@@ -1,13 +1,19 @@
 import { CATEGORIES } from "../config/shop.ts";
 import { Icon } from "./Icon.jsx";
 import { ProductCard } from "./ProductCard.jsx";
+import { PAGES } from "../pages/Pages.jsx";
 
 const CART = "/cart/";
 
 export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
-  const links = [{ slug: "all", name: "All", href: "/shop/" }, ...CATEGORIES.map(([slug, name]) => ({ slug, name, href: `/shop/${slug}/` }))];
+  const links = [{ slug: "all", name: "All", href: "/shop/" }, ...CATEGORIES.map(([slug, name]) => ({ slug, name, href: `/shop/${slug}/` })), { slug: "pages", name: "Pages", href: "/pages/" }];
   const current = (href) => (route === href || (href !== "/shop/" && route.startsWith(href)) ? "page" : undefined);
-  const rows = (slug) => (slug === "all" ? CATEGORIES.map(([s, name]) => ({ title: name, href: `/shop/${s}/` })) : catalog.filter((row) => row.category === slug).map((row) => ({ title: row.title, href: `/${row.handle}/` })));
+  const rows = (slug) =>
+    slug === "all"
+      ? CATEGORIES.map(([s, name]) => ({ title: name, href: `/shop/${s}/` }))
+      : slug === "pages"
+        ? PAGES.filter((one) => one.href !== "/cart/").map((one) => ({ title: one.name, href: one.href }))
+        : catalog.filter((row) => row.category === slug).map((row) => ({ title: row.title, href: `/${row.handle}/` }));
   return (
     <header className="top" data-header>
       <div className="bar">
@@ -52,7 +58,7 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
                 <div className="list">
                   <p className="fine">Explore {one.name}</p>
                   <a className="lead" href={one.href}>
-                    {one.slug === "all" ? "Explore All" : `Explore All ${one.name}`}
+                    {one.slug === "all" ? "Explore All" : one.slug === "pages" ? "All Pages" : `Explore All ${one.name}`}
                   </a>
                   <ul className="cols">
                     {rows(one.slug).map((row, i) => (

@@ -1,9 +1,11 @@
 import json
+import os
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
 
-from env import gate, load_env, need, save_env, say, verb
+from env import SHOP_DIR, gate, load_env, load_json, need, save_env, say, verb
 
 load_env()
 
@@ -55,12 +57,14 @@ query {
 """
 
 VENDOR = "Printful"
+AUTOMATOR = re.compile(r"^[0-9a-f]{8}-")
+CATALOG_PATH = os.path.join(SHOP_DIR, "files", "catalog.json")
 
 PRODUCTS = """
 query($cursor: String) {
     products(first: 250, after: $cursor) {
         pageInfo { hasNextPage endCursor }
-        nodes { id title vendor }
+        nodes { id title handle vendor productType }
     }
 }
 """
@@ -105,7 +109,7 @@ def publications():
     save_env("SHOPIFY_ONLINE_STORE_ID", store)
     save_env("SHOPIFY_HEADLESS_ID", headless)
 
-# PURGE
+# PRODUCTS
 
 def products(access):
     nodes = []
@@ -117,12 +121,30 @@ def products(access):
         cursor = page["pageInfo"]["endCursor"]
     return nodes
 
+def automated(node, ids):
+    return bool(AUTOMATOR.match(node["handle"])) and node["productType"] in ids
+
+def split(nodes):
+    ids = {str(row["id"]) for row in load_json(CATALOG_PATH)}
+    ours = [node for node in nodes if automated(node, ids)]
+    others = [node for node in nodes if not automated(node, ids)]
+    return ours, others
+
+def skipped(others):
+    for node in others:
+        say(f"  skip {node['handle']} vendor {node['vendor']}")
+
+# PURGE
+
 def purge():
     access = token()
-    ids = [node["id"] for node in products(access) if node["vendor"] == VENDOR]
+    ours, others = split(products(access))
+    ids = [node["id"] for node in ours if node["vendor"] == VENDOR]
+    others += [node for node in ours if node["vendor"] != VENDOR]
+    skipped(others)
     if not gate("purge", [
-        f"delete {len(ids)} products with vendor {VENDOR} from the shop behind SHOPIFY_SHOP_URL",
-        "productDelete, one call each, no undo; other vendors stay",
+        f"delete {len(ids)} automator products with vendor {VENDOR} from the shop behind SHOPIFY_SHOP_URL",
+        f"productDelete, one call each, no undo; the {len(others)} skipped above stay",
     ]): return
     for count, one in enumerate(ids, 1):
         result = graphql(access, DELETE, {"input": {"id": one}})["productDelete"]
@@ -136,10 +158,12 @@ def purge():
 
 def vendor():
     access = token()
-    stale = [node for node in products(access) if node["vendor"] != VENDOR]
+    ours, others = split(products(access))
+    stale = [node for node in ours if node["vendor"] != VENDOR]
+    skipped(others)
     if not gate("vendor", [
-        f"set vendor {VENDOR} on {len(stale)} products that carry another vendor",
-        "productUpdate, one call each",
+        f"set vendor {VENDOR} on {len(stale)} automator products that carry another vendor",
+        f"productUpdate, one call each; the {len(others)} skipped above stay",
     ]): return
     for count, node in enumerate(stale, 1):
         result = graphql(access, UPDATE, {"product": {"id": node["id"], "vendor": VENDOR}})["productUpdate"]

@@ -12,10 +12,10 @@
 - `automator/` - the Lambda `carlomitchener-automator`: `run.py` is the loop, one file per step, `core/` holds config, clock, http, api, s3, status, models.
 - `handler.py` - the Lambda entry; it re-exports `automator.run.handler`.
 - `manager.py` - the automator console: init, show, design, status, paths, reset, abort, reap, redo, wipe.
-- `shopify.py` - the shop console: publications, purge, vendor.
+- `shopify.py` - the shop console: publications, purge, vendor. Purge and vendor touch only automator products (handle `{8 hex}-...`, productType in `catalog.json`) and print every other product as skipped, so the gift cards stay.
 - `env.py` - `.env`, json, say, gate and verb for the desk scripts.
 - `files/` - `catalog.json`, `dictionary.json`, `reviews.json`, `products/`. Kept forever.
-- `theme/`, `mrlytheme.zip` - the Online Store theme; the site is headless, the theme only backs checkout.
+- `theme/`, `theme.zip` - the Online Store theme; the site is headless, the theme only backs checkout. Rebuild with `(cd carlomitchener/shop/theme && zip -X -D -r -FS ../theme.zip .)`, upload by hand in Shopify admin.
 - `automator` is a package of the workspace (`pyproject.toml`), so every step file runs from the desk: `uv run python carlomitchener/shop/automator/run.py` is one tick.
 
 ## STEPS
@@ -54,7 +54,8 @@
 ## CONTEXT
 
 - Prices: the variant price is Printful's cost. Shopify Markets adds the margin per market; the site reads market prices through the Storefront API with `@inContext(country)`.
-- Vendor Printful on every automator product; `shopify.py purge` and `vendor` key on it, so paintings and prints can share the shop.
+- Vendor Printful on every automator product; `shopify.py purge` and `vendor` key on it and on the automator handle shape, so gift cards, paintings and prints can share the shop.
+- Theme: `layout/theme.liquid` redirects every page to the site with a meta refresh and `location.replace`, the visible link stays for no-JS; `snippets/target.liquid` picks the target per template: product `/{slug}/{design}/` (a handle without an 8-hex design goes to `/`), collection, search and list-collections `/shop/`, cart `/cart/`, page `/{handle}/`, everything else `/`. `password` never redirects. `templates/gift_card.liquid` is `layout none` and never redirects: Shopify renders the card a buyer receives from it (code, value, balance, expiry, print).
 - Shopify title = `{title} ({design})`, e.g. `Tote Bag (08c92015)`, so cart lines and emails tell variations apart; the site reads its titles from `catalog.json`, never from Shopify.
 - Handle = `{design}-{handle}`, e.g. `08c92015-unisex-hoodie`. Variant sku = `{handle}-{size slug}`. Mockup file = `{handle}-{style}.png`; the style id also leads the alt, and the site's flip keys on the alt (`lib/shop.ts styleOf`, `client/flip.ts`).
 - The site takes the design key from the handle and reads group, primary and secondary from the archived task (`scripts/snapshot.ts`).

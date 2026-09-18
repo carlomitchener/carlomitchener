@@ -5,7 +5,7 @@ import { Life } from "./Life.jsx";
 export function ProductCard({ product, width = 800, eager = false, tiles = false, now }) {
   const image = product.images[0];
   return (
-    <a className="card" href={productUrl(product.key)}>
+    <a className="card" href={productUrl(product.key)} data-design={product.design} data-group={product.group || undefined} data-primary={product.primary || undefined} data-secondary={product.secondary?.length ? product.secondary.join(" ") : undefined} data-created={product.created} data-price={product.price}>
       <span className="shot">
         {tiles ? (
           <img className="pixel" src={tileUrl(product.design, MORE_TILE)} alt={`${product.title} ${product.design}`} width="270" height="270" loading={eager ? "eager" : "lazy"} decoding="async" />

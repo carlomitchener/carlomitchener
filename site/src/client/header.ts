@@ -1,5 +1,5 @@
 import { checkoutUrl, count, load, total } from "./cart.ts";
-import { money, productUrl } from "../lib/shop.ts";
+import { lineUrl, money } from "../lib/shop.ts";
 
 const header = document.querySelector<HTMLElement>("[data-header]");
 
@@ -7,7 +7,7 @@ const HOVER = 180;
 const LEAVE = 260;
 const LIMIT = 12;
 
-type Hit = { name: string; href: string; kind: string };
+type Hit = { name: string; href: string; kind: string; tags?: string };
 
 if (header) {
   const flyout = header.querySelector<HTMLElement>("[data-flyout]")!;
@@ -101,7 +101,7 @@ if (header) {
       ...items.map((item) => {
         const li = document.createElement("li");
         const a = document.createElement("a");
-        a.href = productUrl(item.key);
+        a.href = lineUrl(item.key);
         const img = document.createElement("img");
         img.src = item.image;
         img.alt = item.key;
@@ -164,7 +164,7 @@ if (header) {
     results.hidden = empty;
     if (empty) return;
     const words = text.split(/\s+/);
-    const hits = (await fetchIndex()).filter((hit) => words.every((word) => `${hit.name} ${hit.kind}`.toLowerCase().includes(word))).slice(0, LIMIT);
+    const hits = (await fetchIndex()).filter((hit) => words.every((word) => `${hit.name} ${hit.kind} ${hit.tags ?? ""}`.toLowerCase().includes(word))).slice(0, LIMIT);
     render(hits);
     if (!hits.length) results.innerHTML = '<li class="none">No results.</li>';
   };

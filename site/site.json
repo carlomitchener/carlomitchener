@@ -27,6 +27,7 @@
     "shop": { "path": "../../data/carlomitchener/site/shop.json" },
     "feed": { "path": "../../data/carlomitchener/site/feed.json" },
     "catalog": { "path": "../shop/files/catalog.json" },
+    "reviews": { "path": "../shop/files/reviews.json" },
     "tasks": { "path": "../../data/carlomitchener/site/tasks", "deep": true, "ext": ".json" },
     "pages": { "path": "pages", "ext": ".md" },
     "readme": { "path": "../README.md" },

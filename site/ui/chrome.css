@@ -608,6 +608,7 @@ html.held {
     gap: var(--s1);
     padding: 0;
   }
+
 }
 
 @media (min-width: 1024px) {
@@ -633,10 +634,35 @@ html.held {
   margin: var(--s2) 0;
 }
 
-.foot .socials {
+.foot .sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.foot .sections .group {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s2) var(--s5);
+  align-items: baseline;
+  gap: 0 var(--s3);
+}
+
+.foot .sections h3 {
+  font-size: var(--t-fine);
+  font-weight: 600;
+  color: var(--fg);
+  min-width: 4rem;
+}
+
+.foot .sections ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.foot .sections li:not(:last-child)::after {
+  content: "|";
+  margin: 0 var(--s2);
+  color: var(--line);
 }
 
 .foot .legal {
@@ -644,18 +670,4 @@ html.held {
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--s2) var(--s5);
-}
-
-.foot .pages {
-  display: flex;
-  flex-wrap: wrap;
-  width: max-content;
-  max-width: 100%;
-  flex-shrink: 0;
-}
-
-.foot .pages li + li::before {
-  content: "|";
-  margin: 0 var(--s2);
-  color: var(--line);
 }

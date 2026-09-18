@@ -1,0 +1,21 @@
+{%- liquid
+  assign site = "https://carlomitchener.com"
+  case template.name
+    when "product"
+      assign design = product.handle | split: "-" | first
+      assign slug = product.handle | remove_first: design | remove_first: "-"
+      if design.size == 8 and slug != blank
+        echo site | append: "/" | append: slug | append: "/" | append: design | append: "/"
+      else
+        echo site | append: "/"
+      endif
+    when "collection", "search", "list-collections"
+      echo site | append: "/shop/"
+    when "cart"
+      echo site | append: "/cart/"
+    when "page"
+      echo site | append: "/" | append: page.handle | append: "/"
+    else
+      echo site | append: "/"
+  endcase
+-%}

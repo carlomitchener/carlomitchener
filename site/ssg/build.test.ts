@@ -82,9 +82,11 @@ const selectors = (css: string) => {
       buf = "";
     } else if (c === "}") {
       depth--;
+      if (depth < 0) throw new Error("stray brace");
       buf = "";
     } else if (depth === 0) buf += c;
   }
+  if (depth !== 0) throw new Error("unclosed brace");
   return out;
 };
 

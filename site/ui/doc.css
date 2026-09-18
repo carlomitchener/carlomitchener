@@ -127,38 +127,81 @@
   margin-top: var(--s6);
 }
 
+.status {
+  font-family: var(--mono);
+}
+
+.status h1,
+.status h2 {
+  font-family: var(--mono);
+  letter-spacing: normal;
+}
+
+.status h2 {
+  margin-top: var(--s7);
+  font-size: var(--t-h3);
+}
+
+.status .lead {
+  font-size: var(--t-body);
+}
+
 .status table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  margin: 0.75rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: var(--s4);
+  font-size: var(--t-small);
+  background: var(--panel);
+  border-radius: var(--r-card);
 }
 
 .status th {
   text-align: left;
   font-weight: 600;
   white-space: nowrap;
-  padding: 0.35rem 0.75rem 0.35rem 0;
+  color: var(--dim);
+  padding: var(--s2) var(--s3);
   vertical-align: top;
-  width: 7rem;
+  width: 12ch;
 }
 
 .status td {
-  padding: 0.35rem 0;
+  padding: var(--s2) var(--s3) var(--s2) 0;
   vertical-align: top;
   overflow-wrap: anywhere;
 }
 
 .status tr + tr th,
 .status tr + tr td {
-  border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  border-top: var(--hair) solid var(--line);
 }
 
 .status pre {
-  max-height: 28rem;
+  margin-top: var(--s4);
+  max-height: 32rem;
   overflow: auto;
-  font-size: 0.75rem;
-  line-height: 1.5;
+  padding: var(--s4);
+  border-radius: var(--r-card);
+  background: var(--panel);
+  font-size: var(--t-fine);
+  line-height: 1.6;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+.status .time {
+  color: var(--dim);
+}
+
+.status .info .level {
+  color: var(--blue);
+}
+
+.status .warning {
+  color: var(--orange);
+}
+
+.status .error {
+  color: var(--red);
 }

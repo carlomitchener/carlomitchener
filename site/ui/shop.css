@@ -264,11 +264,6 @@
 }
 
 .gallery {
-    max-width: none;
-  }
-}
-
-.gallery {
   display: grid;
   gap: var(--s4);
   width: 100%;
@@ -279,7 +274,6 @@
 .gallery.pixel img {
   image-rendering: pixelated;
 }
-
 
 .stage {
   position: relative;
@@ -533,10 +527,6 @@
 
 .buy .pill {
   width: 100%;
-}
-
-[data-expiry]:empty {
-  display: none;
 }
 
 /* FILES */

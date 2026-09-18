@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+{%- capture target %}{% render 'target' %}{% endcapture -%}
+{%- if template.name != "password" %}
+<meta http-equiv="refresh" content="0; url={{ target }}">
+<script>location.replace({{ target | json }})</script>
+{%- endif %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ page_title }}</title>
 <link rel="canonical" href="{{ canonical_url }}">

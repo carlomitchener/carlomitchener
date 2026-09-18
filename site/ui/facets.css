@@ -1,0 +1,123 @@
+/* FACETS */
+
+.facets {
+  display: grid;
+  gap: var(--s3);
+  margin: calc(-1 * var(--s4)) 0 var(--s7);
+}
+
+.facet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.facet .fine {
+  min-width: 72px;
+}
+
+.facet button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 32px;
+  padding: 0 var(--s3);
+  border-radius: var(--r-pill);
+  background: var(--panel);
+  font-size: var(--t-fine);
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.facet button:hover {
+  background: color-mix(in oklab, var(--panel) 70%, var(--fg));
+}
+
+.facet button[aria-pressed="true"] {
+  background: var(--fg);
+  color: var(--ground);
+}
+
+.facet button .n {
+  color: var(--dim);
+}
+
+.facet button[aria-pressed="true"] .n {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.sort select {
+  min-height: 32px;
+  padding: 0 var(--s3);
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--panel);
+  color: var(--fg);
+  font: inherit;
+  font-size: var(--t-fine);
+}
+
+.card[hidden] {
+  display: none;
+}
+
+/* PAGES */
+
+.routes-group {
+  margin-top: var(--s7);
+}
+
+.routes-group h2 {
+  font-size: var(--t-h3);
+}
+
+.routes {
+  margin-top: var(--s4);
+}
+
+.routes li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s1) var(--s5);
+  padding: var(--s3) 0;
+  border-top: var(--hair) solid var(--line);
+}
+
+.routes .who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2);
+}
+
+.routes a {
+  font-weight: 600;
+}
+
+.routes a:hover {
+  color: var(--accent);
+}
+
+.routes code {
+  font-family: var(--mono);
+  font-size: var(--t-fine);
+  color: var(--dim);
+}
+
+.routes p {
+  font-size: var(--t-small);
+  color: var(--dim);
+}
+
+@media (min-width: 700px) {
+  .routes li {
+    grid-template-columns: 300px minmax(0, 1fr);
+  }
+}
