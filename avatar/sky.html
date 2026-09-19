@@ -6,81 +6,25 @@
 <title>Sky</title>
 <style>
   html, body { margin: 0; height: 100%; overflow: hidden; background: #000; }
+  body.idle { cursor: none; }
   canvas { display: block; width: 100vw; height: 100vh; }
-  #theme { position: fixed; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.55); background: rgba(0,0,0,.12); color: #fff; font: 16px/34px system-ui; text-align: center; cursor: pointer; opacity: .6; }
-  #theme:hover { opacity: 1; }
 </style>
 </head>
 <body>
 <canvas id="sky"></canvas>
-<button id="theme" aria-label="Toggle light and dark">☾</button>
 <script src="bird.js"></script>
 <script src="avatar.js"></script>
+<script src="sky-core.js"></script>
+<script src="sky-mood.js"></script>
+<script src="sky-clouds.js"></script>
+<script src="sky-weather.js"></script>
+<script src="sky-bird.js"></script>
 <script>
 const Sky = (() => {
+  const { noise } = Core;
   const canvas = document.querySelector("#sky"), ctx = canvas.getContext("2d");
-  const TAU = Math.PI * 2;
-  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-  const hash = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
-  const noise = (t, k = 0) => { const i = Math.floor(t) + k * 1000, f = t - Math.floor(t), u = f * f * (3 - 2 * f); return (hash(i) * (1 - u) + hash(i + 1) * u) * 2 - 1; };
-  const rng = (seed) => () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let r = Math.imul(seed ^ (seed >>> 15), 1 | seed); r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r; return ((r ^ (r >>> 14)) >>> 0) / 4294967296; };
-  const parse = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-  const mix = (a, b, t) => "#" + parse(a).map((v, i) => Math.round(v + (parse(b)[i] - v) * t).toString(16).padStart(2, "0")).join("");
-  const rgba = (hex, a) => `rgba(${parse(hex).join(",")},${a})`;
-  const P = PALETTE;
-
-  // THEMES
-
-  const THEMES = {
-    light: {
-      zenith: mix(mix(P.blue, P.indigo, 0.35), P.black, 0.12), mid: mix(P.blue, P.white, 0.42), rim: mix(P.cyan, P.white, 0.84),
-      tint: rgba(mix(P.yellow, P.white, 0.5), 0.35),
-      body: "#f3f6fb", shade: mix(mix(P.blue, P.white, 0.38), P.gray, 0.4), light: mix(P.white, P.yellow, 0.05), haze: 0.55,
-      bird: P.black, sun: true, grain: 0.06,
-    },
-    dark: {
-      zenith: mix(mix(P.blue, P.indigo, 0.5), P.black, 0.9), mid: mix(P.indigo, P.black, 0.78), rim: mix(P.indigo, P.black, 0.6),
-      tint: rgba(mix(P.white, P.indigo, 0.3), 0.14),
-      body: mix(mix(P.indigo, P.black, 0.72), P.gray, 0.3), shade: mix(P.indigo, P.black, 0.9), light: mix(mix(P.white, P.indigo, 0.6), P.gray, 0.4), haze: 0.4,
-      bird: P.white, sun: false, grain: 0.09,
-    },
-  };
-
-  let theme = "light", T = THEMES.light;
-  let W = 0, H = 0, S = 0, DPR = 1;
-  let skyCache, grain, sprites = [], clouds = [], stars = [], frames = [];
-  let t = 0, last = performance.now(), tick = -1, shown = null;
-  const wind = { x: 1, y: 0 };
-  const bird = { x: 0, y: 0, heading: 0.4, turn: 0, bank: 0, speed: 0, size: 0.8, dir: 1, mode: "soar", timer: 20, span: 1, frame: 0 };
-
-  // ASSETS
-
-  function makeFrames() {
-    const base = Avatar.flatten(BIRD.outline.cubics, 6);
-    const w = Avatar.width(BIRD);
-    return [[0.12, 0.06], [0.45, 0.22], [0.8, 0.4], [1.08, 0.25]].map(([flap, bend]) => {
-      const pts = Avatar.deform(base, { flap, bend, sweep: 0.25 }, BIRD.rig);
-      const p = new Path2D();
-      pts.forEach(([x, y], i) => (i ? p.lineTo(x - w / 2, y - 0.5) : p.moveTo(x - w / 2, y - 0.5)));
-      p.closePath();
-      return p;
-    });
-  }
-
-  function makeSky() {
-    const c = document.createElement("canvas");
-    const w = Math.ceil(W * 1.16), h = Math.ceil(H * 1.16);
-    c.width = w * DPR; c.height = h * DPR;
-    const g = c.getContext("2d");
-    g.scale(DPR, DPR);
-    const grad = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.hypot(w, h) * 0.62);
-    grad.addColorStop(0, T.zenith); grad.addColorStop(0.5, T.mid); grad.addColorStop(1, T.rim);
-    g.fillStyle = grad; g.fillRect(0, 0, w, h);
-    const [sx, sy] = sunAt(); const tint = g.createRadialGradient(sx + w * 0.08, sy + h * 0.08, 0, sx + w * 0.08, sy + h * 0.08, Math.max(w, h) * 0.75);
-    tint.addColorStop(0, T.tint); tint.addColorStop(1, "rgba(0,0,0,0)");
-    g.fillStyle = tint; g.fillRect(0, 0, w, h);
-    return c;
-  }
+  G.canvas = canvas; G.ctx = ctx;
+  let grain, vignette, last = performance.now();
 
   function makeGrain() {
     const n = 256, c = document.createElement("canvas"); c.width = c.height = n;
@@ -90,228 +34,91 @@ const Sky = (() => {
     return ctx.createPattern(c, "repeat");
   }
 
-  function makeCloud(seed) {
-    const rnd = rng(seed), w = 640, h = 480, c = document.createElement("canvas");
-    c.width = w * 2; c.height = h * 2;
-    const g = c.getContext("2d"); g.scale(2, 2);
-    const baseY = h * 0.8, n = 4 + Math.floor(rnd() * 4), puffs = [];
-    for (let i = 0; i < n; i++) {
-      const u = (i + 0.5) / n, r = h * (0.14 + 0.16 * Math.sin(Math.PI * u) * (0.75 + 0.5 * rnd()));
-      const x = w * (0.17 + 0.66 * u) + (rnd() - 0.5) * w * 0.05, y = baseY - r * 0.95 - rnd() * h * 0.04;
-      puffs.push({ x, y, r });
-      for (let j = 0, m = 1 + Math.floor(rnd() * 2); j < m; j++) {
-        const a = -Math.PI * (0.2 + 0.6 * rnd()), rr = r * (0.4 + 0.3 * rnd());
-        puffs.push({ x: x + Math.cos(a) * r * 0.7, y: y + Math.sin(a) * r * 0.7, r: rr });
-      }
-    }
-    const x0 = Math.min(...puffs.map((p) => p.x - p.r)), x1 = Math.max(...puffs.map((p) => p.x + p.r));
-    for (let x = x0 + h * 0.12; x < x1 - h * 0.12; x += h * 0.16) puffs.push({ x, y: baseY - h * 0.13, r: h * (0.15 + 0.04 * rnd()) });
-    puffs.sort((p, q) => q.y - p.y);
-    const circle = (p, dx = 0, dy = 0, k = 1) => { g.moveTo(p.x + dx + p.r * k, p.y + dy); g.arc(p.x + dx, p.y + dy, p.r * k, 0, TAU); };
-    g.save(); g.beginPath(); g.rect(0, 0, w, baseY); g.clip();
-    g.beginPath(); for (const p of puffs) circle(p); g.clip();
-    const lg = g.createLinearGradient(0, baseY - h * 0.6, 0, baseY);
-    lg.addColorStop(0, T.light); lg.addColorStop(0.5, T.body); lg.addColorStop(1, T.shade);
-    g.fillStyle = lg; g.fillRect(0, 0, w, h);
-    for (const p of puffs) {
-      g.save(); g.beginPath(); g.rect(0, 0, w, h); circle(p); g.clip("evenodd");
-      let rg = g.createRadialGradient(p.x, p.y + p.r * 0.75, p.r * 0.25, p.x, p.y + p.r * 0.7, p.r * 1.1);
-      rg.addColorStop(0, rgba(T.shade, 0.34)); rg.addColorStop(1, rgba(T.shade, 0));
-      g.fillStyle = rg; g.fillRect(0, 0, w, h); g.restore();
-      g.save(); g.beginPath(); circle(p); g.clip();
-      rg = g.createRadialGradient(p.x + p.r * 0.12, p.y - p.r * 0.65, 0, p.x + p.r * 0.05, p.y - p.r * 0.25, p.r * 0.92);
-      rg.addColorStop(0, rgba(T.light, 0.6)); rg.addColorStop(0.55, rgba(T.light, 0.2)); rg.addColorStop(1, rgba(T.light, 0));
-      g.fillStyle = rg; g.fillRect(0, 0, w, h); g.restore();
-    }
-    g.restore();
+  function makeVignette() {
+    const { W, H } = G, c = document.createElement("canvas");
+    c.width = Math.ceil(W / 4); c.height = Math.ceil(H / 4);
+    const g = c.getContext("2d"), r = Math.hypot(c.width, c.height) / 2;
+    const v = g.createRadialGradient(c.width / 2, c.height / 2, r * 0.45, c.width / 2, c.height / 2, r * 1.05);
+    v.addColorStop(0, Core.rgba(Core.P.black, 0)); v.addColorStop(1, Core.rgba(Core.P.black, 0.32));
+    g.fillStyle = v; g.fillRect(0, 0, c.width, c.height);
     return c;
   }
 
-  function seedClouds() {
-    const layers = [
-      { depth: 0.20, count: 5, alpha: T.haze, speed: 0.006 },
-      { depth: 0.34, count: 4, alpha: 0.92, speed: 0.012 },
-      { depth: 0.52, count: 2, alpha: 1, speed: 0.022 },
-    ];
-    clouds = [];
-    layers.forEach((L, li) => {
-      for (let i = 0; i < L.count; i++) clouds.push({ layer: li, sprite: Math.floor(Math.random() * sprites.length), flip: Math.random() < 0.5, x: Math.random() * W * 1.4 - W * 0.2, y: Math.random() * H * 1.2 - H * 0.1, w: S * L.depth * (0.85 + Math.random() * 0.4), alpha: L.alpha, speed: L.speed });
-    });
-    clouds.sort((a, b) => a.layer - b.layer);
-  }
-
-  function seedStars() {
-    stars = [];
-    for (let i = 0; i < 260; i++) stars.push({ x: Math.random() * 1.16 - 0.08, y: Math.random() * 1.16 - 0.08, r: 0.4 + Math.random() * 1.3, phase: Math.random() * TAU, speed: 0.6 + Math.random() * 2.2 });
-  }
-
-  function sunAt() { return [W * 0.72, H * 0.26]; }
-
-  function build() {
-    T = THEMES[theme];
-    document.querySelector("#theme").textContent = theme === "light" ? "☾" : "☀";
-    skyCache = makeSky();
+  function rebuild(resized) {
     grain = grain || makeGrain();
-    sprites = [11, 23, 37, 41, 59, 67].map(makeCloud);
-    if (!clouds.length) seedClouds();
-    if (!stars.length) seedStars();
-    if (!frames.length) frames = makeFrames();
+    if (resized) vignette = makeVignette();
+    Clouds.build(resized);
+    Weather.build(resized);
+    Bird.build(resized);
   }
 
   function resize() {
-    DPR = Math.min(2, devicePixelRatio || 1);
-    W = innerWidth; H = innerHeight; S = Math.min(W, H);
-    canvas.width = W * DPR; canvas.height = H * DPR;
-    clouds = [];
-    build();
-    if (!bird.x) { bird.x = W * 0.42; bird.y = H * 0.48; }
-  }
-
-  // BEHAVIOR
-
-  function startDive() {
-    const b = bird;
-    const tx = W * (0.42 + Math.random() * 0.16), ty = H * (0.42 + Math.random() * 0.16);
-    if (Math.hypot(tx - b.x, ty - b.y) < 0.18 * S) return;
-    b.heading = Math.atan2(ty - b.y, tx - b.x);
-    b.mode = "dive"; b.span = b.timer = 1.0;
+    G.DPR = Math.min(2, devicePixelRatio || 1);
+    G.W = innerWidth; G.H = innerHeight; G.S = Math.min(G.W, G.H);
+    canvas.width = G.W * G.DPR; canvas.height = G.H * G.DPR;
+    rebuild(true);
   }
 
   function step(dt) {
-    t += dt;
-    const gust = 1 + 0.55 * noise(t * 0.06, 3), angle = 0.3 * noise(t * 0.025, 4);
-    wind.x = Math.cos(angle) * gust; wind.y = Math.sin(angle) * gust;
-    for (const c of clouds) {
-      c.x += wind.x * c.speed * S * dt; c.y += wind.y * c.speed * S * dt * 0.5;
-      const h = c.w * 0.625;
-      if (c.x > W + c.w * 0.1) { c.x = -c.w * 1.05; c.y = Math.random() * H * 1.2 - H * 0.1; c.sprite = Math.floor(Math.random() * sprites.length); c.flip = Math.random() < 0.5; }
-      if (c.x < -c.w * 1.1) c.x = W + c.w * 0.05;
-      if (c.y > H + h * 0.2) c.y = -h * 1.1; else if (c.y < -h * 1.2) c.y = H + h * 0.1;
-    }
-    const b = bird;
-    b.timer -= dt;
-    if (b.mode === "soar") {
-      b.turn = b.dir * (TAU / 15) + 0.2 * noise(t * 0.5, 5); b.bank = b.dir * 0.42 + 0.1 * noise(t * 0.8, 6); b.speed = 0.10 * S;
-      b.size = Math.max(0.3, b.size - 0.011 * dt); b.frame = 0;
-      if (b.timer < 0) { if (Math.random() < 0.5) { b.mode = "glide"; b.timer = 6 + Math.random() * 8; } else { b.dir = -b.dir; b.timer = 14 + Math.random() * 20; } }
-      if (b.size < 0.6 && Math.random() < dt / 45) startDive();
-    } else if (b.mode === "glide") {
-      b.turn = 0.18 * noise(t * 0.4, 7); b.bank = 0.16 * noise(t * 0.6, 8); b.speed = 0.12 * S;
-      b.size = Math.max(0.3, b.size - 0.004 * dt); b.frame = 0;
-      if (b.timer < 0) { b.mode = "soar"; b.dir = Math.random() < 0.5 ? 1 : -1; b.timer = 14 + Math.random() * 20; }
-    } else if (b.mode === "dive") {
-      const u = 1 - b.timer / b.span;
-      b.turn = 0; b.bank = 0; b.speed = S * (0.15 + 0.5 * u); b.size = Math.min(1.3, b.size + 0.7 * dt); b.frame = u < 0.15 ? 1 : 3;
-      if (b.timer < 0) { b.mode = "pull"; b.span = b.timer = 1.8; b.dir = Math.random() < 0.5 ? 1 : -1; }
-    } else if (b.mode === "pull") {
-      const u = 1 - b.timer / b.span;
-      b.turn = 1.1 * b.dir * (1 - u); b.bank = 0.3 * b.dir; b.speed = S * (0.6 - 0.48 * u); b.size = Math.max(0.55, b.size - 0.14 * dt);
-      b.frame = [1, 2, 1, 0][Math.floor(t * 8) % 4];
-      if (b.timer < 0) { b.mode = "soar"; b.timer = 12 + Math.random() * 12; }
-    }
-    const cx = W / 2 + 0.12 * W * noise(t * 0.02, 9), cy = H / 2 + 0.12 * H * noise(t * 0.02, 10);
-    const dx = cx - b.x, dy = cy - b.y, dist = Math.hypot(dx, dy), limit = 0.3 * S;
-    if (b.mode !== "dive" && dist > limit) {
-      let diff = Math.atan2(dy, dx) - b.heading;
-      diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-      b.turn += diff * 1.4 * Math.min(1.5, (dist - limit) / limit);
-    }
-    b.heading += b.turn * dt;
-    b.x += Math.cos(b.heading) * b.speed * b.size * dt + wind.x * 0.015 * S * dt;
-    b.y += Math.sin(b.heading) * b.speed * b.size * dt + wind.y * 0.015 * S * dt;
-    const k = Math.floor(t * 12);
-    if (k !== tick) { tick = k; shown = { x: b.x, y: b.y, heading: b.heading, bank: b.bank, size: b.size, frame: b.frame }; }
-  }
-
-  // PAINT
-
-  function drawSun(pass) {
-    const [sx, sy] = sunAt(), r = S * (T.sun ? 0.045 : 0.038);
-    if (pass === 0) {
-      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, r * 2.4);
-      if (T.sun) { g.addColorStop(0, "#fffbe6"); g.addColorStop(0.4, mix(P.yellow, P.white, 0.72)); g.addColorStop(0.42, rgba(mix(P.yellow, P.white, 0.5), 0.55)); g.addColorStop(1, rgba(P.yellow, 0)); }
-      else { g.addColorStop(0, "#fbf8ea"); g.addColorStop(0.4, "#f1eedb"); g.addColorStop(0.42, rgba(mix(P.white, P.indigo, 0.2), 0.35)); g.addColorStop(1, rgba(P.indigo, 0)); }
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(sx, sy, r * 2.4, 0, TAU); ctx.fill();
-      if (!T.sun) { const m = ctx.createRadialGradient(sx - r * 0.3, sy - r * 0.3, 0, sx, sy, r); m.addColorStop(0, "rgba(0,0,0,0)"); m.addColorStop(1, "rgba(40,40,80,0.16)"); ctx.fillStyle = m; ctx.beginPath(); ctx.arc(sx, sy, r, 0, TAU); ctx.fill(); }
-    } else {
-      ctx.save(); ctx.globalCompositeOperation = "screen";
-      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, r * 10);
-      g.addColorStop(0, T.sun ? rgba(mix(P.yellow, P.white, 0.6), 0.55) : rgba(mix(P.white, P.indigo, 0.3), 0.3)); g.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(sx, sy, r * 10, 0, TAU); ctx.fill();
-      if (T.sun) for (const [k, a, rr] of [[0.5, 0.09, 0.45], [1.3, 0.06, 0.9], [1.65, 0.05, 0.3]]) {
-        const gx = sx + (W / 2 - sx) * k, gy = sy + (H / 2 - sy) * k;
-        ctx.fillStyle = rgba(mix(P.yellow, P.white, 0.4), a); ctx.beginPath(); ctx.arc(gx, gy, r * rr, 0, TAU); ctx.fill();
-      }
-      ctx.restore();
-    }
-  }
-
-  function drawStars() {
-    if (T.sun) return;
-    ctx.fillStyle = "#ffffff";
-    for (const s of stars) {
-      const a = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
-      ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, TAU); ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  function drawClouds() {
-    for (const c of clouds) {
-      const sp = sprites[c.sprite], h = c.w * 0.625;
-      ctx.save(); ctx.globalAlpha = c.alpha; ctx.translate(c.x + c.w / 2, c.y + h / 2);
-      if (c.flip) ctx.scale(-1, 1);
-      ctx.drawImage(sp, -c.w / 2, -h / 2, c.w, h); ctx.restore();
-    }
-  }
-
-  function drawBird() {
-    if (!shown) return;
-    const s = shown, size = S * 0.3 * s.size;
-    ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.heading);
-    ctx.transform(1, 0, 0.22 * Math.sin(s.bank), Math.cos(s.bank), 0, 0);
-    ctx.scale(size, size); ctx.fillStyle = T.bird; ctx.fill(frames[s.frame]); ctx.restore();
+    G.t += dt;
+    Mood.step(dt);
+    Clouds.step(dt);
+    Weather.step(dt);
+    Bird.step(dt);
   }
 
   function paint() {
+    const { W, H, DPR, t, T } = G;
     const rot = 0.018 * noise(t * 0.05, 11), zoom = 1.04 + 0.012 * noise(t * 0.04, 13);
     const ox = 0.01 * W * noise(t * 0.045, 12), oy = 0.01 * H * noise(t * 0.05, 14);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     ctx.translate(W / 2, H / 2); ctx.rotate(rot); ctx.scale(zoom, zoom); ctx.translate(-W / 2 + ox, -H / 2 + oy);
-    ctx.drawImage(skyCache, -W * 0.08, -H * 0.08, W * 1.16, H * 1.16);
-    drawStars();
-    drawSun(0);
-    drawClouds();
-    drawSun(1);
-    drawBird();
+    if (!skip.sky) { Clouds.drawSky(); Clouds.drawStars(); Clouds.drawSun(0); }
+    if (!skip.weather) Weather.draw(0);
+    if (!skip.clouds) { Clouds.draw(0); Clouds.draw(1); }
+    if (!skip.sky) Clouds.drawSun(1);
+    if (!skip.bird) Bird.draw();
+    if (!skip.weather) Weather.draw(1);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    ctx.save(); ctx.globalCompositeOperation = "overlay"; ctx.globalAlpha = T.grain; ctx.fillStyle = grain; ctx.fillRect(0, 0, W, H); ctx.restore();
+    if (!skip.weather) Weather.draw(2);
+    if (!skip.post) {
+      ctx.save(); ctx.globalAlpha = 0.6 - 0.25 * (T.dark || 0); ctx.drawImage(vignette, 0, 0, W, H); ctx.restore();
+      ctx.save(); ctx.globalCompositeOperation = "overlay"; ctx.globalAlpha = T.grain; ctx.fillStyle = grain; ctx.fillRect(0, 0, W, H); ctx.restore();
+    }
   }
 
+  const perf = { n: 0, step: 0, paint: 0, worst: 0 };
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    step(dt);
-    paint();
+    const a = performance.now(); step(dt);
+    const b = performance.now(); paint();
+    const c = performance.now();
+    perf.n++; perf.step += b - a; perf.paint += c - b; perf.worst = Math.max(perf.worst, c - a);
+    if (perf.n === 120) { if (q.get("perf")) console.log(`perf: step ${(perf.step / perf.n).toFixed(2)}ms paint ${(perf.paint / perf.n).toFixed(2)}ms worst ${perf.worst.toFixed(1)}ms`); perf.n = perf.step = perf.paint = perf.worst = 0; }
     requestAnimationFrame(frame);
   }
 
-  // API
+  // HOOKS
 
-  function setTheme(name) { theme = name; build(); localStorage.setItem("sky-theme", name); }
   function jump(seconds) { for (let i = 0; i < seconds * 60; i++) step(1 / 60); paint(); }
 
-  const saved = new URLSearchParams(location.search).get("theme") || localStorage.getItem("sky-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-  theme = THEMES[saved] ? saved : "light";
+  const q = new URLSearchParams(location.search), skip = {};
+  for (const k of (q.get("skip") || "").split(",")) skip[k] = true;
+  if (q.get("seed")) { G.seed = +q.get("seed"); G.rnd = Core.rng(G.seed); }
+  G.rebuild = () => rebuild(false);
+  Mood.init(q);
+  Bird.init(q);
   addEventListener("resize", resize);
-  document.querySelector("#theme").addEventListener("click", () => setTheme(theme === "light" ? "dark" : "light"));
-  addEventListener("keydown", (e) => { if (e.key === "d") setTheme(theme === "light" ? "dark" : "light"); if (e.key === "v") startDive(); });
+  let idle;
+  addEventListener("mousemove", () => { document.body.classList.remove("idle"); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add("idle"), 3000); });
+  canvas.addEventListener("dblclick", () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()));
   resize();
-  const q = new URLSearchParams(location.search);
   if (q.get("jump")) jump(+q.get("jump"));
-  if (q.get("dive")) { startDive(); jump(+q.get("dive")); }
+  if (q.get("dive")) { Bird.dive(); jump(+q.get("dive")); }
+  if (q.get("debug")) console.log("bird", JSON.stringify(Bird.bird), "T", JSON.stringify(G.T));
   if (!q.get("pause")) requestAnimationFrame(frame);
-  return { setTheme, dive: startDive, jump, bird, wind };
+  return { setTheme: (name) => Mood.set({ theme: name }), dive: Bird.dive, jump, bird: Bird.bird, wind: G.wind };
 })();
 </script>
 </body>
