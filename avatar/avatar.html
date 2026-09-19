@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avatar</title>
+<style>
+  :root { --bg: #111; --fg: #eee; --line: #333; --pane: #1a1a1a; }
+  :root[data-theme="light"] { --bg: #f4f4f4; --fg: #111; --line: #ddd; --pane: #fff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 13px/1.4 ui-monospace, Menlo, monospace; display: grid; grid-template-columns: 1fr 340px; height: 100vh; }
+  main { display: grid; grid-template-rows: 1fr auto; min-width: 0; min-height: 0; }
+  #preview { padding: 16px; min-height: 0; overflow: hidden; }
+  #preview svg { display: block; width: 100%; height: 100%; }
+  .header { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-top: 1px solid var(--line); background: var(--pane); }
+  .header svg { height: 28px; width: auto; color: var(--fg); }
+  .header svg use { transition: transform .35s ease; transform: translate(0, 0); }
+  .header:hover svg g[id$="-fringe"] use, .header.open svg g[id$="-fringe"] use { transform: translate(var(--dx), var(--dy)); }
+  .header span { font-weight: 600; letter-spacing: .02em; }
+  aside { border-left: 1px solid var(--line); background: var(--pane); overflow-y: auto; padding: 12px 14px 40px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; margin: 18px 0 6px; opacity: .6; }
+  h2:first-child { margin-top: 0; }
+  .row { display: flex; align-items: center; gap: 8px; margin: 4px 0; flex-wrap: wrap; }
+  .row label { min-width: 74px; opacity: .8; }
+  input[type=range] { flex: 1; min-width: 80px; }
+  input[type=number] { width: 64px; }
+  select, input, button, textarea { font: inherit; color: inherit; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; }
+  button { cursor: pointer; }
+  button:hover { border-color: var(--fg); }
+  .val { width: 44px; text-align: right; opacity: .7; }
+  textarea { width: 100%; height: 160px; font-size: 11px; resize: vertical; }
+  .x { padding: 1px 6px; }
+  @media (max-width: 800px) { body { grid-template-columns: 1fr; height: auto; } #preview { height: 90vw; } aside { border-left: 0; border-top: 1px solid var(--line); } }
+</style>
+</head>
+<body>
+<main>
+  <div id="preview"></div>
+  <div class="header" id="header" onclick="this.classList.toggle('open')"><span>carlomitchener</span></div>
+</main>
+<aside id="panel"></aside>
+<script src="bird.js"></script>
+<script src="avatar.js"></script>
+<script>
+const NAMES = Object.keys(PALETTE);
+let R = structuredClone(BIRD);
+let O = { theme: "dark", bird: "", background: "", layers: { background: true, glow: true, fringe: true, bird: true }, glow: BIRD.glow.map(() => true), crop: false, wedges: 360, size: 1000 };
+
+const $ = (sel) => document.querySelector(sel);
+const h = (tag, attrs = {}, ...kids) => {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) k.startsWith("on") ? node.addEventListener(k.slice(2), v) : node.setAttribute(k, v);
+  node.append(...kids);
+  return node;
+};
+const row = (label, ...kids) => h("div", { class: "row" }, h("label", {}, label), ...kids);
+const select = (value, names, onchange) => {
+  const s = h("select", { onchange: (e) => onchange(e.target.value) }, ...names.map((n) => h("option", { value: n, ...(n === value ? { selected: "" } : {}) }, n || "theme")));
+  return s;
+};
+const range = (value, min, max, step, onchange) => {
+  const out = h("span", { class: "val" }, value);
+  const r = h("input", { type: "range", min, max, step, value, oninput: (e) => { out.textContent = e.target.value; onchange(+e.target.value); } });
+  return [r, out];
+};
+const check = (label, value, onchange) => h("label", {}, h("input", { type: "checkbox", ...(value ? { checked: "" } : {}), onchange: (e) => onchange(e.target.checked) }), " " + label);
+
+function opts(extra = {}) {
+  return { theme: O.theme, bird: O.bird || null, background: O.background || null, layers: O.layers, glow: O.glow, crop: O.crop, wedges: O.wedges, ...extra };
+}
+
+function render() {
+  document.documentElement.dataset.theme = O.theme;
+  const svg = Avatar.build(R, PALETTE, opts());
+  $("#preview").replaceChildren(svg);
+  const mark = Avatar.build(R, PALETTE, opts({ id: "h", layers: { background: false, glow: false, fringe: true, bird: true }, crop: true, hover: true, bird: O.bird || "currentColor" }));
+  $("#header").replaceChildren(mark, h("span", {}, "carlomitchener"));
+  $("#recipe").value = JSON.stringify({ ...R, outline: `${R.outline.cubics.length} cubics` }, null, 1);
+}
+
+function colorList(list, onchange) {
+  const box = h("div");
+  list.forEach((name, i) => box.append(row(`${i + 1}`, select(name, NAMES, (v) => { list[i] = v; onchange(); }), h("button", { class: "x", onclick: () => { list.splice(i, 1); onchange(); } }, "×"))));
+  box.append(row("", h("button", { onclick: () => { list.push("gray"); onchange(); } }, "+ color")));
+  return box;
+}
+
+function panel() {
+  const p = $("#panel");
+  const redo = () => { panel(); render(); };
+  p.replaceChildren(
+    h("h2", {}, "Theme"),
+    row("theme", select(O.theme, Object.keys(R.themes), (v) => { O.theme = v; render(); })),
+    row("bird", select(O.bird, ["", ...NAMES], (v) => { O.bird = v; render(); })),
+    row("background", select(O.background, ["", ...NAMES], (v) => { O.background = v; render(); })),
+    h("h2", {}, "Layers"),
+    row("", ...["background", "glow", "fringe", "bird"].map((k) => check(k, O.layers[k], (v) => { O.layers[k] = v; render(); }))),
+    h("h2", {}, "Glow"),
+    ...R.glow.map((g, i) => row(check(`${g.shape}`, O.glow[i], (v) => { O.glow[i] = v; render(); }), "σ", h("input", { type: "number", value: g.sigma, min: 0, step: 10, onchange: (e) => { g.sigma = +e.target.value; render(); } }), ...(g.shape === "disc" ? ["r", h("input", { type: "number", value: g.radius, min: 0, step: 50, onchange: (e) => { g.radius = +e.target.value; render(); } })] : []))),
+    h("h2", {}, "Gradient"),
+    row("start", ...range(R.gradient.start, 0, 360, 1, (v) => { R.gradient.start = v; render(); })),
+    colorList(R.gradient.colors, redo),
+    h("h2", {}, "Fringe"),
+    row("angle", ...range(R.fringe.angle, 0, 360, 1, (v) => { R.fringe.angle = v; render(); })),
+    row("step", ...range(R.fringe.step, 0, 60, 0.5, (v) => { R.fringe.step = v; render(); })),
+    colorList(R.fringe.colors, redo),
+    h("h2", {}, "Export"),
+    row("size", select(String(O.size), ["500", "1000", "2000", "5000"], (v) => { O.size = +v; })),
+    row("wedges", select(String(O.wedges), ["90", "180", "360", "720"], (v) => { O.wedges = +v; render(); })),
+    row("", check("crop to bird", O.crop, (v) => { O.crop = v; render(); })),
+    row("", h("button", { onclick: () => Avatar.toPNG($("#preview svg"), O.size).then((b) => Avatar.download(b, `bird-${O.theme}-${O.size}.png`)) }, "PNG"), h("button", { onclick: () => Avatar.download(new Blob([Avatar.serialize($("#preview svg"))], { type: "image/svg+xml" }), `bird-${O.theme}.svg`) }, "SVG"), h("button", { onclick: () => { R = structuredClone(BIRD); redo(); } }, "Reset")),
+    h("h2", {}, "Recipe"),
+    h("textarea", { id: "recipe", readonly: "" }),
+    row("", h("button", { onclick: () => navigator.clipboard.writeText(JSON.stringify(R, null, 1)) }, "Copy full JSON")),
+  );
+}
+
+panel();
+render();
+</script>
+</body>
+</html>
