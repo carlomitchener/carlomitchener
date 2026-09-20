@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 from .api import logger
 from .config import LIVE_DAYS
@@ -6,7 +7,16 @@ from .models import DROPPED, OPEN, USED, Batch, Task
 from .s3 import STATUS_KEY, TASKS_PREFIX, get_json, list_batches, list_objects, load_strikes, put_json
 
 LINES = 300
-ERROR_LIMIT = 300
+CLIP = 160
+
+URL = re.compile(r"https?://\S+")
+QUERY = re.compile(r"\?[^\s]*=[^\s]*")
+SECRET = re.compile(r"(?i)(bearer\s+\S+|[\w.-]*(?:key|token|secret|password|auth|signature|credential)[\w.-]*\s*[=:]\s*(?:bearer\s+)?\S+)")
+
+def clean(message: str) -> str:
+    text = URL.sub("<url>", str(message))
+    text = SECRET.sub("<hidden>", QUERY.sub("", text))
+    return " ".join(text.split())[:CLIP]
 
 class Journal(logging.Handler):
 
@@ -16,7 +26,7 @@ class Journal(logging.Handler):
 
     def emit(self, record: logging.LogRecord) -> None:
         stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(record.created))
-        self.lines.append(f"{stamp} {record.levelname} {record.getMessage()}")
+        self.lines.append(f"{stamp} {record.levelname} {clean(record.getMessage())}")
 
 def attach() -> Journal:
     journal = Journal()
@@ -31,7 +41,7 @@ def task_summary(task: Task) -> dict:
         return None
     metadata = dict(task.metadata)
     if metadata.get("failed_error"):
-        metadata["failed_error"] = str(metadata["failed_error"])[:ERROR_LIMIT]
+        metadata["failed_error"] = clean(metadata["failed_error"])
     return {
         "key": task.key,
         "step": task.step,
@@ -90,11 +100,11 @@ def previous_log() -> list[str]:
 
 def write(journal: Journal, task: Task, batch: Batch, seconds: float, error: str = None) -> None:
     now = time.time()
-    log = (previous_log() + journal.lines)[-LINES:]
+    log = ([clean(line) for line in previous_log()] + journal.lines)[-LINES:]
     data = {
         "at": int(now),
         "seconds": round(seconds, 1),
-        "error": error,
+        "error": clean(error) if error else None,
         "design": design_summary(batch),
         "batch": batch_summary(batch),
         "task": task_summary(task),

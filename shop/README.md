@@ -32,12 +32,12 @@
 - PING `ping.py` - `GET sync/products/@{shopify id}` until Printful's app has pulled the product and every sku, within `PING_BUDGET`.
 - SYNC `sync.py` - `PUT sync/variant/{id}` with the printfiles and the stitch colour, `SYNC_BATCH` 9 variants per tick because Printful allows 10 variant syncs a minute, stops before the tick reserve.
 - PUBLISH `publish.py` - publishes to Online Store and Headless.
-- COMPLETE `complete.py` - archives the task to `data/automator/tasks/<key>.json`, clears `task.json` and wakes the site, which shows the product on `/status/` and at its own URL as a preview, nothing buyable, until the batch is released; ARCHIVE reruns it if a tick died between the two.
+- COMPLETE `complete.py` - archives the task to `data/automator/tasks/<key>.json`, clears `task.json` and wakes the site, which shows the product on `/automator/` and at its own URL as a preview, nothing buyable, until the batch is released; ARCHIVE reruns it if a tick died between the two.
 - RELEASE `release.py` - when CREATE finds no open cell: stamps `released_at`, moves `batch.json` to `batches/{design}.json`, wakes `carlomitchener-site` once, and CREATE rolls the next batch. Design GIFs may join here later.
 - FAILED `run.py` - any other exception parks the task; the next tick sends it back to the failing step; three strikes abort. The counter resets whenever a step advances.
 - REAP `reap.py` - before every task, the oldest released batch past `LIVE_DAYS` loses every product (archives ending `-{design}.json`: Shopify product, CDN folder, archive), then the design folder and the batch file, then the site wakes. It stops at `REAP_RESERVE` seconds left and resumes next tick; a productDelete Shopify refuses is logged and skipped.
 - Abort deletes the Shopify product or its files and the CDN folder, clears the task and counts a strike in `strikes.json`; the cell reopens, and at `MAX_STRIKES` (3) the pair drops: both cells `dropped`, and the sibling already made is removed. A new batch resets the strikes. A missing catalog json drops the pair too.
-- Every tick ends by writing `site/status/automator.json`: design, batch (open, used, dropped, tiles, strikes), task, live (products, batches, expiring) and the last 300 log lines. It is public.
+- Every tick ends by writing `site/automator/automator.json`: design, batch (open, used, dropped, tiles, strikes), task, live (products, batches, expiring) and the last 300 log lines. It is public.
 
 ## S3
 
@@ -49,7 +49,7 @@
 - `data/catalog/<id>.json` - the parsed catalog, uploaded by `catalog/s3.py`; its ids are the rows of every new batch.
 - `site/cdn/printful/<design>/` - `light-tile-1.png` to `dark-tile-9.png`.
 - `site/cdn/printful/<primary>-<handle>-<design>/` - `printfile.png` (or `-1`, `-2`).
-- `site/status/automator.json` - the public status, `no-cache`. `site/status/stats.json` is `carlomitchener-stats`' every 15 minutes: CDN, Lambdas, errors, bucket counts. The site renders both at `/status/`.
+- `site/automator/automator.json` - the public mirror, `no-cache`, rendered at `/automator/`. `site/stats/stats.json` is `carlomitchener-stats`' every 15 minutes: CDN, Lambdas, errors, bucket counts, rendered at `/stats/`.
 - Nothing under `data/` is served; `site/` is the CloudFront origin.
 
 ## CONTEXT
@@ -59,7 +59,7 @@
 - Theme: `layout/theme.liquid` redirects every page to the site with a meta refresh and `location.replace`, the visible link stays for no-JS; `snippets/target.liquid` picks the target per template: product `/shop/{slug}/{design}/` from the handle's last segment (a handle without an 8-hex design goes to `/`), collection, search and list-collections `/shop/`, cart `/cart/`, page `/shop/{handle}/` for shipping, faq and terms and `/{handle}/` for the rest, everything else `/`. `password` never redirects. `templates/gift_card.liquid` is `layout none` and never redirects: Shopify renders the card a buyer receives from it (code, value, balance, expiry, print).
 - Shopify title = `{Light|Dark} {title} ({design})`, e.g. `Dark Tote Bag (08c92015)`, so cart lines and emails tell variations apart; the site reads its titles from `catalog.json`, never from Shopify.
 - Handle = `{primary}-{handle}-{design}`, e.g. `light-unisex-hoodie-08c92015`. Variant sku = `{handle}-{size slug}`. Mockup file = `{handle}-{style}.png`; the style id also leads the alt, and the site's flip keys on the alt (`lib/shop.ts styleOf`, `client/flip.ts`).
-- The site takes the primary and the design from the handle, reads group and secondary from the archived task, and the release date from `batches/` (`scripts/snapshot.ts`). The two products of a design render as one page at `/shop/{slug}/{design}/`: the default follows the site mode, a pill swaps them, and every grid shows the sibling matching the mode. Products without a released batch are pending: they never enter the shop, home, search or sitemap, but `/status/` lists them and their pages exist with Add to Bag and Buy now disabled; a lone sibling stands in for the missing one.
+- The site takes the primary and the design from the handle, reads group and secondary from the archived task, and the release date from `batches/` (`scripts/snapshot.ts`). The two products of a design render as one page at `/shop/{slug}/{design}/`: the default follows the site mode, a pill swaps them, and every grid shows the sibling matching the mode. Products without a released batch are pending: they never enter the shop, home, search or sitemap, but `/automator/` lists them and their pages exist with Add to Bag and Buy now disabled; a lone sibling stands in for the missing one.
 - Vocabulary: light and dark, or white and black, are the primary; never shade. The `primaries` column in `catalog.json` is informational; every row gets both.
 - Stitch colour: the design's primary when the blank offers it, else Clear, else the first offered. Bags offer Black and Clear only.
 - Labels: none. The four `label_*` placements are ignored in `catalog/correct.py`; a label file shows up in the mockups, so Carlo scrapped them (2026-09-17). `label_panel` is a print panel, not a label.

@@ -10,7 +10,7 @@ import { build, digest, globals, today, type Manifest, type Output } from "../ss
 /* WHERE */
 
 const PREFIX = "site/";
-const GUARD = ["cdn/", "art/", "status/automator.json", "status/stats.json"];
+const GUARD = ["cdn/", "art/", "automator/automator.json", "stats/stats.json"];
 const REMOTE = "data/build/manifest.json";
 const ASSET = "@";
 const BATCH = 32;

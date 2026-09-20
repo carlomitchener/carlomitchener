@@ -64,6 +64,7 @@ export type Spec = {
   collect: (site: Site) => Promise<Route[]> | Route[];
   render: (site: Site, route: Route) => Promise<Output[]> | Output[];
   globals?: (site: Site) => Promise<Output[]> | Output[];
+  inline?: string[];
   asset?: (name: string, body: Uint8Array) => Bytes;
 };
 
@@ -286,6 +287,24 @@ export async function globals(site: Site, spec: Spec): Promise<Output[]> {
   return out;
 }
 
+/* GUARD */
+
+const SCRIPT = /<script\b([^>]*)>([\s\S]*?)<\/script>/g;
+
+const TYPED = /\btype\s*=\s*["']?([^"'\s>]*)/;
+
+const RUNS = new Set(["", "module", "text/javascript", "application/javascript", "text/ecmascript", "application/ecmascript"]);
+
+export function guard(path: string, html: string, known: Set<string>) {
+  if (path.startsWith("raw/")) return;
+  for (const [, attrs, body] of html.matchAll(SCRIPT)) {
+    if (/\bsrc\s*=/.test(attrs)) continue;
+    if (!RUNS.has((attrs.match(TYPED)?.[1] ?? "").trim().toLowerCase())) continue;
+    if (known.has(body)) continue;
+    throw new Error(`ssg: ${path} carries an inline script the boot list does not know: ${body.slice(0, 60)}`);
+  }
+}
+
 /* WRITE */
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -316,6 +335,7 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
   const old: Manifest = path && existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : {};
   const next: Manifest = {};
   const kept = new Set<string>();
+  const known = new Set(spec.inline ?? []);
   const verify = options.verify ?? true;
   let rendered = 0;
   let written = 0;
@@ -330,7 +350,10 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
       continue;
     }
     const outputs = await spec.render(site, route);
-    for (const item of outputs) if (put(site.out, item)) written++;
+    for (const item of outputs) {
+      if (item.path.endsWith(".html")) guard(item.path, typeof item.bytes === "string" ? item.bytes : new TextDecoder().decode(item.bytes), known);
+      if (put(site.out, item)) written++;
+    }
     rendered++;
     const at = route.at || (was && same ? was.at : today());
     next[route.route] = { hash, at, outputs: outputs.map((o) => o.path), types: typed(outputs) };

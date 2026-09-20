@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { globals, walk, type Output, type Site, type Spec } from "./build.ts";
+import { globals, guard, walk, type Output, type Site, type Spec } from "./build.ts";
 import { pages } from "../scripts/build.ts";
 
 /* SITE */
@@ -14,7 +14,7 @@ const site = () =>
       llms: {
         about: "A demo shop.",
         links: [
-          { href: "/collections/", name: "Collections", note: "every design" },
+          { href: "/shop/designs/", name: "Designs", note: "every design" },
           { href: "/faq/", name: "FAQ" },
           { href: "/nowhere/", name: "Nowhere" },
         ],
@@ -24,9 +24,9 @@ const site = () =>
       { route: "/", name: "Home", at: "2026-01-01" },
       { route: "/404.html", kind: "missing", hidden: true },
       { route: "/cart/", kind: "cart", hidden: true },
-      { route: "/collections/", kind: "collections", name: "Collections", at: "2026-02-02" },
+      { route: "/shop/designs/", kind: "designs", name: "Designs", at: "2026-02-02" },
       { route: "/faq/", kind: "page", name: "FAQ", at: "2026-03-03" },
-      { route: "/7f3a91c0/", kind: "reel", name: "7f3a91c0", at: "2026-04-04" },
+      { route: "/feed/7f3a91c0/", kind: "post", name: "7f3a91c0", at: "2026-04-04" },
     ],
   }) as unknown as Site;
 
@@ -41,8 +41,8 @@ const made = async () => {
 test("the sitemap carries every shown route with its own date and no hidden one", async () => {
   const { sitemap } = await made();
   expect(sitemap).toContain("<loc>https://demo.test/</loc><lastmod>2026-01-01</lastmod>");
-  expect(sitemap).toContain("<loc>https://demo.test/collections/</loc><lastmod>2026-02-02</lastmod>");
-  expect(sitemap).toContain("<loc>https://demo.test/7f3a91c0/</loc><lastmod>2026-04-04</lastmod>");
+  expect(sitemap).toContain("<loc>https://demo.test/shop/designs/</loc><lastmod>2026-02-02</lastmod>");
+  expect(sitemap).toContain("<loc>https://demo.test/feed/7f3a91c0/</loc><lastmod>2026-04-04</lastmod>");
   expect(sitemap).not.toContain("404.html");
   expect(sitemap).not.toContain("/cart/");
   expect(sitemap.match(/<url>/g)!.length).toBe(4);
@@ -65,7 +65,7 @@ test("llms.txt says what the site is and links only what the site publishes", as
   const { llms } = await made();
   expect(llms).toContain("# Demo");
   expect(llms).toContain("A demo shop.");
-  expect(llms).toContain("- [Collections](https://demo.test/collections/): every design");
+  expect(llms).toContain("- [Designs](https://demo.test/shop/designs/): every design");
   expect(llms).toContain("- [FAQ](https://demo.test/faq/)");
   expect(llms).not.toContain("Nowhere");
 });
@@ -108,7 +108,7 @@ test("the site css never repeats a top-level selector with another rule between"
 
 const HREF = /href="([^"]+)"/g;
 
-const BUCKET = /^\/(cdn|status)\/.+\.[a-z0-9]+$/;
+const BUCKET = /^\/(cdn|automator|stats)\/.+\.[a-z0-9]+$/;
 
 function lands(out: string, href: string) {
   const path = href.split(/[#?]/)[0];
@@ -129,4 +129,23 @@ test("every internal link the built site carries lands on an output in dist", as
     }
   }
   expect(broken).toEqual([]);
+}, 120000);
+
+/* GUARD */
+
+test("the guard passes a listed inline script and json data, and throws on an unlisted script", () => {
+  const known = new Set(["const a=1"]);
+  expect(() => guard("index.html", "<script>const a=1</script>", known)).not.toThrow();
+  expect(() => guard("index.html", '<script id="props" type="application/json">{"a":1}</script>', known)).not.toThrow();
+  expect(() => guard("about/index.html", "<script>const b=2</script>", known)).toThrow(/boot list/);
+});
+
+/* ROUTES */
+
+test("the status page is gone and the automator and the stats pages stand in its place", async () => {
+  const done = await pages();
+  const routes = done.site.routes.map((one) => one.route);
+  expect(routes).toContain("/automator/");
+  expect(routes).toContain("/stats/");
+  expect(routes).not.toContain("/status/");
 }, 120000);

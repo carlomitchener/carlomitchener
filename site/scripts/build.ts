@@ -2,10 +2,11 @@ import { readFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { createElement as h } from "react";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
-import { build, page, today, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
+import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
 import { ALIKE, CATEGORIES, DOCS, docUrl, FILES, GIFT, HOME_ROW, LIVE_DAYS, MATCH, PAGES, PRINTFUL, SHOP, SHOP_DOCS, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
+import { INLINE } from "../src/config/boot.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../ssg/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
@@ -26,7 +27,18 @@ const FALLBACK = `${root}/bird/bird-512.png`;
 
 const read = (path: string) => readFileSync(path, "utf8");
 
-const now = Date.now();
+const now = Number(process.env.SITE_NOW) || Date.now();
+
+const today = () => new Date(now).toISOString().slice(0, 10);
+
+const seeded = (seed: number) => () => {
+  seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+
+const random = seeded(now);
 
 /* TYPES */
 
@@ -147,7 +159,7 @@ const STORE_ORIGIN = STORE ? `https://${STORE}` : undefined;
 
 const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
 
-const RESERVED = new Set(["about", "shop", "cart", "status", "feed", "pages", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
+const RESERVED = new Set(["about", "shop", "cart", "automator", "stats", "feed", "pages", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
 
 const SHOP_RESERVED = new Set(["designs", "gift-card", ...SHOP_DOCS, ...CATEGORIES.map(([slug]) => slug)]);
 
@@ -283,7 +295,7 @@ function pairs(list: Row[], lone = false): Pair[] {
 const shuffle = <T>(list: T[]) => {
   const out = [...list];
   for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
@@ -457,7 +469,8 @@ function collect(site_: Site) {
     });
   }
   routes.push({ route: "/cart/", kind: "cart", name: "Bag", at: today(), hidden: true });
-  routes.push({ route: "/status/", kind: "status", name: "Status", at: today(), hidden: true, data: { pending } });
+  routes.push({ route: "/automator/", kind: "automator", name: "Automator", at: today(), hidden: true, data: { pending } });
+  routes.push({ route: "/stats/", kind: "stats", name: "Stats", at: today(), hidden: true });
   const notes: Record<string, string> = {};
   const readme = site_.input("readme").files[0];
   if (readme) {
@@ -558,10 +571,14 @@ function draw(site_: Site, route: Route): Output[] {
   if (route.kind === "search") return [{ path: "search.json", bytes: JSON.stringify((route.data as { found: unknown[] }).found) }];
   if (route.kind === "product") return product(site_, route, at);
   if (route.kind === "post") return post(site_, route, at);
-  if (route.kind === "status") {
+  if (route.kind === "automator") {
     const { pending } = route.data as { pending: Pair[] };
-    const leaf = { route: route.route, name: "Status", description: "The automator, the CDN and the Lambdas.", noindex: true };
-    return shell(site_, at, leaf, { kind: "status", props: { pending: pending.map(card) } });
+    const leaf = { route: route.route, name: "Automator", description: "The automator's last tick, its batch and its log.", noindex: true };
+    return shell(site_, at, leaf, { kind: "automator", props: { pending: pending.map(card) } });
+  }
+  if (route.kind === "stats") {
+    const leaf = { route: route.route, name: "Stats", description: "The CDN, the Lambdas and the bucket.", noindex: true };
+    return shell(site_, at, leaf, { kind: "stats", props: {} });
   }
   if (route.kind === "cart") {
     return shell(site_, at, { route: route.route, name: "Bag", description: "Your bag.", noindex: true }, { kind: "cart", props: {} });
@@ -674,6 +691,7 @@ export const spec: Spec = {
   out: dist,
   config,
   templates: ["src", "scripts", "ui"],
+  inline: INLINE,
   prepare: bundle,
   collect,
   render: draw,

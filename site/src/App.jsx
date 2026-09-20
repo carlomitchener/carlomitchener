@@ -1,6 +1,7 @@
 import { Nav, useRouter } from "./client/router.ts";
 import { Footer } from "./components/Footer.jsx";
 import { Header } from "./components/Header.jsx";
+import { Automator } from "./pages/Automator.jsx";
 import { Cart } from "./pages/Cart.jsx";
 import { Designs } from "./pages/Designs.jsx";
 import { Doc } from "./pages/Doc.jsx";
@@ -12,7 +13,7 @@ import { Pages } from "./pages/Pages.jsx";
 import { Post } from "./pages/Post.jsx";
 import { Product } from "./pages/Product.jsx";
 import { Shop } from "./pages/Shop.jsx";
-import { Status } from "./pages/Status.jsx";
+import { Stats } from "./pages/Stats.jsx";
 
 const KINDS = {
   home: Home,
@@ -22,7 +23,8 @@ const KINDS = {
   post: Post,
   feed: Feed,
   cart: Cart,
-  status: Status,
+  automator: Automator,
+  stats: Stats,
   pages: Pages,
   gifts: GiftCards,
   gift: GiftCard,
@@ -40,7 +42,7 @@ export function App({ page, chrome }) {
       <main id="main">
         <One key={view.chrome.route} {...view.page.props} now={view.chrome.now} />
       </main>
-      <Footer catalog={view.chrome.catalog} />
+      <Footer catalog={view.chrome.catalog} now={view.chrome.now} />
     </Nav.Provider>
   );
 }

@@ -4,8 +4,6 @@ import { useMediaQuery } from "../lib/hooks.ts";
 import { collectionUrl } from "../lib/shop.ts";
 import { Icon } from "./Icon.jsx";
 
-const year = new Date().getUTCFullYear();
-
 function pack(groups, count) {
   const columns = Array.from({ length: Math.min(count, groups.length) }, () => ({ height: 0, groups: [] }));
   for (const group of [...groups].sort((a, b) => b.links.length - a.links.length)) {
@@ -17,7 +15,8 @@ function pack(groups, count) {
   return columns.filter((one) => one.groups.length).sort((a, b) => groups.indexOf(a.groups[0]) - groups.indexOf(b.groups[0]));
 }
 
-export function Footer({ catalog = [] }) {
+export function Footer({ catalog = [], now = 0 }) {
+  const year = new Date(now || Date.now()).getUTCFullYear();
   const wide = useMediaQuery("(min-width: 1024px)");
   const shop = CATEGORIES.map(([slug, name]) => ({ slug, name, href: `${SHOP}${slug}/`, links: catalog.filter((row) => row.category === slug).map((row) => ({ name: row.title, href: collectionUrl(row.handle) })) })).filter((one) => one.links.length);
   const groups = [

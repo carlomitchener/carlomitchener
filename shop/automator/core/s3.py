@@ -20,7 +20,7 @@ BATCHES_PREFIX = f"{AUTOMATOR_PREFIX}batches/"
 CATALOG_PREFIX = "data/catalog/"
 SITE_PREFIX = "site/"
 CDN_PREFIX = f"{SITE_PREFIX}cdn/printful/"
-STATUS_KEY = f"{SITE_PREFIX}status/automator.json"
+STATUS_KEY = f"{SITE_PREFIX}automator/automator.json"
 
 # KEYS
 

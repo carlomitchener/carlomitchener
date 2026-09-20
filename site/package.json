@@ -7,6 +7,7 @@
     "snapshot": "bun scripts/snapshot.ts",
     "fake": "bun scripts/fake.ts",
     "build": "bun scripts/build.ts",
+    "boot": "bun scripts/boot.ts",
     "push": "bun scripts/push.ts",
     "dev": "bun scripts/dev.ts",
     "vendor": "bun scripts/vendor.ts",

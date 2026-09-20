@@ -8,12 +8,15 @@ from datetime import datetime, timedelta, timezone
 BUCKET = os.environ["CARLOMITCHENER_BUCKET"]
 DISTRIBUTION = os.environ.get("CARLOMITCHENER_ID", "")
 FUNCTIONS = ["carlomitchener-site", "carlomitchener-automator", "carlomitchener-feed", "carlomitchener-stats"]
-STATS_KEY = "site/status/stats.json"
+STATS_KEY = "site/stats/stats.json"
 HOURS = 24
 ERROR_LINES = 10
 ERROR_PATTERN = '?ERROR ?"Task timed out" ?Traceback ?"Runtime exited"'
-CLIP = 300
+CLIP = 160
 DESIGN = re.compile(r"^[0-9a-f]{8}/$")
+URL = re.compile(r"https?://\S+")
+QUERY = re.compile(r"\?[^\s]*=[^\s]*")
+SECRET = re.compile(r"(?i)(bearer\s+\S+|[\w.-]*(?:key|token|secret|password|auth|signature|credential)[\w.-]*\s*[=:]\s*(?:bearer\s+)?\S+)")
 
 cloudwatch = boto3.client("cloudwatch")
 cloudwatch_global = boto3.client("cloudwatch", region_name="us-east-1")
@@ -77,14 +80,19 @@ def lambdas() -> dict:
 
 # LOGS
 
+def clean(message: str) -> str:
+    text = URL.sub("<url>", str(message))
+    text = SECRET.sub("<hidden>", QUERY.sub("", text))
+    return " ".join(text.split())[:CLIP]
+
 def parse(message: str) -> dict:
     try:
         record = json.loads(message)
     except ValueError:
-        return {"at": None, "level": "", "message": message.strip()[:CLIP]}
+        return {"at": None, "level": "", "message": clean(message)}
     if "message" in record:
-        return {"at": record.get("timestamp"), "level": record.get("level", ""), "message": str(record["message"])[:CLIP]}
-    return {"at": record.get("time"), "level": record.get("type", ""), "message": json.dumps(record.get("record", record))[:CLIP]}
+        return {"at": record.get("timestamp"), "level": record.get("level", ""), "message": clean(record["message"])}
+    return {"at": record.get("time"), "level": record.get("type", ""), "message": clean(json.dumps(record.get("record", record)))}
 
 def recent_errors() -> dict:
     start, end = window()

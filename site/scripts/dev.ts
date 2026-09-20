@@ -138,7 +138,7 @@ const server = Bun.serve({
       }
       return fallback(path);
     }
-    if (path.startsWith("/status/") && path.endsWith(".json")) return remote(path);
+    if (path === "/automator/automator.json" || path === "/stats/stats.json") return remote(path);
     if (path.endsWith("/")) path += "index.html";
     if (path.endsWith(".html")) return page(path);
     const at = within(dist, path);

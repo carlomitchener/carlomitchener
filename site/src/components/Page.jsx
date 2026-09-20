@@ -1,9 +1,8 @@
 import site from "../../site.json";
-import { MODE_KEY, SHOPIFY_CDN, THEME_COLORS } from "../config/shop.ts";
+import { SHOPIFY_CDN, THEME_COLORS } from "../config/shop.ts";
+import { MODE_SCRIPT } from "../config/boot.ts";
 
 const FONTS = "/fonts/fonts.css";
-
-const MODE_SCRIPT = `(function(){try{var r=document.documentElement,k="${MODE_KEY}",c={light:"${THEME_COLORS.light}",dark:"${THEME_COLORS.dark}"},m=new URLSearchParams(location.search).get("mode");if(m!=="dark"&&m!=="light"){m=null;try{m=localStorage.getItem(k)}catch(e){}}if(m!=="dark"&&m!=="light")m=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";r.dataset.mode=m;var t=document.querySelector('meta[name="theme-color"]');if(t)t.content=c[m]}catch(e){}})();`;
 
 export const json = (value) => JSON.stringify(value).replace(/[<\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
 
