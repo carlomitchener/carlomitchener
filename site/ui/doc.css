@@ -207,3 +207,57 @@
 .status .error {
   color: var(--red);
 }
+
+/* PAGES */
+
+.routes-group {
+  margin-top: var(--s7);
+}
+
+.routes-group h2 {
+  font-size: var(--t-h3);
+}
+
+.routes {
+  margin-top: var(--s4);
+}
+
+.routes li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s1) var(--s5);
+  padding: var(--s3) 0;
+  border-top: var(--hair) solid var(--line);
+}
+
+.routes .who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2);
+}
+
+.routes a {
+  font-weight: 600;
+}
+
+.routes a:hover {
+  color: var(--accent);
+}
+
+.routes code {
+  font-family: var(--mono);
+  font-size: var(--t-fine);
+  color: var(--dim);
+}
+
+.routes p {
+  font-size: var(--t-small);
+  color: var(--dim);
+}
+
+@media (min-width: 700px) {
+  .routes li {
+    grid-template-columns: 300px minmax(0, 1fr);
+  }
+}

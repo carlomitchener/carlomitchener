@@ -284,6 +284,21 @@ main {
   transform: rotate(180deg);
 }
 
+/* PAGE */
+
+.page-head {
+  padding: var(--s8) 0 var(--s6);
+}
+
+.page-head .lead {
+  margin-top: var(--s3);
+}
+
+.empty {
+  color: var(--dim);
+  padding: var(--s7) 0;
+}
+
 /* MOTION */
 
 @media (prefers-reduced-motion: reduce) {

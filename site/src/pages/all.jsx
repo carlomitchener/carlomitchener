@@ -1,0 +1,27 @@
+import { put } from "../kinds.js";
+import { Automator } from "./Automator.jsx";
+import { Cart } from "./Cart.jsx";
+import { Designs } from "./Designs.jsx";
+import { Doc } from "./Doc.jsx";
+import { Feed } from "./Feed.jsx";
+import { GiftCard, GiftCards } from "./GiftCard.jsx";
+import { Home } from "./Home.jsx";
+import { Pages } from "./Pages.jsx";
+import { Post } from "./Post.jsx";
+import { Product } from "./Product.jsx";
+import { Shop } from "./Shop.jsx";
+import { Stats } from "./Stats.jsx";
+
+put("home", Home);
+put("shop", Shop);
+put("designs", Designs);
+put("product", Product);
+put("post", Post);
+put("feed", Feed);
+put("cart", Cart);
+put("automator", Automator);
+put("stats", Stats);
+put("pages", Pages);
+put("gifts", GiftCards);
+put("gift", GiftCard);
+put("page", Doc);

@@ -1,17 +1,19 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, rmSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { createElement as h } from "react";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
-import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
+import { build, digest, page, short, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
 import { ALIKE, CATEGORIES, DOCS, docUrl, FILES, GIFT, HOME_ROW, LIVE_DAYS, MATCH, PAGES, PRINTFUL, SHOP, SHOP_DOCS, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
+import { CSS, KINDS, sheetsFor } from "../src/config/sheets.ts";
 import { INLINE } from "../src/config/boot.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../ssg/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
 import { collectionUrl, designOf, facetsOf, GIFT_PREFIX, giftUrl, grid, handleOf, isDesign, PRIMARIES, primaryOf, productUrl, type Facets, type Primary, type ProductRow } from "../src/lib/shop.ts";
 import { App } from "../src/App.jsx";
+import "../src/pages/all.jsx";
 import { Page } from "../src/components/Page.jsx";
 import { TIERS } from "../src/pages/GiftCard.jsx";
 import site from "../site.json";
@@ -65,15 +67,26 @@ type Leaf = {
 
 /* CLIENT */
 
+const ENTRY = { main: "", sky: "" };
+
+const only = (out: Bun.BuildOutput) => basename(out.outputs.find((one) => one.kind === "entry-point")!.path);
+
+const sheetUrl = (name: string) => `/ui/${name.slice(0, -4)}-${short(digest([readFileSync(join(org, "ui", name))]))}.css`;
+
+const SHEETS: Record<string, string[]> = Object.fromEntries(KINDS.map((kind) => [kind, sheetsFor(kind).map(sheetUrl)]));
+
 async function bundle() {
+  rmSync(client, { recursive: true, force: true });
   const out = await Bun.build({
     entrypoints: [join(org, "src", "client", "main.tsx")],
     outdir: client,
-    naming: "[name].[ext]",
+    naming: { entry: "[name]-[hash].[ext]", chunk: "lib-[hash].[ext]", asset: "[name]-[hash].[ext]" },
+    splitting: true,
     minify: true,
-    define: { SHOP: JSON.stringify(STORE), "process.env.NODE_ENV": '"production"' },
+    define: { SHOP: JSON.stringify(STORE), SHEETS: JSON.stringify(JSON.stringify(SHEETS)), "process.env.NODE_ENV": '"production"' },
   });
   if (!out.success) throw new Error(`site: client bundle failed\n${out.logs.map(String).join("\n")}`);
+  ENTRY.main = only(out);
   await sky();
 }
 
@@ -83,8 +96,9 @@ async function sky() {
   const avatar = resolve(org, "../avatar");
   const all = join(org, ".cache", "sky", "all.js");
   await Bun.write(all, SKY.map((name) => read(join(avatar, `${name}.js`))).join("\n"));
-  const out = await Bun.build({ entrypoints: [all], outdir: client, naming: "sky.[ext]", minify: true });
+  const out = await Bun.build({ entrypoints: [all], outdir: client, naming: "sky-[hash].[ext]", minify: true });
   if (!out.success) throw new Error(`site: sky bundle failed\n${out.logs.map(String).join("\n")}`);
+  ENTRY.sky = only(out);
 }
 
 /* SHELL */
@@ -110,9 +124,9 @@ function shell(site_: Site, at: string, leaf: Leaf, one: { kind: string; props: 
     image: leaf.image ?? FALLBACK,
     type: leaf.type ?? "website",
     meta: leaf.meta ?? [],
-    sheets: site_.styles,
-    scripts: [site_.asset("main.js")],
-    sky: site_.asset("sky.js"),
+    sheets: SHEETS[one.kind] ?? SHEETS.page,
+    scripts: [site_.asset(ENTRY.main)],
+    sky: site_.asset(ENTRY.sky),
     data: leaf.data,
     noindex: leaf.noindex ?? false,
     preconnect: leaf.preconnect,
@@ -332,6 +346,7 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 type Design = { design: string; count: number; created: string; released: string };
 
 function collect(site_: Site) {
+  for (const name of CSS) if (site_.asset(name) !== sheetUrl(name)) throw new Error(`site: ${name} is hashed two ways`);
   const catalogFile = site_.input("catalog").files[0];
   const reviewsFile = site_.input("reviews").files[0];
   const rated = reviews(site_);
@@ -682,7 +697,7 @@ const config: Config = {
   inputs: DEV ? devInputs(site.inputs) : site.inputs,
   assets: [
     { path: "ui", out: "ui", hash: true, ext: ".css" },
-    { path: ".cache/client", out: "js", hash: true, ext: ".js" },
+    { path: ".cache/client", out: "js", hash: false, ext: ".js" },
   ],
 };
 

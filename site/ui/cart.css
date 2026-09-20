@@ -1,0 +1,118 @@
+/* CART */
+
+.line {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: var(--s4);
+  align-items: center;
+  padding: var(--s5) 0;
+  border-bottom: var(--hair) solid var(--line);
+}
+
+.line > a:first-child {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--panel);
+}
+
+.line img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+}
+
+.line .who {
+  display: grid;
+  gap: var(--s2);
+  justify-items: start;
+}
+
+.line .qty {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  border-radius: var(--r-pill);
+  background: var(--panel);
+  padding: var(--s1);
+}
+
+.line .qty button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--dim);
+}
+
+.line .qty button:hover {
+  color: var(--fg);
+}
+
+.line .qty b {
+  min-width: 24px;
+  font-size: var(--t-small);
+  font-weight: 600;
+  text-align: center;
+}
+
+.line .price {
+  font-size: var(--t-small);
+  white-space: nowrap;
+}
+
+.line .remove {
+  grid-column: 3;
+  justify-self: end;
+  color: var(--dim);
+  font-size: var(--t-fine);
+}
+
+.line .remove:hover {
+  color: var(--fg);
+}
+
+@media (min-width: 600px) {
+  .line {
+    grid-template-columns: 72px minmax(0, 1fr) auto auto;
+    column-gap: var(--s6);
+  }
+
+  .line .remove {
+    grid-column: auto;
+  }
+
+  div.sum {
+    justify-items: end;
+  }
+}
+
+.sum {
+  display: grid;
+  justify-items: start;
+  gap: var(--s4);
+  padding-top: var(--s6);
+}
+
+.sum.empty {
+  justify-items: center;
+  padding: var(--s9) var(--s5);
+  border-radius: var(--r-media);
+  background: var(--panel);
+  text-align: center;
+}
+
+.sum.empty .icon.big {
+  color: var(--dim);
+}
+
+.sum .total {
+  font-size: var(--t-lead);
+  letter-spacing: var(--track-tight);
+}
+
+.sum .back {
+  color: var(--accent);
+  font-size: var(--t-small);
+}

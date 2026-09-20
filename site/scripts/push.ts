@@ -22,7 +22,7 @@ const HOLD = join(process.env.DRY_DIR ?? "/tmp/carlomitchener", "manifest.json")
 const IMMUTABLE = "public, max-age=31536000, immutable";
 const REVALIDATE = "public, max-age=0, must-revalidate";
 
-const HASHED = [/(^|\/)lib-[^/]+\.js$/, /(^|\/)lib-[^/]+\.css$/, /\.wasm$/, /-[0-9a-f]{8}\.[^./]+$/];
+const HASHED = [/(^|\/)lib-[^/]+\.js$/, /(^|\/)lib-[^/]+\.css$/, /(^|\/)js\/[^/]+\.js$/, /\.wasm$/, /-[0-9a-f]{8}\.[^./]+$/];
 
 const TYPES: Record<string, string> = {
   html: "text/html; charset=utf-8",
