@@ -12,4 +12,4 @@ Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 - `bun run dev` - build once, then serve `dist/` on port 3000, with `/cdn/feed/` served from `data/carlomitchener/feed/`; in DEV mode a missing post video is stood in by a local one.
 - `bun run shots [routes]` - screenshots of the dev server at 390, 834 and 1440, light and dark, into `data/carlomitchener/site/shots/`; flags any horizontal overflow.
 - `bun aws/site.ts` - the builder Lambda: commit, install, snapshot, build, push, head.
-- The builder takes `{"source":"push|schedule|manual","sha":"..."}` and rebuilds when the sha moved or the snapshot changed.
+- The builder takes `{"source":"push|schedule|manual","repo":"carlomitchener/carlomitchener","sha":"..."}`; a sha counts only with that repo and only when GitHub's compare calls it an ancestor of main, else it polls main.

@@ -47,6 +47,12 @@ test("a fragment and a query ride along", () => {
   expect(resolve(site, "pages/contact.md", "terms.md?read=1")).toBe("/shop/terms/?read=1");
 });
 
+test("a script-bearing scheme never survives as a link", () => {
+  for (const url of ["javascript:alert(1)", "JavaScript:alert(1)", " java\tscript:alert(1)", "data:text/html,<script>alert(1)</script>"]) {
+    expect(resolve(site, "pages/contact.md", url)).toBe("#");
+  }
+});
+
 test("an outside link and a rooted link pass through", () => {
   for (const url of ["https://mrly.net", "http://mrly.net", "mailto:carlo@mrly.net", "tel:+1", "#top", "/shop/"]) {
     expect(resolve(site, "pages/contact.md", url)).toBe(url);

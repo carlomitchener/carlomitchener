@@ -32,6 +32,10 @@ export const stamp = (idx: Index) =>
 
 const OUT = /^(https?:|mailto:|tel:|#|\/)/;
 
+const DENY = /^(?:javascript|data|vbscript):/i;
+
+const denied = (url: string) => DENY.test(url.replace(/[\u0000-\u0020]/g, ""));
+
 const keys = (path: string) => [path, `${path}.md`, path.replace(/\.md$/, "")];
 
 const known = (idx: Index, path: string) => {
@@ -44,6 +48,7 @@ const known = (idx: Index, path: string) => {
 
 export function resolve(site: Site, from: string, url: string): string {
   const idx = site.index;
+  if (denied(url)) return "#";
   if (!idx || OUT.test(url)) return url;
   const cut = url.search(/[#?]/);
   const tail = cut < 0 ? "" : url.slice(cut);

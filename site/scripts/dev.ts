@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, statSync, watch } from "node:fs";
-import { join, relative, resolve } from "node:path";
+import { join, relative, resolve, sep } from "node:path";
 import site from "../site.json";
 import { DEV, DEV_DIR, PICSUM } from "../src/config/dev.ts";
 
@@ -99,14 +99,25 @@ async function fallback(path: string): Promise<Response> {
 
 const HTML = { "content-type": "text/html; charset=utf-8" };
 
+const LOST = () => new Response("not found", { status: 404 });
+
+function within(dir: string, rest: string): string | null {
+  const base = resolve(dir);
+  const full = resolve(base, `./${rest}`);
+  return full === base || full.startsWith(base + sep) ? full : null;
+}
+
 async function page(path: string, status = 200): Promise<Response> {
-  const file = Bun.file(join(dist, path));
+  const at = within(dist, path);
+  if (!at) return LOST();
+  const file = Bun.file(at);
   if (!(await file.exists())) return status === 404 ? new Response("not built yet", { status: 503 }) : page("404.html", 404);
   return new Response(inject(await file.text()), { status, headers: HTML });
 }
 
 const server = Bun.serve({
   port: Number(process.env.PORT ?? 3000),
+  hostname: "127.0.0.1",
   development: true,
   websocket: {
     open(ws) {
@@ -116,16 +127,23 @@ const server = Bun.serve({
   },
   async fetch(request) {
     let path = decodeURIComponent(new URL(request.url).pathname);
+    if (path.includes("\0")) return LOST();
     if (path === "/__dev") return server.upgrade(request) ? undefined : new Response("upgrade failed", { status: 400 });
     if (path.startsWith("/cdn/")) {
-      const local = Bun.file(join(feed, path.slice("/cdn/feed/".length)));
-      if (path.startsWith("/cdn/feed/") && (await local.exists())) return new Response(local);
+      if (path.startsWith("/cdn/feed/")) {
+        const at = within(feed, path.slice("/cdn/feed/".length));
+        if (!at) return LOST();
+        const local = Bun.file(at);
+        if (await local.exists()) return new Response(local);
+      }
       return fallback(path);
     }
     if (path.startsWith("/status/") && path.endsWith(".json")) return remote(path);
     if (path.endsWith("/")) path += "index.html";
     if (path.endsWith(".html")) return page(path);
-    const file = Bun.file(join(dist, path));
+    const at = within(dist, path);
+    if (!at) return LOST();
+    const file = Bun.file(at);
     if (await file.exists()) return new Response(file);
     return page("404.html", 404);
   },

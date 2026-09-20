@@ -7,7 +7,7 @@ import { need } from "../site/src/lib/env.ts";
 
 /* WHERE */
 
-const SOURCE = "carlomitchener/carlomitchener";
+export const SOURCE = "carlomitchener/carlomitchener";
 const HEAD_KEY = "data/build/head";
 const AGENT = "carlomitchener-site";
 const SRC_DIR = "/tmp/src/carlomitchener";
@@ -28,13 +28,50 @@ function log(line: string) {
   mark = now;
 }
 
+/* EVENT */
+
+export type Source = "push" | "schedule" | "manual" | "";
+
+export type Wake = { source: Source; on: "source" | ""; sha: string };
+
+const SOURCES = new Set(["push", "schedule", "manual"]);
+const SHA = /^[0-9a-f]{7,40}$/;
+
+function json(text: string): Record<string, unknown> {
+  try {
+    const value = JSON.parse(text);
+    return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function readEvent(text: string): Wake {
+  const outer = json(text);
+  const body = typeof outer.body === "string" ? json(outer.body) : outer;
+  const word = typeof body.source === "string" ? body.source.trim() : "";
+  const repo = typeof body.repo === "string" ? body.repo.trim() : "";
+  const named = typeof body.sha === "string" ? body.sha.trim() : "";
+  const on = repo === SOURCE ? "source" : "";
+  return {
+    source: SOURCES.has(word) ? (word as Source) : "",
+    on,
+    sha: on === "source" && SHA.test(named) ? named : "",
+  };
+}
+
+async function payload(request?: Request): Promise<string> {
+  if (!request) return "";
+  try {
+    return await request.text();
+  } catch {
+    return "";
+  }
+}
+
 /* HEAD */
 
 type Head = { sha: string; etag: string; data: string };
-
-type Source = "push" | "schedule" | "manual";
-
-type Event = { source?: Source; sha?: string; repo?: string };
 
 const short = (sha: string) => sha.slice(0, 7) || "none";
 
@@ -69,7 +106,30 @@ async function commit(etag: string): Promise<{ sha: string; etag: string } | nul
   return { sha: body.sha, etag: res.headers.get("etag") ?? "" };
 }
 
+type Get = (url: string, init: { headers: Record<string, string> }) => Promise<{ ok: boolean; status: number; json: () => Promise<unknown> }>;
+
+export async function onMain(sha: string, get: Get = fetch): Promise<boolean> {
+  try {
+    const res = await get(`https://api.github.com/repos/${SOURCE}/compare/${sha}...main`, {
+      headers: { "user-agent": AGENT, accept: "application/vnd.github+json" },
+    });
+    if (!res.ok) {
+      log(`refused ${short(sha)}: compare ${res.status}`);
+      return false;
+    }
+    const body = (await res.json()) as { status?: string };
+    const state = typeof body?.status === "string" ? body.status : "";
+    if (state === "ahead" || state === "identical") return true;
+    log(`refused ${short(sha)}: ${state || "no status"}, not an ancestor of main`);
+    return false;
+  } catch (error) {
+    log(`refused ${short(sha)}: compare failed, ${String((error as Error)?.message ?? error).slice(0, 160)}`);
+    return false;
+  }
+}
+
 async function unpack(slug: string, ref: string, into: string): Promise<void> {
+  if (ref !== "main" && !SHA.test(ref)) throw new Error(`codeload ${slug}: ${ref} is not a sha`);
   const stage = `${into}.stage`;
   rmSync(stage, { recursive: true, force: true });
   rmSync(into, { recursive: true, force: true });
@@ -161,12 +221,12 @@ async function make(s3: S3Client | null, head: Head, stored: Head): Promise<stri
 
 /* HANDLER */
 
-async function once(event: Event): Promise<string> {
+async function once(wake: Wake): Promise<string> {
   const began = Date.now();
   mark = began;
   const s3 = DRY ? null : client(need("CARLOMITCHENER_BUCKET"));
   const stored = await readHead(s3);
-  const pinned = event.repo === SOURCE ? (event.sha ?? "") : "";
+  const pinned = wake.sha && (await onMain(wake.sha)) ? wake.sha : "";
   const head: Head = { sha: pinned, etag: pinned ? "" : stored.etag, data: stored.data };
   if (!head.sha) {
     const fresh = await commit(stored.etag);
@@ -174,22 +234,14 @@ async function once(event: Event): Promise<string> {
     head.etag = fresh ? fresh.etag : stored.etag;
   }
   if (!head.sha) throw new Error("site: no sha in the event, in the head or from github");
-  log(`commit ${short(head.sha)} from ${event.source ?? "manual"}`);
+  log(`commit ${short(head.sha)} from ${wake.source || "poll"}`);
   const line = await make(s3, head, stored);
   console.log(`done ${short(head.sha)} ${Date.now() - began}ms`);
   return line;
 }
 
 async function handler(request?: Request): Promise<Response> {
-  let event: Event = { source: "manual" };
-  if (request) {
-    try {
-      event = (await request.json()) as Event;
-    } catch {
-      event = { source: "manual" };
-    }
-  }
-  return new Response(`${await once(event)}\n`);
+  return new Response(`${await once(readEvent(await payload(request)))}\n`);
 }
 
 export default { fetch: handler };
@@ -198,6 +250,6 @@ export default { fetch: handler };
 
 if (import.meta.main) {
   const raw = process.argv[2] ?? process.env.EVENT ?? '{"source":"manual"}';
-  console.log(await once(JSON.parse(raw) as Event));
+  console.log(await once(readEvent(raw)));
   process.exit(0);
 }
