@@ -1,8 +1,8 @@
 import { CDN, GIFT, SHOP } from "../config/shop.ts";
 
-export type Variant = { id: string; size: string; price: string; available: boolean };
+type Variant = { id: string; size: string; price: string; available: boolean };
 
-export type Picture = { url: string; alt: string; style: string };
+type Picture = { url: string; alt: string; style: string };
 
 export type Primary = "light" | "dark";
 
@@ -63,9 +63,9 @@ export function facetsOf(task: any): Facets {
   };
 }
 
-export type Snapshot = { at: number; products: ProductRow[]; batches: Batch[] };
+type Snapshot = { at: number; products: ProductRow[]; batches: Batch[] };
 
-export const QUERY = `
+const QUERY = `
 query Feed($first: Int!, $after: String, $country: CountryCode) @inContext(country: $country) {
   products(first: $first, sortKey: CREATED_AT, reverse: true, after: $after) {
     pageInfo { hasNextPage endCursor }
@@ -97,16 +97,16 @@ query Feed($first: Int!, $after: String, $country: CountryCode) @inContext(count
 
 const TILE = " - Tile - ";
 
-export const tail = (gid: string) => gid.split("/").pop() ?? gid;
+const tail = (gid: string) => gid.split("/").pop() ?? gid;
 
-export const styleOf = (alt: string) => alt.split(" - ")[0].trim();
+const styleOf = (alt: string) => alt.split(" - ")[0].trim();
 
-export function variantOf(node: any): Variant {
+function variantOf(node: any): Variant {
   const size = (node.selectedOptions ?? []).find((o: any) => o.name === "Size")?.value ?? "One Size";
   return { id: tail(node.id), size, price: node.price.amount, available: node.availableForSale !== false };
 }
 
-export function picturesOf(nodes: any[]): Picture[] {
+function picturesOf(nodes: any[]): Picture[] {
   const out: Picture[] = [];
   for (const node of nodes ?? []) {
     if (node.mediaContentType !== "IMAGE") continue;
@@ -117,7 +117,7 @@ export function picturesOf(nodes: any[]): Picture[] {
   return out;
 }
 
-export function rowOf(node: any): ProductRow {
+function rowOf(node: any): ProductRow {
   return {
     key: node.handle,
     design: designOf(node.handle),
@@ -137,7 +137,7 @@ export function rowOf(node: any): ProductRow {
 
 /* FETCH */
 
-export type Wire = { shop: string; token: string; api: string; country: string; live: number };
+type Wire = { shop: string; token: string; api: string; country: string; live: number };
 
 export async function feed(wire: Wire): Promise<ProductRow[]> {
   const url = `https://${wire.shop}/api/${wire.api}/graphql.json`;
@@ -178,5 +178,3 @@ export const tileUrl = (design: string, primary: Primary, n: number) => cdnUrl(d
 export const grid = (url: string, width: number) => `${url}${url.includes("?") ? "&" : "?"}width=${width}&format=auto`;
 
 export const money = (amount: string | number) => `$${Number(amount).toFixed(2)}`;
-
-export const slugify = (text: string) => String(text ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");

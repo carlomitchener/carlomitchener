@@ -5,11 +5,11 @@ import { index, stamp, type Index } from "./links.ts";
 
 /* TYPES */
 
-export type Bytes = string | Uint8Array;
+type Bytes = string | Uint8Array;
 
 export type Output = { path: string; bytes: Bytes; type?: string };
 
-export type Link = { route: string; name?: string; at?: string; source?: string };
+type Link = { route: string; name?: string; at?: string; source?: string };
 
 export type Route = {
   route: string;
@@ -26,7 +26,7 @@ export type Route = {
 
 export type Input = { name: string; path: string; files: string[]; missing: boolean };
 
-export type Bundle = { path: string; out: string; hash: boolean; files: string[]; ext?: string };
+type Bundle = { path: string; out: string; hash: boolean; files: string[]; ext?: string };
 
 export type Site = {
   root: string;
@@ -91,11 +91,7 @@ export function walk(dir: string, deep = true): string[] {
 
 const cache = new Map<string, Uint8Array>();
 
-export function forget() {
-  cache.clear();
-}
-
-export function bytes(file: string): Uint8Array {
+function bytes(file: string): Uint8Array {
   const hit = cache.get(file);
   if (hit) return hit;
   const data = new Uint8Array(readFileSync(file));
@@ -141,7 +137,7 @@ function bundle(root: string, decl: NonNullable<Config["assets"]>[number]): Bund
   return { path, out: (decl.out ?? "ui").replace(/^\/|\/$/g, ""), hash: decl.hash ?? false, files };
 }
 
-export async function scan(spec: Spec): Promise<Site> {
+async function scan(spec: Spec): Promise<Site> {
   if (spec.prepare) await spec.prepare();
   const root = resolve(spec.root);
   const config = spec.config ?? (JSON.parse(readFileSync(join(root, "site.json"), "utf8")) as Config);
@@ -394,4 +390,4 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
 
 export const page = (route: string) => (route === "/" ? "index.html" : `${route.replace(/^\/|\/$/g, "")}/index.html`);
 
-export { escape, digest, short, today };
+export { digest, short, today };

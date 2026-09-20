@@ -4,7 +4,7 @@ import { MODE_SCRIPT } from "../config/boot.ts";
 
 const FONTS = "/fonts/fonts.css";
 
-export const json = (value) => JSON.stringify(value).replace(/[<\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
+const json = (value) => JSON.stringify(value).replace(/[<\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
 
 export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], sky, data, noindex = false, preconnect, app = "", props }) {
   const url = root + route;

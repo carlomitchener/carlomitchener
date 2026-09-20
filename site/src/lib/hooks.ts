@@ -65,7 +65,7 @@ export function useMediaQuery(query: string) {
 
 /* SEARCH */
 
-export const NAV = "cm:nav";
+const NAV = "cm:nav";
 
 export const bump = () => dispatchEvent(new Event(NAV));
 

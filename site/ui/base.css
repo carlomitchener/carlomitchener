@@ -170,10 +170,6 @@ main {
   letter-spacing: var(--track-tight);
 }
 
-.dim {
-  color: var(--dim);
-}
-
 /* ICON */
 
 .icon {

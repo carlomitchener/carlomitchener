@@ -1,6 +1,6 @@
 import { MODE_KEY, THEME_COLORS } from "../config/shop.ts";
 
-export type Mode = "dark" | "light";
+type Mode = "dark" | "light";
 
 const listeners = new Set<() => void>();
 
@@ -39,7 +39,7 @@ export function subscribe(fn: () => void) {
   return () => void listeners.delete(fn);
 }
 
-export function set(next: Mode) {
+function set(next: Mode) {
   try {
     localStorage.setItem(MODE_KEY, next);
   } catch {}

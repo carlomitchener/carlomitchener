@@ -2,9 +2,9 @@ import { LIVE_DAYS } from "../config/shop.ts";
 
 const DAY = 24 * 60 * 60 * 1000;
 
-export const LUNAR = LIVE_DAYS * DAY;
+const LUNAR = LIVE_DAYS * DAY;
 
-export const expiry = (born: string | number) => new Date(born).getTime() + LUNAR;
+const expiry = (born: string | number) => new Date(born).getTime() + LUNAR;
 
 export const left = (born: string | number, now = Date.now()) => Math.max(0, expiry(born) - now);
 
@@ -12,7 +12,7 @@ export const juice = (born: string | number, now = Date.now()) => Math.min(100, 
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export function countdown(ms: number) {
+function countdown(ms: number) {
   const s = Math.floor(ms / 1000);
   const d = Math.floor(s / 86400);
   const h = Math.floor((s % 86400) / 3600);

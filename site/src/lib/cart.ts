@@ -2,7 +2,7 @@ import { CART_KEY } from "../config/shop.ts";
 
 declare const SHOP: string;
 
-export type Line = { id: string; key: string; title: string; size: string; price: string; image: string; qty: number };
+type Line = { id: string; key: string; title: string; size: string; price: string; image: string; qty: number };
 
 /* STORE */
 
@@ -55,7 +55,7 @@ export function subscribe(fn: () => void) {
   };
 }
 
-export function save(items: Line[]) {
+function save(items: Line[]) {
   try {
     if (items.length) localStorage.setItem(CART_KEY, JSON.stringify(items));
     else localStorage.removeItem(CART_KEY);

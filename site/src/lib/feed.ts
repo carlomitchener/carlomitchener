@@ -14,7 +14,7 @@ export type Post = {
 
 const BASE = "/cdn/feed/p";
 
-export const postName = (name: string) => /^[0-9a-f]{8}$/.test(String(name ?? ""));
+const postName = (name: string) => /^[0-9a-f]{8}$/.test(String(name ?? ""));
 
 export const postVideo = (name: string) => `${BASE}/${name}/${name}.mp4`;
 

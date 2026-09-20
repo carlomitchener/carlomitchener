@@ -1,16 +1,14 @@
-import { createContext, startTransition, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, startTransition, useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { bump } from "../lib/hooks.ts";
 import { need } from "../kinds.js";
 import site from "../../site.json";
 
-export type View = { page: { kind: string; title: string; props: Record<string, unknown> }; chrome: { route: string; catalog: unknown[]; fly: boolean; now: number } };
+type View = { page: { kind: string; title: string; props: Record<string, unknown> }; chrome: { route: string; catalog: unknown[]; fly: boolean; now: number } };
 
-export type Go = (href: string, options?: { keep?: boolean }) => void;
+type Go = (href: string, options?: { keep?: boolean }) => void;
 
 export const Nav = createContext<Go>(() => {});
-
-export const useNav = () => useContext(Nav);
 
 const heading = (title: string) => (title === site.name ? site.name : `${title} · ${site.name}`);
 
