@@ -1,47 +1,59 @@
 import { MODE_KEY, THEME_COLORS } from "../config/shop.ts";
 
-const button = document.querySelector<HTMLButtonElement>("button[data-mode]");
+export type Mode = "dark" | "light";
 
-type Mode = "dark" | "light";
+const listeners = new Set<() => void>();
 
-if (button) {
+let mode: Mode = "light";
+
+const clean = (value: string | null): Mode | null => (value === "dark" || value === "light" ? value : null);
+
+const stored = () => {
+  try {
+    return clean(localStorage.getItem(MODE_KEY));
+  } catch {
+    return null;
+  }
+};
+
+const system = (): Mode => (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+function paint(next: Mode) {
+  mode = next;
   const root = document.documentElement;
+  root.dataset.mode = next;
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (meta) meta.content = THEME_COLORS[next];
+  for (const fn of listeners) fn();
+  dispatchEvent(new CustomEvent("mode", { detail: next }));
+}
+
+export const get = () => mode;
+
+export const server = (): Mode => "light";
+
+export const none = () => null;
+
+export function subscribe(fn: () => void) {
+  listeners.add(fn);
+  return () => void listeners.delete(fn);
+}
+
+export function set(next: Mode) {
+  try {
+    localStorage.setItem(MODE_KEY, next);
+  } catch {}
+  paint(next);
+}
+
+export const toggle = () => set(mode === "dark" ? "light" : "dark");
+
+export function start() {
   const dark = matchMedia("(prefers-color-scheme: dark)");
-
-  const clean = (value: string | null): Mode | null => (value === "dark" || value === "light" ? value : null);
-
-  const stored = () => {
-    try {
-      return clean(localStorage.getItem(MODE_KEY));
-    } catch {
-      return null;
-    }
-  };
-
-  const system = (): Mode => (dark.matches ? "dark" : "light");
-
-  const paint = (mode: Mode) => {
-    root.dataset.mode = mode;
-    if (meta) meta.content = THEME_COLORS[mode];
-    button.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
-    window.dispatchEvent(new CustomEvent("mode", { detail: mode }));
-  };
-
-  paint(clean(root.dataset.mode ?? null) ?? stored() ?? system());
-
-  button.addEventListener("click", () => {
-    const next: Mode = root.dataset.mode === "dark" ? "light" : "dark";
-    try {
-      localStorage.setItem(MODE_KEY, next);
-    } catch {}
-    paint(next);
-  });
-
+  paint(clean(document.documentElement.dataset.mode ?? null) ?? stored() ?? system());
   dark.addEventListener("change", () => {
     if (!stored()) paint(system());
   });
-
   addEventListener("storage", (event) => {
     if (event.key === MODE_KEY) paint(stored() ?? system());
   });

@@ -1,23 +1,26 @@
+import { useState } from "react";
 import { tileUrl } from "../lib/shop.ts";
 import { Carousel } from "./Gallery.jsx";
 import { Icon } from "./Icon.jsx";
 
-export function Downloads({ product, tiles }) {
-  const url = (n) => tileUrl(product.design, product.primary, n);
-  const slides = tiles.map((n) => ({ style: `tile-${n}`, thumb: url(n), full: url(n), link: url(n), alt: `${product.design} ${n}x${n}`, name: `${n}x${n}` }));
+export function Downloads({ design, primary, tiles }) {
+  const [index, setIndex] = useState(0);
+  const url = (n) => tileUrl(design, primary, n);
+  const slides = tiles.map((n) => ({ style: `tile-${n}`, thumb: url(n), full: url(n), link: url(n), alt: `${design} ${n}x${n}`, name: `${n}x${n}` }));
+  const one = slides[index] ?? slides[0];
   return (
-    <details className="drop files" data-files>
+    <details className="drop files">
       <summary>
         <span>Downloads</span>
         <Icon name="expand_more" extra="small" />
       </summary>
       <div className="inside">
-        <Carousel slides={slides} pixel label="Tile" />
+        <Carousel slides={slides} index={index} onIndex={setIndex} pixel label="Tile" />
         <p className="get">
-          <a className="pill go wide" href={url(tiles[0])} download data-download>
+          <a className="pill go wide" href={one.link} download>
             <Icon name="download" />
             <span>
-              Download <span data-download-name>{`${tiles[0]}x${tiles[0]}`}</span>
+              Download <span>{one.name}</span>
             </span>
           </a>
         </p>

@@ -5,14 +5,6 @@
   "since": 1998,
   "tagline": "Life is a loop. But someday it ends.",
   "contact": "carlo@mrly.net",
-  "pages": [
-    { "name": "About", "href": "/about/" },
-    { "name": "Contact", "href": "/contact/" },
-    { "name": "FAQ", "href": "/faq/" },
-    { "name": "Shipping", "href": "/shipping/" },
-    { "name": "Terms", "href": "/terms/" },
-    { "name": "Privacy", "href": "/privacy/" }
-  ],
   "socials": [
     { "name": "GitHub", "href": "https://github.com/carlomitchener" },
     { "name": "YouTube", "href": "https://www.youtube.com/@carlomitchener" },
@@ -34,6 +26,22 @@
     "public": { "path": "public" }
   },
   "robots": { "disallow": ["/cart/"] },
+  "llms": {
+    "about": "carlomitchener.com is Carlo Mitchener's shop. A generator paints a Game of Life design, a pipeline prints it on demand through Printful and sells it through Shopify, and every variation lives one lunar month, 29.53 days, then it is gone and never printed again. Nothing digital is sold: every printfile and every tile on a product page is a free download. The shop lives under /shop/, one page per variation at /shop/{product}/{design}/; the feed of generated posts lives at /feed/.",
+    "links": [
+      { "href": "/shop/", "name": "Shop", "note": "every live variation, by category and by product" },
+      { "href": "/shop/designs/", "name": "Designs", "note": "one tile per design" },
+      { "href": "/shop/gift-card/", "name": "Gift Card", "note": "mini, medi and maxi, sent by email" },
+      { "href": "/shop/faq/", "name": "FAQ", "note": "how the shop works" },
+      { "href": "/shop/shipping/", "name": "Shipping", "note": "who prints and who ships" },
+      { "href": "/shop/terms/", "name": "Terms", "note": "the terms of sale" },
+      { "href": "/about/", "name": "About", "note": "who Carlo is" },
+      { "href": "/contact/", "name": "Contact", "note": "where to write" },
+      { "href": "/privacy/", "name": "Privacy", "note": "what the site stores" },
+      { "href": "/feed/", "name": "Feed", "note": "every generated post, newest first" },
+      { "href": "/pages/", "name": "Pages", "note": "every route this site serves" }
+    ]
+  },
   "manifest": {
     "name": "carlomitchener.com",
     "short_name": "carlomitchener",

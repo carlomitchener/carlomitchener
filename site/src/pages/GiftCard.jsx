@@ -1,4 +1,7 @@
-import { GIFT, giftUrl, money } from "../lib/shop.ts";
+import { useState } from "react";
+import { GIFT } from "../config/shop.ts";
+import { buyHref, giftUrl, money } from "../lib/shop.ts";
+import { AddToBag } from "../components/AddToBag.jsx";
 import { Breadcrumbs } from "../components/Breadcrumbs.jsx";
 
 export const TIERS = [
@@ -7,18 +10,18 @@ export const TIERS = [
   { tier: "maxi", name: "Maxi", tint: "--blue", from: 1111, to: 9999 },
 ];
 
+const FACE = "/bird/bird-128.png";
+
 const whole = (price) => String(Math.round(Number(price)));
 
-function Face({ card, amount, stage = false }) {
+function Face({ card, amount }) {
   return (
     <figure className="face" style={{ "--tint": `var(${card.tint})` }}>
       <div className="face-top">
-        <img src="/bird/bird-128.png" alt="" width="28" height="28" data-stage={stage ? "" : undefined} />
+        <img src={FACE} alt="" width="28" height="28" />
         <span>carlomitchener.com</span>
       </div>
-      <p className="face-amount mono" data-face={stage ? "" : undefined}>
-        {amount}
-      </p>
+      <p className="face-amount mono">{amount}</p>
       <div className="face-foot">
         <span>Gift Card</span>
         <span>{card.name}</span>
@@ -48,22 +51,21 @@ export function GiftCards({ cards }) {
   );
 }
 
-export function GiftCard({ card, cards, product, buy }) {
-  const first = product.variants[0];
+export function GiftCard({ card, cards, product, buyPrefix }) {
+  const [id, setId] = useState("");
+  const variant = product.variants.find((one) => one.id === id) ?? product.variants[0];
   return (
     <div className="wrap">
       <Breadcrumbs trail={[{ name: "Gift Card", href: GIFT }, { name: card.name }]} />
       <article className="gift">
         <div className="left">
-          <Face card={card} amount={whole(first.price)} stage />
+          <Face card={card} amount={whole(variant.price)} />
         </div>
         <div className="side">
           <div className="details">
             <h1>{`${card.name} Gift Card`}</h1>
             <p className="fine">{`Angel numbers from ${card.from} to ${card.to}.`}</p>
-            <p className="price" data-price>
-              {money(first.price)}
-            </p>
+            <p className="price">{money(variant.price)}</p>
             <nav className="tiers" aria-label="Gift card size">
               {cards.map((one) => (
                 <a key={one.tier} href={giftUrl(one.tier)} aria-current={one.tier === card.tier ? "page" : undefined}>
@@ -71,18 +73,16 @@ export function GiftCard({ card, cards, product, buy }) {
                 </a>
               ))}
             </nav>
-            <div className="sizes" role="group" aria-label="Amount" data-sizes>
-              {product.variants.map((variant, i) => (
-                <button type="button" key={variant.id} className="mono" data-variant={variant.id} data-price={variant.price} data-size={`$${whole(variant.price)}`} aria-pressed={i === 0 ? "true" : "false"} disabled={!variant.available}>
-                  {whole(variant.price)}
+            <div className="sizes" role="group" aria-label="Amount">
+              {product.variants.map((one) => (
+                <button type="button" key={one.id} className="mono" aria-pressed={one.id === variant.id ? "true" : "false"} disabled={!one.available} onClick={() => setId(one.id)}>
+                  {whole(one.price)}
                 </button>
               ))}
             </div>
             <div className="buy">
-              <button className="pill go wide" type="button" data-add data-key={product.key} data-title={`${card.name} Gift Card`} data-variant={first.id} data-price={first.price} data-size={`$${whole(first.price)}`} disabled={!product.available}>
-                Add to Bag
-              </button>
-              <a className="pill wide" href={buy} data-buy rel="noopener">
+              <AddToBag disabled={!product.available} line={{ id: variant.id, key: product.key, title: `${card.name} Gift Card`, size: `$${whole(variant.price)}`, price: variant.price, image: FACE }} />
+              <a className="pill wide" href={buyHref(buyPrefix, variant.id)} data-buy rel="noopener">
                 Buy now
               </a>
             </div>

@@ -64,10 +64,6 @@
   font-size: var(--t-fine);
 }
 
-.card[hidden] {
-  display: none;
-}
-
 /* PAGES */
 
 .routes-group {

@@ -11,7 +11,7 @@ const Avatar = (() => {
   };
   const num = (v) => Math.round(v * 100) / 100;
 
-  // GEOMETRY
+  /* GEOMETRY */
 
   function flatten(cubics, n = 8) {
     const out = [];
@@ -49,7 +49,7 @@ const Avatar = (() => {
     return recipe.fringe.colors.map((_, k) => [-(k + 1) * recipe.fringe.step * ux, -(k + 1) * recipe.fringe.step * uy]);
   }
 
-  // COLOR
+  /* COLOR */
 
   const hexOf = (palette, name) => palette[name] || name;
   const parse = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
@@ -63,7 +63,7 @@ const Avatar = (() => {
     return format(a.map((v, k) => v + (b[k] - v) * t));
   }
 
-  // BUILD
+  /* BUILD */
 
   function options(recipe, opts) {
     return {
@@ -141,7 +141,7 @@ const Avatar = (() => {
     if (transform !== undefined) path.setAttribute("transform", transform);
   }
 
-  // RIG
+  /* RIG */
 
   function deform(points, pose, rig) {
     const { flap = 0, bend = 0, sweep = 0 } = pose;
@@ -157,7 +157,7 @@ const Avatar = (() => {
     });
   }
 
-  // EXPORT
+  /* EXPORT */
 
   function serialize(svg, px) {
     const copy = svg.cloneNode(true);

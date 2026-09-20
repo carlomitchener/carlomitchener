@@ -1,4 +1,4 @@
-import { CDN } from "../config/shop.ts";
+import { CDN, GIFT, SHOP } from "../config/shop.ts";
 
 export type Variant = { id: string; size: string; price: string; available: boolean };
 
@@ -41,15 +41,15 @@ export const isDesign = (text: string) => /^[0-9a-f]{8}$/.test(text);
 
 export const handleOf = (key: string) => String(key ?? "").split("-").slice(1, -1).join("-");
 
-export const productUrl = (key: string) => `/${handleOf(key)}/${designOf(key)}/`;
+export const productUrl = (key: string) => `${SHOP}${handleOf(key)}/${designOf(key)}/`;
 
-export const collectionUrl = (handle: string) => `/${handle}/`;
-
-export const GIFT = "/gift-card/";
+export const collectionUrl = (handle: string) => `${SHOP}${handle}/`;
 
 export const GIFT_PREFIX = "gift-card-";
 
 export const giftUrl = (tier: string) => `${GIFT}${tier}/`;
+
+export const buyHref = (prefix: string, id: string) => (prefix && id ? `${prefix}${id}:1` : "/cart/");
 
 export const lineUrl = (key: string) => (key.startsWith(GIFT_PREFIX) ? giftUrl(key.slice(GIFT_PREFIX.length)) : productUrl(key));
 

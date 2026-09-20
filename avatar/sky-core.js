@@ -13,4 +13,6 @@ const Core = (() => {
   return { TAU, clamp, lerp, smooth, hash, noise, rng, parse, format, mix, rgba, P: PALETTE };
 })();
 
-const G = { canvas: null, ctx: null, W: 0, H: 0, S: 0, DPR: 1, t: 0, wind: { x: 1, y: 0 }, T: null, seed: 0, rnd: Math.random, rebuild: () => {} };
+const G = { canvas: null, ctx: null, W: 0, H: 0, S: 0, DPR: 1, t: 0, wind: { x: 1, y: 0 }, T: null, seed: 0, rnd: Math.random, rebuild: () => {}, visible: true };
+
+const typing = (e) => { const t = e.target; return !!t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable); };

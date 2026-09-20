@@ -1,6 +1,6 @@
 import type { S3Client } from "bun";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { client, getText, putBytes } from "./s3.ts";
 import { need } from "../site/src/lib/env.ts";
@@ -12,6 +12,7 @@ const HEAD_KEY = "data/build/head";
 const AGENT = "carlomitchener-site";
 const SRC_DIR = "/tmp/src/carlomitchener";
 const CACHE_DIR = process.env.BUN_INSTALL_CACHE_DIR || "/tmp/bun/cache";
+const LAYER_DIR = process.env.NODE_LAYER_DIR || "/opt/node";
 const DRY = process.env.DRY === "1";
 if (DRY) process.env.DEV = "1";
 const HOLD = process.env.DRY_DIR ?? "/tmp/carlomitchener";
@@ -92,6 +93,29 @@ async function run(cmd: string[], cwd: string): Promise<string> {
   return out;
 }
 
+/* MODULES */
+
+type Modules = "layer" | "stale" | "absent";
+
+function modules(site: string): Modules {
+  const lock = createHash("sha256").update(readFileSync(join(site, "bun.lock"))).digest("hex");
+  const held = join(LAYER_DIR, "bun.lock.sha256");
+  if (!existsSync(held)) return "absent";
+  return readFileSync(held, "utf8").trim() === lock ? "layer" : "stale";
+}
+
+async function install(site: string): Promise<string> {
+  const state = modules(site);
+  if (state === "layer") {
+    const target = join(site, "node_modules");
+    rmSync(target, { recursive: true, force: true });
+    symlinkSync(join(LAYER_DIR, "node_modules"), target);
+    return "modules layer";
+  }
+  await run([process.execPath, "install", "--frozen-lockfile"], site);
+  return state === "stale" ? "modules layer stale, installed" : "modules installed";
+}
+
 /* SNAPSHOT */
 
 const SHAPE: Record<string, (body: unknown) => unknown> = {
@@ -119,8 +143,7 @@ async function make(s3: S3Client | null, head: Head, stored: Head): Promise<stri
     log(`source ${short(head.sha)}`);
   }
   const site = join(SRC || SRC_DIR, "site");
-  await run([bun, "install", "--frozen-lockfile"], site);
-  log("install");
+  log(await install(site));
   await run([bun, "run", DRY ? "fake" : "snapshot"], site);
   head.data = dataHash(site);
   log(`snapshot ${head.data || "none"}`);

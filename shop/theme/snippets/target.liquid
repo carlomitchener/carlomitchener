@@ -7,7 +7,7 @@
       assign design = parts | last
       assign slug = product.handle | remove_first: primary | remove_first: "-" | remove_last: design | remove_last: "-"
       if design.size == 8 and slug != blank and parts.size > 2
-        echo site | append: "/" | append: slug | append: "/" | append: design | append: "/"
+        echo site | append: "/shop/" | append: slug | append: "/" | append: design | append: "/"
       else
         echo site | append: "/"
       endif
@@ -16,7 +16,12 @@
     when "cart"
       echo site | append: "/cart/"
     when "page"
-      echo site | append: "/" | append: page.handle | append: "/"
+      assign docs = "shipping,faq,terms" | split: ","
+      if docs contains page.handle
+        echo site | append: "/shop/" | append: page.handle | append: "/"
+      else
+        echo site | append: "/" | append: page.handle | append: "/"
+      endif
     else
       echo site | append: "/"
   endcase

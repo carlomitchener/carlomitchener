@@ -18,7 +18,7 @@ const Clouds = (() => {
     return [dx / m, dy / m];
   }
 
-  // SPRITES
+  /* SPRITES */
 
   function dab(g, x, y, r, col, a, rot, sq) {
     const gr = g.createRadialGradient(x, y, r * 0.22, x, y, r);
@@ -162,7 +162,7 @@ const Clouds = (() => {
     return { c, ar: h / w };
   }
 
-  // FIELD
+  /* FIELD */
 
   function seedClouds() {
     const W = G.W, H = G.H, S = G.S, rnd = G.rnd, cv = cover(), st = storm(), hz = clamp(F(G.T.haze, 0.55), 0, 1);
@@ -240,7 +240,7 @@ const Clouds = (() => {
     }
   }
 
-  // PAINT
+  /* PAINT */
 
   function drawSky() {
     const { ctx, W, H } = G;

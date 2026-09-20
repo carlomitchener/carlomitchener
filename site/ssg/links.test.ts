@@ -11,8 +11,8 @@ const input = (name: string, path: string): Input => ({ name, path, files: [], m
 const routes: Route[] = [
   { route: "/about/", kind: "page", source: "/repo/README.md" },
   { route: "/contact/", kind: "page", source: `${home}/pages/contact.md` },
-  { route: "/faq/", kind: "page", source: `${home}/pages/faq.md` },
-  { route: "/terms/", kind: "page", source: `${home}/pages/terms.md` },
+  { route: "/shop/faq/", kind: "page", source: `${home}/pages/faq.md` },
+  { route: "/shop/terms/", kind: "page", source: `${home}/pages/terms.md` },
 ];
 
 function shop(): Site {
@@ -34,7 +34,7 @@ const site = shop();
 /* ROUTES */
 
 test("a page link to a sibling page lands on that page's route", () => {
-  expect(resolve(site, "pages/contact.md", "faq.md")).toBe("/faq/");
+  expect(resolve(site, "pages/contact.md", "faq.md")).toBe("/shop/faq/");
   expect(resolve(site, "pages/terms.md", "privacy.md")).toBe("privacy.md");
 });
 
@@ -43,12 +43,12 @@ test("a link to the readme outside the site lands on the about route", () => {
 });
 
 test("a fragment and a query ride along", () => {
-  expect(resolve(site, "pages/contact.md", "faq.md#returns")).toBe("/faq/#returns");
-  expect(resolve(site, "pages/contact.md", "terms.md?read=1")).toBe("/terms/?read=1");
+  expect(resolve(site, "pages/contact.md", "faq.md#returns")).toBe("/shop/faq/#returns");
+  expect(resolve(site, "pages/contact.md", "terms.md?read=1")).toBe("/shop/terms/?read=1");
 });
 
 test("an outside link and a rooted link pass through", () => {
-  for (const url of ["https://mrly.net", "http://mrly.net", "mailto:carlo@mrly.net", "tel:+1", "#top", "/collections/"]) {
+  for (const url of ["https://mrly.net", "http://mrly.net", "mailto:carlo@mrly.net", "tel:+1", "#top", "/shop/"]) {
     expect(resolve(site, "pages/contact.md", url)).toBe(url);
   }
 });
@@ -56,7 +56,7 @@ test("an outside link and a rooted link pass through", () => {
 /* STAMP */
 
 test("the stamp moves when a route a page could link to disappears", () => {
-  const gone = { ...site, routes: routes.filter((one) => one.route !== "/faq/") } as Site;
+  const gone = { ...site, routes: routes.filter((one) => one.route !== "/shop/faq/") } as Site;
   expect(stamp(index(gone))).not.toBe(stamp(site.index!));
 });
 

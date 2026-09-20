@@ -1,5 +1,6 @@
 import { HELP, LIVE_DAYS } from "../config/shop.ts";
-import { cdnUrl, money, primaryName } from "../lib/shop.ts";
+import { buyHref, cdnUrl, money, primaryName } from "../lib/shop.ts";
+import { AddToBag } from "./AddToBag.jsx";
 import { Downloads } from "./Downloads.jsx";
 import { Icon } from "./Icon.jsx";
 import { Life } from "./Life.jsx";
@@ -19,37 +20,32 @@ function Drop({ name, children }) {
   );
 }
 
-export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now, review, preview = false }) {
-  const first = product.variants[0];
+export function ProductDetails({ product, one, primary, onPrimary, variant, size, onSize, image, buyPrefix, printful, shop, tiles, now, review, preview = false, dead = false }) {
+  const shut = preview || dead || !one.available;
   return (
     <div className="details">
       <h1>{product.title}</h1>
-      <p className="fine" data-design>{`Design ${product.design}`}</p>
-      <p className="price" data-price>
-        {money(product.price)}
-      </p>
-      <PrimaryPills picked={product.primary} />
-      <VariantPills sizes={sizes} picked={product.variant} />
+      <p className="fine">{`Design ${product.design}`}</p>
+      <p className="price">{money(variant ? variant.price : one.price)}</p>
+      <PrimaryPills picked={primary} onPick={onPrimary} />
+      <VariantPills variants={one.variants} picked={size} onPick={onSize} />
       <div className="buy">
-        <button
-          className="pill go wide"
-          type="button"
-          data-add
-          data-key={product.key}
-          data-name={product.title}
-          data-title={`${primaryName(product.primary)} ${product.title}`}
-          data-variant={product.variant}
-          data-price={product.price}
-          data-size={first ? first.size : ""}
-          disabled={preview || !product.available}
-        >
-          Add to Bag
-        </button>
-        <a className="pill wide" href={preview ? undefined : buy} aria-disabled={preview ? "true" : undefined} data-buy rel="noopener">
+        <AddToBag
+          disabled={shut}
+          line={{
+            id: variant ? variant.id : "",
+            key: one.key,
+            title: `${primaryName(primary)} ${product.title}`,
+            size: variant ? variant.size : "",
+            price: variant ? variant.price : one.price,
+            image,
+          }}
+        />
+        <a className="pill wide" href={shut ? undefined : buyHref(buyPrefix, variant ? variant.id : "")} aria-disabled={shut ? "true" : undefined} data-buy rel="noopener">
           Buy now
         </a>
       </div>
-      {preview ? <p className="fine pending">{`In batch ${product.design}, not released. The whole batch goes on sale at once.`}</p> : <Life born={product.released} gate bar now={now} />}
+      {preview ? <p className="fine pending">{`In batch ${product.design}, not released. The whole batch goes on sale at once.`}</p> : <Life born={one.released} bar now={now} />}
       <p className="fine">
         <a href={shop}>{`More ${product.title}`}</a>
       </p>
@@ -72,12 +68,12 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
         </p>
       </Drop>
       <Reviews review={review} printful={printful} />
-      <Downloads product={product} tiles={tiles} />
-      {product.files.length ? (
+      <Downloads design={product.design} primary={primary} tiles={tiles} />
+      {one.files.length ? (
         <Drop name="Printfiles">
-          <p className="fine more" data-downloads>
-            {product.files.map((name) => (
-              <a key={name} href={cdnUrl(product.key, name)} download>
+          <p className="fine more">
+            {one.files.map((name) => (
+              <a key={name} href={cdnUrl(one.key, name)} download>
                 {name}
               </a>
             ))}

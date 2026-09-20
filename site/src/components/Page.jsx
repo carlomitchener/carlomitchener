@@ -1,13 +1,13 @@
 import site from "../../site.json";
 import { MODE_KEY, SHOPIFY_CDN, THEME_COLORS } from "../config/shop.ts";
-import { Header } from "./Header.jsx";
-import { Footer } from "./Footer.jsx";
 
 const FONTS = "/fonts/fonts.css";
 
 const MODE_SCRIPT = `(function(){try{var r=document.documentElement,k="${MODE_KEY}",c={light:"${THEME_COLORS.light}",dark:"${THEME_COLORS.dark}"},m=new URLSearchParams(location.search).get("mode");if(m!=="dark"&&m!=="light"){m=null;try{m=localStorage.getItem(k)}catch(e){}}if(m!=="dark"&&m!=="light")m=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";r.dataset.mode=m;var t=document.querySelector('meta[name="theme-color"]');if(t)t.content=c[m]}catch(e){}})();`;
 
-export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, preconnect, catalog, fly = false, children }) {
+export const json = (value) => JSON.stringify(value).replace(/[<\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
+
+export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], sky, data, noindex = false, preconnect, app = "", props }) {
   const url = root + route;
   return (
     <html lang="en">
@@ -37,23 +37,26 @@ export function Page({ root, route, title, description, image, type = "website",
         <link rel="icon" href="/bird/bird-64.png" type="image/png" />
         <link rel="apple-touch-icon" href="/bird/square-180.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="preload" href="/fonts/sans.woff2" as="font" type="font/woff2" crossOrigin="" />
+        <link rel="preload" href="/fonts/icons.woff2" as="font" type="font/woff2" crossOrigin="" />
         <link rel="stylesheet" href={FONTS} />
         {sheets.map((href) => (
           <link key={href} rel="stylesheet" href={href} />
         ))}
-        {data ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} /> : null}
-        {scripts.map((src) => (
-          <script key={src} type="module" src={src} />
-        ))}
+        {data ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json(data) }} /> : null}
       </head>
       <body>
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Header route={route} catalog={catalog} fly={fly} />
-        <div className="veil" data-veil></div>
-        <main id="main">{children}</main>
-        <Footer catalog={catalog} />
+        <div id="app" dangerouslySetInnerHTML={{ __html: app }}></div>
+        <section className="sky" data-sky={sky} aria-label="The sky">
+          <canvas id="sky"></canvas>
+        </section>
+        <script id="props" type="application/json" dangerouslySetInnerHTML={{ __html: json(props) }} />
+        {scripts.map((src) => (
+          <script key={src} type="module" src={src} />
+        ))}
       </body>
     </html>
   );

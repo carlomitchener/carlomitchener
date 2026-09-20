@@ -8,7 +8,7 @@ const Bird = (() => {
   const bird = { x: 0, y: 0, heading: 0.4, turn: 0, bank: 0, speed: 0, size: 0.8, goal: 0.8, rate: 0.02, dir: 1, mode: "soar", timer: 18, span: 18, age: 0, frame: 0, flip: 1, roll: 0, beats: 3, hold: 1, since: 30, last: "" };
   let frames = [], tick = -1, shown = null, opt = {}, meet = 140, started = false;
 
-  // FRAMES
+  /* FRAMES */
 
   function makeFrames() {
     const base = Avatar.flatten(BIRD.outline.cubics, 6);
@@ -32,7 +32,7 @@ const Bird = (() => {
     }
   }
 
-  // DIRECTOR
+  /* DIRECTOR */
 
   function enter(m) {
     const b = bird, rnd = G.rnd;
@@ -97,7 +97,7 @@ const Bird = (() => {
     enter("dive");
   }
 
-  // FRIENDS
+  /* FRIENDS */
 
   function spawn(n) {
     const rnd = G.rnd, W = G.W, H = G.H, S = G.S;
@@ -157,7 +157,7 @@ const Bird = (() => {
     return !(f.role === "leave" && (f.x < -0.22 * W || f.x > 1.22 * W || f.y < -0.22 * H || f.y > 1.22 * H));
   }
 
-  // STEP
+  /* STEP */
 
   function step(dt) {
     const b = bird, t = G.t, S = G.S, W = G.W, H = G.H, rnd = G.rnd;
@@ -246,7 +246,7 @@ const Bird = (() => {
       if (b.timer < 0) enter("glide");
     }
 
-    // KEEP
+    /* KEEP */
 
     b.size += clamp(b.goal - b.size, -b.rate * dt, b.rate * dt);
     if (b.mode === "soar") b.goal = Math.max(0.34, b.goal - 0.004 * dt);
@@ -279,7 +279,7 @@ const Bird = (() => {
     b.y += Math.sin(b.heading) * b.speed * b.size * dt + wy * dt;
     if (b.mode !== "dive" && b.mode !== "away") { b.x = clamp(b.x, 0.05 * W, 0.95 * W); b.y = clamp(b.y, 0.06 * H, 0.94 * H); }
 
-    // FRIENDS
+    /* FRIENDS */
 
     if (opt.friends === undefined || opt.friends > 0) {
       meet -= dt;
@@ -301,7 +301,7 @@ const Bird = (() => {
     }
   }
 
-  // PAINT
+  /* PAINT */
 
   function one(s) {
     const { ctx, S } = G, size = S * 0.3 * s.size;
@@ -323,7 +323,7 @@ const Bird = (() => {
     one(shown);
   }
 
-  // HOOKS
+  /* HOOKS */
 
   function init(q) {
     const f = q.get("friends");
@@ -331,6 +331,7 @@ const Bird = (() => {
     const m = q.get("mode");
     if (m) opt.mode = m;
     addEventListener("keydown", (e) => {
+      if (!G.visible || typing(e) || e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === "v") dive();
       if (e.key === "f" && !friends.length) spawn(1 + Math.floor(G.rnd() * 2));
     });

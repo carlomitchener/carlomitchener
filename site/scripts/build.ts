@@ -1,28 +1,18 @@
 import { readFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { createElement as h } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
+import { renderToStaticMarkup, renderToString } from "react-dom/server";
+import { build, page, today, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
-import { ALIKE, CATEGORIES, HOME_POSTS, HOME_ROW, LIVE_DAYS, MATCH, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
+import { ALIKE, CATEGORIES, DOCS, docUrl, FILES, GIFT, HOME_ROW, LIVE_DAYS, MATCH, PAGES, PRINTFUL, SHOP, SHOP_DOCS, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
-import { sheet } from "../src/lib/md.ts";
+import { sheet } from "../ssg/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
-import { collectionUrl, designOf, facetsOf, GIFT, GIFT_PREFIX, giftUrl, grid, handleOf, isDesign, PRIMARIES, primaryOf, productUrl, type Facets, type Primary, type ProductRow } from "../src/lib/shop.ts";
+import { collectionUrl, designOf, facetsOf, GIFT_PREFIX, giftUrl, grid, handleOf, isDesign, PRIMARIES, primaryOf, productUrl, type Facets, type Primary, type ProductRow } from "../src/lib/shop.ts";
+import { App } from "../src/App.jsx";
 import { Page } from "../src/components/Page.jsx";
-import { Designs } from "../src/pages/Designs.jsx";
-import { Home } from "../src/pages/Home.jsx";
-import { Shop } from "../src/pages/Shop.jsx";
-import { Product } from "../src/pages/Product.jsx";
-import { Post as PostPage } from "../src/pages/Post.jsx";
-import { Feed } from "../src/pages/Feed.jsx";
-import { Cart } from "../src/pages/Cart.jsx";
-import { Status } from "../src/pages/Status.jsx";
-import { Doc } from "../src/pages/Doc.jsx";
-import { NotFound } from "../src/pages/NotFound.jsx";
-import { FILES, PAGES, Pages } from "../src/pages/Pages.jsx";
-import { GiftCard, GiftCards, TIERS } from "../src/pages/GiftCard.jsx";
+import { TIERS } from "../src/pages/GiftCard.jsx";
 import site from "../site.json";
 
 loadEnv();
@@ -31,12 +21,10 @@ const org = resolve(import.meta.dir, "..");
 const dist = join(org, "dist");
 const client = join(org, ".cache", "client");
 const root = (process.env.SITE_URL ?? site.root).replace(/\/$/, "");
-const SHOP = DEV ? "" : (process.env.SHOPIFY_SHOP_URL ?? "");
+const STORE = DEV ? "" : (process.env.SHOPIFY_SHOP_URL ?? "");
 const FALLBACK = `${root}/bird/bird-512.png`;
 
 const read = (path: string) => readFileSync(path, "utf8");
-
-const today = () => new Date().toISOString().slice(0, 10);
 
 const now = Date.now();
 
@@ -67,59 +55,109 @@ type Leaf = {
 
 async function bundle() {
   const out = await Bun.build({
-    entrypoints: [join(org, "src", "client", "main.ts")],
+    entrypoints: [join(org, "src", "client", "main.tsx")],
     outdir: client,
     naming: "[name].[ext]",
     minify: true,
-    define: { SHOP: JSON.stringify(SHOP) },
+    define: { SHOP: JSON.stringify(STORE), "process.env.NODE_ENV": '"production"' },
   });
   if (!out.success) throw new Error(`site: client bundle failed\n${out.logs.map(String).join("\n")}`);
+  await sky();
+}
+
+const SKY = ["bird", "avatar", "sky-core", "sky-mood", "sky-clouds", "sky-weather", "sky-bird", "sky"];
+
+async function sky() {
+  const avatar = resolve(org, "../avatar");
+  const all = join(org, ".cache", "sky", "all.js");
+  await Bun.write(all, SKY.map((name) => read(join(avatar, `${name}.js`))).join("\n"));
+  const out = await Bun.build({ entrypoints: [all], outdir: client, naming: "sky.[ext]", minify: true });
+  if (!out.success) throw new Error(`site: sky bundle failed\n${out.logs.map(String).join("\n")}`);
 }
 
 /* SHELL */
 
-let catalogRows: Catalog[] = [];
+let chromeRows: { category: string; title: string; handle: string }[] = [];
 
+const HOIST = /^(?:<link [^>]*\/>)+/;
 
-function shell(site_: Site, leaf: Leaf, body: unknown) {
-  const node = h(
-    Page,
-    {
-      root,
-      route: leaf.route,
-      title: leaf.name,
-      description: leaf.description,
-      image: leaf.image ?? FALLBACK,
-      type: leaf.type ?? "website",
-      meta: leaf.meta ?? [],
-      sheets: site_.styles,
-      scripts: [site_.asset("main.js")],
-      data: leaf.data,
-      noindex: leaf.noindex ?? false,
-      preconnect: leaf.preconnect,
-      catalog: catalogRows,
-      fly: leaf.fly ?? false,
-    },
-    body as never,
-  );
-  return `<!doctype html>\n${renderToStaticMarkup(node)}\n`;
+const linked = (text: string) => (text.match(/<link [^>]*\/>/g) ?? []).filter((one) => one.includes(" href=")).join("");
+
+function shell(site_: Site, at: string, leaf: Leaf, one: { kind: string; props: object }): Output[] {
+  const view = {
+    page: { kind: one.kind, title: leaf.name, props: one.props },
+    chrome: { route: leaf.route, catalog: chromeRows, fly: leaf.fly ?? false, now },
+  };
+  const drawn = renderToString(h(App, view as never));
+  const hoisted = HOIST.exec(drawn)?.[0] ?? "";
+  const node = h(Page, {
+    root,
+    route: leaf.route,
+    title: leaf.name,
+    description: leaf.description,
+    image: leaf.image ?? FALLBACK,
+    type: leaf.type ?? "website",
+    meta: leaf.meta ?? [],
+    sheets: site_.styles,
+    scripts: [site_.asset("main.js")],
+    sky: site_.asset("sky.js"),
+    data: leaf.data,
+    noindex: leaf.noindex ?? false,
+    preconnect: leaf.preconnect,
+    app: drawn.slice(hoisted.length),
+    props: view,
+  });
+  const html = renderToStaticMarkup(node).replace("</head>", `${linked(hoisted)}</head>`);
+  const out: Output[] = [{ path: at, bytes: `<!doctype html>\n${html}\n` }];
+  if (at.endsWith("index.html")) out.push({ path: at.replace(/index\.html$/, "props.json"), bytes: JSON.stringify(view) });
+  return out;
 }
+
+/* TRIM */
+
+const shot = (row: Row) => {
+  const image = row.images[0];
+  return image ? { url: image.url, alt: image.alt } : null;
+};
+
+const card = (row: Pair) => ({
+  key: row.key,
+  title: row.title,
+  design: row.design,
+  group: row.group ?? "",
+  secondary: row.secondary ?? [],
+  created: row.created,
+  released: row.released,
+  price: row.price,
+  light: shot(row.light),
+  dark: shot(row.dark),
+});
+
+const half = (row: Row) => ({ key: row.key, released: row.released, available: row.available, price: row.price, variants: row.variants, images: row.images, files: row.files });
+
+const teaser = (one: Post) => ({ name: one.name, at: one.at, duration: one.duration, size: one.size });
+
+const moon = (one: Design) => ({ design: one.design, count: one.count, released: one.released });
 
 /* DATA */
 
-const buyUrl = (id: string) => (SHOP ? `https://${SHOP}/cart/${id}:1` : "/cart/");
+const BUY = STORE ? `https://${STORE}/cart/` : "";
 
-const SHOP_ORIGIN = SHOP ? `https://${SHOP}` : undefined;
+const STORE_ORIGIN = STORE ? `https://${STORE}` : undefined;
 
 const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
 
-const RESERVED = new Set(["shop", "feed", "cart", "status", "about", "pages", "gift-card", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
+const RESERVED = new Set(["about", "shop", "cart", "status", "feed", "pages", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
+
+const SHOP_RESERVED = new Set(["designs", "gift-card", ...SHOP_DOCS, ...CATEGORIES.map(([slug]) => slug)]);
 
 const VENDOR = "Printful";
 
 let giftRows: ProductRow[] = [];
 
 type Gift = (typeof TIERS)[number] & { product: ProductRow };
+
+const tier = (one: Gift) => ({ tier: one.tier, name: one.name, tint: one.tint, from: one.from, to: one.to });
 
 type Facet = { key: string; label: string; values: { name: string; n: number }[] };
 
@@ -174,6 +212,7 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
   const byType = new Map(catalog.map((entry) => [String(entry.id), entry]));
   const files = tasks(site_);
   const out: Row[] = [];
+  let odd = 0;
   giftRows = [];
   for (const product of snapshot.products ?? []) {
     if (product.key.startsWith(GIFT_PREFIX)) {
@@ -197,7 +236,7 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
     const primary = primaryOf(product.key);
     const design = designOf(product.key);
     if (!primary || !handleOf(product.key) || !isDesign(design)) {
-      console.warn(`site: ${product.key} is not a {primary}-{slug}-{design} key, skipped`);
+      odd++;
       continue;
     }
     const facets = files.get(product.key);
@@ -215,6 +254,7 @@ function rows(site_: Site, catalog: Catalog[]): Row[] {
       variant: variant.id,
     });
   }
+  if (odd) console.warn(`site: ${odd} products are not a {primary}-{slug}-{design} key, skipped`);
   return out;
 }
 
@@ -284,7 +324,7 @@ function collect(site_: Site) {
   const reviewsFile = site_.input("reviews").files[0];
   const rated = reviews(site_);
   const catalog = JSON.parse(read(catalogFile)) as Catalog[];
-  catalogRows = catalog;
+  chromeRows = catalog.map((one) => ({ category: one.category, title: one.title, handle: one.handle }));
   const every = rows(site_, catalog);
   const all = pairs(every.filter((row) => row.released));
   const pending = pairs(every.filter((row) => !row.released), true);
@@ -297,8 +337,8 @@ function collect(site_: Site) {
   const inCategory = (slug: string) => all.filter((row) => row.category === slug);
   const ofProduct = (entry: Catalog) => byType.get(String(entry.id)) ?? [];
   const categoryCards: Card[] = [
-    { name: "All", href: "/shop/", count: all.length },
-    ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, count: inCategory(slug).length })),
+    { name: "All", href: SHOP, count: all.length },
+    ...CATEGORIES.map(([slug, name]) => ({ name, href: `${SHOP}${slug}/`, count: inCategory(slug).length })),
   ];
   const productCards = (slug?: string): Card[] =>
     catalog
@@ -327,10 +367,10 @@ function collect(site_: Site) {
     })
     .sort((a, b) => (a.released < b.released ? 1 : -1));
   const fresh = designs[0] ? { ...designs[0], products: newestFirst(all.filter((row) => row.design === designs[0].design)).slice(0, HOME_ROW - 1) } : null;
-  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown.slice(0, HOME_POSTS), designs, sections, fresh }, inputs: [catalogFile, index], at: today() });
-  routes.push({ route: "/shop/designs/", kind: "designs", name: "Designs", data: { trail: [{ name: "Shop", href: "/shop/" }, { name: "Designs" }], title: "Designs", lead: `${plural(designs.length, "design")}, one moon each.`, designs }, inputs: [catalogFile, index], at: today() });
+  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), designs, sections, fresh }, inputs: [catalogFile, index], at: today() });
+  routes.push({ route: `${SHOP}designs/`, kind: "designs", name: "Designs", data: { trail: [{ name: "Shop", href: SHOP }, { name: "Designs" }], title: "Designs", lead: `${plural(designs.length, "design")}, one moon each.`, designs }, inputs: [catalogFile, index], at: today() });
   routes.push({
-    route: "/shop/",
+    route: SHOP,
     kind: "shop",
     name: "All Variations",
     data: {
@@ -341,7 +381,7 @@ function collect(site_: Site) {
         { label: "Categories", cards: categoryCards },
         { label: "Products", cards: productCards() },
       ],
-      current: "/shop/",
+      current: SHOP,
       products: newestFirst(all),
       facets: facetsFor(all),
     },
@@ -351,18 +391,18 @@ function collect(site_: Site) {
   for (const [slug, name] of CATEGORIES) {
     const list = inCategory(slug);
     routes.push({
-      route: `/shop/${slug}/`,
+      route: `${SHOP}${slug}/`,
       kind: "shop",
       name,
       data: {
-        trail: [{ name: "Shop", href: "/shop/" }, { name }],
+        trail: [{ name: "Shop", href: SHOP }, { name }],
         title: name,
         lead: `${plural(list.length, "variation")}.`,
         chips: [
           { label: "Categories", cards: categoryCards },
           { label: "Products", cards: productCards(slug) },
         ],
-        current: `/shop/${slug}/`,
+        current: `${SHOP}${slug}/`,
         products: newestFirst(list),
         facets: facetsFor(list),
       },
@@ -371,10 +411,8 @@ function collect(site_: Site) {
     });
   }
   const names = new Map(CATEGORIES);
-  const taken = new Set<string>(RESERVED);
-  for (const file of site_.input("pages").files) taken.add(basename(file, ".md"));
   for (const entry of catalog) {
-    if (taken.has(entry.handle)) throw new Error(`site: product handle ${entry.handle} collides with a page`);
+    if (SHOP_RESERVED.has(entry.handle)) throw new Error(`site: product handle ${entry.handle} collides with the shop route ${SHOP}${entry.handle}/`);
     const list = ofProduct(entry);
     routes.push({
       route: shopRoute(entry),
@@ -382,7 +420,7 @@ function collect(site_: Site) {
       name: entry.title,
       hidden: !list.length,
       data: {
-        trail: [{ name: "Shop", href: "/shop/" }, { name: names.get(entry.category) ?? entry.category, href: `/shop/${entry.category}/` }, { name: entry.title }],
+        trail: [{ name: "Shop", href: SHOP }, { name: names.get(entry.category) ?? entry.category, href: `${SHOP}${entry.category}/` }, { name: entry.title }],
         title: entry.title,
         lead: `${plural(list.length, "variation")}.`,
         chips: [{ label: "Products", cards: productCards(entry.category) }],
@@ -430,9 +468,10 @@ function collect(site_: Site) {
   for (const file of site_.input("pages").files) {
     const name = basename(file, ".md");
     if (RESERVED.has(name)) throw new Error(`site: page ${name} wants a reserved route`);
+    const route = docUrl(name);
     const doc = sheet(read(file));
-    notes[`/${name}/`] = doc.text;
-    routes.push({ route: `/${name}/`, kind: "page", name: doc.title || name, source: file, inputs: [file], at: today() });
+    notes[route] = doc.text;
+    routes.push({ route, kind: "page", name: doc.title || name, source: file, inputs: [file], at: today() });
   }
   const gifts: Gift[] = [];
   for (const tier of TIERS) {
@@ -446,7 +485,7 @@ function collect(site_: Site) {
   }
   const groups = [
     { name: "Pages", rows: PAGES.filter((one) => one.href !== GIFT || gifts.length).map((one) => ({ ...one, note: one.note || notes[one.href] || "" })) },
-    { name: "Shop", rows: [{ name: "All", href: "/shop/", note: "Every live variation." }, { name: "Designs", href: "/shop/designs/", note: "One tile per design." }, ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, note: `${name} variations.` }))] },
+    { name: "Shop", rows: [{ name: "All", href: SHOP, note: "Every live variation." }, { name: "Designs", href: `${SHOP}designs/`, note: "One tile per design." }, ...CATEGORIES.map(([slug, name]) => ({ name, href: `${SHOP}${slug}/`, note: `${name} variations.` }))] },
     { name: "Files", rows: FILES },
   ];
   routes.push({ route: "/pages/", kind: "pages", name: "Pages", data: { groups }, inputs: [...site_.input("pages").files, ...(readme ? [readme] : [])], at: today() });
@@ -463,11 +502,11 @@ function collect(site_: Site) {
   });
   routes.push({ route: FEED_ROUTE, kind: "feed", name: "Feed", data: { posts: shown }, inputs: [index], at: today() });
   const found = [
-    ...CATEGORIES.map(([slug, name]) => ({ name, href: `/shop/${slug}/`, kind: "Category" })),
+    ...CATEGORIES.map(([slug, name]) => ({ name, href: `${SHOP}${slug}/`, kind: "Category" })),
     ...catalog.filter((entry) => ofProduct(entry).length).map((entry) => ({ name: entry.title, href: shopRoute(entry), kind: "Product" })),
     ...all.map((row) => ({ name: `${row.title} ${row.design}`, href: productUrl(row.key), kind: "Variation", tags: [row.group, ...(row.secondary ?? [])].filter(Boolean).join(" ") })),
     ...shown.map((post) => ({ name: post.name, href: postRoute(post.name), kind: "Post" })),
-    ...site.pages.map((one) => ({ name: one.name, href: one.href, kind: "Page" })),
+    ...DOCS.map((one) => ({ name: one.name, href: one.href, kind: "Page" })),
     { name: "Pages", href: "/pages/", kind: "Page" },
   ];
   routes.push({ route: "/search.json", kind: "search", name: "Search", hidden: true, data: { found }, inputs: [catalogFile, index] });
@@ -493,54 +532,63 @@ function cover(products: Pair[]) {
 function draw(site_: Site, route: Route): Output[] {
   const at = route.route === "/404.html" ? "404.html" : page(route.route);
   if (route.kind === "home") {
-    const { products, posts: shown, designs, sections, fresh } = route.data as { products: Pair[]; posts: Post[]; designs: Design[]; sections: { slug: string; name: string; products: Pair[] }[]; fresh: (Design & { products: Pair[] }) | null };
-    const body = h(Home, { posts: shown, designs, sections, fresh, now });
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: site.name, description: site.tagline, image: cover(products), fly: true }, body) }];
+    const { products, designs, sections, fresh } = route.data as { products: Pair[]; designs: Design[]; sections: { slug: string; name: string; products: Pair[] }[]; fresh: (Design & { products: Pair[] }) | null };
+    const props = {
+      designs: designs.map(moon),
+      sections: sections.map((one) => ({ slug: one.slug, name: one.name, products: one.products.map(card) })),
+      fresh: fresh ? { ...moon(fresh), products: fresh.products.map(card) } : null,
+    };
+    return shell(site_, at, { route: route.route, name: site.name, description: site.tagline, image: cover(products), fly: true }, { kind: "home", props });
   }
   if (route.kind === "shop") {
-    const data = route.data as { trail: Crumb[]; title: string; lead: string; chips: { label: string; cards: Card[] }[]; current: string; products: Pair[]; noindex?: boolean };
-    const body = h(Shop, { ...data, now });
+    const data = route.data as { trail: Crumb[]; title: string; lead: string; chips: { label: string; cards: Card[] }[]; current: string; products: Pair[]; facets: Facet[]; tiles?: boolean; noindex?: boolean };
+    const props = { trail: data.trail, title: data.title, lead: data.lead, chips: data.chips, current: data.current, products: data.products.map(card), facets: data.facets, tiles: data.tiles ?? false };
     const leaf = { route: route.route, name: data.title, description: `${data.title}: ${data.lead}`, image: cover(data.products), noindex: data.noindex };
-    return [{ path: at, bytes: shell(site_, leaf, body) }];
+    return shell(site_, at, leaf, { kind: "shop", props });
   }
   if (route.kind === "designs") {
-    const data = route.data as { trail: Crumb[]; title: string; lead: string; designs: { design: string; count: number; created: string; released: string }[] };
-    const body = h(Designs, { ...data, now });
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: data.title, description: `${data.title}: ${data.lead}` }, body) }];
+    const data = route.data as { trail: Crumb[]; title: string; lead: string; designs: Design[] };
+    const props = { trail: data.trail, title: data.title, lead: data.lead, designs: data.designs.map(moon) };
+    return shell(site_, at, { route: route.route, name: data.title, description: `${data.title}: ${data.lead}` }, { kind: "designs", props });
   }
   if (route.kind === "feed") {
     const { posts: shown } = route.data as { posts: Post[] };
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Feed", description: `The feed: ${plural(shown.length, "post")}, newest first.` }, h(Feed, { posts: shown, now })) }];
+    return shell(site_, at, { route: route.route, name: "Feed", description: `The feed: ${plural(shown.length, "post")}, newest first.` }, { kind: "feed", props: { posts: shown.map(teaser) } });
   }
   if (route.kind === "search") return [{ path: "search.json", bytes: JSON.stringify((route.data as { found: unknown[] }).found) }];
   if (route.kind === "product") return product(site_, route, at);
   if (route.kind === "post") return post(site_, route, at);
   if (route.kind === "status") {
     const { pending } = route.data as { pending: Pair[] };
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Status", description: "The automator, the CDN and the Lambdas.", noindex: true }, h(Status, { pending, now })) }];
+    const leaf = { route: route.route, name: "Status", description: "The automator, the CDN and the Lambdas.", noindex: true };
+    return shell(site_, at, leaf, { kind: "status", props: { pending: pending.map(card) } });
   }
   if (route.kind === "cart") {
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Bag", description: "Your bag.", noindex: true }, h(Cart, {})) }];
+    return shell(site_, at, { route: route.route, name: "Bag", description: "Your bag.", noindex: true }, { kind: "cart", props: {} });
   }
   if (route.kind === "pages") {
     const { groups } = route.data as { groups: { name: string; rows: { name: string; href: string; note: string }[] }[] };
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Pages", description: "Every route this site serves." }, h(Pages, { groups })) }];
+    return shell(site_, at, { route: route.route, name: "Pages", description: "Every route this site serves." }, { kind: "pages", props: { groups } });
   }
   if (route.kind === "gifts") {
     const { cards } = route.data as { cards: Gift[] };
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: "Gift Card", description: "Three sizes, nine angel numbers each. Sent by email, never expires." }, h(GiftCards, { cards })) }];
+    const leaf = { route: route.route, name: "Gift Card", description: "Three sizes, nine angel numbers each. Sent by email, never expires." };
+    return shell(site_, at, leaf, { kind: "gifts", props: { cards: cards.map(tier) } });
   }
   if (route.kind === "gift") {
-    const { card, cards } = route.data as { card: Gift; cards: Gift[] };
-    const leaf = { route: route.route, name: `${card.name} Gift Card`, description: `${card.name} gift card, angel numbers from $${card.from} to $${card.to}. Sent by email, never expires.`, preconnect: SHOP_ORIGIN };
-    return [{ path: at, bytes: shell(site_, leaf, h(GiftCard, { card, cards, product: card.product, buy: buyUrl(card.product.variants[0].id) })) }];
+    const { card: one, cards } = route.data as { card: Gift; cards: Gift[] };
+    const leaf = { route: route.route, name: `${one.name} Gift Card`, description: `${one.name} gift card, angel numbers from $${one.from} to $${one.to}. Sent by email, never expires.`, preconnect: STORE_ORIGIN };
+    const props = { card: tier(one), cards: cards.map((each) => ({ tier: each.tier, name: each.name })), product: { key: one.product.key, available: one.product.available, variants: one.product.variants }, buyPrefix: BUY };
+    return shell(site_, at, leaf, { kind: "gift", props });
   }
   if (route.kind === "page") {
     const source = route.source as string;
     const doc = sheet(read(source), (url) => resolveLink(site_, source, url));
-    return [{ path: at, bytes: shell(site_, { route: route.route, name: doc.title || route.name!, description: doc.text }, h(Doc, doc)) }];
+    const leaf = { route: route.route, name: doc.title || route.name!, description: doc.text };
+    return shell(site_, at, leaf, { kind: "page", props: { title: doc.title || route.name!, lead: doc.lead, body: doc.body } });
   }
-  return [{ path: "404.html", bytes: shell(site_, { route: route.route, name: "Not found", description: "That page is gone, or its moon has passed.", noindex: true }, h(NotFound, {})) }];
+  const leaf = { route: route.route, name: "Not found", description: "That page is gone, or its moon has passed.", noindex: true };
+  return shell(site_, "404.html", leaf, { kind: "missing", props: {} });
 }
 
 function post(site_: Site, route: Route, at: string): Output[] {
@@ -558,27 +606,32 @@ function post(site_: Site, route: Route, at: string): Output[] {
     ],
     noindex: true,
   };
-  return [{ path: at, bytes: shell(site_, leaf, h(PostPage, { post: one, prev, next })) }];
+  const props = { post: one, prev: prev ? { name: prev.name } : null, next: next ? { name: next.name } : null };
+  return shell(site_, at, leaf, { kind: "post", props });
 }
-
-const sibling = (one: Row) => ({ key: one.key, created: one.created, released: one.released, price: one.price, variants: one.variants, images: one.images, files: one.files, available: one.available });
 
 function product(site_: Site, route: Route, at: string): Output[] {
   const { product: row, family, matching, alike, review, preview } = route.data as { product: Pair; family: Pair[]; matching: Pair[]; alike: Pair[]; review: Review | null; preview: boolean };
-  const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
-  const siblings: Record<string, unknown> = {};
-  for (const one of family) siblings[one.design] = { light: sibling(one.light), dark: sibling(one.dark) };
   const names = new Map(CATEGORIES);
   const trail: Crumb[] = [
-    { name: "Shop", href: "/shop/" },
-    { name: names.get(row.category) ?? row.category, href: `/shop/${row.category}/` },
+    { name: "Shop", href: SHOP },
+    { name: names.get(row.category) ?? row.category, href: `${SHOP}${row.category}/` },
     { name: row.title, href: shopRoute(row) },
     { name: row.design },
   ];
-  const body = [
-    h(Product, { key: "product", trail, product: row, family, matching, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now, review, preview }),
-    h("script", { key: "siblings", type: "application/json", id: "siblings", dangerouslySetInnerHTML: { __html: JSON.stringify(siblings) } }),
-  ];
+  const props = {
+    trail,
+    product: { title: row.title, design: row.design, light: half(row.light), dark: half(row.dark) },
+    family: family.map((one) => ({ design: one.design, href: productUrl(one.key) })),
+    matching: matching.map(card),
+    alike: alike.map(card),
+    printful: PRINTFUL + row.link,
+    shop: shopRoute(row),
+    tiles: TILES,
+    buyPrefix: BUY,
+    review,
+    preview,
+  };
   const data = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -595,7 +648,8 @@ function product(site_: Site, route: Route, at: string): Output[] {
       availability: row.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
     },
   };
-  return [{ path: at, bytes: shell(site_, { route: route.route, name: row.title, description: describe(row), image: previewOf(row), data, noindex: true, preconnect: SHOP_ORIGIN }, body) }];
+  const leaf = { route: route.route, name: row.title, description: describe(row), image: previewOf(row), data, noindex: true, preconnect: STORE_ORIGIN };
+  return shell(site_, at, leaf, { kind: "product", props });
 }
 
 /* SPEC */

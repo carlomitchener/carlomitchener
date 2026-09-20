@@ -76,12 +76,14 @@
   line-height: 1.6;
 }
 
+.prose .table {
+  overflow-x: auto;
+}
+
 .prose table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--t-small);
-  display: block;
-  overflow-x: auto;
 }
 
 .prose th,

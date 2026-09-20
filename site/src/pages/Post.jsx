@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Breadcrumbs } from "../components/Breadcrumbs.jsx";
 import { Icon } from "../components/Icon.jsx";
 import { FEED_ROUTE, postManifest, postMaster, postPoster, postRoute, postVideo } from "../lib/feed.ts";
@@ -5,10 +6,27 @@ import { FEED_ROUTE, postManifest, postMaster, postPoster, postRoute, postVideo 
 const seconds = (n) => `${Number(n).toFixed(1)}s`;
 
 export function Post({ post, prev, next }) {
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    let live = true;
+    void fetch(postManifest(post.name))
+      .then((reply) => (reply.ok ? reply.json() : null))
+      .then((manifest) => {
+        if (!live || !manifest) return;
+        const { steps, ...rest } = manifest;
+        setText(JSON.stringify(rest, null, 2));
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [post.name]);
+
   return (
     <div className="wrap">
       <Breadcrumbs trail={[{ name: "Feed", href: FEED_ROUTE }, { name: post.name }]} />
-      <article className="play product" data-player data-manifest={postManifest(post.name)}>
+      <article className="play product">
         <div className="left">
           <div className="frame">
             <video controls loop playsInline preload="metadata" poster={postPoster(post.name)} width={post.size || 1080} height={post.size || 1080}>
@@ -57,9 +75,7 @@ export function Post({ post, prev, next }) {
               </a>
             ) : null}
           </p>
-          <pre className="json" data-json>
-            <a href={postManifest(post.name)}>{post.name}.json</a>
-          </pre>
+          <pre className="json">{text || <a href={postManifest(post.name)}>{`${post.name}.json`}</a>}</pre>
         </div>
       </article>
     </div>

@@ -5,6 +5,9 @@
 - `avatar.js` renders the recipe as SVG DOM, deforms the outline, exports SVG and PNG.
 - `avatar.html` is the editor: theme, layers, glow, gradient, fringe, export, header hover demo.
 - `sky.html` is the screensaver: look up, gouache clouds on a gusty wind, sun or moon, the bird soars, climbs, dives, plays with crows.
+- `sky.html` itself is only meta, style, canvas and script tags; the shell lives in `sky.js`, loaded last.
+- `sky.js` sizes the canvas, runs the frame loop, paints grain and vignette, reads the URL hooks, owns fullscreen and idle.
+- The site builds these same files into one `sky.js` and mounts the canvas at the bottom of every page, loaded when it scrolls near and paused while off screen; `Sky.pause()`, `Sky.resume()` and `G.visible` are the hooks.
 - `sky-core.js` holds `Core` (noise, seeded random, palette mixing) and `G` (shared state, the resolved look `G.T`).
 - `sky-mood.js` resolves time, season, weather and moon into `G.T`, drifts through days in auto mode, owns the buttons and hooks.
 - `sky-clouds.js` paints the sky gradient, stars, sun, moon phases, crossings, cloud sprites and layers, wind.
@@ -33,7 +36,7 @@
 - Stills: `jump=<sec>` skips ahead, `pause=1` freezes, `seed=<n>` makes everything deterministic, `perf=1` logs frame times after 120 frames.
 - Debug: `skip=sky,clouds,weather,bird,post` drops paint passes, `debug=1` logs the bird and `G.T` after the jump.
 - Weather test hooks read by `sky-weather.js` when Mood leaves the field at 0: `rain`, `snow`, `storm`, `fog`, `leaves`, `dust` (bare flag or 0..1).
-- Keys: `d` day or night, `t` time, `s` season, `w` weather, `a` auto, `m` moon phase, `v` dive, `f` friends. Double click for fullscreen. Cursor and buttons hide when idle.
+- Keys: `d` day or night, `t` time, `s` season, `w` weather, `a` auto, `m` moon phase, `v` dive, `f` friends. Double click for fullscreen where the browser has it. Cursor and buttons hide until you move or touch.
 
 ## RECIPE
 

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmdirSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative, resolve } from "node:path";
 import { index, stamp, type Index } from "./links.ts";
 
@@ -45,6 +45,7 @@ export type Site = {
 
 export type Config = {
   title?: string;
+  name?: string;
   root?: string;
   inputs?: Record<string, { path: string; ext?: string; deep?: boolean }>;
   assets?: { path: string; out?: string; hash?: boolean; files?: string[]; ext?: string }[];
@@ -262,7 +263,7 @@ function llms(site: Site, root: string): string {
   const rows = (decl.links ?? [])
     .filter((one) => known.has(one.href))
     .map((one) => `- [${one.name ?? one.href}](${root}${one.href})${one.note ? `: ${one.note}` : ""}`);
-  const head = [`# ${site.config.title ?? ""}`, "", `> ${root}`, ""];
+  const head = [`# ${site.config.title ?? site.config.name ?? ""}`, "", `> ${root}`, ""];
   if (decl.about) head.push(decl.about, "");
   return [...head, ...rows, ""].join("\n");
 }
@@ -341,14 +342,23 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
     kept.add(item.path);
   }
   let removed = 0;
-  for (const record of Object.values(old)) {
-    for (const p of record.outputs) {
-      if (kept.has(p)) continue;
-      const file = join(site.out, p);
-      if (!existsSync(file)) continue;
-      unlinkSync(file);
-      removed++;
+  const drop = (p: string) => {
+    const file = join(site.out, p);
+    if (!existsSync(file)) return;
+    unlinkSync(file);
+    removed++;
+    let dir = dirname(file);
+    while (dir !== site.out && existsSync(dir) && readdirSync(dir).length === 0) {
+      rmdirSync(dir);
+      dir = dirname(dir);
     }
+  };
+  for (const record of Object.values(old)) for (const p of record.outputs) if (!kept.has(p)) drop(p);
+  for (const decl of site.config.assets ?? []) {
+    const out = (decl.out ?? "ui").replace(/^\/|\/$/g, "");
+    const dir = join(site.out, out);
+    if (!existsSync(dir)) continue;
+    for (const name of readdirSync(dir)) if (!kept.has(`${out}/${name}`)) drop(`${out}/${name}`);
   }
   if (path) {
     mkdirSync(dirname(path), { recursive: true });

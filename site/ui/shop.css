@@ -20,6 +20,11 @@
 
 .card {
   display: block;
+  container-type: inline-size;
+}
+
+.card[hidden] {
+  display: none;
 }
 
 .card .shot {
@@ -77,8 +82,17 @@
 .card .price {
   display: block;
   margin-top: var(--s1);
+  overflow: hidden;
   font-size: var(--t-small);
   color: var(--dim);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@container (max-width: 230px) {
+  .card .price .trim {
+    display: none;
+  }
 }
 
 .empty {
@@ -453,6 +467,7 @@
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   padding-inline: var(--gutter);
 }
+
 .side {
   display: grid;
   gap: var(--s7);
@@ -565,6 +580,17 @@
 
 .buy .pill {
   width: 100%;
+}
+
+/* STARS */
+
+.stars .icon {
+  font-size: 1.1em;
+  vertical-align: -0.2em;
+}
+
+.stars .lit {
+  font-variation-settings: "FILL" 1;
 }
 
 /* FILES */
@@ -685,14 +711,14 @@
   white-space: nowrap;
 }
 
-.line [data-remove] {
+.line .remove {
   grid-column: 3;
   justify-self: end;
   color: var(--dim);
   font-size: var(--t-fine);
 }
 
-.line [data-remove]:hover {
+.line .remove:hover {
   color: var(--fg);
 }
 
@@ -702,7 +728,7 @@
     column-gap: var(--s6);
   }
 
-  .line [data-remove] {
+  .line .remove {
     grid-column: auto;
   }
 

@@ -1,7 +1,7 @@
 const Weather = (() => {
   const { TAU, clamp, smooth, noise, mix, rgba, P } = Core;
 
-  // HOOKS
+  /* HOOKS */
 
   const Q = new URLSearchParams(location.search);
   const hook = (k) => (Q.has(k) ? clamp(+Q.get(k) || 1, 0, 1) : 0);
@@ -17,7 +17,7 @@ const Weather = (() => {
   let rainN = 0, snowN = 0, carryN = 0, wet = 0, sprites = 0, rainKey = "";
   const rainCol = [[], []];
 
-  // SPRITES
+  /* SPRITES */
 
   function soften(src, px) {
     const c = document.createElement("canvas"); c.width = src.width; c.height = src.height;
@@ -108,7 +108,7 @@ const Weather = (() => {
     sprites = 1;
   }
 
-  // FIELDS
+  /* FIELDS */
 
   function resetRain(p, spread) {
     p.a = G.rnd() * TAU;
@@ -155,7 +155,7 @@ const Weather = (() => {
     rainKey = "";
   }
 
-  // LOOK
+  /* LOOK */
 
   function look() {
     const T = G.T;
@@ -177,7 +177,7 @@ const Weather = (() => {
     return { s: summerS, n: Math.round(3 + T.dust * 15), sz: 0.016, spin: 1, a: 0.5 };
   }
 
-  // STEP
+  /* STEP */
 
   function stepLens(dt, T) {
     const H = G.H, S = G.S;
@@ -287,7 +287,7 @@ const Weather = (() => {
     stepLens(dt, T);
   }
 
-  // PAINT
+  /* PAINT */
 
   function rainColors(T) {
     const k = T.key + "|" + Math.round(T.rain * 8);

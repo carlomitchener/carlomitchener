@@ -125,6 +125,10 @@ template {
 
 /* SHELL */
 
+#app {
+  display: contents;
+}
+
 .wrap {
   width: 100%;
   max-width: var(--container);

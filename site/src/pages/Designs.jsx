@@ -1,11 +1,11 @@
 import { Breadcrumbs } from "../components/Breadcrumbs.jsx";
 import { Life } from "../components/Life.jsx";
-import { MORE_TILE } from "../config/shop.ts";
+import { MORE_TILE, SHOP } from "../config/shop.ts";
 import { PRIMARIES, tileUrl } from "../lib/shop.ts";
 
 export function DesignCard({ design, life = true, now }) {
   return (
-    <a className="card" href={`/shop/?design=${design.design}`}>
+    <a className="card" href={`${SHOP}?design=${design.design}`}>
       <span className="shot">
         {PRIMARIES.map((primary) => (
           <img key={primary} className={`pixel ${primary}`} src={tileUrl(design.design, primary, MORE_TILE)} alt={design.design} width="270" height="270" loading="lazy" decoding="async" />

@@ -1,7 +1,7 @@
 const Mood = (() => {
   const { mix, rgba, clamp, lerp, P } = Core;
 
-  // PAINT BOX
+  /* PAINT BOX */
 
   const paper = mix(mix(P.green, P.indigo, 0.71), P.white, 0.93);
   const silver = mix(mix(P.white, P.indigo, 0.6), P.gray, 0.4);
@@ -9,7 +9,7 @@ const Mood = (() => {
   const frost = mix(P.white, P.cyan, 0.25);
   const ash = mix(P.gray, P.white, 0.55);
 
-  // KEYFRAMES
+  /* KEYFRAMES */
 
   const KF = {
     dawn: {
@@ -119,7 +119,7 @@ const Mood = (() => {
   const state = { time: "morning", season: "summer", weather: "clear", moon: 0.5, auto: true, day: 0.42, theme: "light" };
   const wx = { from: "clear", to: "clear", u: 1, timer: 60 };
 
-  // RESOLVE
+  /* RESOLVE */
 
   function segment(day) {
     const d = ((day % 1) + 1) % 1;
@@ -255,7 +255,7 @@ const Mood = (() => {
 
   function theme() { return G.T; }
 
-  // SUN
+  /* SUN */
 
   function arcAt(day) {
     const [an, bn, u] = segment(day);
@@ -269,7 +269,7 @@ const Mood = (() => {
     return [G.W * p[0], G.H * p[1]];
   }
 
-  // DRIFT
+  /* DRIFT */
 
   function pickWeather() {
     const table = MARKOV[state.season === "winter" && state.weather === "rain" ? "snow" : state.weather] || MARKOV.clear;
@@ -293,7 +293,7 @@ const Mood = (() => {
     state.theme = G.T.dark < 0.5 ? "light" : "dark";
   }
 
-  // STORE
+  /* STORE */
 
   function save() {
     try { localStorage.setItem("sky-mood", JSON.stringify({ time: state.time, season: state.season, weather: state.weather, moon: state.moon, auto: state.auto })); } catch (e) {}
@@ -316,7 +316,7 @@ const Mood = (() => {
     ui();
   }
 
-  // UI
+  /* UI */
 
   const GLYPH = {
     time: { dawn: "◔", morning: "◑", noon: "☼", afternoon: "◕", dusk: "◒", night: "☾" },
@@ -328,7 +328,7 @@ const Mood = (() => {
 
   function css() {
     const line = rgba(P.white, 0.45), face = rgba(P.black, 0.14), hot = rgba(P.black, 0.3), ink = rgba(P.white, 0.92), halo = rgba(P.white, 0.7);
-    return `#mood-ui{position:fixed;top:14px;right:14px;display:flex;gap:8px;z-index:9;opacity:0;transition:opacity .5s ease}
+    return `#mood-ui{position:absolute;bottom:max(14px,env(safe-area-inset-bottom));right:max(14px,env(safe-area-inset-right));display:flex;gap:8px;z-index:9;opacity:0;transition:opacity .5s ease}
 #mood-ui.show{opacity:.7}
 #mood-ui:hover{opacity:1}
 #mood-ui button{width:30px;height:30px;padding:0;border-radius:50%;border:1px solid ${line};background:${face};color:${ink};font:15px/1 system-ui,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:box-shadow .3s ease,background .3s ease}
@@ -354,7 +354,7 @@ const Mood = (() => {
         });
         strip.appendChild(b);
       }
-      document.body.appendChild(strip);
+      (G.canvas ? G.canvas.parentElement : document.body).appendChild(strip);
       const b0 = document.querySelector("#theme"); if (b0) b0.remove();
     }
     const now = state.auto ? (G.T ? G.T.time : state.time) : state.time;
@@ -367,7 +367,7 @@ const Mood = (() => {
 
   function wake() { if (!strip) return; strip.classList.add("show"); idle = 0; }
 
-  // HOOKS
+  /* HOOKS */
 
   function monthSeason(d) { const m = d.getMonth(); return m < 2 || m === 11 ? "winter" : m < 5 ? "spring" : m < 8 ? "summer" : "autumn"; }
   function moonAt(d) { return ((((d.getTime() - 947182440000) / 86400000) / 29.530588) % 1 + 1) % 1; }
@@ -407,6 +407,7 @@ const Mood = (() => {
     if (wired) return;
     wired = true;
     addEventListener("keydown", (e) => {
+      if (!G.visible || typing(e) || e.metaKey || e.ctrlKey || e.altKey) return;
       const k = e.key;
       if (k === "d") set({ theme: state.theme === "light" ? "dark" : "light" });
       else if (k === "t") set({ time: cycle(TIMES, state.time), auto: false });
@@ -417,8 +418,9 @@ const Mood = (() => {
       else return;
       wake();
     });
-    addEventListener("mousemove", wake);
-    addEventListener("touchstart", wake);
+    const home = G.canvas ? G.canvas.parentElement : window;
+    home.addEventListener("mousemove", wake);
+    home.addEventListener("touchstart", wake, { passive: true });
     setInterval(() => { if (!strip) return; idle += 0.5; if (idle > 3) strip.classList.remove("show"); }, 500);
     setInterval(ui, 1000);
   }

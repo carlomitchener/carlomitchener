@@ -1,7 +1,8 @@
 import { expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { join, relative } from "node:path";
 import { globals, walk, type Output, type Site, type Spec } from "./build.ts";
+import { pages } from "../scripts/build.ts";
 
 /* SITE */
 
@@ -102,3 +103,30 @@ test("the site css never repeats a top-level selector with another rule between"
     });
   }
 });
+
+/* LINKS */
+
+const HREF = /href="([^"]+)"/g;
+
+const BUCKET = /^\/(cdn|status)\/.+\.[a-z0-9]+$/;
+
+function lands(out: string, href: string) {
+  const path = href.split(/[#?]/)[0];
+  if (!path) return true;
+  const hit = join(out, path);
+  return existsSync(path.endsWith("/") ? join(hit, "index.html") : hit);
+}
+
+test("every internal link the built site carries lands on an output in dist", async () => {
+  const done = await pages();
+  const out = done.site.out;
+  const broken: string[] = [];
+  for (const file of walk(out).filter((one) => one.endsWith(".html"))) {
+    const html = readFileSync(file, "utf8");
+    for (const [, href] of html.matchAll(HREF)) {
+      if (!href.startsWith("/") || BUCKET.test(href)) continue;
+      if (!lands(out, href)) broken.push(`${relative(out, file)} -> ${href}`);
+    }
+  }
+  expect(broken).toEqual([]);
+}, 120000);
