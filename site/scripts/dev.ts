@@ -53,6 +53,7 @@ const server = Bun.serve({
       if (path.startsWith("/cdn/feed/") && (await local.exists())) return new Response(local);
       return fallback(path);
     }
+    if (path.startsWith("/status/") && path.endsWith(".json")) return remote(path);
     if (path.endsWith("/")) path += "index.html";
     const file = Bun.file(join(dist, path));
     if (await file.exists()) return new Response(file);

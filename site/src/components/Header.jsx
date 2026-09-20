@@ -1,11 +1,10 @@
 import { CATEGORIES } from "../config/shop.ts";
 import { Icon } from "./Icon.jsx";
-import { ProductCard } from "./ProductCard.jsx";
 import { PAGES } from "../pages/Pages.jsx";
 
 const CART = "/cart/";
 
-export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
+export function Header({ route, catalog = [], fly = false }) {
   const links = [{ slug: "all", name: "All", href: "/shop/" }, ...CATEGORIES.map(([slug, name]) => ({ slug, name, href: `/shop/${slug}/` })), { slug: "pages", name: "Pages", href: "/pages/" }];
   const current = (href) => (route === href || (href !== "/shop/" && route.startsWith(href)) ? "page" : undefined);
   const rows = (slug) =>
@@ -19,7 +18,8 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
       <div className="bar">
         <div className="home">
           <a className="mark" href="/" aria-label={fly ? "TheBird" : "Home"} data-fly={fly ? "" : undefined}>
-            <img src="/bird/bird-128.png" alt="TheBird" width="28" height="28" />
+            <img className="light" src="/bird/mark-light-128.png" srcSet="/bird/mark-light-256.png 2x" alt="TheBird" width="28" height="28" />
+            <img className="dark" src="/bird/mark-dark-128.png" srcSet="/bird/mark-dark-256.png 2x" alt="" width="28" height="28" />
           </a>
           <button className="tool back" type="button" aria-label="Back" data-back>
             <Icon name="chevron_left" />
@@ -72,12 +72,6 @@ export function Header({ route, catalog = [], latest = {}, now, fly = false }) {
                     ))}
                   </ul>
                 </div>
-                {latest[one.slug] ? (
-                  <div className="just">
-                    <p className="fine">Just Generated</p>
-                    <ProductCard product={latest[one.slug]} width={400} now={now} />
-                  </div>
-                ) : null}
               </div>
             ))}
             <div className="pane finder" data-pane="search" hidden>

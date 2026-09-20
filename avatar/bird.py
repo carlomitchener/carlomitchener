@@ -1,10 +1,7 @@
-# /// script
-# requires-python = ">=3.11"
-# dependencies = ["pillow"]
-# ///
-
 import os
+from types import SimpleNamespace
 from PIL import Image, ImageChops, ImageDraw
+from render import BIRD, LAYERS, render
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(DIR))
@@ -13,6 +10,8 @@ FILES_DIR = os.path.join(DIR, "files")
 MARKS_DIR = os.path.join(ROOT, "carlomitchener", "site", "public", "bird")
 
 SIZES = [32, 64, 128, 180, 192, 512, 1024]
+THEME_SIZES = [128, 256]
+RENDER = 1024
 TOUCH = 180
 THRESHOLD = 24
 MARGIN = 0.04
@@ -39,14 +38,16 @@ def bounds(image):
     lit = ImageChops.difference(image.convert("RGB"), ground).convert("L")
     return lit.point(lambda v: 255 if v > THRESHOLD else 0).getbbox()
 
-def square(image):
+def box(image):
     left, top, right, bottom = bounds(image)
     side = max(right - left, bottom - top) * (1 + 2 * MARGIN)
     x = (left + right) / 2
     y = (top + bottom) / 2
-    box = (round(x - side / 2), round(y - side / 2), round(x + side / 2), round(y + side / 2))
-    print(f"bird bbox {(left, top, right, bottom)} -> crop {box}")
-    return image.crop(box)
+    print(f"bird bbox {(left, top, right, bottom)} -> crop side {round(side)}")
+    return (round(x - side / 2), round(y - side / 2), round(x + side / 2), round(y + side / 2))
+
+def square(image):
+    return image.crop(box(image))
 
 # MASK
 
@@ -71,6 +72,19 @@ def marks():
         save(round_off(crop, size), MARKS_DIR, f"bird-{size}.png", optimize=True)
     save(resize(crop, (TOUCH, TOUCH)).convert("RGB"), MARKS_DIR, f"square-{TOUCH}.png", optimize=True)
 
+# THEMES
+
+def rendered(theme):
+    return render(SimpleNamespace(size=RENDER, theme=theme, bird=None, background=None, layers=set(LAYERS), glow=[True] * len(BIRD["glow"]), crop=False))
+
+def themes():
+    dark = rendered("dark")
+    window = box(dark)
+    for theme, image in [("dark", dark), ("light", rendered("light"))]:
+        crop = image.crop(window)
+        for size in THEME_SIZES:
+            save(round_off(crop, size), MARKS_DIR, f"mark-{theme}-{size}.png", optimize=True)
+
 # LOGO
 
 def tile(image, columns, rows):
@@ -90,6 +104,7 @@ def logo():
 
 def main():
     marks()
+    themes()
     logo()
 
 if __name__ == "__main__":

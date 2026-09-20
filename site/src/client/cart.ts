@@ -61,7 +61,7 @@ function stock() {
   if (!button) return;
   const buy = one<HTMLAnchorElement>("[data-buy]");
   const price = one<HTMLElement>("[data-price]");
-  const picked = one<HTMLElement>(".sizes button[aria-pressed='true']");
+  const picked = one<HTMLElement>("[data-sizes] button[aria-pressed='true']");
   if (picked) {
     button.dataset.variant = picked.dataset.variant;
     button.dataset.price = picked.dataset.price;
@@ -74,7 +74,7 @@ function stock() {
 }
 
 function pick(button: Element) {
-  for (const other of document.querySelectorAll(".sizes button")) other.setAttribute("aria-pressed", String(other === button));
+  for (const other of document.querySelectorAll("[data-sizes] button")) other.setAttribute("aria-pressed", String(other === button));
   stock();
 }
 
@@ -170,7 +170,7 @@ function lines() {
 document.addEventListener("click", (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (!target) return;
-  const size = target.closest(".sizes button");
+  const size = target.closest("[data-sizes] button");
   if (size) return pick(size);
   const drops = target.closest<HTMLButtonElement>("[data-add]");
   if (drops) return drop(drops);

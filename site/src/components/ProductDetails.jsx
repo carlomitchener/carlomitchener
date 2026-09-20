@@ -1,4 +1,4 @@
-import { LIVE_DAYS } from "../config/shop.ts";
+import { HELP, LIVE_DAYS } from "../config/shop.ts";
 import { cdnUrl, money, primaryName } from "../lib/shop.ts";
 import { Downloads } from "./Downloads.jsx";
 import { Icon } from "./Icon.jsx";
@@ -56,6 +56,19 @@ export function ProductDetails({ product, sizes, buy, printful, shop, tiles, now
       <Drop name="Size Guide">
         <p className="fine">
           Please use Printful's official size guide on their website. Tap <a href={printful} rel="noopener">View on Printful</a>.
+        </p>
+      </Drop>
+      <Drop name="Shipping">
+        <p className="fine">Manufacturing takes 2 to 5 working days. Shipping takes 5 to 10 working days. Bags always ship separately.</p>
+        <p className="fine">
+          Printful prints and ships every order. See their <a href={HELP.delivery} rel="noopener">delivery times</a>, <a href={HELP.shipping} rel="noopener">shipping rates</a>, the <a href={HELP.countries} rel="noopener">countries they do not ship to</a>, <a href={HELP.customs} rel="noopener">who pays customs</a> and <a href={HELP.updates} rel="noopener">current delays</a>.
+        </p>
+      </Drop>
+      <Drop name="Disclaimers">
+        <p className="fine">Printful cannot guarantee perfect placement of designs. The product you receive may look a little different from the mockups. Seams cut through the pattern and can show thin white lines.</p>
+        <p className="fine">Designs are printed on white polyester by sublimation. The inside of a garment stays white. Colours on fabric differ slightly from colours on a screen.</p>
+        <p className="fine">
+          Read Printful's <a href={HELP.disclaimers} rel="noopener">printing disclaimers</a> and <a href={HELP.aop} rel="noopener">how all-over printing works</a>.
         </p>
       </Drop>
       <Reviews review={review} printful={printful} />

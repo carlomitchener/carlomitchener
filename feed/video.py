@@ -1,7 +1,8 @@
 import glob
 import os
 import subprocess
-from config import CRF, WEB, WEB_MIN, FORMAT, FPS, FRAMES_DIR, FREEZE_DURATION, HEATMAP_DIR, HEATMAP_FPS, INTER_SEGMENT_FREEZE, MASTER, PRESET, RATE, SIZE
+from config import CRF, WEB, WEB_MIN, FORMAT, FPS, FRAMES_DIR, FREEZE_DURATION, HEATMAP_DIR, HEATMAP_FPS, INTER_SEGMENT_FREEZE, MASKS_DIR, MASTER, PRESET, RATE, SIZE
+from frames import flash_count, mask_path
 from music import compose_saga_audio
 
 # FFMPEG
@@ -13,13 +14,17 @@ def run_ffmpeg(ffmpeg, args):
 
 # CONCAT
 
-def _entries(frame_dir, fps, outer_freeze, boundary_freeze, segment_lengths):
-    frames = sorted(glob.glob(f"{frame_dir}/*.{FORMAT}"))
+def _entries(frame_dir, fps, outer_freeze, boundary_freeze, segment_lengths, masks=None):
+    frames = sorted(glob.glob(f"{frame_dir}/*.{FORMAT}"))[:sum(segment_lengths)]
     if not frames:
         return []
-    entries = [(frames[0], outer_freeze)]
+    entries = [] if masks else [(frames[0], outer_freeze)]
     cursor = 0
     for seg_i, seg_len in enumerate(segment_lengths):
+        if masks:
+            for _ in range(masks[seg_i][1]):
+                entries.append((frames[cursor], 1.0 / fps))
+                entries.append((masks[seg_i][0], 1.0 / fps))
         for path in frames[cursor:cursor + seg_len]:
             entries.append((path, 1.0 / fps))
         if seg_i < len(segment_lengths) - 1:
@@ -71,7 +76,8 @@ def _encode(ffmpeg, concat, audio, frames, size, output):
 def create_saga_videos(saga, work_dir, out_dir, ffmpeg):
     os.makedirs(out_dir, exist_ok=True)
     audio = compose_saga_audio(saga, f"{work_dir}/{saga.key}.wav")
-    entries = _entries(f"{work_dir}/{FRAMES_DIR}", FPS, FREEZE_DURATION, INTER_SEGMENT_FREEZE, saga.segment_lengths)
+    masks = [(mask_path(f"{work_dir}/{MASKS_DIR}", saga.key, i), flash_count(seg)) for i, seg in enumerate(saga.segments)]
+    entries = _entries(f"{work_dir}/{FRAMES_DIR}", FPS, FREEZE_DURATION, INTER_SEGMENT_FREEZE, saga.segment_lengths, masks)
     entries += _entries(f"{work_dir}/{HEATMAP_DIR}", HEATMAP_FPS, FREEZE_DURATION, INTER_SEGMENT_FREEZE, saga.segment_lengths)
     concat = _write_concat(entries, f"{work_dir}/concat.txt")
     duration = round(sum(duration for _, duration in entries), 3)

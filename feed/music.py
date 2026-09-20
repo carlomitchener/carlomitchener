@@ -6,6 +6,7 @@ from mrlypy.music.enums import ChordType, Movement, Scale
 from mrlypy.music.models import Voice
 from config import FPS, FREEZE_DURATION, HEATMAP_FPS, INTER_SEGMENT_FREEZE
 from enums import Way
+from frames import flash_count
 from models import MusicParams
 
 ROOT_NOTE = 43
@@ -96,19 +97,24 @@ def assemble_segment_track(track, beat_duration, open_freeze, close_freeze, rest
     timed += [(edge[-1], close_freeze)] if close_freeze > 0 else []
     return timed
 
+# FLASH
+
+def flash_track(chord, flashes, frame_duration):
+    staccato = [(chord, frame_duration / 2), ([], frame_duration / 2)]
+    return staccato * (2 * flashes)
+
 # HEATMAP TRACK
 
-def create_heatmap_track(music, target_len, music_config):
+def create_heatmap_track(scale, target, target_len, music_config):
     if target_len <= 0:
         return []
-    intervals = music_config.scales[music.scale]
+    intervals = music_config.scales[scale]
     note_pool = []
     for offset in [0, 12, 24]:
         note_pool.extend([ROOT_NOTE + i + offset for i in intervals])
     step = -1 if choice(["up", "down"]) == "up" else 1
-    start = [note_pool[(note_pool.index(n) + step) % len(note_pool)] for n in music.track[0]]
-    track = [start]
-    current = start
+    track = [target]
+    current = target
     for _ in range(target_len - 1):
         current = [note_pool[(note_pool.index(n) + step) % len(note_pool)] for n in current]
         track.append(current)
@@ -132,19 +138,23 @@ def compose_saga_audio(saga, path: str) -> str:
     heatmap_lengths = _halve_segment_lengths([s.count for s in saga.segments])
     frames_parts = []
     heatmap_parts = []
-    last_renderer = None
     n = len(saga.segments)
-    for i, seg in enumerate(saga.segments):
-        music, renderer, music_config = _compose(seg.music, seg.count)
+    composed = [_compose(seg.music, seg.count) for seg in saga.segments]
+    first_chord = composed[0][0].track[0]
+    for i, (seg, (music, renderer, music_config)) in enumerate(zip(saga.segments, composed)):
         open_freeze = FREEZE_DURATION if i == 0 else 0.0
         close_freeze = FREEZE_DURATION if i == n - 1 else INTER_SEGMENT_FREEZE
         rest = music.track[-1]
-        frames_timed = assemble_segment_track(music.track, 1.0 / FPS, open_freeze, close_freeze, rest)
+        opening = music.track[0]
+        flashes = flash_count(seg)
+        frames_timed = flash_track(opening, flashes, 1.0 / FPS)
+        frames_timed += assemble_segment_track(music.track, 1.0 / FPS, 0.0 if flashes else open_freeze, close_freeze, rest)
         frames_parts.append(renderer.render(frames_timed))
-        heatmap_track = create_heatmap_track(music, heatmap_lengths[i], music_config)
+        target = first_chord if i == n - 1 else opening
+        heatmap_track = create_heatmap_track(music.scale, target, heatmap_lengths[i], music_config)
         heatmap_timed = assemble_segment_track(heatmap_track, 2.0 / HEATMAP_FPS, open_freeze, close_freeze, rest)
         heatmap_parts.append(renderer.render(heatmap_timed))
-        last_renderer = renderer
+    last_renderer = composed[-1][1]
     frames_combined = np.concatenate(frames_parts)
     heatmap_combined = np.concatenate(heatmap_parts)
     full = np.concatenate([frames_combined, heatmap_combined])

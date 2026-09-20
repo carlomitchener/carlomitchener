@@ -53,7 +53,15 @@
 .mark img {
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+}
+
+.mark .dark,
+:root[data-mode="dark"] .mark .light {
+  display: none;
+}
+
+:root[data-mode="dark"] .mark .dark {
+  display: block;
 }
 
 .links {
@@ -250,13 +258,6 @@
   margin-bottom: var(--s3);
 }
 
-.explore {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  gap: var(--s8);
-  align-items: start;
-}
-
 .explore .lead {
   display: block;
   margin-bottom: var(--s4);
@@ -290,10 +291,6 @@
 .explore .cols a:hover,
 .explore .lead:hover {
   color: var(--accent);
-}
-
-.explore .just .card h3 {
-  font-size: var(--t-small);
 }
 
 .big {
@@ -521,10 +518,6 @@ html.held {
   .pane {
     padding: var(--s6) 0 var(--s9);
   }
-
-  .explore {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 @media (min-width: 768px) {
@@ -562,7 +555,8 @@ html.held {
   color: var(--accent);
 }
 
-.foot .catalog summary a {
+.foot .catalog summary a,
+.foot .catalog summary span {
   color: var(--fg);
 }
 
@@ -582,16 +576,22 @@ html.held {
   display: contents;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 1024px) {
   .foot .catalog {
-    display: block;
-    columns: 3;
-    column-gap: var(--s5);
+    flex-direction: row;
+    gap: var(--s5);
+  }
+
+  .foot .catalog .col {
+    display: grid;
+    flex: 1;
+    gap: 0;
+    align-content: start;
+    min-width: 0;
   }
 
   .foot .catalog details {
     border: 0;
-    break-inside: avoid;
     padding-bottom: var(--s5);
   }
 
@@ -617,61 +617,12 @@ html.held {
     gap: var(--s1);
     padding: 0;
   }
-
-}
-
-@media (min-width: 1024px) {
-  .foot .catalog {
-    columns: auto;
-    display: flex;
-    flex-direction: row;
-    gap: var(--s5);
-  }
-
-  .foot .catalog .col {
-    display: grid;
-    flex: 1;
-    gap: 0;
-    align-content: start;
-    min-width: 0;
-  }
 }
 
 .foot .rule {
   height: var(--hair);
   background: var(--line);
   margin: var(--s2) 0;
-}
-
-.foot .sections {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s2);
-}
-
-.foot .sections .group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 var(--s3);
-}
-
-.foot .sections h3 {
-  font-size: var(--t-fine);
-  font-weight: 600;
-  color: var(--fg);
-  min-width: 4rem;
-}
-
-.foot .sections ul {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.foot .sections li:not(:last-child)::after {
-  content: "|";
-  margin: 0 var(--s2);
-  color: var(--line);
 }
 
 .foot .legal {

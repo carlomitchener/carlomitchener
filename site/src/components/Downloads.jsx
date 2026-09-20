@@ -12,7 +12,7 @@ export function Downloads({ product, tiles }) {
         <Icon name="expand_more" extra="small" />
       </summary>
       <div className="inside">
-        <Carousel slides={slides} pixel download label="Tile" />
+        <Carousel slides={slides} pixel label="Tile" />
         <p className="get">
           <a className="pill go wide" href={url(tiles[0])} download data-download>
             <Icon name="download" />

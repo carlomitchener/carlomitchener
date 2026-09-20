@@ -56,7 +56,7 @@ if (header) {
     timer = window.setTimeout(() => (name ? show(name) : hide()), wait);
   };
 
-  const sticky = () => open === "search" || (open && !wide.matches);
+  const sticky = () => open === "search" || open === "bag" || (open && !wide.matches);
 
   /* DESKTOP */
 
@@ -64,7 +64,6 @@ if (header) {
     link.addEventListener("mouseenter", () => wide.matches && later(link.dataset.menu!, open ? 0 : HOVER));
     link.addEventListener("focus", () => wide.matches && show(link.dataset.menu!));
   }
-  bag.addEventListener("mouseenter", () => wide.matches && later("bag", open ? 0 : HOVER));
   for (const away of [header.querySelector(".home")!, search]) away.addEventListener("mouseenter", () => !sticky() && later("", LEAVE));
   header.addEventListener("mouseleave", () => !sticky() && later("", LEAVE));
   flyout.addEventListener("mouseenter", () => clearTimeout(timer));
@@ -81,6 +80,11 @@ if (header) {
   /* BOTH */
 
   search.addEventListener("click", () => (open === "search" ? hide() : show("search")));
+  bag.addEventListener("click", (event) => {
+    if (!wide.matches) return;
+    event.preventDefault();
+    open === "bag" ? hide() : show("bag");
+  });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && open) hide();
   });

@@ -32,10 +32,24 @@ export type Catalog = { id: number; category: string; title: string; technique: 
 
 export const MORE_TILE = 3;
 
-export const ALIKE = 8;
+export const ALIKE = 4;
+
+export const MATCH = 4;
+
+export const HELP = {
+  delivery: "https://help.printful.com/hc/articles/360017631360",
+  shipping: "https://www.printful.com/shipping",
+  countries: "https://help.printful.com/hc/articles/360014066779",
+  customs: "https://help.printful.com/hc/articles/360014066159",
+  updates: "https://www.printful.com/recent-updates",
+  status: "https://www.printfulstatus.com/",
+  disclaimers: "https://help.printful.com/hc/articles/21140050579740",
+  aop: "https://help.printful.com/hc/articles/21045992765468",
+  aopMore: "https://help.printful.com/hc/articles/360014007460",
+};
 
 export const HOME_POSTS = 12;
 
 export const HOME_ROW = 8;
 
-export const FOOT_COLUMNS = 6;
+export const FOOT_COLUMNS = 5;

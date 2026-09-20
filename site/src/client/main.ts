@@ -2,6 +2,7 @@ import "./header.ts";
 import "./mode.ts";
 import "./footer.ts";
 import "./cart.ts";
+import "./warp.ts";
 import "./gallery.ts";
 import "./flip.ts";
 import "./filter.ts";

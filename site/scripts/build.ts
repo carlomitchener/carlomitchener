@@ -4,7 +4,7 @@ import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { build, page, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
 import { resolve as resolveLink } from "../ssg/links.ts";
-import { ALIKE, CATEGORIES, HOME_POSTS, HOME_ROW, LIVE_DAYS, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
+import { ALIKE, CATEGORIES, HOME_POSTS, HOME_ROW, LIVE_DAYS, MATCH, PRINTFUL, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { loadEnv } from "../src/lib/env.ts";
 import { sheet } from "../src/lib/md.ts";
@@ -60,6 +60,7 @@ type Leaf = {
   data?: object;
   noindex?: boolean;
   fly?: boolean;
+  preconnect?: string;
 };
 
 /* CLIENT */
@@ -79,7 +80,6 @@ async function bundle() {
 
 let catalogRows: Catalog[] = [];
 
-let latestRows: Record<string, Row> = {};
 
 function shell(site_: Site, leaf: Leaf, body: unknown) {
   const node = h(
@@ -96,9 +96,8 @@ function shell(site_: Site, leaf: Leaf, body: unknown) {
       scripts: [site_.asset("main.js")],
       data: leaf.data,
       noindex: leaf.noindex ?? false,
+      preconnect: leaf.preconnect,
       catalog: catalogRows,
-      latest: latestRows,
-      now,
       fly: leaf.fly ?? false,
     },
     body as never,
@@ -109,6 +108,8 @@ function shell(site_: Site, leaf: Leaf, body: unknown) {
 /* DATA */
 
 const buyUrl = (id: string) => (SHOP ? `https://${SHOP}/cart/${id}:1` : "/cart/");
+
+const SHOP_ORIGIN = SHOP ? `https://${SHOP}` : undefined;
 
 const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
 
@@ -239,6 +240,15 @@ function pairs(list: Row[], lone = false): Pair[] {
   return out.sort(newest);
 }
 
+const shuffle = <T>(list: T[]) => {
+  const out = [...list];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+};
+
 const newestFirst = (list: Pair[]) => {
   const seen = new Set<string>();
   const first: Pair[] = [];
@@ -267,6 +277,8 @@ function feed(site_: Site): Post[] {
 
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
+type Design = { design: string; count: number; created: string; released: string };
+
 function collect(site_: Site) {
   const catalogFile = site_.input("catalog").files[0];
   const reviewsFile = site_.input("reviews").files[0];
@@ -276,9 +288,6 @@ function collect(site_: Site) {
   const every = rows(site_, catalog);
   const all = pairs(every.filter((row) => row.released));
   const pending = pairs(every.filter((row) => !row.released), true);
-  latestRows = {};
-  for (const row of all) if (!latestRows[row.category]) latestRows[row.category] = row;
-  if (all[0]) latestRows.all = all[0];
   const index = site_.input("feed").files[0] ?? site_.input("feed").path;
   const shown = feed(site_);
   const byType = new Map<string, Pair[]>();
@@ -295,10 +304,12 @@ function collect(site_: Site) {
     catalog
       .filter((entry) => (!slug || entry.category === slug) && ofProduct(entry).length)
       .map((entry) => ({ name: entry.title, href: shopRoute(entry), count: ofProduct(entry).length }));
+  const sameCategoryFirst = (row: Pair) => (a: Pair, b: Pair) => Number(b.category === row.category) - Number(a.category === row.category) || (a.created < b.created ? 1 : -1);
+  const matching = (row: Pair): Pair[] => all.filter((one) => one.design === row.design && one.type !== row.type).sort(sameCategoryFirst(row)).slice(0, MATCH);
   const alike = (row: Pair): Pair[] => {
     const seen = new Set<string>([row.type]);
     const out: Pair[] = [];
-    const ranked = all.filter((one) => one.type !== row.type).sort((a, b) => Number(b.category === row.category) - Number(a.category === row.category) || (a.created < b.created ? 1 : -1));
+    const ranked = all.filter((one) => one.type !== row.type && one.design !== row.design).sort(sameCategoryFirst(row));
     for (const one of ranked) {
       if (seen.has(one.type)) continue;
       seen.add(one.type);
@@ -308,12 +319,15 @@ function collect(site_: Site) {
     return out;
   };
   const routes: Route[] = [];
-  const sections = CATEGORIES.map(([slug, name]) => ({ slug, name, products: inCategory(slug).slice(0, HOME_ROW) })).filter((one) => one.products.length);
-  const designs = [...new Set(all.map((row) => row.design))].map((design) => {
-    const mine = all.filter((row) => row.design === design);
-    return { design, count: mine.length, created: mine[0].created, released: mine[0].released };
-  });
-  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown.slice(0, HOME_POSTS), designs, sections }, inputs: [catalogFile, index], at: today() });
+  const sections = CATEGORIES.map(([slug, name]) => ({ slug, name, products: shuffle(inCategory(slug)).slice(0, HOME_ROW) })).filter((one) => one.products.length);
+  const designs = [...new Set(all.map((row) => row.design))]
+    .map((design) => {
+      const mine = all.filter((row) => row.design === design);
+      return { design, count: mine.length, created: mine[0].created, released: mine[0].released };
+    })
+    .sort((a, b) => (a.released < b.released ? 1 : -1));
+  const fresh = designs[0] ? { ...designs[0], products: newestFirst(all.filter((row) => row.design === designs[0].design)).slice(0, HOME_ROW - 1) } : null;
+  routes.push({ route: "/", kind: "home", name: site.name, data: { products: newestFirst(all), posts: shown.slice(0, HOME_POSTS), designs, sections, fresh }, inputs: [catalogFile, index], at: today() });
   routes.push({ route: "/shop/designs/", kind: "designs", name: "Designs", data: { trail: [{ name: "Shop", href: "/shop/" }, { name: "Designs" }], title: "Designs", lead: `${plural(designs.length, "design")}, one moon each.`, designs }, inputs: [catalogFile, index], at: today() });
   routes.push({
     route: "/shop/",
@@ -388,7 +402,7 @@ function collect(site_: Site) {
       kind: "product",
       name: row.title,
       hidden: true,
-      data: { product: row, family: byType.get(row.type) ?? [row], alike: alike(row), review: rated[row.type] ?? null, preview: false },
+      data: { product: row, family: byType.get(row.type) ?? [row], matching: matching(row), alike: alike(row), review: rated[row.type] ?? null, preview: false },
       inputs: reviewsFile ? [catalogFile, reviewsFile] : [catalogFile],
       at: row.created.slice(0, 10),
     });
@@ -399,7 +413,7 @@ function collect(site_: Site) {
       kind: "product",
       name: row.title,
       hidden: true,
-      data: { product: row, family: pendingByType.get(row.type) ?? [row], alike: alike(row), review: rated[row.type] ?? null, preview: true },
+      data: { product: row, family: pendingByType.get(row.type) ?? [row], matching: [], alike: alike(row), review: rated[row.type] ?? null, preview: true },
       inputs: reviewsFile ? [catalogFile, reviewsFile] : [catalogFile],
       at: row.created.slice(0, 10),
     });
@@ -479,8 +493,8 @@ function cover(products: Pair[]) {
 function draw(site_: Site, route: Route): Output[] {
   const at = route.route === "/404.html" ? "404.html" : page(route.route);
   if (route.kind === "home") {
-    const { products, posts: shown, designs, sections } = route.data as { products: Pair[]; posts: Post[]; designs: { design: string; count: number; created: string; released: string }[]; sections: { slug: string; name: string; products: Pair[] }[] };
-    const body = h(Home, { posts: shown, designs, sections, now });
+    const { products, posts: shown, designs, sections, fresh } = route.data as { products: Pair[]; posts: Post[]; designs: Design[]; sections: { slug: string; name: string; products: Pair[] }[]; fresh: (Design & { products: Pair[] }) | null };
+    const body = h(Home, { posts: shown, designs, sections, fresh, now });
     return [{ path: at, bytes: shell(site_, { route: route.route, name: site.name, description: site.tagline, image: cover(products), fly: true }, body) }];
   }
   if (route.kind === "shop") {
@@ -518,7 +532,7 @@ function draw(site_: Site, route: Route): Output[] {
   }
   if (route.kind === "gift") {
     const { card, cards } = route.data as { card: Gift; cards: Gift[] };
-    const leaf = { route: route.route, name: `${card.name} Gift Card`, description: `${card.name} gift card, angel numbers from $${card.from} to $${card.to}. Sent by email, never expires.` };
+    const leaf = { route: route.route, name: `${card.name} Gift Card`, description: `${card.name} gift card, angel numbers from $${card.from} to $${card.to}. Sent by email, never expires.`, preconnect: SHOP_ORIGIN };
     return [{ path: at, bytes: shell(site_, leaf, h(GiftCard, { card, cards, product: card.product, buy: buyUrl(card.product.variants[0].id) })) }];
   }
   if (route.kind === "page") {
@@ -550,7 +564,7 @@ function post(site_: Site, route: Route, at: string): Output[] {
 const sibling = (one: Row) => ({ key: one.key, created: one.created, released: one.released, price: one.price, variants: one.variants, images: one.images, files: one.files, available: one.available });
 
 function product(site_: Site, route: Route, at: string): Output[] {
-  const { product: row, family, alike, review, preview } = route.data as { product: Pair; family: Pair[]; alike: Pair[]; review: Review | null; preview: boolean };
+  const { product: row, family, matching, alike, review, preview } = route.data as { product: Pair; family: Pair[]; matching: Pair[]; alike: Pair[]; review: Review | null; preview: boolean };
   const sizes = row.variants.map((variant) => ({ id: variant.id, size: variant.size, price: variant.price }));
   const siblings: Record<string, unknown> = {};
   for (const one of family) siblings[one.design] = { light: sibling(one.light), dark: sibling(one.dark) };
@@ -562,7 +576,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
     { name: row.design },
   ];
   const body = [
-    h(Product, { key: "product", trail, product: row, family, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now, review, preview }),
+    h(Product, { key: "product", trail, product: row, family, matching, alike, sizes, buy: buyUrl(row.variant), printful: PRINTFUL + row.link, shop: shopRoute(row), tiles: TILES, now, review, preview }),
     h("script", { key: "siblings", type: "application/json", id: "siblings", dangerouslySetInnerHTML: { __html: JSON.stringify(siblings) } }),
   ];
   const data = {
@@ -581,7 +595,7 @@ function product(site_: Site, route: Route, at: string): Output[] {
       availability: row.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
     },
   };
-  return [{ path: at, bytes: shell(site_, { route: route.route, name: row.title, description: describe(row), image: previewOf(row), data, noindex: true }, body) }];
+  return [{ path: at, bytes: shell(site_, { route: route.route, name: row.title, description: describe(row), image: previewOf(row), data, noindex: true, preconnect: SHOP_ORIGIN }, body) }];
 }
 
 /* SPEC */

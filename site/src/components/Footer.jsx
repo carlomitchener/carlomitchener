@@ -25,50 +25,42 @@ const HELP = site.pages.filter((one) => one.href !== "/about/");
 
 function pack(groups, count) {
   const columns = Array.from({ length: Math.min(count, groups.length) }, () => ({ height: 0, groups: [] }));
-  for (const group of [...groups].sort((a, b) => b.rows.length - a.rows.length)) {
+  for (const group of [...groups].sort((a, b) => b.links.length - a.links.length)) {
     const column = columns.reduce((low, one) => (one.height < low.height ? one : low));
     column.groups.push(group);
-    column.height += group.rows.length + 2;
+    column.height += group.links.length + 2;
   }
   for (const column of columns) column.groups.sort((a, b) => groups.indexOf(a) - groups.indexOf(b));
   return columns.filter((one) => one.groups.length).sort((a, b) => groups.indexOf(a.groups[0]) - groups.indexOf(b.groups[0]));
 }
 
-function Group({ name, links, rel }) {
-  return (
-    <div className="group">
-      <h3>{name}</h3>
-      <ul>
-        {links.map((one) => (
-          <li key={one.href}>
-            <a href={one.href} rel={rel}>
-              {one.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
 export function Footer({ catalog = [] }) {
-  const groups = CATEGORIES.map(([slug, name]) => ({ slug, name, rows: catalog.filter((row) => row.category === slug) })).filter((one) => one.rows.length);
+  const shop = CATEGORIES.map(([slug, name]) => ({ slug, name, href: `/shop/${slug}/`, links: catalog.filter((row) => row.category === slug).map((row) => ({ name: row.title, href: `/${row.handle}/` })) })).filter((one) => one.links.length);
+  const groups = [
+    ...shop,
+    { slug: "site", name: "Site", links: SITE },
+    { slug: "help", name: "Help", links: HELP },
+    { slug: "files", name: "Files", links: FILES },
+    { slug: "socials", name: "Socials", links: site.socials, rel: "me noopener" },
+  ];
   return (
     <footer className="foot">
       <div className="wrap">
-        <nav className="catalog" aria-label="Shop" data-catalog>
+        <nav className="catalog" aria-label="Site" data-catalog>
           {pack(groups, FOOT_COLUMNS).map((column, i) => (
             <div key={i} className="col">
               {column.groups.map((group) => (
                 <details key={group.slug} className="drop" style={{ order: groups.indexOf(group) }}>
                   <summary>
-                    <a href={`/shop/${group.slug}/`}>{group.name}</a>
+                    {group.href ? <a href={group.href}>{group.name}</a> : <span>{group.name}</span>}
                     <Icon name="expand_more" extra="small" />
                   </summary>
                   <ul>
-                    {group.rows.map((row) => (
-                      <li key={row.handle}>
-                        <a href={`/${row.handle}/`}>{row.title}</a>
+                    {group.links.map((one) => (
+                      <li key={one.href}>
+                        <a href={one.href} rel={group.rel}>
+                          {one.name}
+                        </a>
                       </li>
                     ))}
                   </ul>
@@ -76,13 +68,6 @@ export function Footer({ catalog = [] }) {
               ))}
             </div>
           ))}
-        </nav>
-        <div className="rule"></div>
-        <nav className="sections" aria-label="Site">
-          <Group name="Site" links={SITE} />
-          <Group name="Help" links={HELP} />
-          <Group name="Files" links={FILES} />
-          <Group name="Socials" links={site.socials} rel="me noopener" />
         </nav>
         <div className="rule"></div>
         <div className="legal">

@@ -1,6 +1,6 @@
 import { LIVE_DAYS } from "../config/shop.ts";
 
-export const DAY = 24 * 60 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
 
 export const LUNAR = LIVE_DAYS * DAY;
 
@@ -25,8 +25,5 @@ export function countdown(ms: number) {
 
 export function label(born: string | number, now = Date.now()) {
   const ms = left(born, now);
-  if (ms <= 0) return "Gone";
-  if (now - new Date(born).getTime() < DAY) return "Just generated";
-  if (ms < DAY) return "Leaving soon";
-  return `${countdown(ms)} left`;
+  return ms <= 0 ? "Gone" : `${countdown(ms)} left`;
 }

@@ -26,6 +26,13 @@
   color: var(--accent);
 }
 
+.strip .life {
+  margin-right: auto;
+  font-family: var(--mono);
+  font-size: var(--t-fine);
+  color: var(--dim);
+}
+
 /* DESIGNS */
 
 .designs {

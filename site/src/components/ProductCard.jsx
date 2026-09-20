@@ -10,7 +10,7 @@ function Shot({ product, primary, width, eager, tiles }) {
   return <img className={`tile ${primary}`} src={tileUrl(product.design, primary, 3)} alt={product.title} width="88" height="88" loading="lazy" decoding="async" />;
 }
 
-export function ProductCard({ product, width = 800, eager = false, tiles = false, now }) {
+export function ProductCard({ product, width = 800, eager = false, tiles = false, life = true, now }) {
   return (
     <a className="card" href={productUrl(product.key)} data-design={product.design} data-group={product.group || undefined} data-secondary={product.secondary?.length ? product.secondary.join(" ") : undefined} data-created={product.created} data-price={product.price}>
       <span className="shot">
@@ -20,7 +20,8 @@ export function ProductCard({ product, width = 800, eager = false, tiles = false
       </span>
       <h3 className={tiles ? "mono" : undefined}>{tiles ? product.design : product.title}</h3>
       <span className="price">
-        {money(product.price)} · {product.released ? <Life born={product.released} now={now} /> : "in the batch"}
+        {money(product.price)}
+        {life ? <> · {product.released ? <Life born={product.released} now={now} /> : "in the batch"}</> : null}
       </span>
     </a>
   );

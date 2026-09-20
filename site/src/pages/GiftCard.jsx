@@ -71,7 +71,7 @@ export function GiftCard({ card, cards, product, buy }) {
                 </a>
               ))}
             </nav>
-            <div className="sizes" role="group" aria-label="Amount">
+            <div className="sizes" role="group" aria-label="Amount" data-sizes>
               {product.variants.map((variant, i) => (
                 <button type="button" key={variant.id} className="mono" data-variant={variant.id} data-price={variant.price} data-size={`$${whole(variant.price)}`} aria-pressed={i === 0 ? "true" : "false"} disabled={!variant.available}>
                   {whole(variant.price)}

@@ -1,10 +1,12 @@
 const typing = (target: EventTarget | null) => target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName);
+const wide = matchMedia("(min-width: 900px)");
 
 function mount(host: HTMLElement) {
   const stage = host.querySelector<HTMLImageElement>("[data-stage]");
-  const link = host.querySelector<HTMLAnchorElement>("[data-stage-link]");
+  const opener = host.querySelector<HTMLButtonElement>("[data-stage-button]");
   const count = host.querySelector<HTMLElement>("[data-count]");
   const thumbs = [...host.querySelectorAll<HTMLButtonElement>("[data-thumb]")];
+  const full = document.querySelector<HTMLDialogElement>("dialog[data-full]");
   const section = host.parentElement;
   const button = section?.querySelector<HTMLAnchorElement>("[data-download]") ?? null;
   const name = section?.querySelector<HTMLElement>("[data-download-name]") ?? null;
@@ -17,7 +19,6 @@ function mount(host: HTMLElement) {
     stage.src = image.dataset.full ?? image.src;
     stage.alt = image.dataset.alt ?? "";
     stage.dataset.style = image.dataset.style;
-    if (link) link.href = image.dataset.link ?? stage.src;
     if (button) button.href = image.dataset.link ?? stage.src;
     if (name) name.textContent = image.dataset.name ?? "";
     if (count) count.textContent = `${index + 1} / ${thumbs.length}`;
@@ -51,8 +52,8 @@ function mount(host: HTMLElement) {
       show(index + (dx < 0 ? 1 : -1));
     }
   });
-  link?.addEventListener("click", (event) => {
-    if (swiped) event.preventDefault();
+  opener?.addEventListener("click", () => {
+    if (!swiped && wide.matches) full?.showModal();
   });
 
   if (host.dataset.keys !== undefined) {
@@ -63,7 +64,6 @@ function mount(host: HTMLElement) {
       else return;
       event.preventDefault();
     });
-    const full = document.querySelector<HTMLDialogElement>("dialog[data-full]");
     document.addEventListener("click", (event) => {
       const target = event.target instanceof Element ? event.target : null;
       if (!target) return;

@@ -16,6 +16,8 @@ MAX_MASK = 64
 
 # VIDEO
 FPS = 8
+FLASHES = 4
+FLASH_CONWAY = True
 HEATMAP_FPS = 32
 FREEZE_DURATION = 0.5
 INTER_SEGMENT_FREEZE = 0.5
@@ -30,6 +32,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join("data", os.path.relpath(HERE))
 FORMAT = "png"
 FRAMES_DIR = "frames"
+MASKS_DIR = "masks"
 HEATMAP_DIR = "heatmap"
 
 # FEED

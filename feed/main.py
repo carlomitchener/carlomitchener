@@ -12,8 +12,8 @@ from mrlypy.core.state import choice, seed as seed_state
 from mrlypy.life.crop import crop_grids
 from mrlypy.life.enums import Fate
 from mrlypy.two import Cell2d
-from config import ATTEMPTS, DATA_DIR, FPS, FRAMES_DIR, POSTS, HEATMAP_DIR, HEATMAP_FPS, INDEX, LIVE_DAYS, MANIFEST, MAX_GENERATIONS, MAX_SEGMENTS, MIN_GENERATIONS, POSTER, RATE, VERSION, files
-from frames import create_saga_frames, create_saga_poster, frame_path
+from config import ATTEMPTS, DATA_DIR, FLASHES, FPS, FRAMES_DIR, POSTS, HEATMAP_DIR, HEATMAP_FPS, INDEX, LIVE_DAYS, MANIFEST, MASKS_DIR, MAX_GENERATIONS, MAX_SEGMENTS, MIN_GENERATIONS, POSTER, RATE, VERSION, files
+from frames import create_saga_frames, create_saga_masks, create_saga_poster, frame_path
 from heatmap import create_saga_heatmap
 from models import Saga, Task
 from setup import setup_saga, setup_segment
@@ -81,11 +81,20 @@ def _truncate_segment(segment: Task, length: int) -> Task:
 
 # SAGA
 
+def _pad_grids(grids: List[Cell2d], size: int) -> List[Cell2d]:
+    current = grids[0].types.shape[0]
+    if current >= size:
+        return grids
+    before = (size - current) // 2
+    after = size - current - before
+    return [Cell2d(types=np.pad(g.types, ((before, after), (before, after)), mode="constant", constant_values=0)) for g in grids]
+
 def _finalize_saga(saga: Saga, attempts: int) -> Saga:
     all_grids = []
     for seg in saga.segments:
         all_grids.extend(seg.result.grids)
-    saga.grids = crop_grids(all_grids)
+    largest_mask = max(seg.mask.cell.types.shape[0] for seg in saga.segments)
+    saga.grids = _pad_grids(crop_grids(all_grids), largest_mask)
     saga.segment_lengths = [len(s.result.grids) for s in saga.segments]
     saga.count = len(saga.grids)
     saga.time = round(sum((s.result.time or 0.0) for s in saga.segments), 2)
@@ -99,7 +108,8 @@ def generate_saga(seed: int, key: str) -> Saga:
         prev_grid = None
         for index in range(MAX_SEGMENTS):
             segment = _generate_segment(saga, index, prev_grid)
-            if segment.count == 0:
+            if segment.count < MIN_GENERATIONS:
+                print(f"Segment {index} ran only {segment.count} generations, retrying.")
                 break
             saga.segments.append(segment)
             if segment.result.fate == Fate.LIFE:
@@ -152,6 +162,7 @@ def _manifest(saga: Saga, at: str, videos: Dict[str, Any], out_dir: str) -> Dict
         "at": at,
         "story": _story(saga),
         "fps": FPS,
+        "flashes": FLASHES,
         "heatmap_fps": HEATMAP_FPS,
         "rate": RATE,
         "canvas": int(saga.grids[0].types.shape[0]),
@@ -232,7 +243,9 @@ def make(seed: int, root: str) -> Dict[str, Any]:
     mark("saga")
     work = os.path.join(root, "work", key)
     out = os.path.join(root, POSTS, key)
+    shutil.rmtree(work, ignore_errors=True)
     create_saga_frames(saga, f"{work}/{FRAMES_DIR}")
+    create_saga_masks(saga, f"{work}/{MASKS_DIR}")
     mark("frames")
     create_saga_heatmap(saga, f"{work}/{HEATMAP_DIR}")
     mark("heatmap")

@@ -227,12 +227,13 @@
   gap: var(--s3);
 }
 
-.shots a {
+.shots button {
   display: block;
+  width: 100%;
+  padding: 0;
   overflow: hidden;
   border-radius: var(--r-media);
   background: var(--plate);
-  cursor: zoom-in;
 }
 
 .shots img {
@@ -244,7 +245,7 @@
   transition: transform var(--slow) var(--ease);
 }
 
-.shots a:hover img {
+.shots button:hover img {
   transform: scale(1.03);
 }
 
@@ -272,6 +273,14 @@
     margin-top: var(--s5);
   }
 
+  .left .thumbs {
+    display: none;
+  }
+
+  .stage .zoom {
+    cursor: zoom-in;
+  }
+
   .gallery {
     max-width: none;
   }
@@ -297,9 +306,11 @@
   aspect-ratio: 1;
 }
 
-.stage a {
+.stage .shot {
   display: block;
-  cursor: zoom-in;
+  width: 100%;
+  padding: 0;
+  cursor: default;
   touch-action: pan-y;
 }
 
@@ -404,7 +415,7 @@
   max-width: none;
   max-height: none;
   margin: 0;
-  padding: 0 var(--gutter) var(--s8);
+  padding: 0 0 var(--s8);
   border: 0;
   background: var(--ground);
   color: var(--fg);
@@ -434,11 +445,13 @@
   align-items: center;
   justify-content: space-between;
   height: var(--header);
+  max-width: none;
   background: var(--ground);
 }
 
 .all .shots {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  padding-inline: var(--gutter);
 }
 .side {
   display: grid;
@@ -469,6 +482,12 @@
 
 .details .drop:last-of-type {
   border-bottom: var(--hair) solid var(--line);
+}
+
+.drop .inside {
+  display: grid;
+  gap: var(--s3);
+  padding-bottom: var(--s3);
 }
 
 .drop .inside .fine a {
@@ -511,6 +530,11 @@
 
 .variations .tiles a:hover img {
   transform: scale(1.06);
+}
+
+.pick {
+  display: grid;
+  gap: var(--s2);
 }
 
 .sizes {
@@ -579,6 +603,22 @@
 
 .alike .grid {
   margin-top: var(--s5);
+}
+
+/* WARP */
+
+.warp {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.28s var(--ease);
+}
+
+.warp.on {
+  opacity: 1;
 }
 
 /* CART */

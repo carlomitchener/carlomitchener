@@ -7,7 +7,7 @@ const FONTS = "/fonts/fonts.css";
 
 const MODE_SCRIPT = `(function(){try{var r=document.documentElement,k="${MODE_KEY}",c={light:"${THEME_COLORS.light}",dark:"${THEME_COLORS.dark}"},m=new URLSearchParams(location.search).get("mode");if(m!=="dark"&&m!=="light"){m=null;try{m=localStorage.getItem(k)}catch(e){}}if(m!=="dark"&&m!=="light")m=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";r.dataset.mode=m;var t=document.querySelector('meta[name="theme-color"]');if(t)t.content=c[m]}catch(e){}})();`;
 
-export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, catalog, latest = {}, now, fly = false, children }) {
+export function Page({ root, route, title, description, image, type = "website", meta = [], sheets = [], scripts = [], data, noindex = false, preconnect, catalog, fly = false, children }) {
   const url = root + route;
   return (
     <html lang="en">
@@ -22,6 +22,7 @@ export function Page({ root, route, title, description, image, type = "website",
         {noindex ? <meta name="robots" content="noindex" /> : null}
         <link rel="canonical" href={url} />
         <link rel="preconnect" href={SHOPIFY_CDN} />
+        {preconnect ? <link rel="preconnect" href={preconnect} /> : null}
         <meta property="og:site_name" content={site.name} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -49,7 +50,7 @@ export function Page({ root, route, title, description, image, type = "website",
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Header route={route} catalog={catalog} latest={latest} now={now} fly={fly} />
+        <Header route={route} catalog={catalog} fly={fly} />
         <div className="veil" data-veil></div>
         <main id="main">{children}</main>
         <Footer catalog={catalog} />

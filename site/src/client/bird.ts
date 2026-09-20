@@ -6,7 +6,7 @@ const TURN = 3;
 const EDGE = 40;
 
 if (mark) {
-  const image = mark.querySelector("img")!;
+  const shown = () => [...mark.querySelectorAll("img")].find((one) => getComputedStyle(one).display !== "none") ?? mark.querySelector("img")!;
   let ghost: HTMLImageElement | null = null;
   let raf = 0;
   let last = 0;
@@ -43,6 +43,7 @@ if (mark) {
   };
 
   const fly = () => {
+    const image = shown();
     const rect = image.getBoundingClientRect();
     ghost = image.cloneNode() as HTMLImageElement;
     ghost.className = "ghost";
@@ -62,7 +63,7 @@ if (mark) {
 
   const land = () => {
     cancelAnimationFrame(raf);
-    const rect = image.getBoundingClientRect();
+    const rect = shown().getBoundingClientRect();
     const hx = rect.left + rect.width / 2;
     const hy = rect.top + rect.height / 2;
     const dir = Math.atan2(hy - y, hx - x);

@@ -1,16 +1,16 @@
 import { grid } from "../lib/shop.ts";
 import { Icon } from "./Icon.jsx";
 
-export function Carousel({ slides, keys = false, pixel = false, download = false, full = false, label }) {
+export function Carousel({ slides, keys = false, pixel = false, full = false, label }) {
   const first = slides[0];
   const many = slides.length > 1;
   return (
     <div className={pixel ? "gallery pixel" : "gallery"} data-gallery data-keys={keys ? "" : undefined}>
       <div className="stage">
         {first ? (
-          <a href={first.link} data-stage-link download={download ? "" : undefined}>
+          <button type="button" className={full ? "shot zoom" : "shot"} data-stage-button={full ? "" : undefined} aria-label={full ? "All images" : undefined}>
             <img src={first.full} alt={first.alt} width="1200" height="1200" fetchPriority={keys ? "high" : undefined} decoding="async" data-stage data-style={first.style} />
-          </a>
+          </button>
         ) : null}
         {full ? (
           <button type="button" className="arrow full" data-open-full aria-label="All images">
@@ -60,9 +60,9 @@ export function Mockups({ product, width = 800 }) {
   return (
     <div className="shots" data-grid>
       {product.images.map((image, i) => (
-        <a key={image.style} href={grid(image.url, 2000)} data-jump={i} data-style={image.style}>
-          <img src={grid(image.url, width)} alt={image.alt || product.title} width={width} height={width} loading="lazy" decoding="async" data-style={image.style} />
-        </a>
+        <button type="button" key={image.style} data-jump={i} data-style={image.style} aria-label={image.alt || product.title}>
+          <img src={grid(image.url, width)} alt="" width={width} height={width} loading="lazy" decoding="async" data-style={image.style} />
+        </button>
       ))}
     </div>
   );

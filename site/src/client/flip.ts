@@ -47,7 +47,7 @@ function swap(design: string, primary: Primary) {
     downloads.replaceChildren();
     for (const name of one.files) downloads.append(Object.assign(document.createElement("a"), { href: cdnUrl(one.key, name), download: "", textContent: name }));
   }
-  for (const button of document.querySelectorAll<HTMLElement>(".sizes button[data-size]")) {
+  for (const button of document.querySelectorAll<HTMLElement>("[data-sizes] button")) {
     const variant = one.variants.find((each) => each.size === button.dataset.size);
     button.hidden = !variant;
     if (!variant) continue;

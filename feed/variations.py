@@ -109,8 +109,9 @@ def setup_mask(task: Task) -> Task:
     print(f"Setting up mask for variation: {task.key}")
     paths = [Path.SIMPLE, Path.BASIC]
     tile_size = task.tile.max_unit_size
-    print(f"Tile size: {tile_size}")
-    if MIN_MASK <= tile_size <= MAX_MASK:
+    max_mask = min(MAX_MASK, task.canvas_unit_width, task.canvas_unit_height)
+    print(f"Tile size: {tile_size}, max mask: {max_mask}")
+    if MIN_MASK <= tile_size <= max_mask:
         paths.append(Path.COPY)
     print(f"Possible paths: {[p.value for p in paths]}")
     path = choice(paths)
@@ -119,7 +120,7 @@ def setup_mask(task: Task) -> Task:
         case Path.SIMPLE:
             task.mask = simple_mask()
         case Path.BASIC:
-            task.mask = basic_mask(MIN_MASK, MAX_MASK)
+            task.mask = basic_mask(MIN_MASK, max_mask)
         case Path.COPY:
             task.mask = copy_mask(task.tile)
     task.path = path
