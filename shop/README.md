@@ -13,10 +13,10 @@
 - `handler.py` - the Lambda entry; it re-exports `automator.run.handler`.
 - `manager.py` - the automator console: init, show, batch, status, rows, reset, abort, reap, redo, release, wipe.
 - `shopify.py` - the shop console: publications, purge, vendor. Purge and vendor touch only automator products (handle `{dark|light}-...-{8 hex}`, or the old `{8 hex}-...` until the cutover purge, productType in `catalog.json`) and print every other product as skipped, so the gift cards stay.
-- `theme.py` - the theme console: list, push, publish. The theme lives in `theme/` as plain files; no zip, no CLI. It is already the live theme, so `push --yes` edits the storefront directly.
+- `theme.py` - the theme console: list, status, push, publish. `status` is read-only and compares every file's md5 with the shop's, exit 1 when the shop is behind; `push --yes` upserts only the changed files and removes the ones gone from disk. The theme lives in `theme/` as plain files; no zip, no CLI. It is already the live theme, so `push --yes` edits the storefront directly.
 - `env.py` - `.env`, json, say, gate and verb for the desk scripts.
 - `files/` - `catalog.json`, `dictionary.json`, `reviews.json`, `products/`. Kept forever.
-- `theme/`, `theme.zip` - the Online Store theme; the site is headless, the theme only backs checkout. Rebuild with `(cd carlomitchener/shop/theme && zip -X -D -r -FS ../theme.zip .)`, upload by hand in Shopify admin.
+- `theme/` - the Online Store theme as plain files; the site is headless, the theme only backs checkout and redirects every storefront page to the site. `deploy carlo` pushes it after the site lands; there is no zip and nothing to upload by hand.
 - `automator` is a package of the workspace (`pyproject.toml`), so every step file runs from the desk: `uv run python carlomitchener/shop/automator/run.py` is one tick.
 
 ## STEPS

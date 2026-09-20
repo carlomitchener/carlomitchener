@@ -36,5 +36,5 @@ node_modules/
 # IDE
 .vscode/
 
-shop/mrlytheme.zip
+shop/*.zip
 .DS_Store

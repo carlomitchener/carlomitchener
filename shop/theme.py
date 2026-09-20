@@ -1,4 +1,5 @@
 import base64
+import hashlib
 import os
 
 from env import SHOP_DIR, gate, say, verb
@@ -68,14 +69,14 @@ def find(access):
     raise SystemExit(f"refuse: no theme named {NAME} on the shop; run `theme list`")
 
 def remote(access, theme):
-    names = []
+    sums = {}
     cursor = None
     while True:
         page = graphql(access, FILES, {"id": theme["id"], "cursor": cursor})["theme"]["files"]
-        names += [node["filename"] for node in page["nodes"]]
+        for node in page["nodes"]: sums[node["filename"]] = node["checksumMd5"] or ""
         if not page["pageInfo"]["hasNextPage"]: break
         cursor = page["pageInfo"]["endCursor"]
-    return names
+    return sums
 
 def local():
     files = {}
@@ -92,6 +93,17 @@ def body(path):
     with open(path, "rb") as handle:
         return {"type": "BASE64", "value": base64.b64encode(handle.read()).decode()}
 
+def md5(path):
+    with open(path, "rb") as handle:
+        return hashlib.md5(handle.read()).hexdigest()
+
+def compare(access, theme):
+    files = local()
+    sums = remote(access, theme)
+    changed = [name for name, path in files.items() if sums.get(name) != md5(path)]
+    stale = [name for name in sums if name not in files]
+    return files, changed, stale
+
 def errors(result):
     for error in result["userErrors"]:
         say(f"  {error.get('filename') or error.get('field')} {error['message']}")
@@ -103,18 +115,34 @@ def list_():
     for node in themes(token()):
         say(f"  {node['role']:12} {node['name']}  {node['id']}")
 
+# STATUS
+
+def status():
+    access = token()
+    theme = find(access)
+    files, changed, stale = compare(access, theme)
+    for name in changed: say(f"  changed {name}")
+    for name in stale: say(f"  stale {name}")
+    if not changed and not stale:
+        say(f"{theme['name']} ({theme['role']}) holds every file in theme/, {len(files)} files")
+        return
+    say(f"{theme['name']} ({theme['role']}) is behind theme/: {len(changed)} to push, {len(stale)} to remove")
+    raise SystemExit(1)
+
 # PUSH
 
 def push():
     access = token()
     theme = find(access)
-    files = local()
-    stale = [name for name in remote(access, theme) if name not in files]
+    files, changed, stale = compare(access, theme)
+    if not changed and not stale:
+        say(f"{theme['name']} ({theme['role']}) already holds every file in theme/, nothing to push")
+        return
     if not gate("theme push", [
-        f"upsert {len(files)} files from theme/ into {theme['name']} ({theme['role']}) {theme['id']}",
+        f"upsert {len(changed)} changed files from theme/ into {theme['name']} ({theme['role']}) {theme['id']}",
         f"delete {len(stale)} files that are on the shop but not in theme/",
     ]): return
-    names = sorted(files)
+    names = sorted(changed)
     for start in range(0, len(names), PAGE):
         chunk = [{"filename": name, "body": body(files[name])} for name in names[start:start + PAGE]]
         result = graphql(access, UPSERT, {"id": theme["id"], "files": chunk})["themeFilesUpsert"]
@@ -124,7 +152,7 @@ def push():
         result = graphql(access, DELETE, {"id": theme["id"], "files": stale})["themeFilesDelete"]
         if errors(result): raise SystemExit("delete failed")
         for name in stale: say(f"  rm {name}")
-    say(f"{len(files)} files pushed, {len(stale)} removed")
+    say(f"{len(names)} files pushed, {len(stale)} removed")
 
 # PUBLISH
 
@@ -145,6 +173,7 @@ def publish():
 
 VERBS = {
     "list": list_,
+    "status": status,
     "push": push,
     "publish": publish,
 }
