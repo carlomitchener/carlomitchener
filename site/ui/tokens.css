@@ -55,6 +55,29 @@
   --ease: cubic-bezier(0.32, 0.08, 0.24, 1);
 }
 
+/* KIT */
+
+:root {
+  --site-line: var(--line);
+  --site-hair: var(--hair) solid var(--line);
+  --site-panel: var(--panel);
+  --site-art: var(--plate);
+  --site-fg: var(--fg);
+  --site-dim: var(--dim);
+  --site-accent: var(--accent);
+  --site-mix: 45%;
+  --site-mono: var(--mono);
+  --site-read: var(--w-prose);
+  --site-r2: var(--r-card);
+  --site-s1: var(--s1);
+  --site-s2: var(--s2);
+  --site-s3: var(--s3);
+  --site-s4: var(--s4);
+  --site-s5: var(--s5);
+  --site-s6: var(--s6);
+  --site-icon: var(--t-h3);
+}
+
 /* DARK */
 
 :root[data-mode="dark"] {

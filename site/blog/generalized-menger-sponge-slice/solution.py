@@ -1,3 +1,5 @@
+from lib.paths import data
+
 FLIP = str.maketrans("01", "10")
 HEIGHT = 3 ** 0.5 / 2
 
@@ -109,7 +111,7 @@ if __name__ == "__main__":
         sys.exit("odd numbers only")
     binary = mrlygram(number)
     pretty_print(binary)
-    name = f"mrlygram-{number}.svg"
-    with open(name, "w") as f:
+    path = data(f"mrlygram-{number}.svg")
+    with open(path, "w") as f:
         f.write(svg(points(coordinates(binary))) + "\n")
-    print(f"wrote {name}")
+    print(f"wrote {path}")

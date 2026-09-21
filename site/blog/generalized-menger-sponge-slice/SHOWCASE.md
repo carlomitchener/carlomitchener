@@ -23,4 +23,4 @@ All at level 2 — the three sponge views tiled in rings around the center, the 
 | **pro** | ![the four families, number 3, pro](files/gifs/showcase-pro-3.gif) | ![the four families, number 5, pro](files/gifs/showcase-pro-5.gif) | ![the four families, number 7, pro](files/gifs/showcase-pro-7.gif) |
 | **cut** | ![the four families, number 3, cut](files/gifs/showcase-cut-3.gif) | ![the four families, number 5, cut](files/gifs/showcase-cut-5.gif) | ![the four families, number 7, cut](files/gifs/showcase-cut-7.gif) |
 
-Run `uv run some26/showcase.py` for the console, add `all` to draw every cell above, or `cut 5` for just one.
+Run `uv run site/blog/generalized-menger-sponge-slice/showcase.py` for the console, add `all` to draw every cell above, or `cut 5` for just one.

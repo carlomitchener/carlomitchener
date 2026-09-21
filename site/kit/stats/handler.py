@@ -5,15 +5,14 @@ import re
 import time
 from datetime import datetime, timedelta, timezone
 
-BUCKET = os.environ["CARLOMITCHENER_BUCKET"]
-DISTRIBUTION = os.environ.get("CARLOMITCHENER_ID", "")
+BUCKET = os.environ["STATS_BUCKET"]
+DISTRIBUTION = os.environ.get("STATS_DISTRIBUTION", "")
 FUNCTIONS = [one.strip() for one in os.environ["STATS_FUNCTIONS"].split(",") if one.strip()]
 STATS_KEY = os.environ["STATS_KEY"]
 HOURS = 24
 ERROR_LINES = 10
 ERROR_PATTERN = '?ERROR ?"Task timed out" ?Traceback ?"Runtime exited"'
 CLIP = 160
-DESIGN = re.compile(r"^[0-9a-f]{8}/$")
 URL = re.compile(r"https?://\S+")
 QUERY = re.compile(r"\?[^\s]*=[^\s]*")
 SECRET = re.compile(r"(?i)(bearer\s+\S+|[\w.-]*(?:key|token|secret|password|auth|signature|credential)[\w.-]*\s*[=:]\s*(?:bearer\s+)?\S+)")
@@ -22,6 +21,20 @@ cloudwatch = boto3.client("cloudwatch")
 cloudwatch_global = boto3.client("cloudwatch", region_name="us-east-1")
 logs = boto3.client("logs")
 s3 = boto3.client("s3")
+
+# LISTS
+
+def rows(name: str) -> list[tuple[str, str, str]]:
+    out = []
+    for one in os.environ.get(name, "").split(","):
+        label, _, rest = one.strip().partition("=")
+        prefix, _, pattern = rest.partition("=")
+        if label.strip(): out.append((label.strip(), prefix.strip(), pattern.strip()))
+    return out
+
+SIZES = rows("STATS_SIZES")
+COUNTS = rows("STATS_COUNTS")
+FOLDERS = rows("STATS_FOLDERS")
 
 # METRICS
 
@@ -129,17 +142,16 @@ def count_objects(prefix: str) -> tuple[int, int]:
     return objects, size
 
 def bucket() -> dict:
-    site_objects, site_bytes = count_objects("site/")
-    data_objects, data_bytes = count_objects("data/")
-    return {
-        "site_objects": site_objects,
-        "site_bytes": site_bytes,
-        "data_objects": data_objects,
-        "data_bytes": data_bytes,
-        "products": count_objects("data/automator/tasks/")[0],
-        "designs": count_prefixes("site/cdn/printful/", DESIGN),
-        "posts": count_prefixes("site/cdn/feed/p/"),
-    }
+    out = {}
+    for label, prefix, _ in SIZES:
+        objects, size = count_objects(prefix)
+        out[f"{label}_objects"] = objects
+        out[f"{label}_bytes"] = size
+    for label, prefix, _ in COUNTS:
+        out[label] = count_objects(prefix)[0]
+    for label, prefix, pattern in FOLDERS:
+        out[label] = count_prefixes(prefix, re.compile(pattern) if pattern else None)
+    return out
 
 # RUN
 
@@ -161,7 +173,7 @@ def handler(event, context):
     s3.put_object(Bucket=BUCKET, Key=STATS_KEY, Body=json.dumps(data), ContentType="application/json", CacheControl="no-cache")
     summary = {name: (one["invocations"], one["errors"]) for name, one in data["lambdas"].items()}
     print(f"stats written in {data['seconds']} s: cdn {data['cdn'].get('requests')} requests, lambdas {summary}, bucket {data['bucket']}")
-    return {"seconds": data["seconds"], "products": data["bucket"]["products"]}
+    return {"seconds": data["seconds"], "keys": len(data["bucket"])}
 
 if __name__ == "__main__":
-    print(json.dumps(build(), indent=2)[:4000])
+    print(json.dumps(build(), indent=2))

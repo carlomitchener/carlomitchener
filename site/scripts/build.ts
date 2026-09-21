@@ -4,12 +4,13 @@ import { createElement as h } from "react";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
 import { build, digest, page, short, type Config, type Output, type Route, type Site, type Spec } from "../kit/ssg/build.ts";
 import { resolve as resolveLink } from "../kit/ssg/links.ts";
+import { config as gitConfig, isGit, type Leaf as GitLeaf } from "../kit/git/git.ts";
 import { ALIKE, CATEGORIES, DOCS, docUrl, FILES, GIFT, HOME_ROW, LIVE_DAYS, MATCH, PAGES, PRINTFUL, SHOP, SHOP_DOCS, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
-import { CSS, KINDS, sheetsFor } from "../src/config/sheets.ts";
+import { CSS, KIT_CODE, KINDS, sheetsFor } from "../src/config/sheets.ts";
 import { INLINE } from "../src/config/boot.ts";
 import { loadEnv } from "../src/lib/env.ts";
-import { sheet } from "../kit/ssg/md.ts";
+import { front, render as markdown, sheet } from "../kit/ssg/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
 import { collectionUrl, designOf, facetsOf, GIFT_PREFIX, giftUrl, grid, handleOf, isDesign, PRIMARIES, primaryOf, productUrl, type Facets, type Primary, type ProductRow } from "../src/lib/shop.ts";
 import { App } from "../src/App.jsx";
@@ -113,11 +114,16 @@ const HOIST = /^(?:<link [^>]*\/>)+/;
 
 const linked = (text: string) => (text.match(/<link [^>]*\/>/g) ?? []).filter((one) => one.includes(" href=")).join("");
 
-function shell(site_: Site, at: string, leaf: Leaf, one: { kind: string; props: object }): Output[] {
-  const view = {
-    page: { kind: one.kind, title: leaf.name, props: one.props },
-    chrome: { route: leaf.route, catalog: chromeRows, fly: leaf.fly ?? false, now },
-  };
+const sheetsOf = (site_: Site, kind: string) =>
+  kind === "code" ? [...SHEETS.code, ...KIT_CODE.map((name) => site_.asset(name))] : (SHEETS[kind] ?? SHEETS.page);
+
+const seen = (leaf: Leaf, one: { kind: string; props: object }) => ({
+  page: { kind: one.kind, title: leaf.name, props: one.props },
+  chrome: { route: leaf.route, catalog: chromeRows, fly: leaf.fly ?? false, now },
+});
+
+function frame(site_: Site, leaf: Leaf, one: { kind: string; props: object }, sent: object): string {
+  const view = seen(leaf, one);
   const drawn = renderToString(h(App, view as never));
   const hoisted = HOIST.exec(drawn)?.[0] ?? "";
   const node = h(Page, {
@@ -128,18 +134,21 @@ function shell(site_: Site, at: string, leaf: Leaf, one: { kind: string; props: 
     image: leaf.image ?? FALLBACK,
     type: leaf.type ?? "website",
     meta: leaf.meta ?? [],
-    sheets: SHEETS[one.kind] ?? SHEETS.page,
+    sheets: sheetsOf(site_, one.kind),
     scripts: [site_.asset(ENTRY.main)],
     sky: site_.asset(ENTRY.sky),
     data: leaf.data,
     noindex: leaf.noindex ?? false,
     preconnect: leaf.preconnect,
     app: drawn.slice(hoisted.length),
-    props: view,
+    props: { ...view, page: { ...view.page, props: sent } },
   });
-  const html = renderToStaticMarkup(node).replace("</head>", `${linked(hoisted)}</head>`);
-  const out: Output[] = [{ path: at, bytes: `<!doctype html>\n${html}\n` }];
-  if (at.endsWith("index.html")) out.push({ path: at.replace(/index\.html$/, "props.json"), bytes: JSON.stringify(view) });
+  return `<!doctype html>\n${renderToStaticMarkup(node).replace("</head>", `${linked(hoisted)}</head>`)}\n`;
+}
+
+function shell(site_: Site, at: string, leaf: Leaf, one: { kind: string; props: object }): Output[] {
+  const out: Output[] = [{ path: at, bytes: frame(site_, leaf, one, one.props) }];
+  if (at.endsWith("index.html")) out.push({ path: at.replace(/index\.html$/, "props.json"), bytes: JSON.stringify(seen(leaf, one)) });
   return out;
 }
 
@@ -177,7 +186,7 @@ const STORE_ORIGIN = STORE ? `https://${STORE}` : undefined;
 
 const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
 
-const RESERVED = new Set(["about", "shop", "cart", "automator", "stats", "feed", "pages", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
+const RESERVED = new Set(["about", "shop", "cart", "automator", "stats", "feed", "pages", "git", "raw", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
 
 const SHOP_RESERVED = new Set(["designs", "gift-card", ...SHOP_DOCS, ...CATEGORIES.map(([slug]) => slug)]);
 
@@ -702,9 +711,30 @@ const config: Config = {
   assets: [
     { path: "ui", out: "ui", hash: true, ext: ".css" },
     { path: "kit", out: "ui", hash: true, files: KIT_SHEETS },
+    { path: "kit/code", out: "ui", hash: true, files: [...KIT_CODE, "seti/seti.woff2"] },
+    { path: "kit/code", out: "ui", hash: false, files: ["seti/LICENSE-seti.txt"] },
     { path: ".cache/client", out: "js", hash: false, ext: ".js" },
   ],
 };
+
+/* GIT */
+
+const GIT = process.env.MRLY_GIT !== "0";
+
+function served(site_: Site, path: string): string | null {
+  const git = gitConfig(site_);
+  if (!git) return null;
+  const file = join(git.root, path);
+  const hit = site_.serves.get(file);
+  if (hit) return hit;
+  const pub = site_.input("public").path;
+  return file.startsWith(`${pub}/`) ? `/${file.slice(pub.length + 1)}` : null;
+}
+
+function codePage(site_: Site, leaf: GitLeaf) {
+  const one = { route: leaf.route, name: leaf.name, description: leaf.description, type: leaf.type };
+  return frame(site_, one, { kind: "code", props: { body: leaf.body } }, { body: "" });
+}
 
 export const spec: Spec = {
   root: org,
@@ -715,14 +745,20 @@ export const spec: Spec = {
   prepare: bundle,
   collect: (site_) => ({ routes: collect(site_) }),
   render: draw,
+  git: {
+    page: GIT ? codePage : undefined,
+    md: (site_, text, from) => markdown(front(text).body, { link: (url) => resolveLink(site_, from, url) }),
+    served,
+  },
 };
 
 export async function pages() {
-  return await build(spec, { manifest: ".cache/manifest.json" });
+  return await build(spec, { manifest: `.cache/manifest${GIT ? "" : "-nogit"}.json` });
 }
 
 if (import.meta.main) {
   const done = await pages();
   const played = done.site.routes.filter((one) => one.kind === "post").length;
-  console.log(`site${DEV ? " DEV" : ""}: ${done.site.routes.length} routes, ${played} posts, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
+  const code = done.site.routes.filter(isGit).length;
+  console.log(`site${DEV ? " DEV" : ""}: ${done.site.routes.length} routes, ${played} posts, ${code} code pages, ${done.rendered} rendered, ${done.written} files written, ${done.removed} dropped`);
 }

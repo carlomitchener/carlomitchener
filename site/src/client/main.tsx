@@ -11,5 +11,7 @@ const box = document.getElementById("props");
 
 if (host && box) {
   const view = JSON.parse(box.textContent ?? "{}");
+  const body = document.getElementById("code");
+  if (body) view.page.props.body = body.innerHTML;
   void Promise.all([import("./mount.tsx"), load(view.page?.kind)]).then(([one]) => one.mount(host, view));
 }

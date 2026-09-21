@@ -6,7 +6,6 @@
 .claude/
 
 # OUTPUT
-mrlygram-*.svg
 data/
 dist/
 pkg/

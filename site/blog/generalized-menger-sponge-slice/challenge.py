@@ -23,7 +23,7 @@ def label(canvas, name):
 
 def frame(number):
     name = "MrlyGram-%d" % number
-    image = Image.open(IMAGES / (name + ".png")).convert("L")
+    image = Image.open(IMAGES / ("mrlygram-%d.png" % number)).convert("L")
     image.thumbnail((SIZE, SIZE - STRIP), Image.LANCZOS)
     canvas = Image.new("L", (SIZE, SIZE), PAPER.r)
     canvas.paste(image, ((SIZE - image.width) // 2, (SIZE - STRIP - image.height) // 2))

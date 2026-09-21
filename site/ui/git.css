@@ -1,0 +1,39 @@
+/* FRAME */
+
+.git {
+  padding: var(--s8) 0 0;
+}
+
+.git .lede {
+  margin-top: var(--s5);
+}
+
+.git .lede h1 {
+  font-size: clamp(32px, 6vw, 40px);
+}
+
+.git .lede .lead {
+  margin-top: var(--s4);
+}
+
+/* UNDO */
+
+.git .bar {
+  position: static;
+  z-index: auto;
+  height: auto;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+  background: none;
+}
+
+.git .tools {
+  justify-self: auto;
+  display: inline;
+  gap: 0;
+}
+
+.git .doc {
+  padding: 0;
+}

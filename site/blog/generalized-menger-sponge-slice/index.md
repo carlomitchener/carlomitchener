@@ -1,14 +1,10 @@
-*This is my entry to the 2026 Summer of Math Exposition by 3Blue1Brown (https://some.3b1b.co)*
-
-*Note: I am continuously polishing this page — code, images, wording and the occasional new find.*
-
-*Tip for Desktop users: press the 'menu' icon in the top right corner of this viewer to open the outline view and reduce page width.*
+---
+title: Generalized Menger Sponge Slice
+date: 2026-08-15
+lead: My entry to the 2026 Summer of Math Exposition, a page I keep polishing. Slice a sponge, get snowflakes.
+---
 
 ![the diagonal cut of the number-5 sponge at level 2](files/hero.png)
-
-# Generalized Menger Sponge Slice
-
-*Slice a Sponge, Get Snowflakes*
 
 Here's a game you can play in your kitchen. Balance a cube of cheese on one of its corners, so the opposite corner points straight at the ceiling. Now slice it in half with one flat, level cut, right through the middle. Question: what shape is the new face you just revealed?
 
@@ -92,7 +88,7 @@ One more knob before we go. Flipping one value — `start`, whether the *first* 
 
 ## Origins
 
-![screenshot of vs code showing rendered triangles and text file](files/old/Screenshot%202025-03-19%20at%2010.49.49 AM.png)
+![screenshot of vs code showing rendered triangles and text file](files/old/screenshot-2025-03-19.png)
 
 Once upon a time, I was trying to find a way to slice my sponges — no formula, no algorithm, nothing but stubbornness. I had some 3D models lying around in Shapr3D, so I took some screenshots. Then I went over to Photoshop and painstakingly overlaid a triangular lattice on top of each one. Then the fun began: I looped over every triangle *with my eyes* and wrote down its cell type — fill (1), void (0) or grid (-). By the end I had six text blobs in a TXT file: my sponges, sliced by hand. The number after each row is its length in cells.
 
@@ -273,7 +269,7 @@ def cut(cell: Cell3d):
 
 ![the four families, number 5, cut](files/gifs/showcase-cut-5.gif)
 
-And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/crates/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlypy/](../mrlypy/), which is what the scripts here actually run.
+And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source currently lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/crates/mrlymath/src/six/geometry.rs) — and a frozen Python copy ships in this repo's [mrlypy/](https://github.com/carlomitchener/carlomitchener/tree/main/mrlypy), which is what the scripts here actually run.
 
 For a tour of all four families, see [SHOWCASE.md](SHOWCASE.md).
 
@@ -350,7 +346,7 @@ Now hold the number still and climb the levels instead. Each fill count is built
 | 7 | 204, 6840, 228528, 7628256, … | 42 × prev − 288 × the one before |
 | 9 | 210, 10038, 426594, 18900966, … | 28 × prev + 693 × the one before |
 
-Notice every rule in that table needs exactly *two* memories — the previous count and the one before it, never a third. That's a theorem now, and it doesn't stop at three dimensions. Slice the *D*-dimensional cousin of the sponge the same way and its counts still obey a short rule, needing only ⌈*D*/2⌉ memories: two in 3D, two in 4D, three in 5D and 6D — about a quarter of what the construction hands you for free. The proof is a little carry machine that reads the counts like digits, on [the research shelf](../research/slice-recurrence-order/). Its sequel answers a stranger question: the slice comes out a whisker *thicker* than a random cut would be in odd dimensions and a whisker *thinner* in even ones — the even half is fully proved in [its own paper](../research/slice-sign-even-half/), while a sliver of the odd half still resists.
+Notice every rule in that table needs exactly *two* memories — the previous count and the one before it, never a third. That's a theorem now, and it doesn't stop at three dimensions. Slice the *D*-dimensional cousin of the sponge the same way and its counts still obey a short rule, needing only ⌈*D*/2⌉ memories: two in 3D, two in 4D, three in 5D and 6D — about a quarter of what the construction hands you for free. The proof is a little carry machine that reads the counts like digits, on [the research shelf](https://github.com/carlomitchener/carlomitchener/tree/main/research/slice-recurrence-order). Its sequel answers a stranger question: the slice comes out a whisker *thicker* than a random cut would be in odd dimensions and a whisker *thinner* in even ones — the even half is fully proved in [its own paper](https://github.com/carlomitchener/carlomitchener/tree/main/research/slice-sign-even-half), while a sliver of the odd half still resists.
 
 ### One of these is already famous
 
@@ -394,12 +390,12 @@ Stack every snowflake from 1 to 55 like sheets of tracing paper and a picture su
 
 Ready to get your hands... snowy?
 
-The sponge, the slice and the renderers all live in `mrlypy/six`, inside this repo's [mrlypy/](../mrlypy/) — clone the repo and everything is already next door:
+The sponge, the slice and the renderers all live in `mrlypy/six`, inside this repo's [mrlypy/](https://github.com/carlomitchener/carlomitchener/tree/main/mrlypy) — clone the repo and everything is already next door:
 
 ```bash
 git clone https://github.com/carlomitchener/carlomitchener
 cd carlomitchener
-uv run some26/cut.py sweep
+uv run site/blog/generalized-menger-sponge-slice/cut.py sweep
 ```
 
 *(That's [uv](https://docs.astral.sh/uv/) — one command, and it fetches the right Python, the two libraries and the local `mrly` packages into a sandbox of its own. Nothing touches your system Python.)*
@@ -410,12 +406,12 @@ No uv? The scripts find their own imports, so plain Python works too — you onl
 cd carlomitchener
 python3 -m venv .venv && source .venv/bin/activate
 pip install pillow numpy
-python3 some26/cut.py sweep
+python3 site/blog/generalized-menger-sponge-slice/cut.py sweep
 ```
 
 *(On Windows that middle line is `.venv\Scripts\activate`. Delete the `.venv` folder when you're done and no trace is left.)*
 
-The sweep redraws the regular snowflake set in [files/](files/) — cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `uv run some26/cut.py` on its own for the console, or `uv run some26/cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, the corner-on sponges from `sponges.py`, the `start` flip-book from `start.py`, the challenge gif from `challenge.py`, and the rainbow hero up top from `hero.py`.
+The sweep redraws the regular snowflake set in [files/](files/) — cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Drop the `sweep` for the console, or ask for `draw 7 2` to get a single snowflake. The showcase gifs come from `showcase.py`, the corner-on sponges from `sponges.py`, the `start` flip-book from `start.py`, the challenge gif from `challenge.py`, and the rainbow hero up top from `hero.py` — every one of them beside `cut.py` in this post's folder.
 
 Enjoy!
 
@@ -427,21 +423,22 @@ Enjoy!
 - Rob Hocking, [*Three-Dimensional Diagonal Cross-Sections of Four-Dimensional Menger Sponges*](https://archive.bridgesmathart.org/2023/bridges2023-291.pdf) (Bridges 2023) — the slice, one dimension up
 - Rob Hocking, [*Menger-Slice Inspired Fractals based on the Pentagon, Dodecahedron, and 120-Cell*](https://archive.bridgesmathart.org/2024/bridges2024-297.pdf) (Bridges 2024) — the slice idea on other solids
 - Paul Bourke hosts a page on this very family: [*Mrly Fractals*](https://paulbourke.net/fractals/mrlymath) — renders, POV-Ray code and fractal dimensions for the 5- and 7-sponges
+- 3Blue1Brown, [*Summer of Math Exposition*](https://some.3b1b.co) — the contest this page was written for
 
 ## Open questions
 
 - What's the area formula?
 - What's the perimeter formula?
 - Why does one four-row tile tessellate every odd snowflake? (From [the solution](SOLUTION.md).) Best clue so far: [spectra](https://github.com/mrlyprod/mrlyprod/blob/main/research/spectra.md) finds every odd snowflake built from just two tiles — a hexagon and a triangle, rewritten by fixed counts at every level — but the four-row tessellation itself is still unproved.
-- ~~Is there a closed-form fill/void past level 1?~~ Mostly answered, in three installments. Level 1 is closed for all 256 recipes at once by [the spectrometer](../research/walsh-spectrometer/). Past level 1, every odd number keeps its own two-term rule — the "Down the levels" table, with the recipes collected in [spectra](https://github.com/mrlyprod/mrlyprod/blob/main/research/spectra.md) and the Menger rule long since published on [A299916](https://oeis.org/A299916). And climbing the *dimensions* at level 1, the slice counts 2, 6, 6, 30, 20, 140, … turn out to be an old friend in disguise — the swinging factorial [A056040](https://oeis.org/A056040), unmasked in [the census](../research/sequence-census/).
+- ~~Is there a closed-form fill/void past level 1?~~ Mostly answered, in three installments. Level 1 is closed for all 256 recipes at once by [the spectrometer](https://github.com/carlomitchener/carlomitchener/tree/main/research/walsh-spectrometer). Past level 1, every odd number keeps its own two-term rule — the "Down the levels" table, with the recipes collected in [spectra](https://github.com/mrlyprod/mrlyprod/blob/main/research/spectra.md) and the Menger rule long since published on [A299916](https://oeis.org/A299916). And climbing the *dimensions* at level 1, the slice counts 2, 6, 6, 30, 20, 140, … turn out to be an old friend in disguise — the swinging factorial [A056040](https://oeis.org/A056040), unmasked in [the census](https://github.com/carlomitchener/carlomitchener/tree/main/research/sequence-census).
 
 ## Why?
 
-![screenshot of vs code showing a mrlygram printfile](files/old/Screenshot%202025-01-22%20at%204.56.38 PM.png)
+![screenshot of vs code showing a mrlygram printfile](files/old/screenshot-2025-01-22.png)
 
 You may be wondering... Why would a human go down such a wormhole? I was trying to create an automated print-on-demand business and wanted pretty-looking t-shirts. MrlySponge slices seemed like the perfect pattern (they're actually hard to print on fabric). The slicing algorithm was meant as one sub-system in a bigger printfile generator. Here's a mockup of a MrlyGram iPhone case.
 
-![iPhone case mockup with MrlyGram pattern](files/old/abdb96fe-8e9c-4707-af05-fbf0cfc0e0de.png)
+![iPhone case mockup with MrlyGram pattern](files/old/iphone-case-mockup.png)
 
 ## Extras
 

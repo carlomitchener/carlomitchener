@@ -15,7 +15,10 @@ const EXTRA: Record<string, string[]> = {
   gift: ["gift.css", "shop.css"],
   page: ["doc.css"],
   missing: ["doc.css"],
+  code: ["doc.css", "git.css"],
 };
+
+export const KIT_CODE = ["contract.css", "code.css", "seti/seti.css"];
 
 export const KINDS = Object.keys(EXTRA);
 

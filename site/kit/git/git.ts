@@ -6,7 +6,7 @@ import { bytes, digest, escape, type Bytes, type Node, type Output, type Route, 
 
 /* TYPES */
 
-export type Git = { root: string; slug: string; branch: string; name: string };
+export type Git = { root: string; slug: string; branch: string; name: string; sitemap: boolean };
 
 export type Kind = "dir" | "file";
 
@@ -44,7 +44,7 @@ export type Drawn = Hooks & { page: NonNullable<Hooks["page"]> };
 /* CONFIG */
 
 export function config(site: Site): Git | null {
-  const decl = site.config.git as { root?: string; slug?: string; branch?: string } | undefined;
+  const decl = site.config.git as { root?: string; slug?: string; branch?: string; sitemap?: boolean } | undefined;
   if (!decl) return null;
   const slug = decl.slug ?? "";
   return {
@@ -52,6 +52,7 @@ export function config(site: Site): Git | null {
     slug,
     branch: decl.branch ?? "main",
     name: slug.split("/").pop() || "code",
+    sitemap: decl.sitemap ?? true,
   };
 }
 
@@ -164,7 +165,7 @@ export function collect(site: Site): { routes: Route[]; node: Node | null } {
         { route: `/${rawPath(path)}`, name: stem(path) },
       ],
       hidden: true,
-      sitemap: true,
+      sitemap: git.sitemap,
     });
   }
   return { routes, node: { name: "Code", href: "/git/" } };

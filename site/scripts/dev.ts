@@ -141,6 +141,7 @@ const server = Bun.serve({
     if (path === "/automator/automator.json" || path === "/stats/stats.json") return remote(path);
     if (path.endsWith("/")) path += "index.html";
     if (path.endsWith(".html")) return page(path);
+    if (path.startsWith("/git/") && path !== "/git/tree.json") return page(path);
     const at = within(dist, path);
     if (!at) return LOST();
     const file = Bun.file(at);

@@ -10,9 +10,9 @@ Those four rows are a secret four-word alphabet — `a = 0`, `b = 101`, `c = 111
 
 Here's the tile at work — one 60° slice of the number-9 snowflake, fully tessellated:
 
-![the base tile, tessellated across a slice of the number-9 gram](files/old/MrlyGram-9.png)
+![the base tile, tessellated across a slice of the number-9 gram](files/old/mrlygram-9-tiled.png)
 
-Why does one four-row tile tessellate every odd snowflake? That part I still can't prove — it's on the [open questions](README.md#open-questions) list.
+Why does one four-row tile tessellate every odd snowflake? That part I still can't prove — it's on the [open questions](index.md#open-questions) list.
 
 The heart of [solution.py](solution.py):
 
@@ -67,9 +67,9 @@ The challenge said to draw it, too. The rest of [solution.py](solution.py) is th
 3. **SVG** — write every fill and void triangle as a polygon, scale the rows by √3/2 so the triangles come out equilateral, and the snowflake opens in your browser.
 
 ```bash
-python3 some26/solution.py 9    # prints the blob, writes mrlygram-9.svg
+python3 site/blog/generalized-menger-sponge-slice/solution.py 9    # prints the blob, writes the svg under data/
 ```
 
-A rougher ancestor of this pipeline — PIL polygons instead of SVG — drew the very stills cycling in [the challenge](README.md#the-challenge) gif.
+A rougher ancestor of this pipeline — PIL polygons instead of SVG — drew the very stills cycling in [the challenge](index.md#the-challenge) gif.
 
 Is this also what you found? I'd love to know! Send your solution to the email on [my GitHub profile](https://github.com/carlomitchener).

@@ -10,7 +10,7 @@ from mrlypy.six.designs import carpet_iso
 
 from lib.canvas import H3, PAPER, flatten, quantize
 from lib.gif import write_gif
-from lib.paths import EXTRAS, GIFS, ensure, show
+from lib.paths import GIFS, data, ensure, show
 from lib.terminal import menu, pick_level, pick_number
 
 SIZE = 1080
@@ -62,7 +62,7 @@ def frame(cell):
 
 def draw_one(number, level):
     ensure()
-    path = EXTRAS / ("sponge-%d-%d.png" % (number, level))
+    path = data("sponge-%d-%d.png" % (number, level))
     picture(sponge(number, level), SIZE).save(path, optimize=True)
     print("%s (%d cubes across)" % (show(path), number ** level))
     return 0

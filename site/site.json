@@ -25,6 +25,7 @@
     "readme": { "path": "../README.md" },
     "public": { "path": "public" }
   },
+  "git": { "root": "..", "slug": "carlomitchener/carlomitchener", "branch": "main", "sitemap": false },
   "shots": {
     "routes": ["/", "/shop/", "/shop/men/", "/about/", "/cart/", "/404.html"],
     "sizes": { "phone": [390, 844, true], "tablet": [834, 1194, true], "desktop": [1440, 900, false] }
@@ -68,7 +69,8 @@
       { "href": "/contact/", "name": "Contact", "note": "where to write" },
       { "href": "/privacy/", "name": "Privacy", "note": "what the site stores" },
       { "href": "/feed/", "name": "Feed", "note": "every generated post, newest first" },
-      { "href": "/pages/", "name": "Pages", "note": "every route this site serves" }
+      { "href": "/pages/", "name": "Pages", "note": "every route this site serves" },
+      { "href": "/git/", "name": "Code", "note": "the whole tree, browsable, with raw bytes under /raw/" }
     ]
   },
   "manifest": {

@@ -6,7 +6,8 @@
 
 ## SITE.JSON
 
-- `git`: `{ root, slug, branch }`. `root` is the repo root relative to the site, `slug` is `owner/name` on GitHub, `branch` defaults to `main`.
+- `git`: `{ root, slug, branch, sitemap }`. `root` is the repo root relative to the site, `slug` is `owner/name` on GitHub, `branch` defaults to `main`.
+- `sitemap` defaults to true and rules the file pages and their raw objects only; `false` keeps the listings on the map and leaves every file off it, for a site whose map is about something else.
 - A site whose repo root sits one level up declares `{ "root": "..", "slug": "owner/repo", "branch": "main" }` and publishes the repo it lives in.
 - The three Shiki packages `deps.json` names under `git` are needed only by a site with this block; `code.ts` loads them lazily, so a site without one never resolves them.
 
@@ -30,7 +31,7 @@
 
 - `/git` is one collapsed node in the site tree, never the whole repo; a listing carries its own children and a path bar carries its ancestors.
 - The node is added only when the site's own nav has no `/git/` href, so a site may place `{ "name": "Code", "href": "/git/" }` in `site.json` itself.
-- Every route below the root is `hidden` and `sitemap`: out of the navigator, on the map, so a crawler reads what a reader has to click to.
+- Every route below the root is `hidden` and, unless `sitemap` is false, `sitemap`: out of the navigator, on the map, so a crawler reads what a reader has to click to.
 - A file route carries two `urls`, its page and its `/raw/` object, and both take the file's own `lastmod`.
 
 ## HEAD

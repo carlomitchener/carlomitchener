@@ -9,6 +9,7 @@ const LOAD: Record<string, () => Promise<unknown>> = {
   post: () => import("../pages/Post.jsx").then((one) => one.Post),
   feed: () => import("../pages/Feed.jsx").then((one) => one.Feed),
   cart: () => import("../pages/Cart.jsx").then((one) => one.Cart),
+  code: () => import("../pages/Code.jsx").then((one) => one.Code),
   automator: () => import("../pages/Automator.jsx").then((one) => one.Automator),
   stats: () => import("../pages/Stats.jsx").then((one) => one.Stats),
   pages: () => import("../pages/Pages.jsx").then((one) => one.Pages),

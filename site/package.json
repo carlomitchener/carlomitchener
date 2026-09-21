@@ -15,6 +15,9 @@
     "shots": "bun scripts/shots.ts"
   },
   "dependencies": {
+    "@shikijs/core": "^4.4.3",
+    "@shikijs/engine-javascript": "^4.4.3",
+    "@shikijs/langs": "^4.4.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "rehype-stringify": "^10.0.1",
