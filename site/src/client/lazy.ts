@@ -16,6 +16,7 @@ const LOAD: Record<string, () => Promise<unknown>> = {
   gifts: () => import("../pages/GiftCard.jsx").then((one) => one.GiftCards),
   gift: () => import("../pages/GiftCard.jsx").then((one) => one.GiftCard),
   page: () => import("../pages/Doc.jsx").then((one) => one.Doc),
+  blog: () => import("../pages/Blog.jsx").then((one) => one.Blog),
 };
 
 async function code(kind: string) {

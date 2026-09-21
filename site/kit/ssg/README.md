@@ -6,6 +6,7 @@
 - `md.ts` is the markdown pipeline: `render(md, { link, math, widget })`, `inline`, `sheet`, `front`, `title`, `summary`, `plain`, `slug`, `escape`.
 - `links.ts` is the one link resolver and `pic.ts` draws a dark and light `<picture>` pair.
 - The one dispatch is `../git`: a `git` block in `site.json` makes `scan` append the repo's own `/git/` and `/raw/` routes, and `render` and `fingerprint` dispatch to that module; no block, nothing git-related runs.
+- The other dispatch is `blog.ts`: a `blog` input makes `scan` append `/blog/` and every post, and `render` dispatches to that module; no input, no routes.
 
 ## SITE.JSON
 
@@ -18,6 +19,22 @@
 - `assets`: more bundles of the same shape, for files that must keep their names, such as `fonts/` and `seti/`, whose CSS names its faces by relative url.
 - `manifest`: the webmanifest, written as is. `robots`: `{ disallow }`, appended to the wildcard block alone.
 - `llms`: `{ about, links }`, optional. `about` is the paragraph llms.txt opens on; a link is `{ href, name, note }` and is dropped unless the site publishes that route. No block, no `llms.txt`.
+
+## BLOG
+
+- `blog.ts` is the one blog both sites run: a post is `site/blog/<slug>/index.md` with every figure and file beside it.
+- The input is declared like any other, `"blog": { "path": "blog", "deep": true }`; no input, no folder or an empty one and the site gets no routes at all.
+- Front matter is `title`, `date` (YYYY-MM-DD) and `lead`; a missing or malformed one throws naming the post, and a slug that is not lowercase words joined by hyphens throws too.
+- A file loose in the blog folder throws: the shape is one folder per post, never a bare `<slug>.md`.
+- `/blog/` lists the posts newest first, then by slug; `/blog/<slug>/` is the post, and its `lastmod` is the front matter date.
+- Every file beside `index.md` ships at `/blog/<slug>/<path>` with its content type on the output, so `push.ts` sets the S3 header without re-rendering.
+- Those files ride a hidden route that never enters the sitemap, and each one is named in the link index, so a relative image in the body answers with its served path.
+- A markdown sibling ships too but is never indexed, so a link to it falls through the resolver to the `/git/` page where the site has one.
+- `leaf.image` is the og:image: the first figure in the body when it names a shipped file, its bare name when the body names a site figure, else empty.
+- `posts(site)` is the parsed list, memoised per site, so a site's own `collect` can read it for its tree, its cards and its home page.
+- The module never imports the chrome, so `spec.blog` carries it: `{ page, md }`; no `spec.blog.page` means the routes are collected and nothing is rendered.
+- `page(site, leaf)` draws the page, listing and post alike: `leaf.kind` says which, `leaf.posts` is every card, and `leaf.out` is the outputs the page may add beside itself.
+- `md(site, text, from, out)` renders the body the site's way, with `from` set to the post's `index.md`, so relative links and images resolve beside the post.
 
 ## EXPORTS
 
@@ -41,13 +58,14 @@
 
 ## SPEC
 
-- `root out config templates prepare collect render globals inline icons git asset`.
+- `root out config templates prepare collect render globals inline icons git blog asset`.
 - `templates` are the dirs whose bytes rebuild every route; the kit itself is always one, so a kit edit re-renders everything.
 - `prepare` runs first, before the scan reads anything, for a site that bundles its client and then lists the bundle as an asset.
 - `collect(site)` returns `{ routes, nav? }`; `nav` is the site tree the chrome draws and the code viewer's node joins it when the site has not placed one.
 - `inline` lists every inline script a page may carry; `build` refuses a page carrying one it does not know.
 - `icons`: `{ rows, svg }`, a square glyph grid of `0`/`1` strings and the favicon svg; the builder writes the svg as `favicon.svg` and draws `favicon.png`, `apple-touch-icon.png`, `icon-192.png` and `icon-512.png` from the grid. No field, no icons.
 - `git` is the code viewer's hooks, `{ page, md, code, served }`: the chrome, the markdown pipeline, the highlighter and the mirror seam the module cannot know by itself.
+- `blog` is the blog's hooks, `{ page, md }`, the same seam for `blog.ts`.
 - `asset(name, body)` may rewrite a bundle file's bytes before it is hashed and placed.
 - `Route`: `{ route, kind, name, data, source, inputs, urls, at, hidden, sitemap }`.
 - `hidden` keeps a route out of the navigator and out of every list a reader browses; `sitemap` puts it back on the map anyway.

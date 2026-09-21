@@ -22,6 +22,7 @@
     "reviews": { "path": "../shop/files/reviews.json" },
     "tasks": { "path": "../../data/carlomitchener/site/tasks", "deep": true, "ext": ".json" },
     "pages": { "path": "pages", "ext": ".md" },
+    "blog": { "path": "blog", "deep": true },
     "readme": { "path": "../README.md" },
     "public": { "path": "public" }
   },
@@ -68,6 +69,7 @@
       { "href": "/about/", "name": "About", "note": "who Carlo is" },
       { "href": "/contact/", "name": "Contact", "note": "where to write" },
       { "href": "/privacy/", "name": "Privacy", "note": "what the site stores" },
+      { "href": "/blog/", "name": "Blog", "note": "long-form posts, newest first" },
       { "href": "/feed/", "name": "Feed", "note": "every generated post, newest first" },
       { "href": "/pages/", "name": "Pages", "note": "every route this site serves" },
       { "href": "/git/", "name": "Code", "note": "the whole tree, browsable, with raw bytes under /raw/" }

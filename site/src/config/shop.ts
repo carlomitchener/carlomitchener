@@ -58,6 +58,7 @@ export const SITE = [
   { name: "Gift Card", href: GIFT, note: "Mini, medi and maxi. Angel numbers." },
   { name: "Automator", href: "/automator/", note: "The automator's last tick, its batch and its log." },
   { name: "Stats", href: "/stats/", note: "The CDN, the Lambdas and the bucket." },
+  { name: "Blog", href: "/blog/", note: "Long-form posts, newest first." },
   { name: "Code", href: "/git/", note: "This site's repo, browsable, with the raw bytes under /raw/." },
   { name: "Bag", href: "/cart/", note: "Your bag." },
   { name: "Pages", href: "/pages/", note: "This list." },

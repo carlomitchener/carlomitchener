@@ -308,7 +308,7 @@ const WIDE = 200 * 1024;
 const size = (n: number) =>
   n < 1024 ? `${n} B` : n < 1024 * 1024 ? `${(n / 1024).toFixed(1)} kB` : `${(n / (1024 * 1024)).toFixed(1)} MB`;
 
-function reads(body: Uint8Array): string | null {
+export function reads(body: Uint8Array): string | null {
   const look = body.subarray(0, 8192);
   for (const one of look) if (one === 0) return null;
   try {

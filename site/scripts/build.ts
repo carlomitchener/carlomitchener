@@ -5,6 +5,7 @@ import { renderToStaticMarkup, renderToString } from "react-dom/server";
 import { build, digest, page, short, type Config, type Output, type Route, type Site, type Spec } from "../kit/ssg/build.ts";
 import { resolve as resolveLink } from "../kit/ssg/links.ts";
 import { config as gitConfig, isGit, type Leaf as GitLeaf } from "../kit/git/git.ts";
+import { type Leaf as BlogLeaf } from "../kit/ssg/blog.ts";
 import { ALIKE, CATEGORIES, DOCS, docUrl, FILES, GIFT, HOME_ROW, LIVE_DAYS, MATCH, PAGES, PRINTFUL, SHOP, SHOP_DOCS, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { CSS, KIT_CODE, KINDS, sheetsFor } from "../src/config/sheets.ts";
@@ -186,7 +187,7 @@ const STORE_ORIGIN = STORE ? `https://${STORE}` : undefined;
 
 const shopRoute = (row: { handle: string }) => collectionUrl(row.handle);
 
-const RESERVED = new Set(["about", "shop", "cart", "automator", "stats", "feed", "pages", "git", "raw", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
+const RESERVED = new Set(["about", "shop", "cart", "automator", "stats", "feed", "blog", "pages", "git", "raw", "search.json", "404.html", "cdn", "ui", "js", "fonts", "bird", "art"]);
 
 const SHOP_RESERVED = new Set(["designs", "gift-card", ...SHOP_DOCS, ...CATEGORIES.map(([slug]) => slug)]);
 
@@ -731,6 +732,42 @@ function served(site_: Site, path: string): string | null {
   return file.startsWith(`${pub}/`) ? `/${file.slice(pub.length + 1)}` : null;
 }
 
+/* BLOG */
+
+const BLOG_LEAD = "Long-form posts, newest first.";
+
+const full = (path: string) => (path.startsWith("/") ? root + path : path);
+
+function blogPage(site_: Site, leaf: BlogLeaf): string {
+  const at = page(leaf.route);
+  const list = leaf.kind === "blog";
+  const one = list
+    ? { kind: "blog", props: { posts: leaf.posts.map(({ slug, route, title, date, lead, image }) => ({ slug, route, title, date, lead, image })) } }
+    : { kind: "blog", props: { post: { title: leaf.name, date: leaf.date, lead: leaf.lead }, body: leaf.body } };
+  const data = list
+    ? undefined
+    : {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: leaf.name,
+        description: leaf.lead,
+        url: root + leaf.route,
+        image: leaf.image ? full(leaf.image) : undefined,
+        author: { "@type": "Person", name: site.owner },
+        datePublished: leaf.date,
+      };
+  const head: Leaf = {
+    route: leaf.route,
+    name: list ? "Blog" : leaf.name,
+    description: list ? BLOG_LEAD : leaf.lead,
+    image: leaf.image ? full(leaf.image) : list ? full(leaf.posts[0]?.image ?? "") || undefined : undefined,
+    type: list ? "website" : "article",
+    data,
+  };
+  leaf.out.push({ path: at.replace(/index\.html$/, "props.json"), bytes: JSON.stringify(seen(head, one)) });
+  return frame(site_, head, one, list ? one.props : { ...one.props, body: "" });
+}
+
 function codePage(site_: Site, leaf: GitLeaf) {
   const one = { route: leaf.route, name: leaf.name, description: leaf.description, type: leaf.type };
   return frame(site_, one, { kind: "code", props: { body: leaf.body } }, { body: "" });
@@ -749,6 +786,10 @@ export const spec: Spec = {
     page: GIT ? codePage : undefined,
     md: (site_, text, from) => markdown(front(text).body, { link: (url) => resolveLink(site_, from, url) }),
     served,
+  },
+  blog: {
+    page: blogPage,
+    md: (site_, text, from) => markdown(text, { link: (url) => resolveLink(site_, from, url) }),
   },
 };
 

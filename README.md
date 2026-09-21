@@ -85,7 +85,7 @@ Sequences I have published in, or contributed to, the [On-Line Encyclopedia of I
 
 ## Links
 
-- [Generalized Menger Sponge Slice](site/blog/generalized-menger-sponge-slice/) - slice a sponge, get snowflakes
+- [Generalized Menger Sponge Slice](site/blog/generalized-menger-sponge-slice/index.md) - slice a sponge, get snowflakes
 - [mrly.net](https://mrly.net)
 - [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod)
 

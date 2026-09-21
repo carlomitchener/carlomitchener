@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmdirSync, statSync, 
 import { basename, dirname, extname, join, normalize, relative, resolve } from "node:path";
 import { deflateSync } from "node:zlib";
 import { collect as gitRoutes, forest, isGit, mirror, owner, print as gitPrint, render as gitRender, type Hooks } from "../git/git.ts";
+import { collect as blogRoutes, isBlog, render as blogRender, type Hooks as Posts } from "./blog.ts";
 import { index, stamp, type Index } from "./links.ts";
 
 /* TYPES */
@@ -82,6 +83,7 @@ export type Spec = {
   inline?: string[];
   icons?: Icons;
   git?: Hooks;
+  blog?: Posts;
   asset?: (name: string, body: Uint8Array) => Bytes;
 };
 
@@ -267,6 +269,8 @@ export async function scan(spec: Spec): Promise<Site> {
   const picked = await spec.collect(site);
   site.routes = picked.routes;
   site.nav = picked.nav ?? [];
+  const written = blogRoutes(site);
+  if (written.routes.length) site.routes = [...site.routes, ...written.routes];
   const repo = gitRoutes(site);
   if (repo.routes.length) {
     site.routes = [...site.routes, ...repo.routes];
@@ -319,6 +323,7 @@ export function fingerprint(site: Site, route: Route, spec?: Spec): string {
 
 export async function render(site: Site, route: Route, spec: Spec): Promise<Output[]> {
   if (isGit(route)) return spec.git?.page ? gitRender(site, route, spec) : [];
+  if (isBlog(route)) return spec.blog?.page ? blogRender(site, route, spec) : [];
   return await spec.render(site, route);
 }
 
@@ -497,6 +502,7 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
   let written = 0;
   for (const route of site.routes) {
     if (isGit(route) && !spec.git?.page) continue;
+    if (isBlog(route) && !spec.blog?.page) continue;
     const hash = fingerprint(site, route, spec);
     const was = old[route.route];
     const same = !options.force && !!was && was.hash === hash;

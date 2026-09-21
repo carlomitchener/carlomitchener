@@ -14,6 +14,7 @@ const EXTRA: Record<string, string[]> = {
   gifts: ["gift.css", "shop.css"],
   gift: ["gift.css", "shop.css"],
   page: ["doc.css"],
+  blog: ["doc.css", "shop.css", "blog.css"],
   missing: ["doc.css"],
   code: ["doc.css", "git.css"],
 };

@@ -1,5 +1,6 @@
 import { put } from "../kinds.js";
 import { Automator } from "./Automator.jsx";
+import { Blog } from "./Blog.jsx";
 import { Cart } from "./Cart.jsx";
 import { Code } from "./Code.jsx";
 import { Designs } from "./Designs.jsx";
@@ -27,3 +28,4 @@ put("pages", Pages);
 put("gifts", GiftCards);
 put("gift", GiftCard);
 put("page", Doc);
+put("blog", Blog);

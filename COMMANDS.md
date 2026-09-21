@@ -15,6 +15,10 @@ Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 - `bun run push --dry` lists every hashed path it would upload and counts the rest; `DRY=1 DRY_DIR=<dir>` holds the manifest in that folder instead of S3, so a push proves itself with no AWS at all.
 - `/automator/` and `/stats/` are hidden pages; `src/components/Mirror.jsx` fetches `/automator/automator.json` and `/stats/stats.json` every minute, so they need no rebuild.
 - `bun run dev` - build once, then serve `dist/` on port 3000, with `/cdn/feed/` served from `data/carlomitchener/feed/`; in DEV mode a missing post video is stood in by a local one.
+- `/blog/` is the blog from `kit/ssg/blog.ts`: one post is `site/blog/<slug>/index.md` with every figure, script and note beside it, and `blog` is a declared input like any other.
+- Those siblings are served at `/blog/<slug>/<path>` with their own content types, so an image the post writes as `files/hero.png` resolves to its served copy and the first one is the page's `og:image`.
+- A markdown file beside the post is not a page: a link to it lands on its `/git/` page, where the code viewer renders it with the chrome.
+- Both blog pages are the `blog` kind, drawn by `src/pages/Blog.jsx`; the post body is sent once in the HTML and read back off the DOM on hydrate, the way a code page does it.
 - `/git/` is the code viewer from `kit/git/`: it browses this repo's own tracked tree, `/raw/` serves the bytes, and the `git` block in `site/site.json` names the root, the GitHub slug and the branch.
 - That block also carries `"sitemap": false`, so the file pages and their `/raw/` objects stay off the map and only the `/git/` and `/git/<dir>/` listings enter it; the map stays about products.
 - A code page carries no props box and no `props.json`, so nothing hydrates it: the chrome is static there and the 200 kB body is sent once, never twice.
