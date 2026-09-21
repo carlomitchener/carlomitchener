@@ -10,7 +10,10 @@
       "unified": "^11.0.5",
       "unist-util-visit": "^5.1.0"
     },
-    "types": ["hast", "mdast"]
+    "types": [
+      "hast",
+      "mdast"
+    ]
   },
   "git": {
     "when": "git",
@@ -29,6 +32,10 @@
     "packages": {}
   },
   "theme": {
+    "when": null,
+    "packages": {}
+  },
+  "s3": {
     "when": null,
     "packages": {}
   }

@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { facetsOf, feed, GIFT_PREFIX, type Batch, type Facets, type ProductRow } from "../src/lib/shop.ts";
 import { loadEnv, need } from "../src/lib/env.ts";
-import { client, getText, list, putBytes } from "../../aws/s3.ts";
+import { client, getText, list, putBytes } from "../kit/s3.ts";
 import { API, COUNTRY, LIVE_DAYS } from "../src/config/shop.ts";
 
 loadEnv();

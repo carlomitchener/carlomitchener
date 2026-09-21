@@ -2,7 +2,7 @@ import type { S3Client } from "bun";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { client, getText, putBytes } from "./s3.ts";
+import { client, getText, putBytes } from "../site/kit/s3.ts";
 import { need } from "../site/src/lib/env.ts";
 
 /* WHERE */
