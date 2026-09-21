@@ -6,7 +6,7 @@ import FONT from './font.json' with { type: 'json' };
 
 const WORDMARK = 'MRLYPROD';
 const PKG = join(import.meta.dir, '..', '..', 'pkg');
-const HAS = existsSync(join(PKG, 'mrlydemo.js'));
+const HAS = existsSync(join(PKG, 'demos.js'));
 
 test.skipIf(!HAS)('the wordmark writes itself in stroke order, one cell a frame', () => {
   const write = animate(WORDMARK, 1);
@@ -50,8 +50,8 @@ test.skipIf(!HAS)('any string writes itself and a lone glyph has nothing to merg
 });
 
 test.skipIf(!HAS)('the kit matches the crate frame for frame', async () => {
-  const wasm = await import(join(PKG, 'mrlydemo.js'));
-  await wasm.default({ module_or_path: await Bun.file(join(PKG, 'mrlydemo_bg.wasm')).arrayBuffer() });
+  const wasm = await import(join(PKG, 'demos.js'));
+  await wasm.default({ module_or_path: await Bun.file(join(PKG, 'demos_bg.wasm')).arrayBuffer() });
   for (const text of ['MRLYPROD', 'SIERPINSKI', 'mrly.net', '(1)', 'Hi 42', 'A']) {
     expect(animate(text, 1)).toEqual(JSON.parse(wasm.font_animate(text, 1)));
     expect(cycle(text, 1, 25)).toEqual(JSON.parse(wasm.font_cycle(text, 1, 25)));
