@@ -27,6 +27,14 @@
     "when": null,
     "packages": {}
   },
+  "lambda": {
+    "when": null,
+    "packages": {}
+  },
+  "stats": {
+    "when": null,
+    "packages": {}
+  },
   "palette": {
     "when": null,
     "packages": {}
@@ -37,6 +45,10 @@
   },
   "s3": {
     "when": null,
+    "packages": {}
+  },
+  "push": {
+    "when": "push",
     "packages": {}
   }
 }

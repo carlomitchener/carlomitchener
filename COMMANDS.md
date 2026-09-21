@@ -10,7 +10,9 @@ Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 - `SITE_NOW=<epoch ms>` freezes `build`'s clock, so two runs of the same tree give byte-identical pages.
 - `bun run test` - the `kit/` and `scripts/` tests; it rebuilds `dist/` with the real clock, so run it before a frozen build, never after.
 - `bun run boot` - print every inline boot script as a JSON string; `build` refuses any inline script missing from that list.
-- `bun run push` - upload what changed, delete what went, never touch `cdn/`, `art/`, `automator/automator.json` or `stats/stats.json`.
+- `bun run push` - upload what changed under `site/`, delete what went, never touch `cdn/`, `art/`, `automator/automator.json` or `stats/stats.json`.
+- The `push` block in `site/site.json` is the whole rule: the prefix, that guard list, the bucket env key names, the manifest store and the immutable names; `kit/push.ts` reads it and `scripts/push.ts` is four lines.
+- `bun run push --dry` lists every hashed path it would upload and counts the rest; `DRY=1 DRY_DIR=<dir>` holds the manifest in that folder instead of S3, so a push proves itself with no AWS at all.
 - `/automator/` and `/stats/` are hidden pages; `src/components/Mirror.jsx` fetches `/automator/automator.json` and `/stats/stats.json` every minute, so they need no rebuild.
 - `bun run dev` - build once, then serve `dist/` on port 3000, with `/cdn/feed/` served from `data/carlomitchener/feed/`; in DEV mode a missing post video is stood in by a local one.
 - `bun run shots [routes]` - screenshots of the dev server at 390, 834 and 1440, light and dark, into `data/carlomitchener/site/shots/`; flags any horizontal overflow.

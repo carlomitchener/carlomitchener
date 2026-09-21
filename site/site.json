@@ -25,6 +25,13 @@
     "readme": { "path": "../README.md" },
     "public": { "path": "public" }
   },
+  "push": {
+    "prefix": "site/",
+    "guard": ["cdn/", "art/", "automator/automator.json", "stats/stats.json"],
+    "bucket": "CARLOMITCHENER_BUCKET",
+    "store": { "bucket": "CARLOMITCHENER_BUCKET", "prefix": "data/build" },
+    "hashed": ["(^|/)lib-[^/]+\\.js$", "(^|/)lib-[^/]+\\.css$", "(^|/)js/[^/]+\\.js$", "\\.wasm$", "-[0-9a-f]{8}\\.[^./]+$"]
+  },
   "robots": { "disallow": ["/cart/"] },
   "llms": {
     "about": "carlomitchener.com is Carlo Mitchener's shop. A generator paints a Game of Life design, a pipeline prints it on demand through Printful and sells it through Shopify, and every variation lives one lunar month, 29.53 days, then it is gone and never printed again. Nothing digital is sold: every printfile and every tile on a product page is a free download. The shop lives under /shop/, one page per variation at /shop/{product}/{design}/; the feed of generated posts lives at /feed/.",

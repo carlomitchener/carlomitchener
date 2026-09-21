@@ -7,8 +7,8 @@ from datetime import datetime, timedelta, timezone
 
 BUCKET = os.environ["CARLOMITCHENER_BUCKET"]
 DISTRIBUTION = os.environ.get("CARLOMITCHENER_ID", "")
-FUNCTIONS = ["carlomitchener-site", "carlomitchener-automator", "carlomitchener-feed", "carlomitchener-stats"]
-STATS_KEY = "site/stats/stats.json"
+FUNCTIONS = [one.strip() for one in os.environ["STATS_FUNCTIONS"].split(",") if one.strip()]
+STATS_KEY = os.environ["STATS_KEY"]
 HOURS = 24
 ERROR_LINES = 10
 ERROR_PATTERN = '?ERROR ?"Task timed out" ?Traceback ?"Runtime exited"'

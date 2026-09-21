@@ -3,6 +3,8 @@ import sys
 import unittest
 
 os.environ.setdefault("CARLOMITCHENER_BUCKET", "test")
+os.environ.setdefault("STATS_FUNCTIONS", "one,two")
+os.environ.setdefault("STATS_KEY", "stats.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from handler import clean
