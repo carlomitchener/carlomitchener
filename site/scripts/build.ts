@@ -79,9 +79,10 @@ const sheetDir = (name: string) => (KIT_SHEETS.includes(name) ? "kit" : "ui");
 
 const sheetUrl = (name: string) => `/ui/${name.slice(0, -4)}-${short(digest([readFileSync(join(org, sheetDir(name), name))]))}.css`;
 
-const SHEETS: Record<string, string[]> = Object.fromEntries(KINDS.map((kind) => [kind, sheetsFor(kind).map(sheetUrl)]));
+let SHEETS: Record<string, string[]> = {};
 
 async function bundle() {
+  SHEETS = Object.fromEntries(KINDS.map((kind) => [kind, sheetsFor(kind).map(sheetUrl)]));
   rmSync(client, { recursive: true, force: true });
   const out = await Bun.build({
     entrypoints: [join(org, "src", "client", "main.tsx")],
@@ -148,9 +149,7 @@ function frame(site_: Site, leaf: Leaf, one: { kind: string; props: object }, se
 }
 
 function shell(site_: Site, at: string, leaf: Leaf, one: { kind: string; props: object }): Output[] {
-  const out: Output[] = [{ path: at, bytes: frame(site_, leaf, one, one.props) }];
-  if (at.endsWith("index.html")) out.push({ path: at.replace(/index\.html$/, "props.json"), bytes: JSON.stringify(seen(leaf, one)) });
-  return out;
+  return [{ path: at, bytes: frame(site_, leaf, one, one.props) }];
 }
 
 /* TRIM */
@@ -739,7 +738,6 @@ const BLOG_LEAD = "Long-form posts, newest first.";
 const full = (path: string) => (path.startsWith("/") ? root + path : path);
 
 function blogPage(site_: Site, leaf: BlogLeaf): string {
-  const at = page(leaf.route);
   const list = leaf.kind === "blog";
   const one = list
     ? { kind: "blog", props: { posts: leaf.posts.map(({ slug, route, title, date, lead, image }) => ({ slug, route, title, date, lead, image })) } }
@@ -764,7 +762,6 @@ function blogPage(site_: Site, leaf: BlogLeaf): string {
     type: list ? "website" : "article",
     data,
   };
-  leaf.out.push({ path: at.replace(/index\.html$/, "props.json"), bytes: JSON.stringify(seen(head, one)) });
   return frame(site_, head, one, list ? one.props : { ...one.props, body: "" });
 }
 

@@ -2,9 +2,8 @@ import { createContext, startTransition, useCallback, useEffect, useRef, useStat
 import { flushSync } from "react-dom";
 import { bump } from "../lib/hooks.ts";
 import { need } from "../kinds.js";
+import { read, type View } from "./read.ts";
 import site from "../../site.json";
-
-type View = { page: { kind: string; title: string; props: Record<string, unknown> }; chrome: { route: string; catalog: unknown[]; fly: boolean; now: number } };
 
 type Go = (href: string, options?: { keep?: boolean }) => void;
 
@@ -35,9 +34,10 @@ export function useRouter(first: View): [View, Go] {
     async (path: string) => {
       const hit = seen.get(path);
       if (hit) return hit;
-      const reply = await fetch(`${path}props.json`, { headers: { accept: "application/json" } });
-      if (!reply.ok) throw new Error(`props ${reply.status}`);
-      const next = (await reply.json()) as View;
+      const reply = await fetch(path, { headers: { accept: "text/html" } });
+      if (!reply.ok) throw new Error(`page ${reply.status}`);
+      const next = read(await reply.text());
+      if (!next) throw new Error(`page ${path} carries no props`);
       await need(next.page.kind);
       seen.set(path, next);
       return next;

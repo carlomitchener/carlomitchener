@@ -62,5 +62,13 @@
   "vendor": {
     "when": "fonts",
     "packages": {}
+  },
+  "serve": {
+    "when": null,
+    "packages": {}
+  },
+  "dev": {
+    "when": null,
+    "packages": {}
   }
 }

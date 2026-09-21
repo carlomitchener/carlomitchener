@@ -7,6 +7,7 @@
 - `links.ts` is the one link resolver and `pic.ts` draws a dark and light `<picture>` pair.
 - The one dispatch is `../git`: a `git` block in `site.json` makes `scan` append the repo's own `/git/` and `/raw/` routes, and `render` and `fingerprint` dispatch to that module; no block, nothing git-related runs.
 - The other dispatch is `blog.ts`: a `blog` input makes `scan` append `/blog/` and every post, and `render` dispatches to that module; no input, no routes.
+- `../serve.ts` maps a path to a route through `render` and `globals`, and `../dev.ts` serves a site through it; neither reads a file by path, and a route lists in `urls` what it publishes beside its page or, as the slash route above, holds whatever is asked for under it.
 
 ## SITE.JSON
 
