@@ -9,7 +9,7 @@ import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { CSS, KINDS, sheetsFor } from "../src/config/sheets.ts";
 import { INLINE } from "../src/config/boot.ts";
 import { loadEnv } from "../src/lib/env.ts";
-import { sheet } from "../ssg/md.ts";
+import { sheet } from "../kit/ssg/md.ts";
 import { FEED_ROUTE, postMaster, postPoster, postRoute, posts, type Post } from "../src/lib/feed.ts";
 import { collectionUrl, designOf, facetsOf, GIFT_PREFIX, giftUrl, grid, handleOf, isDesign, PRIMARIES, primaryOf, productUrl, type Facets, type Primary, type ProductRow } from "../src/lib/shop.ts";
 import { App } from "../src/App.jsx";
@@ -71,7 +71,11 @@ const ENTRY = { main: "", sky: "" };
 
 const only = (out: Bun.BuildOutput) => basename(out.outputs.find((one) => one.kind === "entry-point")!.path);
 
-const sheetUrl = (name: string) => `/ui/${name.slice(0, -4)}-${short(digest([readFileSync(join(org, "ui", name))]))}.css`;
+const KIT_SHEETS = ["palette.css"];
+
+const sheetDir = (name: string) => (KIT_SHEETS.includes(name) ? "kit" : "ui");
+
+const sheetUrl = (name: string) => `/ui/${name.slice(0, -4)}-${short(digest([readFileSync(join(org, sheetDir(name), name))]))}.css`;
 
 const SHEETS: Record<string, string[]> = Object.fromEntries(KINDS.map((kind) => [kind, sheetsFor(kind).map(sheetUrl)]));
 
@@ -697,6 +701,7 @@ const config: Config = {
   inputs: DEV ? devInputs(site.inputs) : site.inputs,
   assets: [
     { path: "ui", out: "ui", hash: true, ext: ".css" },
+    { path: "kit", out: "ui", hash: true, files: KIT_SHEETS },
     { path: ".cache/client", out: "js", hash: false, ext: ".js" },
   ],
 };
@@ -705,7 +710,7 @@ export const spec: Spec = {
   root: org,
   out: dist,
   config,
-  templates: ["src", "scripts", "ui"],
+  templates: ["src", "scripts", "ui", "kit"],
   inline: INLINE,
   prepare: bundle,
   collect,

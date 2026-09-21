@@ -1,0 +1,23 @@
+{
+  "ssg": {
+    "when": null,
+    "packages": {
+      "rehype-stringify": "^10.0.1",
+      "remark-gfm": "^4.0.1",
+      "remark-math": "^6.0.0",
+      "remark-parse": "^11.0.0",
+      "remark-rehype": "^11.1.2",
+      "unified": "^11.0.5",
+      "unist-util-visit": "^5.1.0"
+    },
+    "types": ["hast", "mdast"]
+  },
+  "palette": {
+    "when": null,
+    "packages": {}
+  },
+  "theme": {
+    "when": null,
+    "packages": {}
+  }
+}

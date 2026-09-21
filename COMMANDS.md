@@ -8,6 +8,7 @@ Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 - DEV mode: `"dev": true` in `site/package.json` (or `DEV=1`) makes `build` and `dev` read the `dev/` files, drop the Shopify cart and redirect `/cdn/` pictures to picsum; the knobs live in `site/src/config/dev.ts`; the Lambda ignores the flag.
 - `bun run build` - render every page into `dist/`: the feed wall, the shop by category and product, one page per variation and one per post.
 - `SITE_NOW=<epoch ms>` freezes `build`'s clock, so two runs of the same tree give byte-identical pages.
+- `bun run test` - the `kit/` and `ssg/` tests; it rebuilds `dist/` with the real clock, so run it before a frozen build, never after.
 - `bun run boot` - print every inline boot script as a JSON string; `build` refuses any inline script missing from that list.
 - `bun run push` - upload what changed, delete what went, never touch `cdn/`, `art/`, `automator/automator.json` or `stats/stats.json`.
 - `/automator/` and `/stats/` are hidden pages; `src/components/Mirror.jsx` fetches `/automator/automator.json` and `/stats/stats.json` every minute, so they need no rebuild.
