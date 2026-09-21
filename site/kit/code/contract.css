@@ -1,0 +1,22 @@
+/* CONTRACT */
+
+:root {
+  --kit-line: var(--site-line, #dddddf);
+  --kit-hair: var(--site-hair, 1px solid var(--kit-line));
+  --kit-panel: var(--site-panel, #f1f1f2);
+  --kit-art: var(--site-art, #ffffff);
+  --kit-fg: var(--site-fg, #000000);
+  --kit-dim: var(--site-dim, #555558);
+  --kit-accent: var(--site-accent, #008cff);
+  --kit-mix: var(--site-mix, 45%);
+  --kit-mono: var(--site-mono, ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace);
+  --kit-read: var(--site-read, 72ch);
+  --kit-r2: var(--site-r2, 8px);
+  --kit-s1: var(--site-s1, 0.25rem);
+  --kit-s2: var(--site-s2, 0.5rem);
+  --kit-s3: var(--site-s3, 0.75rem);
+  --kit-s4: var(--site-s4, 1rem);
+  --kit-s5: var(--site-s5, 1.5rem);
+  --kit-s6: var(--site-s6, 2rem);
+  --kit-icon: var(--site-icon, 1.05rem);
+}

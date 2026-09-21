@@ -12,6 +12,10 @@
     },
     "types": ["hast", "mdast"]
   },
+  "code": {
+    "when": null,
+    "packages": {}
+  },
   "palette": {
     "when": null,
     "packages": {}

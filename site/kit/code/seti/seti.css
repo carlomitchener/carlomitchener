@@ -1,0 +1,137 @@
+/* FACE */
+
+@font-face {
+  font-family: "seti";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./seti.woff2") format("woff2");
+  font-display: block;
+}
+
+/* GLYPH */
+
+.si {
+  flex: none;
+  font-family: "seti";
+  font-size: var(--kit-icon);
+  line-height: 1;
+  text-align: center;
+  width: var(--kit-icon);
+}
+
+.si::before {
+  color: #d4d7d6;
+  content: "\e023";
+}
+
+/* TYPES */
+
+.si-c::before {
+  color: #519aba;
+  content: "\e00c";
+}
+
+.si-config::before {
+  color: #6d8086;
+  content: "\e019";
+}
+
+.si-css::before {
+  color: #519aba;
+  content: "\e01d";
+}
+
+.si-csv::before {
+  color: #8dc149;
+  content: "\e01e";
+}
+
+.si-cuda::before {
+  color: #8dc149;
+  content: "\e01f";
+}
+
+.si-favicon::before {
+  color: #cbcb41;
+  content: "\e02f";
+}
+
+.si-font::before {
+  color: #cc3e44;
+  content: "\e033";
+}
+
+.si-git::before {
+  color: #41535b;
+  content: "\e034";
+}
+
+.si-h::before {
+  color: #a074c4;
+  content: "\e00c";
+}
+
+.si-html::before {
+  color: #e37933;
+  content: "\e048";
+}
+
+.si-image::before {
+  color: #a074c4;
+  content: "\e04c";
+}
+
+.si-js::before {
+  color: #cbcb41;
+  content: "\e051";
+}
+
+.si-json::before {
+  color: #cbcb41;
+  content: "\e055";
+}
+
+.si-license::before {
+  color: #cbcb41;
+  content: "\e05a";
+}
+
+.si-lock::before {
+  color: #8dc149;
+  content: "\e05d";
+}
+
+.si-markdown::before {
+  color: #519aba;
+  content: "\e060";
+}
+
+.si-python::before {
+  color: #519aba;
+  content: "\e07b";
+}
+
+.si-react::before {
+  color: #519aba;
+  content: "\e07d";
+}
+
+.si-rust::before {
+  color: #6d8086;
+  content: "\e082";
+}
+
+.si-shell::before {
+  color: #8dc149;
+  content: "\e089";
+}
+
+.si-svg::before {
+  color: #a074c4;
+  content: "\e091";
+}
+
+.si-ts::before {
+  color: #519aba;
+  content: "\e099";
+}
