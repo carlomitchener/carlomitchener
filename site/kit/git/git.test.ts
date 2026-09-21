@@ -23,7 +23,7 @@ writeFileSync(join(home, "src", "a.rs"), "fn main() {}\n");
 
 afterAll(() => rmSync(home, { recursive: true, force: true }));
 
-const site = (git: unknown) => ({ root: home, config: git ? { git } : {} }) as unknown as Site;
+const site = (git: unknown) => ({ root: home, config: git ? { git } : {}, ships: new Map<string, string>() }) as unknown as Site;
 
 /* RULES */
 
@@ -118,7 +118,7 @@ test("a binary the site already serves loses its raw copy and points at the serv
   mkdirSync(shelf, { recursive: true });
   writeFileSync(join(shelf, "logo.png"), Uint8Array.from([137, 80, 78, 71, 13, 10, 26, 10, 0, 1]));
   writeFileSync(join(shelf, "seal.bin"), Uint8Array.from([0, 1, 2, 3]));
-  const one = { root: shelf, config: { git: { root: "." } }, nav: [] } as unknown as Site;
+  const one = { root: shelf, config: { git: { root: "." } }, nav: [], ships: new Map<string, string>() } as unknown as Site;
   const { routes } = collect(one);
   const spec = { git: { page: (_s: Site, leaf: { body: string }) => leaf.body, served: (_s: Site, path: string) => (path === "logo.png" ? "/figures/logo.png" : null) } } as unknown as Spec;
   const shown = await render(one, routes.find((r) => r.route === "/git/logo.png")!, spec);
@@ -126,6 +126,21 @@ test("a binary the site already serves loses its raw copy and points at the serv
   expect(shown[0].bytes).toContain('<img src="/figures/logo.png"');
   const kept = await render(one, routes.find((r) => r.route === "/git/seal.bin")!, spec);
   expect(kept.map((item) => item.path)).toEqual(["raw/seal.bin", "git/seal.bin"]);
+  rmSync(shelf, { recursive: true, force: true });
+});
+
+/* SHIPPED */
+
+test("a file the build ships verbatim loses its raw copy whatever its type", async () => {
+  const shelf = join(tmpdir(), `mrlyship-${process.pid}`);
+  mkdirSync(shelf, { recursive: true });
+  writeFileSync(join(shelf, "make.py"), "print(1)\n");
+  const one = { root: shelf, config: { git: { root: "." } }, nav: [], ships: new Map([[join(shelf, "make.py"), "/blog/post/make.py"]]) } as unknown as Site;
+  const { routes } = collect(one);
+  const spec = { git: { page: (_s: Site, leaf: { body: string }) => leaf.body } } as unknown as Spec;
+  const shown = await render(one, routes.find((r) => r.route === "/git/make.py")!, spec);
+  expect(shown.map((item) => item.path)).toEqual(["git/make.py"]);
+  expect(shown[0].bytes).toContain('<a href="/blog/post/make.py">Raw</a>');
   rmSync(shelf, { recursive: true, force: true });
 });
 

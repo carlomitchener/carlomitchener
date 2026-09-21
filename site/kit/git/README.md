@@ -23,8 +23,9 @@
 - A file over 1 MB is a raw link only; text over 200 KB drops the line numbers and stays a plain `<pre>`.
 - A name with no dot gets `.txt` on both its page and its raw path, because the CloudFront router 301s any extensionless path to a slash.
 - `/raw/<path>` is the bytes: text is `text/plain; charset=utf-8`, binary keeps its type by extension, and the type rides on the output so `push.ts` sets the S3 header.
-- A binary the site already serves elsewhere gets no `/raw/` object at all: the Raw link, the `<img>`, the `<embed>` and the Download link point at the served copy, and the sitemap drops the raw URL.
-- `spec.git.served(site, path)` answers that question, so the kit never names an extension or a folder; text, PDFs and unserved binaries keep their `/raw/` copy.
+- A file the site already serves elsewhere gets no `/raw/` object at all: the Raw link, the `<img>`, the `<embed>` and the Download link point at the served copy, and the sitemap drops the raw URL.
+- `site.ships` answers first, for a file the build publishes byte for byte, then `spec.git.served(site, path)`, so the kit never names an extension or a folder.
+- A served file a bundler may have rewritten keeps its `/raw/` copy unless it is binary, huge or a PDF, because only then are the bytes known to match.
 - Every page links to the same path on github.com and to its own raw object.
 
 ## NAVIGATOR

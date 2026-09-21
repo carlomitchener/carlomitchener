@@ -49,6 +49,7 @@ export type Site = {
   styles: string[];
   serves: Map<string, string>;
   made: Set<string>;
+  ships: Map<string, string>;
   asset: (name: string) => string;
   input: (name: string) => Input;
   bytes: (file: string) => Uint8Array;
@@ -254,6 +255,7 @@ export async function scan(spec: Spec): Promise<Site> {
     styles: [...assets].filter(([name]) => name.endsWith(".css")).map(([, href]) => href).sort(),
     serves,
     made: new Set(copies.map((one) => one.path)),
+    ships: new Map(),
     asset: (name) => {
       const hit = assets.get(name);
       if (!hit) throw new Error(`ssg: no asset named ${name}`);

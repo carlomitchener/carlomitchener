@@ -320,8 +320,10 @@ export function reads(body: Uint8Array): string | null {
 
 /* SERVED */
 
-function shelved(site: Site, git: Git, path: string, weight: number, hooks: Hooks): string | null {
-  const url = hooks.served?.(site, path);
+function shelved(site: Site, git: Git, path: string, weight: number, hooks?: Hooks): string | null {
+  const ship = site.ships.get(join(git.root, path));
+  if (ship) return ship;
+  const url = hooks?.served?.(site, path);
   if (!url) return null;
   const kind = ext(path);
   if (weight > HUGE || IMAGE.has(kind) || kind === "pdf") return url;
@@ -329,7 +331,7 @@ function shelved(site: Site, git: Git, path: string, weight: number, hooks: Hook
 }
 
 export function mirror(site: Site, route: Route, hooks?: Hooks): string | null {
-  if (route.kind !== "gitfile" || !hooks?.served) return null;
+  if (route.kind !== "gitfile") return null;
   const git = config(site);
   if (!git) return null;
   const { path, size } = route.data as File;

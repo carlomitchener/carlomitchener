@@ -33,6 +33,7 @@ const site = (path = home) =>
     root: home,
     config: { inputs: { blog: { path, deep: true } } },
     input: () => ({ name: "blog", path, files: walk(path, true), missing: !walk(path, true).length }),
+    ships: new Map<string, string>(),
   }) as unknown as Site;
 
 const spec = (out: string[] = []) =>
@@ -80,6 +81,16 @@ test("every file beside index.md ships under the post with its own type", () => 
   expect(find(out, "blog/newer-news/files/hero.png")?.type).toBe("image/png");
   expect(find(out, "blog/newer-news/NOTES.md")?.type).toBe("text/plain; charset=utf-8");
   expect(files.urls?.map((u) => u.route)).toEqual(["/blog/newer-news/files/hero.png"]);
+});
+
+/* SHIPS */
+
+test("every sibling is named in site.ships at collect time", () => {
+  forget();
+  const one = site();
+  routes(one);
+  expect(one.ships.get(join(home, "newer-news", "files", "hero.png"))).toBe("/blog/newer-news/files/hero.png");
+  expect(one.ships.get(join(home, "newer-news", "NOTES.md"))).toBe("/blog/newer-news/NOTES.md");
 });
 
 /* FIGURE */

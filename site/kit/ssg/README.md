@@ -29,6 +29,7 @@
 - A file loose in the blog folder throws: the shape is one folder per post, never a bare `<slug>.md`.
 - `/blog/` lists the posts newest first, then by slug; `/blog/<slug>/` is the post, and its `lastmod` is the front matter date.
 - Every file beside `index.md` ships at `/blog/<slug>/<path>` with its content type on the output, so `push.ts` sets the S3 header without re-rendering.
+- Each one is named in `site.ships` at collect time, repo file to published URL, so the code viewer links that copy and writes no `/raw/` twin, whatever its type.
 - Those files ride a hidden route that never enters the sitemap, and each one is named in the link index, so a relative image in the body answers with its served path.
 - A markdown sibling ships too but is never indexed, so a link to it falls through the resolver to the `/git/` page where the site has one.
 - `leaf.image` is the og:image: the first figure in the body when it names a shipped file, its bare name when the body names a site figure, else empty.
@@ -40,9 +41,10 @@
 ## EXPORTS
 
 - `scan(spec)`: runs `prepare`, reads `site.json` and the declared inputs, places every bundle, calls `collect()`, returns `Site`.
-- `Site`: `root out config inputs kit routes nav stamp index copies styles serves made asset input bytes`.
+- `Site`: `root out config inputs kit routes nav stamp index copies styles serves made ships asset input bytes`.
 - `copies` are the placed bundle files, which `globals` writes; `styles` is every placed `.css` href, sorted, for a chrome that links them all.
 - `serves` maps a bundled source file to its href and `made` holds every path the build has written; the code viewer's `served` hook reads both.
+- `ships` maps a repo file the build publishes byte for byte to that URL, filled at collect time, and the code viewer reads it before it asks the hook.
 - `render(site, route, spec)`: pure, returns `[{ path, bytes, type? }]` for that route alone. A missing input throws here.
 - `type` overrides the content type a path would earn by its extension; it rides in the manifest so a push sets the S3 header without re-rendering.
 - `globals(site, spec)`: the copies, sitemap.xml, robots.txt, llms.txt, the webmanifest, the icons, `git/tree.json`, the public copy, then the site's own extras.

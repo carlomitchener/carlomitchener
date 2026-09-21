@@ -179,6 +179,7 @@ export function collect(site: Site): { routes: Route[] } {
       at: one.date,
     });
     if (!one.names.length) continue;
+    for (const path of one.names) site.ships.set(join(one.dir, path), `${one.route}${path}`);
     routes.push({
       route: `${one.route}@files`,
       kind: "blogfiles",
