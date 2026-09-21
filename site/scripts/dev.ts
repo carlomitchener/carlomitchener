@@ -22,7 +22,7 @@ async function build(): Promise<string> {
 
 /* WATCH */
 
-const WATCHED = ["src", "ui", "kit", "pages", "ssg", "scripts", "site.json", "../README.md", "../shop/files", "../avatar"];
+const WATCHED = ["src", "ui", "kit", "pages", "scripts", "site.json", "../README.md", "../shop/files", "../avatar"];
 
 const pending = new Set<string>();
 let timer: ReturnType<typeof setTimeout> | null = null;

@@ -12,6 +12,14 @@
     },
     "types": ["hast", "mdast"]
   },
+  "git": {
+    "when": "git",
+    "packages": {
+      "@shikijs/core": "^4.4.3",
+      "@shikijs/engine-javascript": "^4.4.3",
+      "@shikijs/langs": "^4.4.3"
+    }
+  },
   "code": {
     "when": null,
     "packages": {}

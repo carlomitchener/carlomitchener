@@ -1,15 +1,17 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmdirSync, statSync, unlinkSync, writeFileSync } from "node:fs";
-import { basename, dirname, extname, join, relative, resolve } from "node:path";
+import { basename, dirname, extname, join, normalize, relative, resolve } from "node:path";
+import { deflateSync } from "node:zlib";
+import { collect as gitRoutes, forest, isGit, mirror, owner, print as gitPrint, render as gitRender, type Hooks } from "../git/git.ts";
 import { index, stamp, type Index } from "./links.ts";
 
 /* TYPES */
 
-type Bytes = string | Uint8Array;
+export type Bytes = string | Uint8Array;
 
 export type Output = { path: string; bytes: Bytes; type?: string };
 
-type Link = { route: string; name?: string; at?: string; source?: string };
+export type Link = { route: string; name?: string; at?: string; source?: string };
 
 export type Route = {
   route: string;
@@ -24,36 +26,49 @@ export type Route = {
   sitemap?: boolean;
 };
 
+export type Node = { name: string; href?: string; nodes?: Node[]; open?: boolean; lazy?: string; icon?: string; figure?: { dark: string; light: string }; text?: string; dates?: string[] };
+
 export type Input = { name: string; path: string; files: string[]; missing: boolean };
 
-type Bundle = { path: string; out: string; hash: boolean; files: string[]; ext?: string };
+export type Bundle = { path: string; out: string; hash: boolean; files: string[]; ext?: string };
+
+export type Icons = { rows: string[]; svg: string };
 
 export type Site = {
   root: string;
   out: string;
   config: Config;
   inputs: Record<string, Input>;
+  kit: Bundle | null;
   routes: Route[];
+  nav: Node[];
   stamp: string;
   index: Index | null;
   copies: Output[];
   styles: string[];
+  serves: Map<string, string>;
+  made: Set<string>;
   asset: (name: string) => string;
   input: (name: string) => Input;
   bytes: (file: string) => Uint8Array;
 };
+
+export type Decl = { path: string; out?: string; hash?: boolean; files?: string[]; ext?: string };
 
 export type Config = {
   title?: string;
   name?: string;
   root?: string;
   inputs?: Record<string, { path: string; ext?: string; deep?: boolean }>;
-  assets?: { path: string; out?: string; hash?: boolean; files?: string[]; ext?: string }[];
+  kit?: Decl;
+  assets?: Decl[];
   manifest?: Record<string, unknown>;
   robots?: { disallow?: string[] };
   llms?: { about?: string; links?: { href: string; name?: string; note?: string }[] };
   [key: string]: unknown;
 };
+
+export type Picked = { routes: Route[]; nav?: Node[] };
 
 export type Spec = {
   root: string;
@@ -61,10 +76,12 @@ export type Spec = {
   config?: Config;
   templates?: string[];
   prepare?: () => Promise<void> | void;
-  collect: (site: Site) => Promise<Route[]> | Route[];
+  collect: (site: Site) => Promise<Picked> | Picked;
   render: (site: Site, route: Route) => Promise<Output[]> | Output[];
   globals?: (site: Site) => Promise<Output[]> | Output[];
   inline?: string[];
+  icons?: Icons;
+  git?: Hooks;
   asset?: (name: string, body: Uint8Array) => Bytes;
 };
 
@@ -91,7 +108,11 @@ export function walk(dir: string, deep = true): string[] {
 
 const cache = new Map<string, Uint8Array>();
 
-function bytes(file: string): Uint8Array {
+export function forget() {
+  cache.clear();
+}
+
+export function bytes(file: string): Uint8Array {
   const hit = cache.get(file);
   if (hit) return hit;
   const data = new Uint8Array(readFileSync(file));
@@ -124,53 +145,113 @@ function inputs(root: string, config: Config): Record<string, Input> {
 }
 
 function templates(spec: Spec): string {
-  const dirs = [import.meta.dir, ...(spec.templates ?? []).map((d) => resolve(spec.root, d))];
+  const here = resolve(import.meta.dir, "..");
+  const dirs = [here, ...(spec.templates ?? []).map((d) => resolve(spec.root, d))];
   const parts: Bytes[] = [];
   for (const dir of dirs) for (const file of walk(dir)) parts.push(relative(dir, file), bytes(file));
   return digest(parts);
 }
 
-function bundle(root: string, decl: NonNullable<Config["assets"]>[number]): Bundle {
+const outDir = (decl: Decl) => (decl.out ?? "ui").replace(/^\/|\/$/g, "");
+
+function bundle(root: string, decl: Decl): Bundle {
   const path = resolve(root, decl.path);
   const named = decl.files ?? walk(path, false).map((f) => f.slice(path.length + 1));
   const files = decl.ext ? named.filter((f) => f.endsWith(decl.ext!)) : named;
-  return { path, out: (decl.out ?? "ui").replace(/^\/|\/$/g, ""), hash: decl.hash ?? false, files };
+  return { path, out: outDir(decl), hash: decl.hash ?? false, files };
 }
 
-async function scan(spec: Spec): Promise<Site> {
+const decls = (config: Config): Decl[] => [...(config.kit ? [config.kit] : []), ...(config.assets ?? [])];
+
+/* ASSETS */
+
+const IMPORT = /((?:\bfrom|\bimport)\s*\(?\s*)(["'])(\.\.?\/[^"']+)\2/g;
+
+const URLS = /(\burl\(\s*)(["']?)([^"')]+)\2(\s*\))/g;
+
+const LOADS = /(@import\s+)(["'])([^"']+)\2/g;
+
+const OUTSIDE = /^(?:[a-z][a-z0-9+.-]*:|[/#])/i;
+
+function place(one: Bundle, spec: Spec, assets: Map<string, string>, copies: Output[], serves: Map<string, string>) {
+  const known = new Set(one.files);
+  const busy = new Set<string>();
+  const point = (name: string, target: string): string | null => {
+    if (OUTSIDE.test(target)) return null;
+    const dep = normalize(join(dirname(name), target));
+    if (known.has(dep)) return visit(dep);
+    const placed = serves.get(join(one.path, dep));
+    if (placed) return placed;
+    if (existsSync(join(one.path, dep))) throw new Error(`ssg: ${name} names ${dep}, which the bundle's files do not list`);
+    return null;
+  };
+  const visit = (name: string): string => {
+    const hit = assets.get(name);
+    if (hit) return hit;
+    if (busy.has(name)) throw new Error(`ssg: ${name} imports itself around a cycle`);
+    busy.add(name);
+    const file = join(one.path, name);
+    if (!existsSync(file)) throw new Error(`ssg: asset missing: ${file}`);
+    const raw = bytes(file);
+    let body = spec.asset ? spec.asset(name, raw) : raw;
+    if (one.hash && /\.m?js$/.test(name)) {
+      const text = typeof body === "string" ? body : new TextDecoder().decode(body);
+      body = text.replace(IMPORT, (whole, head: string, quote: string, target: string) => {
+        const to = point(name, target);
+        return to ? `${head}${quote}${to}${quote}` : whole;
+      });
+    }
+    if (one.hash && /\.css$/.test(name)) {
+      const text = typeof body === "string" ? body : new TextDecoder().decode(body);
+      body = text
+        .replace(URLS, (whole, head: string, quote: string, target: string, tail: string) => {
+          const to = point(name, target);
+          return to ? `${head}${quote}${to}${quote}${tail}` : whole;
+        })
+        .replace(LOADS, (whole, head: string, quote: string, target: string) => {
+          const to = point(name, target);
+          return to ? `${head}${quote}${to}${quote}` : whole;
+        });
+    }
+    const data = typeof body === "string" ? new TextEncoder().encode(body) : body;
+    const stem = name.replace(/(\.[^.]+)$/, "");
+    const path = one.hash ? `${one.out}/${stem}-${short(digest([data]))}${extname(name)}` : `${one.out}/${name}`;
+    assets.set(name, `/${path}`);
+    serves.set(join(one.path, name), `/${path}`);
+    copies.push({ path, bytes: data });
+    busy.delete(name);
+    return `/${path}`;
+  };
+  for (const name of one.files) visit(name);
+}
+
+const shows = (nodes: Node[], href: string): boolean =>
+  nodes.some((node) => node.href === href || shows(node.nodes ?? [], href));
+
+export async function scan(spec: Spec): Promise<Site> {
   if (spec.prepare) await spec.prepare();
   const root = resolve(spec.root);
   const config = spec.config ?? (JSON.parse(readFileSync(join(root, "site.json"), "utf8")) as Config);
   const found = inputs(root, config);
+  const list = decls(config).map((decl) => bundle(root, decl));
   const assets = new Map<string, string>();
   const copies: Output[] = [];
-  const styles: string[] = [];
-  for (const decl of config.assets ?? []) {
-    const one = bundle(root, decl);
-    for (const name of one.files) {
-      const file = join(one.path, name);
-      if (!existsSync(file)) throw new Error(`ssg: asset missing: ${file}`);
-      const raw = bytes(file);
-      const body = spec.asset ? spec.asset(name, raw) : raw;
-      const data = typeof body === "string" ? new TextEncoder().encode(body) : body;
-      const stem = name.replace(/(\.[^.]+)$/, "");
-      const ext = extname(name);
-      const path = one.hash ? `${one.out}/${stem}-${short(digest([data]))}${ext}` : `${one.out}/${name}`;
-      assets.set(name, `/${path}`);
-      if (ext === ".css") styles.push(`/${path}`);
-      copies.push({ path, bytes: data });
-    }
-  }
+  const serves = new Map<string, string>();
+  for (const one of list) place(one, spec, assets, copies, serves);
   const site: Site = {
     root,
     out: resolve(spec.out),
     config,
     inputs: found,
+    kit: config.kit ? list[0] : null,
     routes: [],
+    nav: [],
     stamp: "",
     index: null,
     copies,
-    styles: styles.sort(),
+    styles: [...assets].filter(([name]) => name.endsWith(".css")).map(([, href]) => href).sort(),
+    serves,
+    made: new Set(copies.map((one) => one.path)),
     asset: (name) => {
       const hit = assets.get(name);
       if (!hit) throw new Error(`ssg: no asset named ${name}`);
@@ -183,10 +264,18 @@ async function scan(spec: Spec): Promise<Site> {
     },
     bytes,
   };
-  site.routes = await spec.collect(site);
+  const picked = await spec.collect(site);
+  site.routes = picked.routes;
+  site.nav = picked.nav ?? [];
+  const repo = gitRoutes(site);
+  if (repo.routes.length) {
+    site.routes = [...site.routes, ...repo.routes];
+    if (repo.node && !shows(site.nav, repo.node.href!)) site.nav = [...site.nav, repo.node];
+  }
   site.index = index(site);
   site.stamp = digest([
     templates(spec),
+    JSON.stringify(site.nav),
     JSON.stringify(config),
     JSON.stringify([...assets]),
     stamp(site.index),
@@ -209,7 +298,8 @@ export function label(site: Site, file: string): string {
   return file === base ? name : `${name}/${file.slice(base.length + 1)}`;
 }
 
-export function fingerprint(site: Site, route: Route): string {
+export function fingerprint(site: Site, route: Route, spec?: Spec): string {
+  if (isGit(route)) return gitPrint(site, route, spec?.git);
   const files = route.inputs ?? (route.source ? [route.source] : []);
   const named = files.map((file) => [label(site, file), file] as const).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
   const parts: Bytes[] = [route.route, route.kind ?? "", JSON.stringify(route.data ?? null), site.stamp];
@@ -225,18 +315,85 @@ export function fingerprint(site: Site, route: Route): string {
   return digest(parts).slice(0, 16);
 }
 
+/* RENDER */
+
+export async function render(site: Site, route: Route, spec: Spec): Promise<Output[]> {
+  if (isGit(route)) return spec.git?.page ? gitRender(site, route, spec) : [];
+  return await spec.render(site, route);
+}
+
+/* ICONS */
+
+const SIGNATURE = Uint8Array.from([137, 80, 78, 71, 13, 10, 26, 10]);
+
+const TABLE = new Uint32Array(256).map((_, n) => {
+  let c = n;
+  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+  return c >>> 0;
+});
+
+function crc32(data: Uint8Array): number {
+  let c = 0xffffffff;
+  for (const b of data) c = TABLE[(c ^ b) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+
+function chunk(type: string, body: Uint8Array): Uint8Array {
+  const out = new Uint8Array(12 + body.length);
+  const view = new DataView(out.buffer);
+  view.setUint32(0, body.length);
+  out.set(new TextEncoder().encode(type), 4);
+  out.set(body, 8);
+  view.setUint32(8 + body.length, crc32(out.subarray(4, 8 + body.length)));
+  return out;
+}
+
+function png(size: number, dark: (x: number, y: number) => boolean): Uint8Array {
+  const raw = new Uint8Array(size * (size + 1));
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) raw[y * (size + 1) + 1 + x] = dark(x, y) ? 0 : 255;
+  const head = new Uint8Array(13);
+  const view = new DataView(head.buffer);
+  view.setUint32(0, size);
+  view.setUint32(4, size);
+  head[8] = 8;
+  const parts = [SIGNATURE, chunk("IHDR", head), chunk("IDAT", new Uint8Array(deflateSync(raw))), chunk("IEND", new Uint8Array(0))];
+  const out = new Uint8Array(parts.reduce((n, part) => n + part.length, 0));
+  let at = 0;
+  for (const part of parts) {
+    out.set(part, at);
+    at += part.length;
+  }
+  return out;
+}
+
+function icons({ rows, svg }: Icons): Output[] {
+  const n = rows.length;
+  const mark = (size: number) => png(size, (x, y) => rows[Math.floor((y * n) / size)][Math.floor((x * n) / size)] === "1");
+  return [
+    { path: "favicon.svg", bytes: svg },
+    { path: "favicon.png", bytes: mark(40) },
+    { path: "apple-touch-icon.png", bytes: mark(180) },
+    { path: "icon-192.png", bytes: mark(192) },
+    { path: "icon-512.png", bytes: mark(512) },
+  ];
+}
+
 /* GLOBALS */
 
 const clean = (root: string) => (root ?? "").replace(/\/$/, "");
 
 const AGENTS = ["GPTBot", "ClaudeBot", "Claude-Web", "CCBot", "Google-Extended", "anthropic-ai", "PerplexityBot"];
 
-function links(site: Site): Link[] {
+function links(site: Site, spec: Spec): Link[] {
   const out: Link[] = [];
   for (const route of site.routes) {
     if (route.hidden && !route.sitemap) continue;
+    const away = mirror(site, route, spec.git);
     const list = route.urls ?? (route.route.endsWith("/") ? [{ route: route.route, name: route.name }] : []);
-    for (const one of list) out.push({ route: one.route, name: one.name ?? one.route, at: one.at || route.at });
+    for (const one of list) {
+      if (away && owner(one.route)) continue;
+      out.push({ route: one.route, name: one.name ?? one.route, at: one.at || route.at });
+    }
   }
   return out.sort((a, b) => a.route.localeCompare(b.route));
 }
@@ -266,9 +423,9 @@ function llms(site: Site, root: string): string {
 }
 
 export async function globals(site: Site, spec: Spec): Promise<Output[]> {
-  const out: Output[] = [...(site.copies ?? [])];
+  const out: Output[] = [...site.copies];
   const root = clean(site.config.root as string);
-  const shown = links(site);
+  const shown = links(site, spec);
   const urls = shown.map((l) => `<url><loc>${escape(root + l.route)}</loc><lastmod>${l.at || today()}</lastmod></url>`);
   out.push({
     path: "sitemap.xml",
@@ -277,6 +434,9 @@ export async function globals(site: Site, spec: Spec): Promise<Output[]> {
   out.push({ path: "robots.txt", bytes: robots(site, root) });
   if (site.config.llms) out.push({ path: "llms.txt", bytes: llms(site, root) });
   if (site.config.manifest) out.push({ path: "manifest.webmanifest", bytes: JSON.stringify(site.config.manifest, null, 2) + "\n" });
+  if (spec.icons) out.push(...icons(spec.icons));
+  const wood = forest(site);
+  if (wood) out.push({ path: "git/tree.json", bytes: JSON.stringify(wood), type: "application/json" });
   const pub = site.config.inputs?.public ? site.input("public") : null;
   if (pub) for (const file of walk(pub.path)) out.push({ path: file.slice(pub.path.length + 1), bytes: bytes(file) });
   if (spec.globals) out.push(...(await spec.globals(site)));
@@ -336,16 +496,20 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
   let rendered = 0;
   let written = 0;
   for (const route of site.routes) {
-    const hash = fingerprint(site, route);
+    if (isGit(route) && !spec.git?.page) continue;
+    const hash = fingerprint(site, route, spec);
     const was = old[route.route];
     const same = !options.force && !!was && was.hash === hash;
     if (was && same && (!verify || was.outputs.every((p) => existsSync(join(site.out, p))))) {
       next[route.route] = was;
       route.at = route.at || was.at;
-      for (const p of was.outputs) kept.add(p);
+      for (const p of was.outputs) {
+        kept.add(p);
+        site.made.add(p);
+      }
       continue;
     }
-    const outputs = await spec.render(site, route);
+    const outputs = await render(site, route, spec);
     for (const item of outputs) {
       if (item.path.endsWith(".html")) guard(item.path, typeof item.bytes === "string" ? item.bytes : new TextDecoder().decode(item.bytes), known);
       if (put(site.out, item)) written++;
@@ -354,7 +518,10 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
     const at = route.at || (was && same ? was.at : today());
     next[route.route] = { hash, at, outputs: outputs.map((o) => o.path), types: typed(outputs) };
     route.at = at;
-    for (const item of outputs) kept.add(item.path);
+    for (const item of outputs) {
+      kept.add(item.path);
+      site.made.add(item.path);
+    }
   }
   for (const item of await globals(site, spec)) {
     if (put(site.out, item)) written++;
@@ -373,11 +540,11 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
     }
   };
   for (const record of Object.values(old)) for (const p of record.outputs) if (!kept.has(p)) drop(p);
-  for (const decl of site.config.assets ?? []) {
-    const out = (decl.out ?? "ui").replace(/^\/|\/$/g, "");
-    const dir = join(site.out, out);
-    if (!existsSync(dir)) continue;
-    for (const name of readdirSync(dir)) if (!kept.has(`${out}/${name}`)) drop(`${out}/${name}`);
+  for (const out of new Set(decls(site.config).map(outDir))) {
+    for (const file of walk(join(site.out, out))) {
+      const p = relative(site.out, file);
+      if (!kept.has(p)) drop(p);
+    }
   }
   if (path) {
     mkdirSync(dirname(path), { recursive: true });
@@ -390,4 +557,8 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
 
 export const page = (route: string) => (route === "/" ? "index.html" : `${route.replace(/^\/|\/$/g, "")}/index.html`);
 
-export { digest, short, today };
+export const jsonText = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
+
+export const jsonScript = (data: unknown) => `<script type="application/ld+json">${jsonText(data)}</script>`;
+
+export { escape, digest, short, today };

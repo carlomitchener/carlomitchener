@@ -5,7 +5,7 @@ import { spec } from "./build.ts";
 import { need } from "../src/lib/env.ts";
 import { client, del, getText, putBytes } from "../../aws/s3.ts";
 import type { S3Client } from "bun";
-import { build, digest, globals, today, type Manifest, type Output } from "../ssg/build.ts";
+import { build, digest, globals, today, type Manifest, type Output } from "../kit/ssg/build.ts";
 
 /* WHERE */
 

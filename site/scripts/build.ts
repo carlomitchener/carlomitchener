@@ -2,8 +2,8 @@ import { readFileSync, rmSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { createElement as h } from "react";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
-import { build, digest, page, short, type Config, type Output, type Route, type Site, type Spec } from "../ssg/build.ts";
-import { resolve as resolveLink } from "../ssg/links.ts";
+import { build, digest, page, short, type Config, type Output, type Route, type Site, type Spec } from "../kit/ssg/build.ts";
+import { resolve as resolveLink } from "../kit/ssg/links.ts";
 import { ALIKE, CATEGORIES, DOCS, docUrl, FILES, GIFT, HOME_ROW, LIVE_DAYS, MATCH, PAGES, PRINTFUL, SHOP, SHOP_DOCS, TILES, type Catalog } from "../src/config/shop.ts";
 import { DEV, DEV_DIR } from "../src/config/dev.ts";
 import { CSS, KINDS, sheetsFor } from "../src/config/sheets.ts";
@@ -710,10 +710,10 @@ export const spec: Spec = {
   root: org,
   out: dist,
   config,
-  templates: ["src", "scripts", "ui", "kit"],
+  templates: ["src", "scripts", "ui"],
   inline: INLINE,
   prepare: bundle,
-  collect,
+  collect: (site_) => ({ routes: collect(site_) }),
   render: draw,
 };
 
