@@ -16,7 +16,7 @@
 - `code/` is the code viewer's skin: `code.css`, the SETI icon font, and `contract.css` between them and a site.
 - The kit's CSS reads only `--kit-*` names; `contract.css` gives each one a `--site-*` hook and a plain default.
 - `theme/` is the same colours in JS: `palette.js` the fifteen as an object, `theme.js` the two role maps over them, `dark` and `light`.
-- `font/` is the pixel font that writes a wordmark: `font.js` lays out, writes, folds and plays a text, `font.json` the glyph book the `mrlyfont` crate generates.
+- `font/` is the pixel font that writes a wordmark: `font.js` lays out, writes, folds and plays a text, `font.json` the glyph book `mrlyrs::font` generates.
 - `deps.json` names, per module, the npm packages it imports and the range each site must carry.
 - Every import between kit files is relative and stays inside the kit; nothing reaches out into a site.
 - `bun test ./kit` from a site runs every test, each one beside the file it covers.
