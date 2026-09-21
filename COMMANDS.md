@@ -2,7 +2,7 @@
 
 Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 
-- `bun run vendor` - vendor the font faces, the icon subset and their licences into `site/public/fonts/`.
+- `bun run vendor` - vendor the font faces, the icon subset and their licences into `site/public/fonts/`; the work is `kit/vendor.ts` and the `fonts` block in `site/site.json` names the output folder, the Google families and axes, and the icon list.
 - `bun run snapshot` - the live Shopify products into `data/carlomitchener/site/shop.json`, and the published feed index into `feed.json`.
 - `bun run fake` - the same two files, invented, into `data/carlomitchener/site/dev/`: every catalog product with 6 to 10 variations, 60 posts, a pool of 50 to 100 picsum pictures; no Shopify, no S3.
 - DEV mode: `"dev": true` in `site/package.json` (or `DEV=1`) makes `build` and `dev` read the `dev/` files, drop the Shopify cart and redirect `/cdn/` pictures to picsum; the knobs live in `site/src/config/dev.ts`; the Lambda ignores the flag.
@@ -15,6 +15,8 @@ Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 - `bun run push --dry` lists every hashed path it would upload and counts the rest; `DRY=1 DRY_DIR=<dir>` holds the manifest in that folder instead of S3, so a push proves itself with no AWS at all.
 - `/automator/` and `/stats/` are hidden pages; `src/components/Mirror.jsx` fetches `/automator/automator.json` and `/stats/stats.json` every minute, so they need no rebuild.
 - `bun run dev` - build once, then serve `dist/` on port 3000, with `/cdn/feed/` served from `data/carlomitchener/feed/`; in DEV mode a missing post video is stood in by a local one.
-- `bun run shots [routes]` - screenshots of the dev server at 390, 834 and 1440, light and dark, into `data/carlomitchener/site/shots/`; flags any horizontal overflow.
+- `bun run shots [routes]` - screenshots of the built `dist/`, which it serves itself, at phone, tablet and desktop, into `data/carlomitchener/site/scripts/shots/latest/`; console errors print under a shot and it flags any horizontal overflow.
+- `SITE_URL=<origin>` shoots a live site instead of `dist/`, `<route>@<expr>` runs an expression before the shot, `--baseline` keeps a set to compare later runs against by hash.
+- The `shots` block in `site/site.json` names the default routes and the three sizes; `kit/shots.ts` reads it and `scripts/shots.ts` is a handful of lines.
 - `bun aws/site.ts` - the builder Lambda: commit, install, snapshot, build, push, head.
 - The builder takes `{"source":"push|schedule|manual","repo":"carlomitchener/carlomitchener","sha":"..."}`; a sha counts only with that repo and only when GitHub's compare calls it an ancestor of main, else it polls main.

@@ -1,8 +1,8 @@
 ## Commands
 
-- Run any file with the VS Code Play button, or by path from `Developer/`: `uv run python carlomitchener/shop/catalog/main.py`.
+- Run any file with the VS Code Play button, or by path from the desk root: `uv run python carlomitchener/shop/catalog/main.py`.
 - The block at the bottom of each file lists its steps; comment out what you don't want.
-- Secrets come from `Developer/.env`: `PRINTFUL_API_KEY`, `CARLOMITCHENER_BUCKET`.
+- Secrets come from the desk's `.env`: `PRINTFUL_API_KEY`, `CARLOMITCHENER_BUCKET`.
 
 ## Catalog
 

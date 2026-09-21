@@ -7,6 +7,8 @@
 - `lambda.ts` is the builder Lambda both sites run: the event, the head, the GitHub ancestor check and ETag poll, the `/opt/node` modules layer, the build and the push, over one config object a repo's thin `aws/*.ts` passes in.
 - `stats/handler.py` is the 15-minute stats Lambda: CloudFront, Lambda and bucket numbers into one JSON key; its bucket, distribution, function names and key all come from the environment.
 - `push.ts` ships a built site to its bucket by manifest diff: a `push` block in `site.json` names the prefix, the guarded paths, the bucket env keys, the manifest store and the immutable rule; `--dry` lists every hashed path and `DRY=1` holds the manifest on disk instead of S3.
+- `shots.ts` is the screenshot driver: a `shots` block in `site.json` names the default routes and the sizes, it serves the built `dist/` itself, drives one headless Chrome on one port with one throwaway profile, and writes into `data/<repo>/site/scripts/shots/{latest,baseline}`.
+- `vendor.ts` writes a site's font folder: a `fonts` block in `site.json` names the output folder, the Google families and their axes, the optional icon subset, and a `keep` css of the faces the site cuts itself, which it copies verbatim into `fonts.css` under the vendored ones.
 - `palette.css` is the fifteen generated colours as CSS variables, at the kit root because a site's stylesheet loads it first.
 - `code/` is the code viewer's skin: `code.css`, the SETI icon font, and `contract.css` between them and a site.
 - The kit's CSS reads only `--kit-*` names; `contract.css` gives each one a `--site-*` hook and a plain default.

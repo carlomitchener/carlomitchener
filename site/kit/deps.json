@@ -54,5 +54,13 @@
   "push": {
     "when": "push",
     "packages": {}
+  },
+  "shots": {
+    "when": "shots",
+    "packages": {}
+  },
+  "vendor": {
+    "when": "fonts",
+    "packages": {}
   }
 }
