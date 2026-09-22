@@ -1,14 +1,12 @@
 import math
 import sys
 
-import lib  # noqa: F401
-
 from PIL import Image
-from mrlypy.core.colors import alpha, black, gradient, white
-from mrlypy.six import GRID, LEFT, RIGHT, UP
-from mrlypy.six.designs import carpet_iso
+from mrlypy.core.colors import ALPHA, BLACK, WHITE, gradient
+from mrlypy.math import six, three
+from mrlypy.math.six import GRID, LEFT, RIGHT, UP
 
-from lib.canvas import H3, PAPER, flatten, quantize
+from lib.canvas import H3, PAPER, decode, flatten, quantize
 from lib.gif import write_gif
 from lib.paths import GIFS, data, ensure, show
 from lib.terminal import menu, pick_level, pick_number
@@ -25,8 +23,8 @@ CUBE_CAP = 8 * 1024 ** 2
 
 # SHADES
 
-SHADES = gradient([black, white], 4)  # 0, 85, 170, 255: black, two equal greys, paper
-PALETTE = {UP: [SHADES[2]], LEFT: [SHADES[1]], RIGHT: [SHADES[0]], GRID: [alpha]}
+SHADES = gradient([BLACK, WHITE], 4)
+PALETTE = {UP: [SHADES[2]], LEFT: [SHADES[1]], RIGHT: [SHADES[0]], GRID: [ALPHA]}
 
 # SPONGE
 
@@ -36,15 +34,15 @@ def cost(number, level):
 def sponge(number, level):
     weight = cost(number, level)
     if weight > CUBE_CAP:
-        sys.exit("%d-%d is %d little cubes: mrlypy.six.iso walks every one of them"
+        sys.exit("%d-%d is %d little cubes: six.iso walks every one of them"
                  % (number, level, weight))
-    return carpet_iso(number, level).paint(PALETTE)
+    return six.paint(six.iso(three.carpet(number, level)), PALETTE)
 
 # CANVAS
 
 def picture(cell, height):
-    scale = max(1, math.ceil(SUPER * height / (cell.height + 2)))
-    image = flatten(cell.draw(scale=scale)).convert("L")
+    scale = max(1, math.ceil(SUPER * height / (six.height(cell) + 2)))
+    image = flatten(decode(six.png(cell, scale, None, 0))).convert("L")
     w, h = image.size
     image = image.resize((max(1, round(w * H3)), h), Image.LANCZOS)
     image.thumbnail((round(height * H3), height), Image.LANCZOS)
@@ -54,7 +52,7 @@ def picture(cell, height):
 
 def frame(cell):
     image = picture(cell, GIFH - 2 * PAD)
-    canvas = Image.new("L", (GIFW, GIFH), PAPER.r)
+    canvas = Image.new("L", (GIFW, GIFH), PAPER[0])
     canvas.paste(image, ((GIFW - image.width) // 2, (GIFH - image.height) // 2))
     return quantize(canvas, GREYS)
 

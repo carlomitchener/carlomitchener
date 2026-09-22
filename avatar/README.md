@@ -52,4 +52,4 @@
 
 - Photoshop's gaussian radius equals sigma. Outside the canvas counts as transparent. Blur happens in sRGB.
 - SVG has no conic gradient. The renderer fakes one with `wedges` thin triangles, invisible after blur.
-- Colors come from `utils/colors.py` through `mrlypy.core.palette`. The 2021 file used older Apple values.
+- Colors come from `utils/colors.py` through `mrlypy.core.colors`. The 2021 file used older Apple values.

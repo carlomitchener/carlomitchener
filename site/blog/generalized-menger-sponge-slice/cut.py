@@ -2,17 +2,13 @@ import math
 import re
 import sys
 
-import lib  # noqa: F401
-
 from PIL import Image
-from mrlypy.core import binary, formulas
-from mrlypy.core.colors import alpha
-from mrlypy.six import FILL, GRID, VOID
-from mrlypy.six.designs import carpet_cut
-from mrlypy.six.renderer import draw, svg
-from mrlypy.two.renderer import svg_square, to_image
+from mrlypy.core.colors import ALPHA
+from mrlypy.math import counts, six, three, two
+from mrlypy.math.atoms import carpet_3d
+from mrlypy.math.six import FILL, GRID, VOID
 
-from lib.canvas import H3, INK, PAPER, flatten, quantize
+from lib.canvas import H3, INK, PAPER, decode, flatten, quantize
 from lib.gif import write_gif
 from lib.paths import CUTS, GIFS, GRIDS, ensure, show, write
 from lib.terminal import menu, pick_level, pick_number
@@ -28,8 +24,9 @@ DEPTH = 2
 LEVELS = {1: 3, 3: 3, 5: 3}
 SVG_CAP = 120000
 CUBE_CAP = 4 * 1024 ** 3
+CARPET = 23
 GLYPHS = {VOID: "0", FILL: "1", GRID: "-"}
-PALETTE = {VOID: [PAPER], FILL: [INK], GRID: [alpha]}
+PALETTE = {VOID: [PAPER], FILL: [INK], GRID: [ALPHA]}
 
 # CUT
 
@@ -42,9 +39,9 @@ def cost(number, level):
 def cut(number, level):
     weight = cost(number, level)
     if weight > CUBE_CAP:
-        sys.exit("%d-%d needs %.1f GB: mrlypy.six.cut blows the cube up by 4 before slicing it"
+        sys.exit("%d-%d needs %.1f GB: six.cut blows the cube up by 4 before slicing it"
                  % (number, level, weight / 1e9))
-    return carpet_cut(number, level).paint(PALETTE)
+    return six.paint(six.cut(three.carpet(number, level)), PALETTE)
 
 # CANVAS
 
@@ -54,8 +51,8 @@ def save_png(path, image):
 # TRIANGLES
 
 def triangles(cell, width):
-    scale = max(1, math.ceil(SUPER * width / (cell.width + 1)))
-    image = flatten(draw(cell, scale=scale, start=cell.start))
+    scale = max(1, math.ceil(SUPER * width / (six.width(cell) + 1)))
+    image = flatten(decode(six.png(cell, scale, None, 0)))
     height = max(1, round(width * image.height * H3 / image.width))
     return image.resize((width, height), Image.BOX)
 
@@ -77,43 +74,43 @@ def equilateral(markup):
     )
 
 def svg_tri(path, cell):
-    write(path, equilateral(svg(cell, scale=1, start=cell.start)))
+    write(path, equilateral(six.svg(cell, 1, None, 0)))
 
 # SQUARES
 
 def png_sq(path, cell):
-    image = flatten(to_image(cell.cell))
+    image = flatten(decode(two.png(cell["cell"], 1, None, 0, "Square")))
     height = max(1, round(SIZE * image.height / image.width))
     save_png(path, image.resize((SIZE, height), Image.NEAREST))
 
 def svg_sq(path, cell):
-    write(path, svg_square(cell.cell))
+    write(path, two.svg(cell["cell"], 1, None, 0, "Square"))
 
 # GIF
 
 def frame(cell):
     image = triangles(cell, GIFW).convert("L")
     image.thumbnail((GIFW, GIFH), Image.BOX)
-    canvas = Image.new("L", (GIFW, GIFH), PAPER.r)
+    canvas = Image.new("L", (GIFW, GIFH), PAPER[0])
     canvas.paste(image, ((GIFW - image.width) // 2, (GIFH - image.height) // 2))
     return quantize(canvas, GREYS)
 
 def frame_sq(cell):
-    image = flatten(to_image(cell.cell)).convert("L")
+    image = flatten(decode(two.png(cell["cell"], 1, None, 0, "Square"))).convert("L")
     height = max(1, round(GIFW * image.height / image.width))
     image = image.resize((GIFW, height), Image.NEAREST)
-    canvas = Image.new("L", (GIFW, GIFSQ), PAPER.r)
+    canvas = Image.new("L", (GIFW, GIFSQ), PAPER[0])
     canvas.paste(image, (0, (GIFSQ - height) // 2))
     return quantize(canvas, GREYS)
 
 # TEXT
 
 def write_txt(path, cell):
-    write(path, "\n".join(cell.text(GLYPHS)))
+    write(path, "\n".join(two.text(cell["cell"], GLYPHS)))
 
 def preview(cell):
-    rows = cell.text({VOID: " ", FILL: "█", GRID: " "})
-    step = max(1, round(cell.height / 31))
+    rows = two.text(cell["cell"], {VOID: " ", FILL: "█", GRID: " "})
+    step = max(1, round(six.height(cell) / 31))
     stride = max(1, round(step * 2 * H3))
     for row in rows[::step]:
         print(row[::stride].rstrip())
@@ -121,13 +118,13 @@ def preview(cell):
 # RUN
 
 def stats(number, level, cell):
-    fills = int((cell.types == FILL).sum())
+    fills = int((cell["cell"]["types"] == FILL).sum())
     print("sponge %d level %d: %d triangles in the cut" % (number, level, fills))
-    print("closed form says %d" % formulas.carpet_fill_triangles(number, level))
+    print("closed form says %d" % counts.cut_fills(CARPET, number, level))
     if number >= 3:
-        seed = int(binary.carpet_3d(number).sum())
+        seed = int(carpet_3d(number).sum())
         print("dimension log(%d)/log(%d) = %.4f"
-              % (seed, number, formulas.carpet_3d_dimension(number)))
+              % (seed, number, counts.dimension(CARPET, number, 3, 2)))
 
 def one(number, level, cell):
     stem = "cut-%d-%d" % (number, level)
@@ -135,7 +132,7 @@ def one(number, level, cell):
     write_txt(CUTS / (stem + ".txt"), cell)
     png_tri(CUTS / (stem + ".png"), cell)
     png_sq(GRIDS / (grid + ".png"), cell)
-    count = cell.width * cell.height
+    count = six.width(cell) * six.height(cell)
     if count <= SVG_CAP:
         svg_tri(CUTS / (stem + ".svg"), cell)
         svg_sq(GRIDS / (grid + ".svg"), cell)
@@ -167,7 +164,7 @@ def sweep():
     for number in NUMBERS:
         story = [frames[(number, l)] for l in range(1, depth(number) + 1)]
         if number != 1:
-            story.insert(0, frames[(1, 1)])  # level 0: the solid cube
+            story.insert(0, frames[(1, 1)])
         write_gif(GIFS / ("cut-levels-%d.gif" % number), story)
     deepest = max(depth(n) for n in NUMBERS)
     for level in range(1, deepest + 1):

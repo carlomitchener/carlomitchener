@@ -2,18 +2,19 @@ import argparse, json, os
 import numpy as np
 from PIL import Image, ImageDraw
 from scipy.ndimage import gaussian_filter
-from mrlypy.core.palette import PALETTE
+from mrlypy.core.colors import NAMES, PALETTE
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join("data", os.path.relpath(HERE))
 BIRD = json.load(open(os.path.join(HERE, "bird.json")))
 LAYERS = ["background", "glow", "fringe", "bird"]
+RGB = {name: color[:3] for name, color in zip(NAMES, PALETTE)}
 
 def rgb(name):
-    return np.array(PALETTE[name], float) / 255
+    return np.array(RGB[name], float) / 255
 
 def hexa(name):
-    return "#%02x%02x%02x" % PALETTE[name]
+    return "#%02x%02x%02x" % RGB[name]
 
 def direction(deg):
     a = np.radians(deg)
@@ -165,8 +166,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--size", type=int, default=1000)
     ap.add_argument("--theme", default="dark", choices=list(BIRD["themes"]))
-    ap.add_argument("--bird", default=None, choices=list(PALETTE))
-    ap.add_argument("--background", default=None, choices=list(PALETTE))
+    ap.add_argument("--bird", default=None, choices=NAMES)
+    ap.add_argument("--background", default=None, choices=NAMES)
     ap.add_argument("--layers", default=",".join(LAYERS))
     ap.add_argument("--glow", default=",".join("1" for _ in BIRD["glow"]))
     ap.add_argument("--crop", action="store_true")

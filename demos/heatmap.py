@@ -1,20 +1,8 @@
-import os
-import sys
-
-# MRLYPROD
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-MRLYPROD = os.path.normpath(os.path.join(HERE, ".."))
-
-if not os.path.isdir(os.path.join(MRLYPROD, "mrlypy", "six")):
-    sys.exit(f"missing mrlypy: expected it at {MRLYPROD}")
-
-sys.path.insert(0, MRLYPROD)
-
-import mrlypy.two as m2
 import numpy as np
 from config import DATA_DIR, IMAGE_SIZE
 from helpers import hex_key
+from mrlypy.math import two
+from mrlypy.math.cell import models
 from PIL import Image
 from typing import Iterable
 
@@ -26,10 +14,10 @@ PAINT = "GRAYSCALE"
 ODDS = [i for i in range(1, LIMIT, 2)]
 NUMBERS = ODDS
 FUNCS = [
-    m2.carpet_2d,
-    m2.net_2d,
-    m2.tree_2d,
-    m2.void_2d,
+    two.carpet,
+    two.net,
+    two.vtree,
+    two.void,
 ]
 
 def pad_grid(grid: np.ndarray, max_height: int, max_width: int) -> np.ndarray:
@@ -97,9 +85,9 @@ def generate_steps(title: str, grids: Iterable[np.ndarray], mode: str):
 def main():
     for func in FUNCS:
         if INVERT:
-            grids = (func(number, LEVEL).invert().to_array() for number in NUMBERS)
+            grids = (models.invert(func(number, LEVEL))["types"] for number in NUMBERS)
         else:
-            grids = (func(number, LEVEL).to_array() for number in NUMBERS)
+            grids = (func(number, LEVEL)["types"] for number in NUMBERS)
         generate_steps(func.__name__, grids, MODE)
 
 if __name__ == "__main__":

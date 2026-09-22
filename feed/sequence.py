@@ -1,9 +1,12 @@
-from mrlypy.core.state import randint, sample, bool, choice
-import numpy as np
-from mrlypy.core import formulas as f
+from mrlypy.math import counts
 from typing import Callable, List
 from enums import Sequence
 from models import Task
+
+CARPET = 7
+NET = 14
+TREE = 5
+VOID = 9
 
 def evens_sequence(limit: int) -> List[int]:
     return [i for i in range(0, limit + 1, 2)]
@@ -11,10 +14,8 @@ def evens_sequence(limit: int) -> List[int]:
 def odds_sequence(limit: int) -> List[int]:
     return [i for i in range(1, limit + 1, 2)]
 
-def random_sequence(limit: int) -> List[int]:
-    options = list(range(0, limit + 1))
-    count = randint(1, len(options))
-    return sorted(sample(options, count))
+def random_sequence(limit: int, rng) -> List[int]:
+    return sorted(rng.sample_indices(limit + 1, rng.range(1, limit + 1)))
 
 def prime_sequence(limit: int) -> List[int]:
     if limit < 2:
@@ -40,73 +41,54 @@ def fibonacci_sequence(limit: int) -> List[int]:
         a, b = b, a + b
     return sorted(list(set(sequence)))
 
-def mrly_sequence(limit: int, generator: Callable) -> List[int]:
-    sequence = []
-    number = 1
-    level = 1
-    while True:
-        val = generator(number, level)
-        if val > limit:
-            break
-        sequence.append(val)
-        number += 2
-    return sorted(list(set(sequence)))
+def mrly_sequence(count: Callable[[int], int]) -> Callable[[int], List[int]]:
+    def sequence(limit: int) -> List[int]:
+        values = []
+        number = 1
+        while (value := count(number)) <= limit:
+            values.append(value)
+            number += 2
+        return sorted(set(values))
+    return sequence
 
-def grid_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.grid_squares)
+def fills(code: int) -> Callable[[int], List[int]]:
+    return mrly_sequence(lambda number: counts.fill(code, number, 2, 1, 2))
 
-def carpet_fill_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.carpet_fill_squares)
-
-def carpet_void_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.carpet_void_squares)
-
-def net_fill_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.net_fill_squares)
-
-def net_void_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.net_void_squares)
-
-def tree_fill_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.tree_fill_squares)
-
-def tree_void_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.tree_void_squares)
-
-def void_fill_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.void_fill_squares)
-
-def void_void_squares_sequence(limit: int) -> List[int]:
-    return mrly_sequence(limit, f.void_void_squares)
+def voids(code: int) -> Callable[[int], List[int]]:
+    return mrly_sequence(lambda number: counts.void(code, number, 2, 1, 2))
 
 SEQUENCE_FACTORY = {
     Sequence.EVENS: evens_sequence,
     Sequence.ODDS: odds_sequence,
-    Sequence.RANDOM: random_sequence,
     Sequence.PRIME: prime_sequence,
     Sequence.BINARY: binary_sequence,
     Sequence.FIBONACCI: fibonacci_sequence,
-    Sequence.GRID_SQUARES: grid_squares_sequence,
-    Sequence.CARPET_FILL_SQUARES: carpet_fill_squares_sequence,
-    Sequence.CARPET_VOID_SQUARES: carpet_void_squares_sequence,
-    Sequence.TREE_FILL_SQUARES: tree_fill_squares_sequence,
-    Sequence.TREE_VOID_SQUARES: tree_void_squares_sequence,
-    Sequence.NET_FILL_SQUARES: net_fill_squares_sequence,
-    Sequence.NET_VOID_SQUARES: net_void_squares_sequence,
-    Sequence.VOID_FILL_SQUARES: void_fill_squares_sequence,
-    Sequence.VOID_VOID_SQUARES: void_void_squares_sequence,
+    Sequence.GRID_SQUARES: mrly_sequence(lambda number: counts.grid(number, 2, 1)),
+    Sequence.CARPET_FILL_SQUARES: fills(CARPET),
+    Sequence.CARPET_VOID_SQUARES: voids(CARPET),
+    Sequence.TREE_FILL_SQUARES: fills(TREE),
+    Sequence.TREE_VOID_SQUARES: voids(TREE),
+    Sequence.NET_FILL_SQUARES: fills(NET),
+    Sequence.NET_VOID_SQUARES: voids(NET),
+    Sequence.VOID_FILL_SQUARES: fills(VOID),
+    Sequence.VOID_VOID_SQUARES: voids(VOID),
 }
 
-def create_sequence(task: Task) -> Task:
+def build_sequence(sequence: Sequence, limit: int, rng) -> List[int]:
+    if sequence == Sequence.RANDOM:
+        return random_sequence(limit, rng)
+    return SEQUENCE_FACTORY[sequence](limit)
+
+def create_sequence(task: Task, rng) -> Task:
     print(f"Creating sequence for variation: {task.key}")
     if task.birth_counts and task.survive_counts:
         print(f"Birth counts: {task.birth_counts}")
         print(f"Survive counts: {task.survive_counts}")
         return task
-    max_neighbors = int(np.sum(task.mask.cell.types))
+    max_neighbors = int(task.mask.types.sum())
     print(f"Max neighbors: {max_neighbors}")
-    raw_birth = SEQUENCE_FACTORY[task.birth_sequence](max_neighbors)
-    raw_survive = SEQUENCE_FACTORY[task.survive_sequence](max_neighbors)
+    raw_birth = build_sequence(task.birth_sequence, max_neighbors, rng)
+    raw_survive = build_sequence(task.survive_sequence, max_neighbors, rng)
     task.birth_counts = [
         x for x in raw_birth
         if (x != 0 or task.include_zeros) and (x != 1 or task.include_ones)
@@ -142,7 +124,7 @@ SECONDARIES = [
     Sequence.VOID_VOID_SQUARES
 ]
 
-def setup_sequence(task: Task) -> Task:
+def setup_sequence(task: Task, rng) -> Task:
     print(f"Setting up sequence for variation: {task.key}")
     if task.is_simple():
         sequences = PRIMARIES
@@ -150,20 +132,20 @@ def setup_sequence(task: Task) -> Task:
         sequences = PRIMARIES + SECONDARIES
         sequences.remove(Sequence.RANDOM)
     print(f"Sequences: {[s.value for s in sequences]}")
-    task.reflect = bool()
+    task.reflect = rng.boolean()
     print(f"Reflect: {task.reflect}")
     match task.reflect:
         case True:
-            sequence = choice(sequences)
+            sequence = rng.choice(sequences)
             print(f"Birth/Survive sequence: {sequence}")
             task.birth_sequence = sequence
             task.survive_sequence = sequence
         case False:
-            task.birth_sequence, task.survive_sequence = sample(sequences, 2)
+            task.birth_sequence, task.survive_sequence = [sequences[i] for i in rng.sample_indices(len(sequences), 2)]
             print(f"Birth sequence: {task.birth_sequence}")
             print(f"Survive sequence: {task.survive_sequence}")
-    task.include_zeros = bool()
+    task.include_zeros = rng.boolean()
     print(f"Include zeros: {task.include_zeros}")
-    task.include_ones = bool()
+    task.include_ones = rng.boolean()
     print(f"Include ones: {task.include_ones}")
     return task

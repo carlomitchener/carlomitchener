@@ -1,2 +1,0 @@
-class MrlyError(Exception):
-    pass

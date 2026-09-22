@@ -1,5 +1,18 @@
 from enum import Enum
 
+class Boundary(Enum):
+    CONSTANT = "constant"
+    WRAP = "wrap"
+
+class Fate(Enum):
+    LIFE = "life"
+    DEAD = "dead"
+    LOOP = "loop"
+    TIME = "time"
+
+BOUNDARIES = {Boundary.CONSTANT: "Constant", Boundary.WRAP: "Wrap"}
+FATES = {"Alive": Fate.LIFE, "Dead": Fate.DEAD, "Loop": Fate.LOOP, "Timeout": Fate.TIME}
+
 class Path(Enum):
     SIMPLE = "simple"
     BASIC = "basic"

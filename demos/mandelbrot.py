@@ -1,7 +1,9 @@
-import mrlypy.two as m2
-from mrlypy.core.colors import blue, gradient, green, red
 import numpy as np
 from config import DATA_DIR, IMAGE_SIZE
+from helpers import save
+from mrlypy.core.colors import BLUE, GREEN, RED, gradient
+from mrlypy.math import two
+from mrlypy.math.cell import models
 
 RESOLUTION = IMAGE_SIZE
 MAX_ITER = 100
@@ -22,18 +24,11 @@ def mandelbrot_set(width, height, max_iter=100, x_min=-2.0, x_max=1.0, y_min=-1.
 def main():
     width, height = RESOLUTION
     grid = mandelbrot_set(width, height, MAX_ITER)
-    cell = m2.Cell2d.from_array(grid)
-    start = red
-    mid = green
-    end = blue
-    colors = gradient([start, mid, end], MAX_ITER)
-    palette = np.array([c.to_rgba() for c in colors], dtype=np.uint8)
+    colors = gradient([RED, GREEN, BLUE], MAX_ITER)
+    palette = np.array(colors, dtype=np.uint8)
     grid_clipped = np.clip(grid, 0, MAX_ITER - 1)
-    cell.colors = palette[grid_clipped]
-    fp = f"{DATA_DIR}/mandelbrot.png"
-    image = cell.to_image(scale=10)
-    image.save(fp)
-    print(f"Saved: {fp}")
+    cell = {**models.new(grid.astype(np.uint8)), "colors": palette[grid_clipped]}
+    save(f"{DATA_DIR}/mandelbrot.png", two.png(cell, 10, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()

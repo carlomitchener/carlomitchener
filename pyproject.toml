@@ -10,6 +10,7 @@ dependencies = [
     "botocore[crt]",
     "numpy",
     "pillow",
+    "mrlypy",
 ]
 
 [dependency-groups]
@@ -24,4 +25,4 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 
 where = [".", "shop"]
-include = ["mrlypy*", "automator*"]
+include = ["automator*"]

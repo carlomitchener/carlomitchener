@@ -1,13 +1,14 @@
 import math
-import mrlypy.gen
 from automator.core.api import logger
 from automator.core.config import MAX_RENDERS, TILES
 from automator.core.errors import TaskAborted
 from automator.core.models import Task
 from automator.core.s3 import cdn_key, load_batch, put_png, s3_url, save_batch, save_task
 from automator.core.steps import Step
+from automator.create import design_config
 from io import BytesIO
-from mrlypy.paint.colors import get_primary_inks
+from mrlypy.core import Rng
+from mrlypy.gen import variation
 from PIL import Image, ImageCms
 
 FORMAT = "PNG"
@@ -37,17 +38,17 @@ def guard_renders(task: Task) -> Task:
     save_task(task)
     return task
 
-def prepare(task: Task, gen: mrlypy.gen.Gen, tiles: bool) -> mrlypy.gen.Gen:
-    tile_width, tile_height = gen.tile.unit_width, gen.tile.unit_height
-    gen.files = []
+def prepare(task: Task, gen: variation.Variation, tiles: bool) -> variation.Variation:
+    tile_width, tile_height = gen.tile.width, gen.tile.height
+    files = []
     for pf in task.printfiles:
         grid_width = math.ceil(pf.width / (tile_width * UNIT_IN))
         grid_height = math.ceil(pf.height / (tile_height * UNIT_IN))
-        gen.files.append(mrlypy.gen.File(width=grid_width, height=grid_height))
+        files.append(variation.File.new(grid_width, grid_height).to_dict())
     if tiles:
         for size in TILES:
-            gen.files.append(mrlypy.gen.File(width=size, height=size))
-    return gen
+            files.append(variation.File.new(size, size).to_dict())
+    return variation.Variation.from_dict({**gen.to_dict(), "files": files})
 
 def save_png(key: str, image: Image.Image, dpi: int = None) -> str:
     with BytesIO() as data:
@@ -59,9 +60,9 @@ def save_png(key: str, image: Image.Image, dpi: int = None) -> str:
         put_png(key, data)
     return s3_url(key)
 
-def process_printfiles(task: Task, gen: mrlypy.gen.Gen) -> Task:
+def process_printfiles(task: Task, gen: variation.Variation) -> Task:
     for i, pf in enumerate(task.printfiles):
-        image = gen.files[i].data
+        image = Image.open(BytesIO(gen.files[i].png)).convert("RGBA")
         full_width = round(image.width * UNIT_IN * pf.dpi)
         full_height = round(image.height * UNIT_IN * pf.dpi)
         image = image.resize(size=(full_width, full_height), resample=Image.Resampling.NEAREST)
@@ -70,9 +71,9 @@ def process_printfiles(task: Task, gen: mrlypy.gen.Gen) -> Task:
         logger.info(f"{task.desc} uploaded printfile {image.width}x{image.height} {pf.url}")
     return task
 
-def process_tiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> None:
+def process_tiles(task: Task, gen: variation.Variation, start: int) -> None:
     for i, size in enumerate(TILES):
-        raw = gen.files[start + i].data
+        raw = Image.open(BytesIO(gen.files[start + i].png)).convert("RGBA")
         image = raw.resize(size=(raw.width * TILE_SCALE, raw.height * TILE_SCALE), resample=Image.Resampling.NEAREST)
         url = save_png(cdn_key(task.design, f"{task.primary}-{TILE_NAME}-{size}"), image)
         logger.info(f"design {task.design} uploaded {task.primary} tile {url}")
@@ -80,12 +81,11 @@ def process_tiles(task: Task, gen: mrlypy.gen.Gen, start: int) -> None:
 def mrly_generate(task: Task) -> Task:
     batch = load_batch()
     tiles = bool(batch) and batch.design == task.design and not batch.tiles.get(task.primary)
-    gen = mrlypy.gen.Gen.from_dict(task.variation)
-    gen.primaries = get_primary_inks([task.ink])
+    gen = variation.Variation.from_dict({**task.variation, "primaries": [task.ink]})
     gen = prepare(task, gen, tiles)
     task = guard_renders(task)
-    gen = mrlypy.gen.generate(gen)
-    gen = mrlypy.gen.render(gen, scale=UNIT_SCALE)
+    gen = variation.generate(gen, design_config(task.ink), Rng(gen.seed))
+    gen = variation.render(gen, UNIT_SCALE, Rng(gen.seed))
     task = process_printfiles(task, gen)
     if tiles:
         process_tiles(task, gen, len(task.printfiles))

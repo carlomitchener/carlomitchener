@@ -1,17 +1,16 @@
-import mrlypy.two as m2
-from mrlypy.core.colors import red
 from config import DATA_DIR
+from helpers import save
+from mrlypy.core.colors import RED
+from mrlypy.math import two
+from mrlypy.math.cell import paint
 
 SCALE = 10
 
 def cell_2d():
-    fp = f"{DATA_DIR}/cell.svg"
-    cell = m2.carpet_2d(3, 2).paint()
-    data = cell.svg_square(SCALE, outline=red, width=3)
+    cell = paint(two.carpet(3, 2))
+    data = two.svg(cell, SCALE, RED, 3, "Square")
     print(data)
-    with open(fp, "w") as f:
-        f.write(data)
-    print(f"Saved: {fp}")
+    save(f"{DATA_DIR}/cell.svg", data)
 
 def main():
     cell_2d()

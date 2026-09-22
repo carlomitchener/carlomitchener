@@ -1,10 +1,10 @@
-import mrlypy.two as m2
-from mrlypy.core.colors import blue, gradient, green, red
 import numpy as np
-from config import DATA_DIR, IMAGE_SIZE
+from config import DATA_DIR
+from helpers import save
+from mrlypy.core.colors import BLUE, GREEN, RED, gradient
+from mrlypy.math import two
+from mrlypy.math.cell import models
 
-# 1000X1000 PIXELS
-# 1000X1000 PIXELS
 RESOLUTION = (100, 100)
 SCALE = 10
 MAX_ITER = 100
@@ -25,18 +25,11 @@ def julia_set(width, height, c, max_iter=100, x_min=-1.5, x_max=1.5, y_min=-1.5,
 def main():
     width, height = RESOLUTION
     grid = julia_set(width, height, C_COMPLEX, MAX_ITER)
-    cell = m2.Cell2d.from_array(grid)
-    start = red
-    mid = green
-    end = blue
-    colors = gradient([start, mid, end], MAX_ITER)
-    palette = np.array([c.to_rgba() for c in colors], dtype=np.uint8)
+    colors = gradient([RED, GREEN, BLUE], MAX_ITER)
+    palette = np.array(colors, dtype=np.uint8)
     grid_clipped = np.clip(grid, 0, MAX_ITER - 1)
-    cell.colors = palette[grid_clipped]
-    fp = f"{DATA_DIR}/julia.png"
-    image = cell.to_image(scale=SCALE)
-    image.save(fp)
-    print(f"Saved: {fp}")
+    cell = {**models.new(grid.astype(np.uint8)), "colors": palette[grid_clipped]}
+    save(f"{DATA_DIR}/julia.png", two.png(cell, SCALE, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()

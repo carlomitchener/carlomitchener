@@ -1,4 +1,3 @@
-from mrlypy.core.state import choice, sample
 from typing import List
 from .config import Config
 from .enums import ChordType, Movement, Scale
@@ -8,8 +7,9 @@ from .models import Music, Voice
 
 class Composer:
 
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, rng):
         self.config = config
+        self.rng = rng
 
     # COMPOSE
 
@@ -52,21 +52,24 @@ class Composer:
 
     # BARS
 
+    def _notes(self, note_pool: list[int], num_notes: list[int]) -> list[int]:
+        return [note_pool[i] for i in self.rng.sample_indices(len(note_pool), self.rng.choice(num_notes))]
+
     def _bar(self, count: int, movements: list[Movement], note_pool: list[int],
              num_notes: list[int], start: list[int] = None) -> List[List[int]]:
         bar = []
         if start is not None:
             previous = start
         else:
-            previous = sample(note_pool, choice(num_notes))
+            previous = self._notes(note_pool, num_notes)
         bar.append(previous)
         for _ in range(count - 1):
-            movement = choice(movements) if len(movements) > 1 else movements[0]
+            movement = self.rng.choice(movements) if len(movements) > 1 else movements[0]
             match movement:
                 case Movement.REPEAT:
                     notes = previous
                 case Movement.RANDOM:
-                    notes = sample(note_pool, choice(num_notes))
+                    notes = self._notes(note_pool, num_notes)
                 case Movement.UP:
                     notes = [note_pool[(note_pool.index(n) + 1) % len(note_pool)] for n in previous]
                 case Movement.DOWN:

@@ -1,10 +1,10 @@
-import mrlypy.two as m2
 from config import DATA_DIR
+from mrlypy.math import two
 
 def main():
-    cell = m2.carpet_2d(5, 2)
+    cell = two.carpet(5, 2)
     mapping = {0: "⬜️", 1: "⬛️"}
-    data = cell.text(mapping)
+    data = two.text(cell, mapping)
     fp = f"{DATA_DIR}/cell_2d.txt"
     for row in data:
         print(row)

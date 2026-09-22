@@ -1,17 +1,14 @@
 import math
 
-import lib  # noqa: F401
-
 import numpy as np
 from PIL import Image
-from mrlypy.core.colors import black, gradient, ink, white
-from mrlypy.core.enums import Mode
-from mrlypy.core.state import seed
-from mrlypy.six import FILL, GRID, VOID
-from mrlypy.six.designs import carpet_cut
-from mrlypy.six.renderer import draw
+from mrlypy.core import Rng
+from mrlypy.core.colors import BLACK, WHITE, gradient, named
+from mrlypy.math import six, three
+from mrlypy.math.cell import models
+from mrlypy.math.six import FILL, GRID, VOID
 
-from lib.canvas import H3, quantize
+from lib.canvas import H3, decode, quantize
 from lib.paths import HERO, ensure, show
 
 NUMBER = 5
@@ -27,7 +24,7 @@ HUES = ["red", "orange", "yellow", "green", "mint", "cyan", "blue", "indigo", "p
 # FRAME
 
 def widen(cell):
-    types = cell.types
+    types = cell["cell"]["types"]
     h, w = types.shape
     rows = h + 2 * MARGIN
     cols = math.ceil(2 * ASPECT * rows * H3 - 1)
@@ -35,19 +32,17 @@ def widen(cell):
     side += side % 2
     grid = np.full((rows, w + 2 * side), GRID, dtype=np.uint8)
     grid[MARGIN:MARGIN + h, side:side + w] = types
-    cell.types = grid
-    return cell
+    return {**cell, "cell": models.new(grid)}
 
 # PAINT
 
 def rainbow(cell):
     palette = {
-        VOID: [white],
-        FILL: [black],
-        GRID: gradient([ink(name) for name in HUES], STEPS),
+        VOID: [WHITE],
+        FILL: [BLACK],
+        GRID: gradient([named(name) for name in HUES], STEPS),
     }
-    seed(SEED)
-    return cell.paint(palette, Mode.RANDOM)
+    return six.paint(cell, palette, "Random", Rng(SEED))
 
 # CROP
 
@@ -67,9 +62,9 @@ def crop(image):
 
 def main():
     ensure()
-    cell = rainbow(widen(carpet_cut(NUMBER, LEVEL)))
-    scale = math.ceil(2 * WIDTH / (cell.width + 1))
-    image = draw(cell, scale=scale, start=cell.start)
+    cell = rainbow(widen(six.cut(three.carpet(NUMBER, LEVEL))))
+    scale = math.ceil(2 * WIDTH / (six.width(cell) + 1))
+    image = decode(six.png(cell, scale, None, 0))
     w, h = image.size
     image = crop(image.resize((w, round(h * H3)), Image.LANCZOS))
     image = quantize(image, COLORS)

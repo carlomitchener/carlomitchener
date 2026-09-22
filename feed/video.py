@@ -3,7 +3,7 @@ import os
 import subprocess
 from config import CRF, WEB, WEB_MIN, FORMAT, FPS, FRAMES_DIR, FREEZE_DURATION, HEATMAP_DIR, HEATMAP_FPS, INTER_SEGMENT_FREEZE, MASKS_DIR, MASTER, PRESET, RATE, SIZE
 from frames import flash_count, mask_path
-from music import compose_saga_audio
+from music.saga import compose_saga_audio
 
 # FFMPEG
 
@@ -73,16 +73,16 @@ def _encode(ffmpeg, concat, audio, frames, size, output):
 
 # SAGA VIDEOS
 
-def create_saga_videos(saga, work_dir, out_dir, ffmpeg):
+def create_saga_videos(saga, work_dir, out_dir, ffmpeg, rng):
     os.makedirs(out_dir, exist_ok=True)
-    audio = compose_saga_audio(saga, f"{work_dir}/{saga.key}.wav")
+    audio = compose_saga_audio(saga, f"{work_dir}/{saga.key}.wav", rng)
     masks = [(mask_path(f"{work_dir}/{MASKS_DIR}", saga.key, i), flash_count(seg)) for i, seg in enumerate(saga.segments)]
     entries = _entries(f"{work_dir}/{FRAMES_DIR}", FPS, FREEZE_DURATION, INTER_SEGMENT_FREEZE, saga.segment_lengths, masks)
     entries += _entries(f"{work_dir}/{HEATMAP_DIR}", HEATMAP_FPS, FREEZE_DURATION, INTER_SEGMENT_FREEZE, saga.segment_lengths)
     concat = _write_concat(entries, f"{work_dir}/concat.txt")
     duration = round(sum(duration for _, duration in entries), 3)
     frames = round(duration * RATE)
-    size = web_size(int(saga.grids[0].types.shape[0]))
+    size = web_size(int(saga.grids[0]["types"].shape[0]))
     _encode(ffmpeg, concat, audio, frames, SIZE, f"{out_dir}/{saga.key}{MASTER}")
     _encode(ffmpeg, concat, audio, frames, size, f"{out_dir}/{saga.key}{WEB}")
     print(f"videos {duration} s, {frames} frames, web {size} px -> {out_dir}")

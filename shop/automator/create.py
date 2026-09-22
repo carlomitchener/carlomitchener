@@ -1,6 +1,3 @@
-import mrlypy.gen
-import mrlypy.paint
-import mrlypy.tile
 import random
 import re
 import time
@@ -11,8 +8,8 @@ from automator.core.errors import NoTaskError
 from automator.core.models import OPEN, USED, Batch, Mockup, Placement, Printfile, Task, Variant
 from automator.core.s3 import archive_exists, catalog_ids, load_batch, load_product, save_batch, save_strikes
 from automator.core.steps import Step
-from mrlypy.core.helpers import hex_key
-from mrlypy.paint.colors import get_primary_inks
+from mrlypy.core import Rng
+from mrlypy.gen import Group, hex_key, variation
 from typing import Any
 
 MAX_VARIANTS = 100
@@ -22,19 +19,32 @@ PRINTFILE = "printfile"
 def slugify(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-") or "one-size"
 
+def entropy() -> Rng:
+    return Rng(random.randint(0, 2**32 - 1))
+
 # BATCH
+
+def design_config(ink: str) -> dict:
+    return {
+        "tile": {
+            "groups": Group.all(),
+            "catalog": "Classics",
+            "min_size": 3,
+            "max_size": 9,
+            "parity": "Odds",
+            "invert": None,
+        },
+        "paint": {"editions": None, "primaries": [ink], "target": None},
+        "files": [],
+    }
 
 def new_batch(ids: list[str]) -> Batch:
     if not ids:
         raise NoTaskError("no catalog products in the bucket")
     first = next(iter(PRIMARIES.values()))
-    config = mrlypy.gen.Config(
-        tile=mrlypy.tile.Config(min_size=3, max_size=9, anti=False),
-        paint=mrlypy.paint.Config(primaries=get_primary_inks([first])),
-        files=[],
-    )
-    gen = mrlypy.gen.create(config)
-    gen = mrlypy.gen.generate(gen)
+    config = design_config(first)
+    gen = variation.create(config, entropy())
+    gen = variation.generate(gen, config, Rng(gen.seed))
     rows = {id: {primary: OPEN for primary in PRIMARIES} for id in ids}
     batch = Batch(design=gen.key, seed=gen.seed, created_at=int(time.time()), variation=gen.to_dict(), rows=rows)
     save_batch(batch)
@@ -103,7 +113,7 @@ def name_items(items: list[Any], task_key: str, suffix) -> list[Any]:
     for item in items:
         name = f"{task_key}-{suffix(item)}"
         while name in seen:
-            name = f"{task_key}-{suffix(item)}-{hex_key(4)}"
+            name = f"{task_key}-{suffix(item)}-{hex_key(4, entropy())}"
         seen.add(name)
         item.name = name
     return items

@@ -1,6 +1,6 @@
 import json
+import logging
 import re
-from mrlypy.core.helpers import create_logger
 from . import http
 from .config import (
     PRINTFUL_API_KEY,
@@ -16,7 +16,8 @@ from .models import Task
 BODY_LIMIT = 300
 OPERATION = re.compile(r"^\s*(?:mutation|query)\s+(\w+)")
 
-logger = create_logger("carlomitchener-automator")
+logging.basicConfig(level=logging.INFO, format="(%(name)s) %(message)s")
+logger = logging.getLogger("carlomitchener-automator")
 
 TOKEN = {"admin": None}
 

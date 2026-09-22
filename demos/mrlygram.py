@@ -1,39 +1,28 @@
+import math
 import os
 import sys
-
-# MRLYPROD
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-MRLYPROD = os.path.normpath(os.path.join(HERE, ".."))
-
-if not os.path.isdir(os.path.join(MRLYPROD, "mrlypy", "six")):
-    sys.exit(f"missing mrlypy: expected it at {MRLYPROD}")
-
-sys.path.insert(0, MRLYPROD)
-
-import math
+from config import DATA_DIR
+from helpers import decode
+from mrlypy.core.colors import ALPHA, WHITE, rgb
+from mrlypy.math import six, three, two
+from mrlypy.math.cell import paint
+from mrlypy.math.six import FILL, GRID, VOID
 from PIL import Image
-from mrlypy.core.colors import Color, alpha
-from mrlypy.six import FILL, GRID, VOID
-from mrlypy.six.designs import carpet_cut, net_cut, tree_cut, void_cut
-from mrlypy.six.renderer import draw
-from mrlypy.two.designs import carpet_2d, net_2d, tree_2d, void_2d
-from mrlypy.two.renderer import to_image
 
 # DESIGNS
 
 CUTS = {
-    "carpet": carpet_cut,
-    "net": net_cut,
-    "tree": tree_cut,
-    "void": void_cut,
+    "carpet": three.carpet,
+    "net": three.net,
+    "tree": three.ztree,
+    "void": three.void,
 }
 
 FLATS = {
-    "carpet": carpet_2d,
-    "net": net_2d,
-    "tree": tree_2d,
-    "void": void_2d,
+    "carpet": two.carpet,
+    "net": two.net,
+    "tree": two.vtree,
+    "void": two.void,
 }
 
 DESIGNS = list(CUTS)
@@ -46,14 +35,14 @@ CUBE_CAP = 4 * 1024 ** 3
 
 # PAINT
 
-INK = Color(17, 17, 17)
-PAPER = Color(255, 255, 255)
-HEX_PALETTE = {VOID: [PAPER], FILL: [INK], GRID: [alpha]}
+INK = rgb(17, 17, 17)
+PAPER = WHITE
+HEX_PALETTE = {VOID: [PAPER], FILL: [INK], GRID: [ALPHA]}
 FLAT_PALETTE = {0: [PAPER], 1: [INK]}
 
 # CANVAS
 
-DATA = os.path.join(HERE, "data", "mrlygram")
+DATA = os.path.join(DATA_DIR, "mrlygram")
 H3 = math.sqrt(3) / 2
 WIDTH = 1080
 HEIGHT = round(WIDTH * H3)
@@ -71,32 +60,26 @@ def cost(number, level):
 def guard(design, number, level):
     weight = cost(number, level)
     if weight > CUBE_CAP:
-        sys.exit("%s %d-%d needs %.1f GB: mrlypy.six.cut blows the cube up by 4 before slicing it"
+        sys.exit("%s %d-%d needs %.1f GB: six.cut blows the cube up by 4 before slicing it"
                  % (design, number, level, weight / 1e9))
 
 # DRAW
 
 def flatten(image):
-    canvas = Image.new("RGB", image.size, PAPER.to_rgb())
+    canvas = Image.new("RGB", image.size, PAPER[:3])
     canvas.paste(image, (0, 0), image)
     return canvas
 
 def cut_gram(design, number, level):
-    """The diagonal slice, drawn as triangles, sized to the common box.
-
-    Every cut draws to a square, so forcing the same box both squashes the
-    lattice to equilateral and lines all the numbers up on top of each other.
-    """
     guard(design, number, level)
-    cell = CUTS[design](number, level).paint(HEX_PALETTE)
-    scale = max(1, math.ceil(SUPER * WIDTH / (cell.width + 1)))
-    image = flatten(draw(cell, scale=scale, start=cell.start))
+    cell = six.paint(six.cut(CUTS[design](number, level)), HEX_PALETTE)
+    scale = max(1, math.ceil(SUPER * WIDTH / (six.width(cell) + 1)))
+    image = flatten(decode(six.png(cell, scale, None, 0)))
     return image.resize((WIDTH, HEIGHT), Image.BOX)
 
 def flat_gram(design, number, level):
-    """The rule in 2D, drawn as squares, sized to the common box."""
-    cell = FLATS[design](number, level).paint(FLAT_PALETTE)
-    return flatten(to_image(cell)).resize((WIDTH, WIDTH), Image.BOX)
+    cell = paint(FLATS[design](number, level), FLAT_PALETTE)
+    return flatten(decode(two.png(cell, 1, None, 0, "Square"))).resize((WIDTH, WIDTH), Image.BOX)
 
 VIEWS = {
     "cut": cut_gram,
@@ -106,7 +89,6 @@ VIEWS = {
 # OVERLAY
 
 def overlay(layers):
-    """Stack the grams at equal weight: frame i is the mean of the first i + 1."""
     canvas = layers[0]
     frames = [canvas]
     for count, layer in enumerate(layers[1:], start=2):
@@ -117,7 +99,6 @@ def overlay(layers):
 # GIF
 
 def quantize(image):
-    """Ink on paper is grey all the way through, so the gif rides on greys."""
     size = (GIFW, max(1, round(GIFW * image.height / image.width)))
     small = image.convert("L").resize(size, Image.LANCZOS)
     return small.quantize(colors=GREYS, method=Image.MEDIANCUT, dither=Image.Dither.NONE)
@@ -142,10 +123,10 @@ def run(view, design, level=LEVEL):
     for index, (number, frame) in enumerate(zip(NUMBERS, frames)):
         path = os.path.join(folder, "%s-%s-%03d-%03d.png" % (view, design, index, number))
         frame.save(path, optimize=True)
-    print("saved %d frames to %s" % (len(frames), os.path.relpath(folder, HERE)))
+    print("saved %d frames to %s" % (len(frames), folder))
     gif = os.path.join(DATA, "%s-%s-%d.gif" % (view, design, level))
     write_gif(gif, [quantize(frame) for frame in frames])
-    print("saved %s  %.1f MB" % (os.path.relpath(gif, HERE), os.path.getsize(gif) / 1e6))
+    print("saved %s  %.1f MB" % (gif, os.path.getsize(gif) / 1e6))
     print("  %d grams, %d to %d, overlaid at %dx%d" % (len(frames), MIN, NUMBERS[-1], *frames[0].size))
     return 0
 

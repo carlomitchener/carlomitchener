@@ -1,15 +1,10 @@
 import sys
 
-import lib  # noqa: F401
-
 from PIL import Image, ImageDraw, ImageFont
-from mrlypy.six import designs
-from mrlypy.six.geometry import radial
-from mrlypy.six.renderer import draw
-from mrlypy.two import designs as designs_2d
-from mrlypy.two.renderer import to_image
+from mrlypy.math import six, three, two
+from mrlypy.math.cell import models, paint
 
-from lib.canvas import H3, INK, PAPER, quantize
+from lib.canvas import H3, INK, PAPER, decode, quantize
 from lib.gif import write_gif
 from lib.paths import GIFS, ensure, show
 from lib.terminal import menu
@@ -23,6 +18,9 @@ COLORS = 64
 STRIP = 110
 FAMILIES = ["carpet", "net", "tree", "void"]
 VIEWS = ["flat", "iso", "pro", "cut"]
+FLATS = {"carpet": two.carpet, "net": two.net, "tree": two.vtree, "void": two.void}
+CUBES = {"carpet": three.carpet, "net": three.net, "tree": three.ztree, "void": three.void}
+PROJECTIONS = {"iso": six.iso, "pro": six.pro, "cut": six.cut}
 
 # FRAME
 
@@ -31,12 +29,12 @@ def label(canvas, family):
         font = ImageFont.load_default(48)
     except TypeError:
         font = ImageFont.load_default()
-    ImageDraw.Draw(canvas).text((30, CANVAS - 78), family, fill=INK.to_rgb(), font=font)
+    ImageDraw.Draw(canvas).text((30, CANVAS - 78), family, fill=INK[:3], font=font)
 
 def flat_frame(family, number):
-    cell = getattr(designs_2d, f"{family}_2d")(number, LEVEL).paint()
-    image = to_image(cell, max(1, (CANVAS - STRIP) // cell.height))
-    canvas = Image.new("RGB", (CANVAS, CANVAS), PAPER.to_rgb())
+    cell = paint(FLATS[family](number, LEVEL))
+    image = decode(two.png(cell, max(1, (CANVAS - STRIP) // models.height(cell)), None, 0, "Square"))
+    canvas = Image.new("RGB", (CANVAS, CANVAS), PAPER[:3])
     canvas.paste(image, ((CANVAS - image.width) // 2, (CANVAS - STRIP - image.height) // 2), image)
     label(canvas, family)
     return quantize(canvas, COLORS)
@@ -44,16 +42,18 @@ def flat_frame(family, number):
 def frame(family, projection, number):
     if projection == "flat":
         return flat_frame(family, number)
-    cell = getattr(designs, f"{family}_{projection}")(number, LEVEL).paint()
-    sheet = radial(cell, RADIUS)
-    image = draw(sheet, scale=SCALE, start=1 - cell.start)
+    cell = six.paint(PROJECTIONS[projection](CUBES[family](number, LEVEL)))
+    sheet = six.radial(cell, RADIUS)
+    orientation = six.orientation(models.width(sheet), models.height(sheet))
+    sheet = six.new(sheet, cell["projection"], orientation, 1 - cell["start"])
+    image = decode(six.png(sheet, SCALE, None, 0))
     w, h = image.size
-    if cell.orientation == "horizontal":
+    if cell["orientation"] == "Horizontal":
         image = image.resize((w, round(h * H3)), Image.LANCZOS)
     else:
         image = image.resize((round(w * H3), h), Image.LANCZOS)
     image.thumbnail((CANVAS, CANVAS), Image.LANCZOS)
-    canvas = Image.new("RGB", (CANVAS, CANVAS), PAPER.to_rgb())
+    canvas = Image.new("RGB", (CANVAS, CANVAS), PAPER[:3])
     canvas.paste(image, ((CANVAS - image.width) // 2, (CANVAS - image.height) // 2), image)
     label(canvas, family)
     return quantize(canvas, COLORS)

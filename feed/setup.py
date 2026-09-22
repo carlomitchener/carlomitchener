@@ -1,11 +1,8 @@
-from mrlypy.core.state import choice, randint
-from mrlypy.life.enums import Boundary
-from mrlypy.paint.enums import Ink
-from mrlypy.two import Cell2d
+from mrlypy import gen
 from colors import SECONDARIES
-from enums import Path, Sequence, Way
+from enums import Boundary, Path, Sequence, Way
 from models import Saga, Task
-from music import compose_music_params
+from music.saga import compose_music_params
 from sequence import setup_sequence, create_sequence
 from variations import (
     moore_mask,
@@ -16,69 +13,56 @@ from variations import (
     tile_from_grid,
 )
 
-# KEYS
-
-HEX = "0123456789abcdef"
-
-def hex8() -> str:
-    return "".join(HEX[randint(0, 15)] for _ in range(8))
-
 # SAGA
 
-def setup_saga_boundary(saga: Saga) -> Saga:
-    saga.boundary = choice(list(Boundary))
+def setup_saga_boundary(saga: Saga, rng) -> Saga:
+    saga.boundary = rng.choice(list(Boundary))
     print(f"Setting up saga boundary: {saga.boundary}")
     return saga
 
 def setup_saga_colors(saga: Saga) -> Saga:
     print(f"Setting up saga colors")
-    saga.primary = Ink.BLACK
+    saga.primary = "Black"
     print(f"Primary: {saga.primary}")
     return saga
 
-def setup_saga(saga: Saga, seed: int, key: str) -> Saga:
+def setup_saga(saga: Saga, seed: int, key: str, rng) -> Saga:
     print(f"Setting up saga {key} from seed {seed}")
     saga.seed = seed
     saga.key = key
-    saga = setup_saga_boundary(saga)
+    saga = setup_saga_boundary(saga, rng)
     saga = setup_saga_colors(saga)
     return saga
 
 # WAYS
 
-def setup_conway(task: Task) -> Task:
+def setup_conway(task: Task, rng) -> Task:
     print(f"Setting up ConWay for segment: {task.key}")
-    task = setup_tile(task)
-    task = setup_canvas(task)
-    task.mask = moore_mask()
-    task.path = Path.SIMPLE
-    task.birth_sequence = Sequence.CUSTOM
-    task.birth_counts = [3]
-    task.survive_sequence = Sequence.CUSTOM
-    task.survive_counts = [2, 3]
-    return task
+    task = setup_tile(task, rng)
+    task = setup_canvas(task, rng)
+    return _setup_chained_conway(task)
 
-def setup_mrlyway(task: Task) -> Task:
+def setup_mrlyway(task: Task, rng) -> Task:
     print(f"Setting up MrlyWay for segment: {task.key}")
-    task = setup_variations(task)
-    task = setup_sequence(task)
-    task = create_sequence(task)
+    task = setup_variations(task, rng)
+    task = setup_sequence(task, rng)
+    task = create_sequence(task, rng)
     return task
 
-def setup_way(task: Task) -> Task:
-    way = choice(list(Way))
+def setup_way(task: Task, rng) -> Task:
+    way = rng.choice(list(Way))
     task.way = way
     print(f"Way: {way}")
     match way:
         case Way.CONWAY:
-            return setup_conway(task)
+            return setup_conway(task, rng)
         case Way.MRLYWAY:
-            return setup_mrlyway(task)
+            return setup_mrlyway(task, rng)
 
 # SEGMENT
 
 def _setup_chained_conway(task: Task) -> Task:
-    print(f"Setting up chained ConWay for segment: {task.key}")
+    print(f"Setting up ConWay rules for segment: {task.key}")
     task.mask = moore_mask()
     task.path = Path.SIMPLE
     task.birth_sequence = Sequence.CUSTOM
@@ -87,14 +71,14 @@ def _setup_chained_conway(task: Task) -> Task:
     task.survive_counts = [2, 3]
     return task
 
-def _setup_chained_mrlyway(task: Task) -> Task:
+def _setup_chained_mrlyway(task: Task, rng) -> Task:
     print(f"Setting up chained MrlyWay for segment: {task.key}")
-    task = setup_mask(task)
-    task = setup_sequence(task)
-    task = create_sequence(task)
+    task = setup_mask(task, rng)
+    task = setup_sequence(task, rng)
+    task = create_sequence(task, rng)
     return task
 
-def setup_segment_way(task: Task, prev_grid: Cell2d, prev_way: Way) -> Task:
+def setup_segment_way(task: Task, prev_grid, prev_way: Way, rng) -> Task:
     task.tile = tile_from_grid(prev_grid)
     way = Way.MRLYWAY if prev_way == Way.CONWAY else Way.CONWAY
     task.way = way
@@ -103,19 +87,19 @@ def setup_segment_way(task: Task, prev_grid: Cell2d, prev_way: Way) -> Task:
         case Way.CONWAY:
             return _setup_chained_conway(task)
         case Way.MRLYWAY:
-            return _setup_chained_mrlyway(task)
+            return _setup_chained_mrlyway(task, rng)
 
-def setup_segment(saga: Saga, index: int, prev_grid: Cell2d = None) -> Task:
+def setup_segment(saga: Saga, index: int, prev_grid, rng) -> Task:
     print(f"Setting up segment {index}")
     task = Task()
-    task.key = hex8()
+    task.key = gen.hex_key(8, rng)
     task.seed = saga.seed
     task.boundary = saga.boundary
     task.primary = saga.primary
-    task.secondary = choice(list(SECONDARIES.keys()))
+    task.secondary = rng.choice(list(SECONDARIES))
     print(f"Secondary: {task.secondary}")
     if index == 0:
-        task = setup_way(task)
+        task = setup_way(task, rng)
         saga.canvas_size = task.canvas_size
         saga.canvas_unit_width = task.canvas_unit_width
         saga.canvas_unit_height = task.canvas_unit_height
@@ -124,6 +108,6 @@ def setup_segment(saga: Saga, index: int, prev_grid: Cell2d = None) -> Task:
         task.canvas_unit_width = saga.canvas_unit_width
         task.canvas_unit_height = saga.canvas_unit_height
         prev_way = saga.segments[-1].way
-        task = setup_segment_way(task, prev_grid, prev_way)
-    task.music = compose_music_params(task.way)
+        task = setup_segment_way(task, prev_grid, prev_way, rng)
+    task.music = compose_music_params(task.way, rng)
     return task

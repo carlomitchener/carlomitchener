@@ -1,5 +1,3 @@
-import lib  # noqa: F401
-
 from PIL import Image, ImageDraw, ImageFont
 
 from lib.canvas import INK, PAPER, quantize
@@ -19,13 +17,13 @@ def label(canvas, name):
         font = ImageFont.load_default(48)
     except TypeError:
         font = ImageFont.load_default()
-    ImageDraw.Draw(canvas).text((30, SIZE - 78), name, fill=INK.r, font=font)
+    ImageDraw.Draw(canvas).text((30, SIZE - 78), name, fill=INK[0], font=font)
 
 def frame(number):
     name = "MrlyGram-%d" % number
     image = Image.open(IMAGES / ("mrlygram-%d.png" % number)).convert("L")
     image.thumbnail((SIZE, SIZE - STRIP), Image.LANCZOS)
-    canvas = Image.new("L", (SIZE, SIZE), PAPER.r)
+    canvas = Image.new("L", (SIZE, SIZE), PAPER[0])
     canvas.paste(image, ((SIZE - image.width) // 2, (SIZE - STRIP - image.height) // 2))
     label(canvas, name)
     return quantize(canvas, GREYS)

@@ -1,14 +1,13 @@
-import mrlypy.two as m2
-from mrlypy.core.colors import black, blue, green, red, white
 from config import DATA_DIR
+from helpers import save
+from mrlypy.core.colors import BLACK, BLUE, GREEN, RED, WHITE
+from mrlypy.math import two
+from mrlypy.math.cell import models, paint
 
 def main():
-    fp = f"{DATA_DIR}/cell_borders.png"
-    cell = m2.carpet_2d(3, 2).pad(1, 2).pad(1, 3).pad(1, 4)
-    cell.paint({0: [white], 1: [black], 2: [red], 3: [green], 4: [blue]})
-    image = cell.to_image(20)
-    image.save(fp)
-    print(f"Saved: {fp}")
+    cell = models.pad(models.pad(models.pad(two.carpet(3, 2), 1, 2), 1, 3), 1, 4)
+    cell = paint(cell, {0: [WHITE], 1: [BLACK], 2: [RED], 3: [GREEN], 4: [BLUE]})
+    save(f"{DATA_DIR}/cell_borders.png", two.png(cell, 20, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()

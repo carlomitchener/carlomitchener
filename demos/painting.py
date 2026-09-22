@@ -1,28 +1,31 @@
-import mrlypy.two as m2
+from colors import PRIMARIES, SECONDARIES
+from config import DATA_DIR
+from helpers import save
+from mrlypy.core import Rng
 from mrlypy.core.colors import gradient
-from mrlypy.core.enums import Mode
-from mrlypy.core.state import seed
-from colors import *
+from mrlypy.math import two
+from mrlypy.math.cell import models, paint
 
 def main():
-    design = m2.carpet_2d
+    design = two.carpet
     scale = 33
     number = 55
     steps = 77
-    seed(99)
-    primaries = [black, white]
-    secondaries = [red, orange, yellow, green, mint, teal, cyan, blue, indigo, purple, pink, brown, gray]
-    secondaries = gradient(secondaries, steps)
-    PAINT_MAP = {0: primaries, 1: secondaries}
+    rng = Rng(99)
+    PAINT_MAP = {0: PRIMARIES, 1: gradient(SECONDARIES, steps)}
     def new_cell():
-        return design(number)
-    new_cell().paint(PAINT_MAP, Mode.ENUMERATE).to_image(scale).save("data/enumerate.png")
-    new_cell().paint(PAINT_MAP, Mode.INDEX).to_image(scale).save("data/index.png")
-    new_cell().paint(PAINT_MAP, Mode.ROW).to_image(scale).save("data/row.png")
-    new_cell().paint(PAINT_MAP, Mode.COLUMN).to_image(scale).save("data/column.png")
-    new_cell().paint(PAINT_MAP, Mode.RANDOM).to_image(scale).save("data/random.png")
-    new_cell().layers().paint(PAINT_MAP, Mode.TAG).to_image(scale).save("data/layers.png")
-    new_cell().neighbors(new_cell().types).paint(PAINT_MAP, Mode.TAG).to_image(scale).save("data/neighbors.png")
+        return design(number, 1)
+    cells = {
+        "enumerate": paint(new_cell(), PAINT_MAP, "Enumerate"),
+        "index": paint(new_cell(), PAINT_MAP, "Index"),
+        "row": paint(new_cell(), PAINT_MAP, "Row"),
+        "column": paint(new_cell(), PAINT_MAP, "Column"),
+        "random": paint(new_cell(), PAINT_MAP, "Random", rng),
+        "layers": paint(models.layers(new_cell()), PAINT_MAP, "Tag"),
+        "neighbors": paint(models.neighbors(new_cell(), new_cell()["types"], 1, False), PAINT_MAP, "Tag"),
+    }
+    for name, cell in cells.items():
+        save(f"{DATA_DIR}/{name}.png", two.png(cell, scale, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()
