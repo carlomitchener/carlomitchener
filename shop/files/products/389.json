@@ -4,6 +4,7 @@
   "title": "Minimalist Backpack",
   "handle": "minimalist-backpack",
   "technique": "cut-sew",
+  "recycled": false,
   "primaries": [
     "White"
   ],
@@ -122,7 +123,7 @@
       "category": "Boy's Lifestyle",
       "title": "Zoomed-in",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 20200,

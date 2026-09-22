@@ -4,6 +4,7 @@
   "title": "Neck Gaiter",
   "handle": "neck-gaiter",
   "technique": "cut-sew",
+  "recycled": false,
   "primaries": [
     "White"
   ],
@@ -225,7 +226,7 @@
       "category": "Lifestyle 1",
       "title": "Right",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 3735,

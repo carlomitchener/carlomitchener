@@ -1,6 +1,7 @@
 from fetch import raw_path
 from helpers import all_ids, catalog_map, load_json, save_product
 from models import Mockup, Placement, Product, Variant
+from recycled import is_recycled
 
 def get_primaries(data):
     if data == "Black":
@@ -95,6 +96,7 @@ def parse_products(ids: list[int]):
             title=row["title"],
             handle=row["handle"],
             technique=row["technique"],
+            recycled=is_recycled(product_data),
             primaries=get_primaries(row["primaries"]),
             stitch_colors=get_stitch_colors(product_data),
             placements=parse_placements(mockup_data),

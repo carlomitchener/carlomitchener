@@ -4,6 +4,7 @@
   "title": "Duffle Bag",
   "handle": "duffle-bag",
   "technique": "cut-sew",
+  "recycled": false,
   "primaries": [
     "White"
   ],
@@ -147,14 +148,14 @@
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7231,
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7232,
@@ -175,35 +176,35 @@
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7236,
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7237,
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7238,
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7239,
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7240,
@@ -245,21 +246,21 @@
       "category": "Product specs",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7246,
       "category": "Product specs",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7247,
       "category": "Product specs",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 7248,

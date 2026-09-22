@@ -4,6 +4,7 @@
   "title": "Gym Bag",
   "handle": "gym-bag",
   "technique": "cut-sew",
+  "recycled": false,
   "primaries": [
     "White"
   ],

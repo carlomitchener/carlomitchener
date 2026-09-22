@@ -4,6 +4,7 @@
   "title": "Unisex Baseball Jersey",
   "handle": "unisex-baseball-jersey",
   "technique": "cut-sew",
+  "recycled": true,
   "primaries": [
     "White"
   ],
@@ -288,7 +289,7 @@
       "category": "Product specs",
       "title": "English",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     },
     {
       "id": 23710,

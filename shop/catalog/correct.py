@@ -21,9 +21,12 @@ IGNORED_PLACEMENTS = [
 # VARIANTS
 
 IGNORED_VARIANTS = [
-    {"id": 84, "title": "Tote Bag", "variants": [8904, 8905]},
-    {"id": 274, "title": "Large Tote Bag w/ Pocket", "variants": [9040, 9041]},
-    {"id": 630, "title": "Bandana", "variants": [16031, 16032]},
+    {"id": 84, "title": "Tote Bag", "variants": [8904, 8905],
+     "why": "red and yellow, reason not recorded"},
+    {"id": 274, "title": "Large Tote Bag w/ Pocket", "variants": [9040, 9041],
+     "why": "red and yellow, reason not recorded"},
+    {"id": 630, "title": "Bandana", "variants": [16031, 16032],
+     "why": "sizes S and M, reason not recorded"},
 ]
 
 # MOCKUPS
@@ -43,22 +46,44 @@ IGNORED_MOCKUP_TITLES = [
 ]
 
 IGNORED_MOCKUPS = [
-    {"id": 189, "title": "Women's Leggings", "mockups": [14947]},
-    {"id": 202, "title": "Women's Tank Top", "mockups": [15035]},
-    {"id": 288, "title": "Men's Leggings", "mockups": [16567]},
-    {"id": 322, "title": "Kids Leggings", "mockups": [2422, 2424]},
-    {"id": 323, "title": "Youth Leggings", "mockups": [18469]},
-    {"id": 400, "title": "Men's Joggers", "mockups": [3179]},
-    {"id": 401, "title": "Women's Joggers", "mockups": [3198]},
-    {"id": 458, "title": "Beanie", "mockups": [6328]},
-    {"id": 630, "title": "Bandana", "mockups": [
-        4350, 4353, 4356, 4357, 4359, 4360, 4362, 4363, 4365, 4366,
-    ]},
-    {"id": 654, "title": "Reversible Bucket Hat", "mockups": [
-        4865, 4873, 4875, 4877, 4884, 4885, 4886, 4887,
-        4888, 4889, 4894, 4895, 4896, 4897, 4898, 4900,
-    ]},
-    {"id": 693, "title": "Unisex Mesh Shorts", "mockups": [8605]},
+    {"id": 189, "title": "Women's Leggings", "mockups": [14947],
+     "why": "not recorded"},
+    {"id": 202, "title": "Women's Tank Top", "mockups": [15035],
+     "why": "not recorded"},
+    {"id": 279, "title": "Backpack", "mockups": [20739],
+     "why": "comes back empty every batch; twin 16435 renders"},
+    {"id": 288, "title": "Men's Leggings", "mockups": [16567],
+     "why": "not recorded"},
+    {"id": 322, "title": "Kids Leggings", "mockups": [2422, 2424],
+     "why": "not recorded"},
+    {"id": 323, "title": "Youth Leggings", "mockups": [18469],
+     "why": "not recorded"},
+    {"id": 389, "title": "Minimalist Backpack", "mockups": [20199],
+     "why": "comes back empty every batch; twin 20198 renders"},
+    {"id": 400, "title": "Men's Joggers", "mockups": [3179],
+     "why": "not recorded"},
+    {"id": 401, "title": "Women's Joggers", "mockups": [3198],
+     "why": "not recorded"},
+    {"id": 420, "title": "Neck Gaiter", "mockups": [3734],
+     "why": "comes back empty every batch; twin 3730 renders"},
+    {"id": 458, "title": "Beanie", "mockups": [6328],
+     "why": "not recorded"},
+    {"id": 465, "title": "Duffle Bag",
+     "why": "comes back empty every batch; twins 7229 and 7244 render",
+     "mockups": [7230, 7231, 7235, 7236, 7237, 7238, 7239, 7245, 7246, 7247]},
+    {"id": 630, "title": "Bandana",
+     "why": "restricted to the ignored variants 16031 and 16032",
+     "mockups": [4350, 4353, 4356, 4357, 4359, 4360, 4362, 4363, 4365, 4366]},
+    {"id": 654, "title": "Reversible Bucket Hat",
+     "why": "the inside views, reason not recorded",
+     "mockups": [4865, 4873, 4875, 4877, 4884, 4885, 4886, 4887,
+                 4888, 4889, 4894, 4895, 4896, 4897, 4898, 4900]},
+    {"id": 693, "title": "Unisex Mesh Shorts", "mockups": [8605],
+     "why": "not recorded"},
+    {"id": 730, "title": "Unisex Hockey Fan Jersey", "mockups": [20834],
+     "why": "comes back empty every batch; twin 20835 renders"},
+    {"id": 792, "title": "Unisex Baseball Jersey", "mockups": [23389],
+     "why": "comes back empty every batch; twin 23388 renders"},
 ]
 
 # CORRECT

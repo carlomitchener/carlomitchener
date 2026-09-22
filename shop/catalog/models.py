@@ -80,6 +80,7 @@ class Product:
     title: str = None
     handle: str = None
     technique: str = None
+    recycled: bool = None
     primaries: list[str] = field(default_factory=list)
     stitch_colors: list[str] = field(default_factory=list)
     placements: list[Placement] = field(default_factory=list)

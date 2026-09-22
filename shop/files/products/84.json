@@ -4,6 +4,7 @@
   "title": "Tote Bag",
   "handle": "tote-bag",
   "technique": "cut-sew",
+  "recycled": false,
   "primaries": [
     "White"
   ],

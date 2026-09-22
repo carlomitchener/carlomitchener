@@ -4,6 +4,7 @@
   "title": "Backpack",
   "handle": "backpack",
   "technique": "cut-sew",
+  "recycled": false,
   "primaries": [
     "White"
   ],
@@ -221,7 +222,7 @@
       "category": "Product details",
       "title": "Product details",
       "variant_ids": null,
-      "is_ignored": false
+      "is_ignored": true
     }
   ]
 }

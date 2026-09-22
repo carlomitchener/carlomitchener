@@ -4,6 +4,7 @@
   "title": "Drawstring Bag",
   "handle": "drawstring-bag",
   "technique": "cut-sew",
+  "recycled": false,
   "primaries": [
     "White"
   ],
