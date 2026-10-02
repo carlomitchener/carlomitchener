@@ -87,6 +87,11 @@ test("a sha with no repo, or another repo's, names no target", () => {
   expect(net.readEvent(JSON.stringify({ source: "push", repo: "owner/fork", sha: SHA }))).toEqual({ source: "push", on: "", sha: SHA });
 });
 
+test("the payload parser unwraps the bun-lambda envelope of a direct invoke", () => {
+  const wrapped = { event: { source: "manual", repo: "owner/net", sha: SHA }, requestId: "r", traceId: "t", deadlineMs: 0 };
+  expect(net.readEvent(JSON.stringify(wrapped))).toEqual({ source: "manual", on: "source", sha: SHA });
+});
+
 /* GITHUB */
 
 test("the ancestor check accepts a sha main is ahead of or identical to", async () => {

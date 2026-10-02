@@ -88,12 +88,13 @@ export type Spec = {
   asset?: (name: string, body: Uint8Array) => Bytes;
 };
 
-export type Record_ = { hash: string; at: string; outputs: string[]; types?: Record<string, string> };
+export type Record_ = { hash: string; at: string; outputs: string[]; types?: Record<string, string>; sums?: Record<string, string> };
 
 export type Manifest = Record<string, Record_>;
 
 /* FILES */
 
+const TICK = 250;
 const SKIP = new Set(["node_modules", "dist", ".git", ".cache", "target", "data", "pkg"]);
 
 export function walk(dir: string, deep = true): string[] {
@@ -492,7 +493,7 @@ function typed(outputs: Output[]): Record<string, string> | undefined {
   return Object.keys(out).length ? out : undefined;
 }
 
-export async function build(spec: Spec, options: { manifest?: string; force?: boolean; verify?: boolean } = {}) {
+export async function build(spec: Spec, options: { manifest?: string; force?: boolean; verify?: boolean; tick?: (done: number, total: number) => void } = {}) {
   const site = await scan(spec);
   const path = options.manifest ? resolve(spec.root, options.manifest) : "";
   const old: Manifest = path && existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : {};
@@ -502,7 +503,9 @@ export async function build(spec: Spec, options: { manifest?: string; force?: bo
   const verify = options.verify ?? true;
   let rendered = 0;
   let written = 0;
+  let walked = 0;
   for (const route of site.routes) {
+    if (++walked % TICK === 0) options.tick?.(walked, site.routes.length);
     if (isGit(route) && !spec.git?.page) continue;
     if (isBlog(route) && !spec.blog?.page) continue;
     const hash = fingerprint(site, route, spec);

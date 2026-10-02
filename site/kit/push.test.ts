@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { cache, IMMUTABLE, kind, mine, REVALIDATE, rules, spread, sweep, typing, type Lister } from "./push.ts";
+import { cache, changes, IMMUTABLE, kind, mine, REVALIDATE, rules, spread, sweep, typing, type Lister } from "./push.ts";
 import type { Manifest } from "./ssg/build.ts";
 
 const SHOP = rules(["(^|/)lib-[^/]+\\.js$", "(^|/)lib-[^/]+\\.css$", "(^|/)js/[^/]+\\.js$", "\\.wasm$", "-[0-9a-f]{8}\\.[^./]+$"]);
@@ -52,6 +52,13 @@ describe("push", () => {
       ["shop/index.html", "/shop/"],
       ["ui/tokens-8a0bcf6d.css", "@ui/tokens-8a0bcf6d.css"],
     ]);
+  });
+
+  test("a re-rendered output uploads only when its bytes moved", () => {
+    const old: Manifest = { "/": { hash: "a", at: "2026-09-21", outputs: ["index.html", "props.json"], sums: { "index.html": "s1", "props.json": "s2" } } };
+    const next: Manifest = { "/": { hash: "b", at: "2026-09-21", outputs: ["index.html", "props.json"] } };
+    expect(changes(old, next, [], (path) => (path === "index.html" ? "s1" : "s3"))).toEqual(["props.json"]);
+    expect(next["/"]!.sums).toEqual({ "index.html": "s1", "props.json": "s3" });
   });
 
   test("the guard owns a prefix and a single key alike", () => {

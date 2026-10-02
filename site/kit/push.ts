@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { build, digest, globals, today, type Manifest, type Output, type Spec } from "./ssg/build.ts";
+import { build, digest, globals, today, type Bytes, type Manifest, type Output, type Spec } from "./ssg/build.ts";
 import { client, del, getText, need, putBytes } from "./s3.ts";
 
 /* WHERE */
@@ -12,6 +12,7 @@ export type Block = { prefix: string; guard: string[]; bucket: string; store: St
 
 const ASSET = "@";
 const BATCH = 32;
+const TICK = 512;
 
 export function block(spec: Spec): Block {
   const config = spec.config ?? (JSON.parse(readFileSync(join(spec.root, "site.json"), "utf8")) as Record<string, unknown>);
@@ -107,6 +108,30 @@ export function spread(manifest: Manifest): Map<string, string> {
   return out;
 }
 
+export function sums(manifest: Manifest): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const record of Object.values(manifest)) for (const [path, sum] of Object.entries(record.sums ?? {})) out.set(path, sum);
+  return out;
+}
+
+export const seal = (bytes: Bytes, type: string, control: string) => digest([bytes, type, control]).slice(0, 16);
+
+export function changes(old: Manifest, next: Manifest, guard: string[], sealed: (path: string) => string): string[] {
+  const had = spread(old);
+  const before = sums(old);
+  const out: string[] = [];
+  for (const [path, name] of spread(next)) {
+    if (!mine(path, guard)) continue;
+    const was = old[name];
+    const now = next[name]!;
+    if (was && was.hash === now.hash && had.has(path)) continue;
+    const sum = sealed(path);
+    now.sums = { ...now.sums, [path]: sum };
+    if (before.get(path) !== sum) out.push(path);
+  }
+  return out;
+}
+
 /* LOCAL */
 
 export const holding = () => process.env.DRY === "1";
@@ -133,22 +158,17 @@ export async function push(spec: Spec, options: { dry?: boolean } = {}): Promise
   const old: Manifest = found ? JSON.parse(found) : {};
   const carry = join(tmpdir(), `push-remote-${process.pid}.json`);
   writeFileSync(carry, JSON.stringify(old, null, 2) + "\n");
-  const done = await build(spec, { manifest: carry, verify: false });
+  const done = await build(spec, { manifest: carry, verify: false, tick: (n, total) => console.log(`render ${n}/${total}`) });
   rmSync(carry, { force: true });
   const next: Manifest = { ...done.manifest, ...assets(await globals(done.site, spec), old) };
   const want = spread(next);
   const had = spread(old);
   const types = typing(next);
-  const upload: string[] = [];
-  for (const [path, name] of want) {
-    if (!mine(path, conf.guard)) continue;
-    const was = old[name];
-    if (was && was.hash === next[name]!.hash && had.has(path)) continue;
-    upload.push(path);
-  }
+  const header = (path: string) => (types.has(path) ? REVALIDATE : cache(path, hashed));
+  const type = (path: string) => types.get(path) ?? kind(path);
+  const upload = changes(old, next, conf.guard, (path) => seal(readFileSync(join(done.site.out, path)), type(path), header(path)));
   const seen = found || !site ? [...had.keys()] : await sweep(site, conf.prefix, conf.guard);
   const remove = seen.filter((path) => mine(path, conf.guard) && !want.has(path));
-  const header = (path: string) => (types.has(path) ? REVALIDATE : cache(path, hashed));
   const text = JSON.stringify(next, null, 2) + "\n";
   if (options.dry) {
     const fixed = upload.filter((path) => header(path) === IMMUTABLE);
@@ -159,13 +179,18 @@ export async function push(spec: Spec, options: { dry?: boolean } = {}): Promise
       await Promise.all(
         upload.slice(i, i + BATCH).map((path) =>
           putBytes(site, conf.prefix + path, new Uint8Array(readFileSync(join(done.site.out, path))), {
-            type: types.get(path) ?? kind(path),
+            type: type(path),
             cacheControl: header(path),
           }),
         ),
       );
+      const sent = Math.min(i + BATCH, upload.length);
+      if (sent % TICK === 0 || sent === upload.length) console.log(`upload ${sent}/${upload.length}`);
     }
-    if (remove.length) await del(site, remove.map((path) => conf.prefix + path), BATCH);
+    if (remove.length) {
+      console.log(`delete ${remove.length}`);
+      await del(site, remove.map((path) => conf.prefix + path), BATCH);
+    }
     await putBytes(store, key, text, { type: "application/json", cacheControl: REVALIDATE });
   } else hold(where(conf.store), text);
   return { rendered: done.rendered, uploaded: upload.length, deleted: remove.length };

@@ -10,6 +10,7 @@ const CACHE_DIR = process.env.BUN_INSTALL_CACHE_DIR || "/tmp/bun/cache";
 const LAYER_DIR = process.env.NODE_LAYER_DIR || "/opt/node";
 const SHELF_DIR = "/tmp/shelf";
 const SHELF_ENV = "MRLY_SHELF";
+const TOKEN_ENV = "GITHUB_READ_TOKEN";
 const BACKOFF = [1000, 3000, 9000];
 const SHA = /^[0-9a-f]{7,40}$/;
 
@@ -128,7 +129,8 @@ export function lambda(config: Config) {
 
   function readEvent(text: string): Wake {
     const outer = json(text);
-    const body = typeof outer.body === "string" ? json(outer.body) : outer;
+    const event = outer.event && typeof outer.event === "object" ? (outer.event as Record<string, unknown>) : outer;
+    const body = typeof event.body === "string" ? json(event.body) : event;
     const word = typeof body.source === "string" ? body.source.trim() : "";
     const repo = typeof body.repo === "string" ? body.repo.trim() : "";
     const named = typeof body.sha === "string" ? body.sha.trim().toLowerCase() : "";
@@ -172,7 +174,12 @@ export function lambda(config: Config) {
 
   /* GITHUB */
 
-  const headers = () => ({ "user-agent": config.agent, accept: "application/vnd.github+json" });
+  function headers(): Record<string, string> {
+    const sent: Record<string, string> = { "user-agent": config.agent, accept: "application/vnd.github+json" };
+    const token = (process.env[TOKEN_ENV] ?? "").trim();
+    if (token) sent.authorization = `Bearer ${token}`;
+    return sent;
+  }
 
   async function commit(slug: string, etag: string, get: Get = fetch): Promise<Mark | null> {
     return retry(`github ${slug}`, async () => {
