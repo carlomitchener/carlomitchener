@@ -48,7 +48,7 @@ const DENY = /^(?:javascript|data|vbscript):/i;
 
 const denied = (url: string) => DENY.test(url.replace(/[\u0000-\u0020]/g, ""));
 
-const keys = (path: string) => [path, `${path}.md`, path.replace(/\.md$/, "")];
+const keys = (path: string) => [path, `${path}.md`, path.replace(/\.md$/, ""), `${path}/README.md`];
 
 const known = (idx: Index, path: string) => {
   for (const key of keys(path)) {

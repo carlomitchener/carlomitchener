@@ -56,6 +56,11 @@ test("a note link to a sibling note lands on that note's route", () => {
   expect(resolve(mrly, "research/core.md", "README.md")).toBe("/research/");
 });
 
+test("a link to a folder lands on the route of its README", () => {
+  expect(resolve(mrly, "site/blog/hello.md", "../../research/")).toBe("/research/");
+  expect(resolve(mrly, "research/core.md", "../research#law")).toBe("/research/#law");
+});
+
 test("a note link to a demo lands on the demo route", () => {
   expect(resolve(mrly, "research/core.md", "../demos/spin/")).toBe("/demos/spin/");
 });

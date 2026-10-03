@@ -88,7 +88,7 @@
 - The path resolves against the directory of `from`, and its `#fragment` or `?query` is set aside and put back on whatever the resolver answers.
 - `scan()` builds the index once per build: every route's `source`, and every `source` a route names in its `urls`, mapped to that route under both its absolute path and its declared name, so `research/core.md` and `demos/spin` are keys as much as the full paths are.
 - A route that wants to be found by a link names the input it publishes in `source`; a group route names one per page in `urls`, which is how a shelf hands each folder its own route.
-- The index is asked first, for the path, the path plus `.md` and the path with `.md` stripped, so `bases.md`, `bases` and `../demos/spin/` all land on the route the site publishes.
+- The index is asked first, for the path, the path plus `.md`, the path with `.md` stripped and the path's own `README.md`, so `bases.md`, `bases`, `../demos/spin/` and a folder whose README is a page all land on the route the site publishes.
 - A miss falls to the repo: `/raw/<path>` for an image or a PDF, `/git/<path>` for a file, `/git/<path>/` for a directory, and only when the code viewer carries that route.
 - A site with git routes but no slug stops there; a site with no git routes falls to `https://github.com/<slug>/blob/<branch>/<path>` when `site.json` names one, and a site with no git block leaves the link as written.
 - Anything else is left exactly as written: a target outside the repo, a paper fetched from another tree, a path nothing publishes.
