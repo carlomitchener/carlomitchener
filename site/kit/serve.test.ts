@@ -32,6 +32,7 @@ const site = {
   config: { root: "https://demo.test" },
   routes,
   copies: [{ path: "ui/base-abcd1234.css", bytes: "body{margin:0}" }],
+  made: new Set<string>(),
 } as unknown as Site;
 
 /* TESTS */

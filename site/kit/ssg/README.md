@@ -19,7 +19,7 @@
 - A cycle throws, and naming a file the bundle does not list throws unless an earlier bundle already placed it, which answers with that file's hashed href.
 - `assets`: more bundles of the same shape, for files that must keep their names, such as `fonts/` and `seti/`, whose CSS names its faces by relative url.
 - `manifest`: the webmanifest, written as is. `robots`: `{ disallow }`, appended to the wildcard block alone.
-- `llms`: `{ about, links }`, optional. `about` is the paragraph llms.txt opens on; a link is `{ href, name, note }` and is dropped unless the site publishes that route. No block, no `llms.txt`.
+- `llms`: `{ about, legend, links }`, optional. `about` is the paragraph llms.txt opens on, `legend` one line under it; a link is `{ href, name, note }` and is dropped unless the site publishes that route. No block, no `llms.txt`.
 
 ## BLOG
 
@@ -47,10 +47,12 @@
 - `ships` maps a repo file the build publishes byte for byte to that URL, filled at collect time, and the code viewer reads it before it asks the hook.
 - `render(site, route, spec)`: pure, returns `[{ path, bytes, type? }]` for that route alone. A missing input throws here.
 - `type` overrides the content type a path would earn by its extension; it rides in the manifest so a push sets the S3 header without re-rendering.
-- `globals(site, spec)`: the copies, sitemap.xml, robots.txt, llms.txt, the webmanifest, the icons, `git/tree.json`, the public copy, then the site's own extras.
+- `globals(site, spec)`: the copies, sitemap.xml and its children, robots.txt, llms.txt, the webmanifest, the icons, `git/tree.json`, the public copy, then the site's own extras.
 - robots.txt allows everything: an `Allow: /` block per named crawler (GPTBot, ClaudeBot, Claude-Web, CCBot, Google-Extended, anthropic-ai, PerplexityBot), then `*`, then the sitemap line.
-- sitemap.xml is one `<url>` per entry in every route's `urls`, `lastmod` from the route's `at`, so a group route fills the map with the pages it publishes.
-- llms.txt is the title, the site root, the `about` paragraph and the declared links; nothing is listed by accident and no route writes itself in.
+- The map is one `<url>` per entry in every route's `urls`, `lastmod` from the route's `at`, so a group route fills the map with the pages it publishes.
+- sitemap.xml is an index: one child `sitemap-<segment>.xml` per first path segment holding two urls or more, every other url (`/` and each lone segment) in `sitemap-pages.xml`; each entry's `lastmod` is its child's newest.
+- The children sit at the root because a sitemap may only list urls under its own folder. A `/pages/` of two urls throws, and so does any route output, public file or extra on a sitemap's path.
+- llms.txt is the title, the site root, `about`, `legend`, the declared links, then one `## name` block per section of `spec.llms`; a row whose route the site does not publish is dropped, an emptied section with it, and no route writes itself in.
 - `fingerprint(site, route, spec?)`: sha256 of the route's input bytes, its data, the templates, the navigator and the link index. Never a date, never an absolute path.
 - A file is named by its declaration, `research/foo.md`, not by where the tree sits; an undeclared file is named by its basename, a directory hashes every inner path and byte relative to itself.
 - So a checkout, a tarball and a lambda fingerprint the same bytes the same way, and one manifest serves them all.
@@ -61,7 +63,8 @@
 
 ## SPEC
 
-- `root out config templates prepare collect render globals inline icons git blog asset`.
+- `root out config templates prepare collect render globals llms inline icons git blog asset`.
+- `llms(site)` returns `[{ name, rows }]`, a row `{ href, name, note }`; it runs in `globals`, after every route is collected.
 - `templates` are the dirs whose bytes rebuild every route; the kit itself is always one, so a kit edit re-renders everything.
 - `prepare` runs first, before the scan reads anything, for a site that bundles its client and then lists the bundle as an asset.
 - `collect(site)` returns `{ routes, nav? }`; `nav` is the site tree the chrome draws and the code viewer's node joins it when the site has not placed one.

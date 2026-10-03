@@ -57,6 +57,10 @@ export type Site = {
 
 export type Decl = { path: string; out?: string; hash?: boolean; files?: string[]; ext?: string };
 
+export type Row = { href: string; name?: string; note?: string };
+
+export type Section = { name: string; rows: Row[] };
+
 export type Config = {
   title?: string;
   name?: string;
@@ -66,7 +70,7 @@ export type Config = {
   assets?: Decl[];
   manifest?: Record<string, unknown>;
   robots?: { disallow?: string[] };
-  llms?: { about?: string; links?: { href: string; name?: string; note?: string }[] };
+  llms?: { about?: string; legend?: string; links?: Row[] };
   [key: string]: unknown;
 };
 
@@ -81,6 +85,7 @@ export type Spec = {
   collect: (site: Site) => Promise<Picked> | Picked;
   render: (site: Site, route: Route) => Promise<Output[]> | Output[];
   globals?: (site: Site) => Promise<Output[]> | Output[];
+  llms?: (site: Site) => Section[];
   inline?: string[];
   icons?: Icons;
   git?: Hooks;
@@ -406,6 +411,37 @@ function links(site: Site, spec: Spec): Link[] {
   return out.sort((a, b) => a.route.localeCompare(b.route));
 }
 
+const XML = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+
+const SCHEMA = "http://www.sitemaps.org/schemas/sitemap/0.9";
+
+const LONE = "pages";
+
+const segment = (route: string) => route.split("/")[1]!;
+
+function sitemaps(shown: Link[], root: string): Output[] {
+  const count = new Map<string, number>();
+  for (const one of shown) count.set(segment(one.route), (count.get(segment(one.route)) ?? 0) + 1);
+  if ((count.get(LONE) ?? 0) > 1) throw new Error(`ssg: /${LONE}/ holds ${count.get(LONE)} urls, and sitemap-${LONE}.xml is the lone pages' map`);
+  const children = new Map<string, Link[]>();
+  for (const one of shown) {
+    const at = segment(one.route);
+    const name = at && count.get(at)! > 1 ? at : LONE;
+    if (!children.has(name)) children.set(name, []);
+    children.get(name)!.push(one);
+  }
+  const out: Output[] = [];
+  const index: string[] = [];
+  for (const name of [...children.keys()].sort()) {
+    const list = children.get(name)!;
+    const dates = list.map((l) => l.at || today());
+    const urls = list.map((l, n) => `<url><loc>${escape(root + l.route)}</loc><lastmod>${dates[n]}</lastmod></url>`);
+    out.push({ path: `sitemap-${name}.xml`, bytes: `${XML}<urlset xmlns="${SCHEMA}">\n${urls.join("\n")}\n</urlset>\n` });
+    index.push(`<sitemap><loc>${escape(`${root}/sitemap-${name}.xml`)}</loc><lastmod>${dates.reduce((a, b) => (b > a ? b : a))}</lastmod></sitemap>`);
+  }
+  return [{ path: "sitemap.xml", bytes: `${XML}<sitemapindex xmlns="${SCHEMA}">\n${index.join("\n")}\n</sitemapindex>\n` }, ...out];
+}
+
 function robots(site: Site, root: string): string {
   const deny = (site.config.robots?.disallow ?? []).map((path) => `Disallow: ${path}`);
   const lines: string[] = [];
@@ -415,32 +451,30 @@ function robots(site: Site, root: string): string {
   return lines.join("\n");
 }
 
-function llms(site: Site, root: string): string {
+function llms(site: Site, root: string, spec: Spec): string {
   const decl = site.config.llms ?? {};
   const known = new Set<string>();
   for (const route of site.routes) {
     known.add(route.route);
     for (const one of route.urls ?? []) known.add(one.route);
   }
-  const rows = (decl.links ?? [])
-    .filter((one) => known.has(one.href))
-    .map((one) => `- [${one.name ?? one.href}](${root}${one.href})${one.note ? `: ${one.note}` : ""}`);
-  const head = [`# ${site.config.title ?? site.config.name ?? ""}`, "", `> ${root}`, ""];
-  if (decl.about) head.push(decl.about, "");
-  return [...head, ...rows, ""].join("\n");
+  const rows = (list: Row[]) =>
+    list
+      .filter((one) => known.has(one.href.replace(/#.*/, "")))
+      .map((one) => `- [${one.name ?? one.href}](${root}${one.href})${one.note ? `: ${one.note}` : ""}`)
+      .join("\n");
+  const sections = (spec.llms?.(site) ?? []).map((one) => [one.name, rows(one.rows)]).filter(([, list]) => list).map(([name, list]) => `## ${name}\n\n${list}`);
+  const blocks = [`# ${site.config.title ?? site.config.name ?? ""}`, `> ${root}`, decl.about, decl.legend, rows(decl.links ?? []), ...sections];
+  return `${blocks.filter(Boolean).join("\n\n")}\n`;
 }
 
 export async function globals(site: Site, spec: Spec): Promise<Output[]> {
   const out: Output[] = [...site.copies];
   const root = clean(site.config.root as string);
-  const shown = links(site, spec);
-  const urls = shown.map((l) => `<url><loc>${escape(root + l.route)}</loc><lastmod>${l.at || today()}</lastmod></url>`);
-  out.push({
-    path: "sitemap.xml",
-    bytes: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`,
-  });
+  const maps = sitemaps(links(site, spec), root);
+  out.push(...maps);
   out.push({ path: "robots.txt", bytes: robots(site, root) });
-  if (site.config.llms) out.push({ path: "llms.txt", bytes: llms(site, root) });
+  if (site.config.llms) out.push({ path: "llms.txt", bytes: llms(site, root, spec) });
   if (site.config.manifest) out.push({ path: "manifest.webmanifest", bytes: JSON.stringify(site.config.manifest, null, 2) + "\n" });
   if (spec.icons) out.push(...icons(spec.icons));
   const wood = forest(site);
@@ -448,6 +482,8 @@ export async function globals(site: Site, spec: Spec): Promise<Output[]> {
   const pub = site.config.inputs?.public ? site.input("public") : null;
   if (pub) for (const file of walk(pub.path)) out.push({ path: file.slice(pub.path.length + 1), bytes: bytes(file) });
   if (spec.globals) out.push(...(await spec.globals(site)));
+  const paths = [...site.made, ...out.map((one) => one.path)];
+  for (const one of maps) if (paths.indexOf(one.path) !== paths.lastIndexOf(one.path)) throw new Error(`ssg: ${one.path} is the sitemap's, and another output claims it`);
   return out;
 }
 

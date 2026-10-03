@@ -39,12 +39,14 @@ const site = (config: Site["config"] = {}) =>
       },
     ],
     copies: [],
+    made: new Set<string>(),
   }) as unknown as Site;
 
 const made = async (one = site(), spec = {} as unknown as Spec) => {
   const out = await globals(one, spec);
   const find = (path: string) => out.find((item: Output) => item.path === path)?.bytes as string | undefined;
-  return { out, sitemap: find("sitemap.xml")!, robots: find("robots.txt")!, llms: find("llms.txt") };
+  const children = out.filter((item) => item.path.startsWith("sitemap-"));
+  return { out, index: find("sitemap.xml")!, children, sitemap: children.map((item) => item.bytes).join(""), robots: find("robots.txt")!, llms: find("llms.txt") };
 };
 
 /* SITEMAP */
@@ -59,6 +61,27 @@ test("the sitemap carries every shown route and every raw path with its own date
   expect(sitemap).not.toContain("404.html");
   expect(sitemap).not.toContain("/cart/");
   expect(sitemap.match(/<url>/g)!.length).toBe(5);
+});
+
+test("the sitemap indexes one child per first segment, dated by its newest url, the lone pages sharing pages.xml", async () => {
+  const { index, children } = await made();
+  expect(index).toBe(
+    '<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+      "<sitemap><loc>https://demo.test/sitemap-git.xml</loc><lastmod>2026-03-03</lastmod></sitemap>\n" +
+      "<sitemap><loc>https://demo.test/sitemap-pages.xml</loc><lastmod>2026-04-04</lastmod></sitemap>\n</sitemapindex>\n",
+  );
+  const locs = (path: string) => [...(children.find((item) => item.path === path)!.bytes as string).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  expect(locs("sitemap-git.xml")).toEqual(["https://demo.test/git/", "https://demo.test/git/README.md"]);
+  expect(locs("sitemap-pages.xml")).toEqual(["https://demo.test/", "https://demo.test/faq/", "https://demo.test/raw/README.md"]);
+  const crowded = site();
+  crowded.routes.push({ route: "/pages/", name: "Pages" }, { route: "/pages/one/", name: "One" });
+  await expect(made(crowded)).rejects.toThrow("sitemap-pages.xml");
+});
+
+test("a route or a file that claims a sitemap's path stops the build", async () => {
+  const one = site();
+  one.made.add("sitemap-git.xml");
+  await expect(made(one)).rejects.toThrow("sitemap-git.xml is the sitemap's");
 });
 
 /* ROBOTS */
@@ -82,6 +105,13 @@ test("llms.txt says what the site is and links only what the site publishes", as
   expect(llms).toContain("- [Code](https://demo.test/git/): the tree");
   expect(llms).toContain("- [FAQ](https://demo.test/faq/)");
   expect(llms).not.toContain("Nowhere");
+});
+
+test("the spec's llms hook lays its sections under the header and its legend", async () => {
+  const one = site({ llms: { about: "A demo tree.", legend: "Links are sources." } });
+  const rows = [{ href: "/raw/README.md#top", name: "README", note: "the readme" }, { href: "/faq/" }, { href: "/nowhere/", name: "Nowhere" }];
+  const { llms } = await made(one, { llms: () => [{ name: "Read", rows }, { name: "Gone", rows: rows.slice(2) }] } as unknown as Spec);
+  expect(llms).toBe("# Demo\n\n> https://demo.test\n\nA demo tree.\n\nLinks are sources.\n\n## Read\n\n- [README](https://demo.test/raw/README.md#top): the readme\n- [/faq/](https://demo.test/faq/)\n");
 });
 
 test("no llms block in site.json means no llms.txt", async () => {

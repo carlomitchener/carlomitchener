@@ -69,7 +69,7 @@ export const PAGES = [...SITE, ...DOCS.map((one) => ({ ...one, note: "" }))];
 export const FILES = [
   { name: "robots.txt", href: "/robots.txt", note: "Who may crawl, and where the sitemap is." },
   { name: "llms.txt", href: "/llms.txt", note: "The site on one page, for machines." },
-  { name: "sitemap.xml", href: "/sitemap.xml", note: "Every indexable route with its date." },
+  { name: "sitemap.xml", href: "/sitemap.xml", note: "Every indexable route with its date, one map per section." },
   { name: "manifest.webmanifest", href: "/manifest.webmanifest", note: "The web app manifest." },
   { name: "search.json", href: "/search.json", note: "The search index the header reads." },
   { name: "404", href: "/404.html", note: "Not found, or its moon has passed." },
