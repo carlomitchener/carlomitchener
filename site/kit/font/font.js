@@ -138,6 +138,16 @@ export function merge(text, pad = 1) {
   return frames;
 }
 
+export function fold(text, into = 'X', pad = 0) {
+  const laid = layout(text);
+  const [rows, cols] = board(laid, pad);
+  const end = layout(into);
+  const x = Math.floor((cols - end.width) / 2);
+  const y = Math.floor((rows - end.height) / 2);
+  const last = stamp(end.blocks, end.blocks.map((b) => [x + b.col, y + b.offset]), rows, cols);
+  return { rows, cols, fps: FPS, frames: [...merge(text, pad), last] };
+}
+
 export function cycle(text, pad = 1, hold = HOLD) {
   const fast = bridge('font_cycle');
   if (fast) return JSON.parse(fast(text, pad, hold));

@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { animate, cycle, letters, merge, HOLD } from './font.js';
+import { animate, cycle, fold, letters, merge, HOLD } from './font.js';
 import FONT from './font.json' with { type: 'json' };
 
 const WORDMARK = 'MRLYPROD';
@@ -27,6 +27,18 @@ test.skipIf(!HAS)('the eight letters fold into an X in twenty-two frames', () =>
   const x = [];
   FONT.X.rows.forEach((row, r) => [...row].forEach((ch, c) => ch === '1' && x.push((1 + r) * 49 + 22 + c)));
   expect(folded[21]).toEqual(x);
+});
+
+test('a word folds from its own letters and lands on the X at its centre', () => {
+  const { rows, cols, grid } = letters('wiki');
+  const folded = fold('wiki');
+  expect([folded.rows, folded.cols]).toEqual([rows, cols]);
+  expect(folded.frames[0]).toEqual(grid.flat().flatMap((on, i) => (on ? [i] : [])));
+  const x = [];
+  const top = (rows - 5) >> 1;
+  const left = (cols - 5) >> 1;
+  FONT.X.rows.forEach((row, r) => [...row].forEach((ch, c) => ch === '1' && x.push((top + r) * cols + left + c)));
+  expect(folded.frames.at(-1)).toEqual(x);
 });
 
 test.skipIf(!HAS)('the cycle loops through both halves with a rest after each', () => {
