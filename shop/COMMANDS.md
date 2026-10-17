@@ -1,15 +1,15 @@
 ## Commands
 
-- Run any file with the VS Code Play button, or by path from the desk root: `uv run python carlomitchener/shop/catalog/main.py`.
+- Run any file with the VS Code Play button, or by path from the repo root: `uv run python shop/catalog/main.py`.
 - The block at the bottom of each file lists its steps; comment out what you don't want.
-- Secrets come from the desk's `.env`: `PRINTFUL_API_KEY`, `CARLOMITCHENER_BUCKET`.
+- Secrets come from the repo-root `.env` when present, else the process env: `PRINTFUL_API_KEY`, `CARLOMITCHENER_BUCKET`.
 
 ## Catalog
 
 - `files/catalog.json` is the hand-kept product list: id, category, title, technique, link, handle, primaries. Every row is live; `primaries` is informational, every row gets a light and a dark product.
 - `files/products/<id>.json` is the parsed product. `files/dictionary.json` maps id to "category, title, technique".
 - `catalog/main.py` - the whole pipeline: sort, dictionary, check, fetch, parse, sort sizes, correct, check, upload.
-- `catalog/fetch.py` - Printful raw data into `data/carlomitchener/shop/catalog/raw/`; skips products already fetched. `raw/catalog.json` is the whole Printful catalog as `id: "title - technique"`, discontinued dropped, with product counts per technique in `raw/stats.json`; `new_products()` prints the All-Over Print ones missing from `catalog.json`.
+- `catalog/fetch.py` - Printful raw data into `data/shop/catalog/raw/`; skips products already fetched. `raw/catalog.json` is the whole Printful catalog as `id: "title - technique"`, discontinued dropped, with product counts per technique in `raw/stats.json`; `new_products()` prints the All-Over Print ones missing from `catalog.json`.
 - `catalog/parse.py` - raw data into `files/products/`.
 - `catalog/sort.py` - variants by size.
 - `catalog/correct.py` - fixes dims and ignores placements (the labels), variants and mockups; the tables sit at the top of the file.
@@ -23,6 +23,6 @@
 ## Shopify
 
 - `manager.py <verb>` - verbs: init, show, batch, status, rows, reset, abort, reap, redo, release, wipe. `rows` counts the cells and reopens dropped rows; `reap <design>` reaps a released batch now; `redo [key]` remakes a live product (or the task in flight) this batch; `release` closes the batch in flight whatever is open.
-- `automator/run.py` runs one tick from the desk against the real bucket and shops; every step file runs alone on the task in flight.
+- `automator/run.py` runs one tick locally against the real bucket and shops; every step file runs alone on the task in flight.
 - `shopify.py <verb>` - verbs: publications, purge, vendor.
-- `theme.py <verb>` - verbs: list, status, push, publish. `status` compares md5s with the shop and exits 1 when it is behind; `deploy carlo` runs it after the wake and pushes when needed. `push` upserts every file under `theme/` into the theme named `theme` and deletes remote files not on disk; `publish` makes it live. Both plan first, apply with `--yes`.
+- `theme.py <verb>` - verbs: list, status, push, publish. `status` compares md5s with the shop and exits 1 when it is behind; the deploy runs it after the wake and pushes when needed. `push` upserts every file under `theme/` into the theme named `theme` and deletes remote files not on disk; `publish` makes it live. Both plan first, apply with `--yes`.

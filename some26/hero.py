@@ -2,11 +2,11 @@ import math
 
 import numpy as np
 from PIL import Image
-from mrlypy.core import Rng
-from mrlypy.core.colors import BLACK, WHITE, gradient, named
-from mrlypy.math import six, three
-from mrlypy.math.cell import models
-from mrlypy.math.six import FILL, GRID, VOID
+from mrly.core import Rng
+from mrly.core.colors import BLACK, WHITE, gradient, named
+from mrly.math import six, three
+from mrly.math.cell import models
+from mrly.math.six import FILL, GRID, VOID
 
 from lib.canvas import H3, decode, quantize
 from lib.paths import HERO, ensure, show

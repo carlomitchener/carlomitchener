@@ -2,10 +2,10 @@ import random
 from colors import random_gradient, random_primary, random_secondary
 from config import DATA_DIR
 from helpers import decode, save
-from mrlypy.core import Rng
-from mrlypy.core.colors import ALPHA, BLACK, WHITE, lightness
-from mrlypy.math import six, three, two
-from mrlypy.math.cell import models, paint
+from mrly.core import Rng
+from mrly.core.colors import ALPHA, BLACK, WHITE, lightness
+from mrly.math import six, three, two
+from mrly.math.cell import models, paint
 from PIL import Image
 
 # SETTINGS

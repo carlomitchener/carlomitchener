@@ -2,7 +2,7 @@ import math
 from io import BytesIO
 
 from PIL import Image
-from mrlypy.core.colors import named
+from mrly.core.colors import named
 
 H3 = math.sqrt(3) / 2
 INK = named("black")

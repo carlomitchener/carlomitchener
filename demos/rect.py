@@ -1,9 +1,9 @@
 import numpy as np
 from config import DATA_DIR
 from helpers import decode, save
-from mrlypy.core.colors import ALPHA, BLACK, BLUE, GREEN, RED, WHITE
-from mrlypy.math import six, three, two
-from mrlypy.math.cell import models
+from mrly.core.colors import ALPHA, BLACK, BLUE, GREEN, RED, WHITE
+from mrly.math import six, three, two
+from mrly.math.cell import models
 from PIL import Image
 
 # HELPERS

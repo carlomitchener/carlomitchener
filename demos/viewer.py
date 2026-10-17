@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from mrlypy.math import three
-from mrlypy.math.cell import models
+from mrly.math import three
+from mrly.math.cell import models
 
 def view(cell: dict):
     facecolors = "white"

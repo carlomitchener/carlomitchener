@@ -1,10 +1,10 @@
 ## Commands
 
-Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
+Run from the repo root: a script below is `bun run --cwd site <script>`, and `bun aws/site.ts` runs as is. `data/` is at the repo root; `kit/`, `scripts/`, `src/`, `ui/` and `dist/` are in `site/`.
 
 - `bun run vendor` - vendor the font faces, the icon subset and their licences into `site/public/fonts/`; the work is `kit/vendor.ts` and the `fonts` block in `site/site.json` names the output folder, the Google families and axes, and the icon list.
-- `bun run snapshot` - the live Shopify products into `data/carlomitchener/site/shop.json`, and the published feed index into `feed.json`.
-- `bun run fake` - the same two files, invented, into `data/carlomitchener/site/dev/`: every catalog product with 6 to 10 variations, 60 posts, a pool of 50 to 100 picsum pictures; no Shopify, no S3.
+- `bun run snapshot` - the live Shopify products into `data/site/shop.json`, and the published feed index into `feed.json`.
+- `bun run fake` - the same two files, invented, into `data/site/dev/`: every catalog product with 6 to 10 variations, 60 posts, a pool of 50 to 100 picsum pictures; no Shopify, no S3.
 - DEV mode: `"dev": true` in `site/package.json` (or `DEV=1`) makes `build` and `dev` read the `dev/` files, drop the Shopify cart and redirect `/cdn/` pictures to picsum; the knobs live in `site/src/config/dev.ts`; the Lambda ignores the flag.
 - `bun run build` - render every page into `dist/`: the feed wall, the shop by category and product, one page per variation and one per post.
 - `SITE_NOW=<epoch ms>` freezes `build`'s clock, so two runs of the same tree give byte-identical pages.
@@ -12,7 +12,7 @@ Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 - `bun run boot` - print every inline boot script as a JSON string; `build` refuses any inline script missing from that list.
 - FROZEN 2026-10-03: carlomitchener.com keeps its live bytes and is never pushed again; `bun run push` and `scripts/push.ts` are gone, and `kit/push.ts` with the `push` block in `site/site.json` stays as the reference.
 - `/automator/` and `/stats/` are hidden pages; `src/components/Mirror.jsx` fetches `/automator/automator.json` and `/stats/stats.json` every minute, so they need no rebuild.
-- `bun run dev` - render on request through `kit/serve.ts` on port 3000 (`PORT` picks another): every declared input, `src/`, `ui/`, `scripts/` and the kit are watched, a CSS edit swaps the sheets in place, any other edit reloads the page, and `bun --hot` re-runs the server on a script or component edit; `/cdn/feed/` is served from `data/carlomitchener/feed/`, the rest of `/cdn/` falls to picsum or a local video in DEV mode and to the live site otherwise, and `/automator/automator.json` and `/stats/stats.json` are proxied from the live site; the work is `kit/dev.ts` and `scripts/dev.ts` passes the spec and those fixtures.
+- `bun run dev` - render on request through `kit/serve.ts` on port 3000 (`PORT` picks another): every declared input, `src/`, `ui/`, `scripts/` and the kit are watched, a CSS edit swaps the sheets in place, any other edit reloads the page, and `bun --hot` re-runs the server on a script or component edit; `/cdn/feed/` is served from `data/feed/`, the rest of `/cdn/` falls to picsum or a local video in DEV mode and to the live site otherwise, and `/automator/automator.json` and `/stats/stats.json` are proxied from the live site; the work is `kit/dev.ts` and `scripts/dev.ts` passes the spec and those fixtures.
 - `/blog/` is the blog from `kit/ssg/blog.ts`: one post is `site/blog/<slug>/index.md` with every figure, script and note beside it, and `blog` is a declared input like any other.
 - Those siblings are served at `/blog/<slug>/<path>` with their own content types, so an image the post writes as `files/hero.png` resolves to its served copy and the first one is the page's `og:image`.
 - A markdown file beside the post is not a page: a link to it lands on its `/git/` page, where the code viewer renders it with the chrome.
@@ -24,7 +24,7 @@ Run from `site/`, except `bun aws/site.ts`, which runs from the repo root.
 - A repo binary the site already serves gets no `/raw/` twin: the bird pngs, the fonts and the kit's seti font are linked where they already live.
 - `MRLY_GIT=0` skips rendering `/git/` and `/raw/` on `build` and `dev`, the knob mrly uses; the routes are still collected, and the manifest is `.cache/manifest-nogit.json` so the two modes never reap each other's files.
 - `site/ui/tokens.css` maps the code kit's `--site-*` contract onto the shop's own roles, so the frames, the file lists and the image outlines take the shop's colours, hairline, radii, spacing and mono face; `site/ui/git.css` is the shop's frame for those pages.
-- `bun run shots [routes]` - screenshots of the built `dist/`, which it serves itself, at phone, tablet and desktop, into `data/carlomitchener/site/scripts/shots/latest/`; console errors print under a shot and it flags any horizontal overflow.
+- `bun run shots [routes]` - screenshots of the built `dist/`, which it serves itself, at phone, tablet and desktop, into `data/site/scripts/shots/latest/`; console errors print under a shot and it flags any horizontal overflow.
 - `SITE_URL=<origin>` shoots a live site instead of `dist/`, `<route>@<expr>` runs an expression before the shot, `--baseline` keeps a set to compare later runs against by hash.
 - The `shots` block in `site/site.json` names the default routes and the three sizes; `kit/shots.ts` reads it and `scripts/shots.ts` is a handful of lines.
 - `bun aws/site.ts` - the builder Lambda: commit, install, snapshot, build, push, head.

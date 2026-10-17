@@ -273,7 +273,7 @@ def cut(cell: Cell3d):
 
 ![the four families, number 5, cut](files/gifs/showcase-cut-5.gif)
 
-And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/pkgs/mrlyrs/src/math/six/geometry.rs), and the scripts here call that very Rust from Python through [mrlypy](https://pypi.org/project/mrlypy/).
+And now, with Claude, we've grown up a bit and rewritten everything in Rust. Along the way the one rule grew three siblings — *net*, *tree* and *void* — four families of sponges in all. The full MrlyMath source lives at [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod/blob/main/crates/mrly-math/src/six/geometry.rs), and the scripts here call that very Rust from Python through [mrly](https://pypi.org/project/mrly/).
 
 For a tour of all four families, see [SHOWCASE.md](SHOWCASE.md).
 
@@ -394,26 +394,27 @@ Stack every snowflake from 1 to 55 like sheets of tracing paper and a picture su
 
 Ready to get your hands... snowy?
 
-The sponge, the slice and the renderers all live in `mrlypy.math.six`, the Python face of the Rust crate — clone the repo and the scripts are already next door:
+The sponge, the slice and the renderers all live in `mrly.math.six`, the Python face of the Rust crate — clone the repo and the scripts are already next door:
 
 ```bash
 git clone https://github.com/carlomitchener/carlomitchener
-uv run carlomitchener/some26/cut.py sweep
+cd carlomitchener
+uv run some26/cut.py sweep
 ```
 
-*(That's [uv](https://docs.astral.sh/uv/) — one command, and it fetches the right Python, `mrlypy` and the two libraries into a sandbox of its own. Nothing touches your system Python.)*
+*(That's [uv](https://docs.astral.sh/uv/) — one command, and it fetches the right Python and the repo's libraries into a sandbox of its own. Nothing touches your system Python. Until `mrly` ships a wheel, the first run compiles it from source, so you need Rust too: [rustup](https://rustup.rs).)*
 
-No uv? Plain Python works too; you need `mrlypy` and the two libraries:
+No uv? Plain Python works too; you need `mrly` (built from source, so Rust as well) and the two libraries:
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
-pip install mrlypy pillow numpy
-python3 carlomitchener/some26/cut.py sweep
+pip install "mrly @ git+https://github.com/mrlyprod/mrlyprod#subdirectory=bindings/py" pillow numpy
+python3 some26/cut.py sweep
 ```
 
 *(On Windows the activate step is `.venv\Scripts\activate`. Delete the `.venv` folder when you're done and no trace is left.)*
 
-The sweep redraws the regular snowflake set in [files/](files/) — cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `uv run carlomitchener/some26/cut.py` on its own for the console, or `uv run carlomitchener/some26/cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, the corner-on sponges from `sponges.py`, the `start` flip-book from `start.py`, the challenge gif from `challenge.py`, and the rainbow hero up top from `hero.py`.
+The sweep redraws the regular snowflake set in [files/](files/) — cut and grid pngs, svgs, txts and gifs — in about 3 seconds. Run `uv run some26/cut.py` on its own for the console, or `uv run some26/cut.py draw 7 2` for a single snowflake. The showcase gifs come from `showcase.py`, the corner-on sponges from `sponges.py`, the `start` flip-book from `start.py`, the challenge gif from `challenge.py`, and the rainbow hero up top from `hero.py`.
 
 Enjoy!
 

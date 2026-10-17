@@ -67,7 +67,7 @@ The challenge said to draw it, too. The rest of [solution.py](solution.py) is th
 3. **SVG** — write every fill and void triangle as a polygon, scale the rows by √3/2 so the triangles come out equilateral, and the snowflake opens in your browser.
 
 ```bash
-python3 carlomitchener/some26/solution.py 9    # prints the blob, writes the svg under data/
+python3 some26/solution.py 9    # prints the blob, writes the svg under data/
 ```
 
 A rougher ancestor of this pipeline — PIL polygons instead of SVG — drew the very stills cycling in [the challenge](README.md#the-challenge) gif.

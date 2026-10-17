@@ -4,17 +4,18 @@ name = "carlomitchener"
 version = "0.1.0"
 license = "MIT"
 description = "MrlyMath and friends: one environment for every script in the repo"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 dependencies = [
     "boto3",
     "botocore[crt]",
     "numpy",
     "pillow",
-    "mrlypy",
+    "mrly",
 ]
 
 [dependency-groups]
 
+avatar = ["scipy"]
 plots = ["matplotlib"]
 
 [build-system]
@@ -26,3 +27,7 @@ build-backend = "setuptools.build_meta"
 
 where = [".", "shop"]
 include = ["automator*"]
+
+[tool.uv.sources]
+
+mrly = { git = "https://github.com/mrlyprod/mrlyprod", subdirectory = "bindings/py" }

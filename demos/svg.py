@@ -1,8 +1,8 @@
 from config import DATA_DIR
 from helpers import save
-from mrlypy.core.colors import RED
-from mrlypy.math import two
-from mrlypy.math.cell import paint
+from mrly.core.colors import RED
+from mrly.math import two
+from mrly.math.cell import paint
 
 SCALE = 10
 

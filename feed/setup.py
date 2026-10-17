@@ -1,4 +1,4 @@
-from mrlypy import gen
+from mrly import gen
 from colors import SECONDARIES
 from enums import Boundary, Path, Sequence, Way
 from models import Saga, Task

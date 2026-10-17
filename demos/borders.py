@@ -1,8 +1,8 @@
 from config import DATA_DIR
 from helpers import save
-from mrlypy.core.colors import BLACK, BLUE, GREEN, RED, WHITE
-from mrlypy.math import two
-from mrlypy.math.cell import models, paint
+from mrly.core.colors import BLACK, BLUE, GREEN, RED, WHITE
+from mrly.math import two
+from mrly.math.cell import models, paint
 
 def main():
     cell = models.pad(models.pad(models.pad(two.carpet(3, 2), 1, 2), 1, 3), 1, 4)

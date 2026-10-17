@@ -1,8 +1,8 @@
 import numpy as np
 from config import DATA_DIR
 from helpers import save
-from mrlypy.math import two
-from mrlypy.math.cell import models, paint
+from mrly.math import two
+from mrly.math.cell import models, paint
 
 def from_list():
     python_list = [

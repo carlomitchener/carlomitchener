@@ -1,8 +1,8 @@
 import numpy as np
 from config import DATA_DIR, IMAGE_SIZE
 from helpers import hex_key
-from mrlypy.math import two
-from mrlypy.math.cell import models
+from mrly.math import two
+from mrly.math.cell import models
 from PIL import Image
 from typing import Iterable
 

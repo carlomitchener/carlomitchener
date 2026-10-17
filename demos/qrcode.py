@@ -1,10 +1,10 @@
 import numpy as np
 from config import DATA_DIR
 from helpers import save
-from mrlypy.core.cell import mosaic
-from mrlypy.core.colors import BLACK, WHITE
-from mrlypy.math import two
-from mrlypy.math.cell import models, paint
+from mrly.core.cell import mosaic
+from mrly.core.colors import BLACK, WHITE
+from mrly.math import two
+from mrly.math.cell import models, paint
 
 string = "Hello, World!"
 

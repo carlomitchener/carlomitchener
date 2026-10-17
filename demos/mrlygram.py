@@ -3,10 +3,10 @@ import os
 import sys
 from config import DATA_DIR
 from helpers import decode
-from mrlypy.core.colors import ALPHA, WHITE, rgb
-from mrlypy.math import six, three, two
-from mrlypy.math.cell import paint
-from mrlypy.math.six import FILL, GRID, VOID
+from mrly.core.colors import ALPHA, WHITE, rgb
+from mrly.math import six, three, two
+from mrly.math.cell import paint
+from mrly.math.six import FILL, GRID, VOID
 from PIL import Image
 
 # DESIGNS

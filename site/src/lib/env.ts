@@ -1,9 +1,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-const DESK = resolve(import.meta.dir, "../../../..");
+const REPO = resolve(import.meta.dir, "../../..");
 
-export function loadEnv(path = join(DESK, ".env")) {
+export function loadEnv(path = join(REPO, ".env")) {
   if (!existsSync(path)) return;
   for (const line of readFileSync(path, "utf8").split("\n")) {
     const clean = line.trim();

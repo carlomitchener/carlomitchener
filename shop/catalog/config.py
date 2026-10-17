@@ -4,13 +4,13 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 SHOP = os.path.dirname(HERE)
 sys.path.append(SHOP)
-from env import load_env, need
+from env import REPO, load_env, need
 
 load_env()
 
 # PATHS
 
-DATA_DIR = os.path.join("data", os.path.relpath(HERE))
+DATA_DIR = os.path.join(REPO, "data", os.path.relpath(HERE, REPO))
 RAW = os.path.join(DATA_DIR, "raw")
 FILES = os.path.join(SHOP, "files")
 CATALOG = os.path.join(FILES, "catalog.json")

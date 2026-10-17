@@ -7,8 +7,8 @@ from automator.core.s3 import cdn_key, load_batch, put_png, s3_url, save_batch, 
 from automator.core.steps import Step
 from automator.create import design_config
 from io import BytesIO
-from mrlypy.core import Rng
-from mrlypy.gen import variation
+from mrly.core import Rng
+from mrly.tile import variation
 from PIL import Image, ImageCms
 
 FORMAT = "PNG"

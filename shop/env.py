@@ -6,15 +6,13 @@ import sys
 
 SHOP_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(SHOP_DIR)
-DESK = os.path.dirname(REPO)
-ENV_PATH = os.path.join(DESK, ".env")
-DATA_DIR = os.path.join("data", os.path.relpath(SHOP_DIR))
+ENV_PATH = os.path.join(REPO, ".env")
+DATA_DIR = os.path.join(REPO, "data", os.path.relpath(SHOP_DIR, REPO))
 
 # ENV
 
 def load_env():
-    if not os.path.exists(ENV_PATH):
-        raise SystemExit(f"refuse: {ENV_PATH} is missing")
+    if not os.path.exists(ENV_PATH): return
     with open(ENV_PATH) as handle:
         for line in handle:
             line = line.strip()
@@ -35,9 +33,9 @@ def save_env(key, value):
     if env(key):
         say(f"skip {key}, .env already holds a value")
         return
-    with open(ENV_PATH) as handle:
-        head = "" if handle.read().endswith("\n") else "\n"
-    with open(ENV_PATH, "a") as handle:
+    with open(ENV_PATH, "a+") as handle:
+        handle.seek(0)
+        head = "" if handle.read()[-1:] in ("", "\n") else "\n"
         handle.write(f"{head}{key}={value}\n")
     os.environ[key] = value
     say(f"{key} written to .env")

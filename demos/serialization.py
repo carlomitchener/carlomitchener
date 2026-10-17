@@ -1,10 +1,10 @@
 import json
 import numpy as np
 from config import DATA_DIR
-from mrlypy.core.cell import moore
-from mrlypy.core.colors import BLUE, RED, WHITE
-from mrlypy.math import three, two
-from mrlypy.math.cell import models, paint
+from mrly.core.cell import moore
+from mrly.core.colors import BLUE, RED, WHITE
+from mrly.math import three, two
+from mrly.math.cell import models, paint
 
 FORMATS = {
     "2d": {

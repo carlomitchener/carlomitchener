@@ -2,10 +2,11 @@ import argparse, json, os
 import numpy as np
 from PIL import Image, ImageDraw
 from scipy.ndimage import gaussian_filter
-from mrlypy.core.colors import NAMES, PALETTE
+from mrly.core.colors import NAMES, PALETTE
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join("data", os.path.relpath(HERE))
+REPO = os.path.dirname(HERE)
+DATA_DIR = os.path.join(REPO, "data", os.path.relpath(HERE, REPO))
 BIRD = json.load(open(os.path.join(HERE, "bird.json")))
 LAYERS = ["background", "glow", "fringe", "bird"]
 RGB = {name: color[:3] for name, color in zip(NAMES, PALETTE)}

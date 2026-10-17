@@ -1,4 +1,4 @@
-from mrlypy.math import counts
+from mrly.math import counts
 from typing import Callable, List
 from enums import Sequence
 from models import Task

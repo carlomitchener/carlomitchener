@@ -17,7 +17,7 @@ const SHAPE: Record<string, (body: unknown) => unknown> = {
 function dataHash(site: string): string {
   const hash = createHash("sha256");
   for (const [name, take] of Object.entries(SHAPE)) {
-    const path = join(site, "..", "..", "data", "carlomitchener", "site", name);
+    const path = join(site, "..", "data", "site", name);
     hash.update(name);
     hash.update(existsSync(path) ? JSON.stringify(take(JSON.parse(readFileSync(path, "utf8")))) : "gone");
   }

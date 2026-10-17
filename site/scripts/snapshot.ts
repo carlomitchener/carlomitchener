@@ -8,12 +8,12 @@ import { API, COUNTRY, LIVE_DAYS } from "../src/config/shop.ts";
 loadEnv();
 
 const org = resolve(import.meta.dir, "..");
-const DATA_DIR = resolve(org, "../../data/carlomitchener/site");
+const DATA_DIR = resolve(org, "../data/site");
 const s3 = client(need("CARLOMITCHENER_BUCKET"));
 const SHOP = "data/shop.json";
 const BATCHES = "data/automator/batches/";
 const INDEX = "site/cdn/feed/index.json";
-const LOCAL = resolve(org, "../../data/carlomitchener/feed/index.json");
+const LOCAL = resolve(org, "../data/feed/index.json");
 
 async function pull(key: string): Promise<Facets | null> {
   const local = join(DATA_DIR, "tasks", `${key}.json`);

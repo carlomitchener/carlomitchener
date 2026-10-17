@@ -6,8 +6,8 @@ import { DEV, DEV_DIR, PICSUM } from "../src/config/dev.ts";
 import { spec } from "./build.ts";
 
 const org = resolve(import.meta.dir, "..");
-const feed = resolve(org, "../../data/carlomitchener/feed");
-const data = resolve(org, "../../data/carlomitchener/site");
+const feed = resolve(org, "../data/feed");
+const data = resolve(org, "../data/site");
 const root = (process.env.SITE_URL ?? site.root).replace(/\/$/, "");
 const poolFile = join(data, DEV_DIR, "picsum.json");
 const pool: string[] = DEV && existsSync(poolFile) ? JSON.parse(readFileSync(poolFile, "utf8")) : [];

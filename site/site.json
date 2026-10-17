@@ -16,11 +16,11 @@
     { "name": "MrlyNet", "href": "https://mrly.net" }
   ],
   "inputs": {
-    "shop": { "path": "../../data/carlomitchener/site/shop.json" },
-    "feed": { "path": "../../data/carlomitchener/site/feed.json" },
+    "shop": { "path": "../data/site/shop.json" },
+    "feed": { "path": "../data/site/feed.json" },
     "catalog": { "path": "../shop/files/catalog.json" },
     "reviews": { "path": "../shop/files/reviews.json" },
-    "tasks": { "path": "../../data/carlomitchener/site/tasks", "deep": true, "ext": ".json" },
+    "tasks": { "path": "../data/site/tasks", "deep": true, "ext": ".json" },
     "pages": { "path": "pages", "ext": ".md" },
     "blog": { "path": "blog", "deep": true },
     "readme": { "path": "../README.md" },

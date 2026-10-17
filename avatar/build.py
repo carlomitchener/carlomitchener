@@ -1,5 +1,5 @@
 import json, os
-from mrlypy.core.colors import NAMES, PALETTE
+from mrly.core.colors import NAMES, PALETTE
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 

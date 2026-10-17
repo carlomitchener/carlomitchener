@@ -7,8 +7,8 @@ import time
 from datetime import datetime, timezone
 from typing import Any, Dict, List
 import numpy as np
-from mrlypy import life
-from mrlypy.core import Rng, cell
+from mrly import life
+from mrly.core import Rng, cell
 from config import ATTEMPTS, DATA_DIR, FLASHES, FPS, FRAMES_DIR, POSTS, HEATMAP_DIR, HEATMAP_FPS, INDEX, LIVE_DAYS, MANIFEST, MASKS_DIR, MAX_GENERATIONS, MAX_SEGMENTS, MIN_GENERATIONS, POSTER, RATE, VERSION, files
 from enums import BOUNDARIES, FATES, Fate
 from frames import create_saga_frames, create_saga_masks, create_saga_poster, frame_path

@@ -8,8 +8,8 @@ from automator.core.errors import NoTaskError
 from automator.core.models import OPEN, USED, Batch, Mockup, Placement, Printfile, Task, Variant
 from automator.core.s3 import archive_exists, catalog_ids, load_batch, load_product, save_batch, save_strikes
 from automator.core.steps import Step
-from mrlypy.core import Rng
-from mrlypy.gen import Group, hex_key, variation
+from mrly.core import Rng
+from mrly.tile import Group, hex_key, variation
 from typing import Any
 
 MAX_VARIANTS = 100

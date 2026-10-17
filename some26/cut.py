@@ -3,10 +3,10 @@ import re
 import sys
 
 from PIL import Image
-from mrlypy.core.colors import ALPHA
-from mrlypy.math import counts, six, three, two
-from mrlypy.math.atoms import carpet_3d
-from mrlypy.math.six import FILL, GRID, VOID
+from mrly.core.colors import ALPHA
+from mrly.math import counts, six, three, two
+from mrly.math.atoms import carpet_3d
+from mrly.math.six import FILL, GRID, VOID
 
 from lib.canvas import H3, INK, PAPER, decode, flatten, quantize
 from lib.gif import write_gif

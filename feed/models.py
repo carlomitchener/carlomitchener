@@ -1,6 +1,6 @@
 import numpy as np
 from dataclasses import dataclass, field
-from mrlypy import gen
+from mrly import gen
 from typing import Any, Dict, List
 from enums import Boundary, Fate, Path, Sequence, Way
 from music import Scale, Voice, WaveType

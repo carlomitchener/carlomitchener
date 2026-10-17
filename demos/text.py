@@ -1,5 +1,5 @@
 from config import DATA_DIR
-from mrlypy.math import two
+from mrly.math import two
 
 def main():
     cell = two.carpet(5, 2)

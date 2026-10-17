@@ -1,8 +1,8 @@
 from config import DATA_DIR
 from helpers import save
-from mrlypy.core.colors import RED
-from mrlypy.math import two
-from mrlypy.math.cell import models, paint
+from mrly.core.colors import RED
+from mrly.math import two
+from mrly.math.cell import models, paint
 
 SHAPES = {"squares": "Square", "circles": "Circle", "diamonds": "Diamond"}
 

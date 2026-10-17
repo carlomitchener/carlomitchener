@@ -1,9 +1,9 @@
 import math
 
 from PIL import Image, ImageDraw, ImageFont
-from mrlypy.core.colors import ALPHA
-from mrlypy.math import six, three
-from mrlypy.math.six import FILL, GRID, VOID
+from mrly.core.colors import ALPHA
+from mrly.math import six, three
+from mrly.math.six import FILL, GRID, VOID
 
 from lib.canvas import H3, INK, PAPER, decode, flatten, quantize
 from lib.gif import write_gif

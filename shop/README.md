@@ -1,6 +1,6 @@
 # SHOP
 
-- The Printful catalog, the automator Lambda that turns it into Shopify products, and the desk consoles.
+- The Printful catalog, the automator Lambda that turns it into Shopify products, and the local consoles.
 - One design per batch: every catalog product gets the design twice, light (White primary) and dark (Black primary), as two Shopify products.
 - One product per tick: printfiles on the CDN, Printful mockups, Shopify files, one Shopify product, Printful sync, publish.
 - The site shows a batch only once every cell is used or dropped and the batch is released; a batch lives one lunar month (29.53 days) from its release, then the reaper deletes it whole.
@@ -14,10 +14,10 @@
 - `manager.py` - the automator console: init, show, batch, status, rows, reset, abort, reap, redo, release, wipe.
 - `shopify.py` - the shop console: publications, purge, vendor. Purge and vendor touch only automator products (handle `{dark|light}-...-{8 hex}`, or the old `{8 hex}-...` until the cutover purge, productType in `catalog.json`) and print every other product as skipped, so the gift cards stay.
 - `theme.py` - the theme console: list, status, push, publish. `status` is read-only and compares every file's md5 with the shop's, exit 1 when the shop is behind; `push --yes` upserts only the changed files and removes the ones gone from disk. The theme lives in `theme/` as plain files; no zip, no CLI. It is already the live theme, so `push --yes` edits the storefront directly.
-- `env.py` - `.env`, json, say, gate and verb for the desk scripts.
+- `env.py` - `.env`, json, say, gate and verb for the local scripts.
 - `files/` - `catalog.json`, `dictionary.json`, `reviews.json`, `products/`. Kept forever.
-- `theme/` - the Online Store theme as plain files; the site is headless, the theme only backs checkout and redirects every storefront page to the site. `deploy carlo` pushes it after the site lands; there is no zip and nothing to upload by hand.
-- `automator` is a package of the workspace (`pyproject.toml`), so every step file runs from the desk: `uv run python carlomitchener/shop/automator/run.py` is one tick.
+- `theme/` - the Online Store theme as plain files; the site is headless, the theme only backs checkout and redirects every storefront page to the site. the deploy pushes it after the site lands; there is no zip and nothing to upload by hand.
+- `automator` is a package of the repo (`pyproject.toml`), so every step file runs from the repo root: `uv run python shop/automator/run.py` is one tick.
 
 ## STEPS
 
@@ -69,4 +69,4 @@
 - Printful rate limits, the two walls the pace is built on: 2 mockup requests a minute per store, `MOCKUP_POSTS` caps at 1; 10 variant syncs a minute, `SYNC_BATCH` caps at 9. Both live in `core/config.py`; a 429 past either retries next tick.
 - Budgets in `core/config.py`: mockup 30 min and 12 renders per task, status 20 min, ping 60 min, 3 file rounds, 3 renders, 3 strikes, 25 s tick reserve, 60 s reap reserve.
 - `requests` is not needed: `core/http.py` is a small shim with backoff and `Retry-After`.
-- Secrets live in the desk's `.env` and in the Lambda env in the cloud; the row is `carlomitchener-automator` in `aws/common.py`.
+- Secrets live in the repo-root `.env` (gitignored) locally and in the Lambda env in the cloud.

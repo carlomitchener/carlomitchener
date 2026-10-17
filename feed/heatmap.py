@@ -1,4 +1,4 @@
-from mrlypy.core.colors import gradient
+from mrly.core.colors import gradient
 from PIL import Image
 import numpy as np
 import os

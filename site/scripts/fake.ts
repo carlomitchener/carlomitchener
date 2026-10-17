@@ -5,7 +5,7 @@ import { PRIMARIES } from "../src/lib/shop.ts";
 import { DEV_DIR, DEV_POSTS, DEV_SEED, DEV_VARIATIONS, PICSUM, PICSUM_POOL } from "../src/config/dev.ts";
 
 const org = resolve(import.meta.dir, "..");
-const DATA_DIR = resolve(org, "../../data/carlomitchener/site", DEV_DIR);
+const DATA_DIR = resolve(org, "../data/site", DEV_DIR);
 const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
 

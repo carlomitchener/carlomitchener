@@ -4,10 +4,10 @@ from PIL import Image, ImageChops, ImageDraw
 from render import BIRD, LAYERS, render
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(DIR))
+REPO = os.path.dirname(DIR)
 SOURCE = os.path.join(DIR, "files", "TheBird-Official.png")
 FILES_DIR = os.path.join(DIR, "files")
-MARKS_DIR = os.path.join(ROOT, "carlomitchener", "site", "public", "bird")
+MARKS_DIR = os.path.join(REPO, "site", "public", "bird")
 
 SIZES = [32, 64, 128, 180, 192, 512, 1024]
 THEME_SIZES = [128, 256]
@@ -29,7 +29,7 @@ def resize(image, size):
 def save(image, directory, name, **kwargs):
     path = os.path.join(directory, name)
     image.save(path, **kwargs)
-    print(f"{os.path.relpath(path, ROOT)}  {os.path.getsize(path)} bytes")
+    print(f"{os.path.relpath(path, REPO)}  {os.path.getsize(path)} bytes")
 
 # CROP
 

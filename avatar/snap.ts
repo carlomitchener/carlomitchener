@@ -1,6 +1,6 @@
 const [url, out, w = "1440", h = "900"] = process.argv.slice(2);
 import { mkdirSync, rmSync } from "node:fs";
-const S = new URL("../../data/carlomitchener/avatar/", import.meta.url).pathname, port = 9400 + Math.floor(Math.random() * 500), profile = `${S}chrome-${process.pid}`;
+const S = new URL("../data/avatar/", import.meta.url).pathname, port = 9400 + Math.floor(Math.random() * 500), profile = `${S}chrome-${process.pid}`;
 mkdirSync(S, { recursive: true });
 const chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const proc = Bun.spawn([chrome, "--headless=new", "--disable-gpu", "--no-first-run", `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, "about:blank"], { stdout: "ignore", stderr: "ignore" });

@@ -1,5 +1,5 @@
-from mrlypy.core import Rng
-from mrlypy.math import two
+from mrly.core import Rng
+from mrly.math import two
 
 def print_cell(cell: dict):
     mapping = {0: "⬜️", 1: "⬛️"}

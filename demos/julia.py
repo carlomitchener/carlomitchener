@@ -1,9 +1,9 @@
 import numpy as np
 from config import DATA_DIR
 from helpers import save
-from mrlypy.core.colors import BLUE, GREEN, RED, gradient
-from mrlypy.math import two
-from mrlypy.math.cell import models
+from mrly.core.colors import BLUE, GREEN, RED, gradient
+from mrly.math import two
+from mrly.math.cell import models
 
 RESOLUTION = (100, 100)
 SCALE = 10

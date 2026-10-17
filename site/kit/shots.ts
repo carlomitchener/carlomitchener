@@ -163,8 +163,8 @@ const sha = (bytes: Uint8Array) => createHash("sha256").update(bytes).digest("he
 export async function main(root: string, config?: Record<string, unknown>): Promise<void> {
   const conf = config ?? (JSON.parse(readFileSync(join(root, "site.json"), "utf8")) as Record<string, unknown>);
   const { routes, sizes } = block(conf);
-  const desk = resolve(root, "../..");
-  const DATA_DIR = join(desk, "data", relative(desk, root), "scripts");
+  const repo = resolve(root, "..");
+  const DATA_DIR = join(repo, "data", relative(repo, root), "scripts");
   const args = process.argv.slice(2);
   const print = args.includes("--print");
   const baseline = args.includes("--baseline");

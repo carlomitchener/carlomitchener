@@ -1,8 +1,8 @@
 import sys
 
 from PIL import Image, ImageDraw, ImageFont
-from mrlypy.math import six, three, two
-from mrlypy.math.cell import models, paint
+from mrly.math import six, three, two
+from mrly.math.cell import models, paint
 
 from lib.canvas import H3, INK, PAPER, decode, quantize
 from lib.gif import write_gif

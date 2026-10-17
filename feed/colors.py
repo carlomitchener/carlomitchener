@@ -1,4 +1,4 @@
-from mrlypy.core.paint import Ink
+from mrly.core.paint import Ink
 from typing import List, Tuple
 from models import Task
 

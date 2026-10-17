@@ -2,7 +2,8 @@ import os
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
-DATA_DIR = os.path.join("data", os.path.relpath(HERE))
+REPO = HERE.parent
+DATA_DIR = os.path.join(REPO, "data", os.path.relpath(HERE, REPO))
 FILES = HERE / "files"
 CUTS = FILES / "cuts"
 GRIDS = FILES / "grids"
@@ -19,7 +20,7 @@ def data(name):
     return Path(DATA_DIR) / name
 
 def show(path):
-    return os.path.relpath(path)
+    return os.path.relpath(path, REPO)
 
 def write(path, body):
     with open(path, "w") as f:

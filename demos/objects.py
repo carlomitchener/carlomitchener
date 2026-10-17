@@ -2,9 +2,9 @@ import random
 import numpy as np
 from config import DATA_DIR
 from helpers import save
-from mrlypy.core import Rng
-from mrlypy.math import three, two
-from mrlypy.math.cell import models
+from mrly.core import Rng
+from mrly.math import three, two
+from mrly.math.cell import models
 
 RNG = Rng(random.getrandbits(32))
 

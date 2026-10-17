@@ -2,9 +2,9 @@ import math
 import sys
 
 from PIL import Image
-from mrlypy.core.colors import ALPHA, BLACK, WHITE, gradient
-from mrlypy.math import six, three
-from mrlypy.math.six import GRID, LEFT, RIGHT, UP
+from mrly.core.colors import ALPHA, BLACK, WHITE, gradient
+from mrly.math import six, three
+from mrly.math.six import GRID, LEFT, RIGHT, UP
 
 from lib.canvas import H3, PAPER, decode, flatten, quantize
 from lib.gif import write_gif

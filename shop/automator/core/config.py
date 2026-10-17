@@ -3,8 +3,8 @@ import os
 # ENV
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DESK = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(HERE))))
-ENV_PATH = os.path.join(DESK, ".env")
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
+ENV_PATH = os.path.join(REPO, ".env")
 
 def load_env() -> None:
     if not os.path.exists(ENV_PATH):

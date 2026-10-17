@@ -14,18 +14,19 @@
 - `sky-weather.js` paints rain, snow, lightning, lens drops, leaves, petals, seeds, wind streaks.
 - `sky-bird.js` is the director: soar, glide, flap, drift, roam, tumble, dive, pull, away, plus visiting crows.
 - `sheet.py` shoots twelve moments and tiles them into one contact sheet.
-- `render.py` renders the recipe headless to PNG and SVG in `data/carlomitchener/avatar/`.
+- `render.py` renders the recipe headless to PNG and SVG in `data/avatar/`.
 - `bird.py` cuts favicons and wallpapers from `files/TheBird-Official.png`, and the header marks from the recipe the same way, one per theme: `site/public/bird/mark-{theme}-{128,256}.png`.
 
 ## RUN
 
-- `uv run python carlomitchener/avatar/build.py` after editing `bird.json`.
-- `uv run python carlomitchener/avatar/render.py --size 1000 --theme dark --svg`
-- `uv run python carlomitchener/avatar/render.py --layers fringe,bird --crop --svg --name sticker`
-- `uv run python carlomitchener/avatar/bird.py` after any recipe change; the site reads the marks from `public/`.
+- Run from the repo root.
+- `uv run python avatar/build.py` after editing `bird.json`.
+- `uv run --group avatar python avatar/render.py --size 1000 --theme dark --svg`
+- `uv run --group avatar python avatar/render.py --layers fringe,bird --crop --svg --name sticker`
+- `uv run --group avatar python avatar/bird.py` after any recipe change; the site reads the marks from `public/`.
 - Open the HTML files straight from disk. No server, no build.
-- Snapshot: `bun carlomitchener/avatar/snap.ts "file:///$PWD/carlomitchener/avatar/sky.html?time=dusk&jump=8&pause=1&seed=7" data/carlomitchener/avatar/sky.png` (optional width height). Prints page errors and console logs. Safe to run in parallel.
-- Contact sheet: `uv run python carlomitchener/avatar/sheet.py` writes `data/carlomitchener/avatar/sheet.png`.
+- Snapshot: `bun avatar/snap.ts "file:///$PWD/avatar/sky.html?time=dusk&jump=8&pause=1&seed=7" data/avatar/sky.png` (optional width height). Prints page errors and console logs. Safe to run in parallel.
+- Contact sheet: `uv run python avatar/sheet.py` writes `data/avatar/sheet.png`.
 
 ## SKY HOOKS
 
@@ -52,4 +53,4 @@
 
 - Photoshop's gaussian radius equals sigma. Outside the canvas counts as transparent. Blur happens in sRGB.
 - SVG has no conic gradient. The renderer fakes one with `wedges` thin triangles, invisible after blur.
-- Colors come from `utils/colors.py` through `mrlypy.core.colors`. The 2021 file used older Apple values.
+- Colors come from `mrly.core.colors`. The 2021 file used older Apple values.

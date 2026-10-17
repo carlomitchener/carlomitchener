@@ -1,7 +1,7 @@
 from dataclasses import replace
-from mrlypy import gen
-from mrlypy.core import cell
-from mrlypy.gen import build
+from mrly import gen
+from mrly.core import cell
+from mrly.tile import build
 from config import MAX_CANVAS, MAX_MASK, MAX_TILE, MIN_CANVAS, MIN_MASK, MIN_TILE
 from enums import Path
 from models import Task, Tile

@@ -5,10 +5,10 @@ import numpy as np
 from colors import random_secondary
 from config import DATA_DIR
 from helpers import decode
-from mrlypy.core import Rng
-from mrlypy.core.colors import ALPHA, BLACK, BLUE, GRAY, WHITE, gradient
-from mrlypy.math import six, three, two
-from mrlypy.math.cell import models, paint
+from mrly.core import Rng
+from mrly.core.colors import ALPHA, BLACK, BLUE, GRAY, WHITE, gradient
+from mrly.math import six, three, two
+from mrly.math.cell import models, paint
 from PIL import Image
 
 ORIENTATION = "landscape"
