@@ -9,7 +9,7 @@
     "build": "bun scripts/build.ts",
     "test": "bun test ./kit ./scripts ./src",
     "boot": "bun scripts/boot.ts",
-    "dev": "bun --hot scripts/dev.ts",
+    "dev": "bun install && (test -f ../data/site/shop.json || bun scripts/snapshot.ts) && bun --hot scripts/dev.ts",
     "vendor": "bun scripts/vendor.ts",
     "shots": "bun scripts/shots.ts"
   },
