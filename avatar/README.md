@@ -7,15 +7,16 @@
 - `sky.html` is the screensaver: look up, gouache clouds on a gusty wind, sun or moon, the bird soars, climbs, dives, plays with crows.
 - `sky.html` itself is only meta, style, canvas and script tags; the shell lives in `sky.js`, loaded last.
 - `sky.js` sizes the canvas, runs the frame loop, paints grain and vignette, reads the URL hooks, owns fullscreen and idle.
-- The site builds these same files into one `sky.js` and mounts the canvas at the bottom of every page, loaded when it scrolls near and paused while off screen; `Sky.pause()`, `Sky.resume()` and `G.visible` are the hooks.
+- The site (`site/`) bundles these same files, in that order, then `splash.js`, into one `sky.js`, and ships `splash.css`: the canvas is the first screen, above the README, and fades and pauses as it scrolls away; `Sky.pause()`, `Sky.resume()` and `G.visible` are the hooks.
 - `sky-core.js` holds `Core` (noise, seeded random, palette mixing) and `G` (shared state, the resolved look `G.T`).
-- `sky-mood.js` resolves time, season, weather and moon into `G.T`, drifts through days in auto mode, owns the buttons and hooks.
+- `sky-mood.js` resolves time, season, weather and moon into `G.T`, drifts through days in auto mode, owns the buttons and hooks; the sky bird is white in light mode, and in dark mode black by day and white at night.
+- `splash.js` follows the system theme with the recipe's `themes`: light is a white ground, white glow edge and white bird, dark is black; its glow mask is drawn in the 1024 px image's own units, because WebKit clamps SVG filter regions (about 4096 user units) and cropped the glow to a square on iPhone.
 - `sky-clouds.js` paints the sky gradient, stars, sun, moon phases, crossings, cloud sprites and layers, wind.
 - `sky-weather.js` paints rain, snow, lightning, lens drops, leaves, petals, seeds, wind streaks.
 - `sky-bird.js` is the director: soar, glide, flap, drift, roam, tumble, dive, pull, away, plus visiting crows.
 - `sheet.py` shoots twelve moments and tiles them into one contact sheet.
 - `render.py` renders the recipe headless to PNG and SVG in `data/avatar/`.
-- `bird.py` cuts favicons and wallpapers from `files/TheBird-Official.png`, and the header marks from the recipe the same way, one per theme: `site/public/bird/mark-{theme}-{128,256}.png`.
+- `bird.py` cuts the marks from `files/TheBird-Official.png` into `site/public/bird/` (`bird-{size}.png`, `square-180.png`, and `mark-{theme}-{128,256}.png` from the recipe), and the wallpapers into `files/`; the site's favicons are copied from there.
 
 ## RUN
 
@@ -23,7 +24,7 @@
 - `uv run python avatar/build.py` after editing `bird.json`.
 - `uv run --group avatar python avatar/render.py --size 1000 --theme dark --svg`
 - `uv run --group avatar python avatar/render.py --layers fringe,bird --crop --svg --name sticker`
-- `uv run --group avatar python avatar/bird.py` after any recipe change; the site reads the marks from `public/`.
+- `uv run --group avatar python avatar/bird.py` after any recipe change; the next `site` build picks the favicons up.
 - Open the HTML files straight from disk. No server, no build.
 - Snapshot: `bun avatar/snap.ts "file:///$PWD/avatar/sky.html?time=dusk&jump=8&pause=1&seed=7" data/avatar/sky.png` (optional width height). Prints page errors and console logs. Safe to run in parallel.
 - Contact sheet: `uv run python avatar/sheet.py` writes `data/avatar/sheet.png`.

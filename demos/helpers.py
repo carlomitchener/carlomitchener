@@ -1,5 +1,4 @@
 import random
-from io import BytesIO
 from PIL import Image
 
 def hex_key(count: int):
@@ -13,10 +12,13 @@ def is_prime(n: int) -> bool:
             return False
     return True
 
-def decode(png: bytes) -> Image.Image:
-    return Image.open(BytesIO(png)).convert("RGBA")
+def rgba(pixels) -> Image.Image:
+    return Image.fromarray(pixels).convert("RGBA")
 
-def save(fp: str, data: bytes | str):
-    with open(fp, "wb" if isinstance(data, bytes) else "w") as f:
-        f.write(data)
+def save(fp: str, data):
+    if isinstance(data, (bytes, str)):
+        with open(fp, "wb" if isinstance(data, bytes) else "w") as f:
+            f.write(data)
+    else:
+        rgba(data).save(fp)
     print(f"Saved: {fp}")

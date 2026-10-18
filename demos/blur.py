@@ -1,7 +1,7 @@
 import os
 import random
 from config import DATA_DIR
-from helpers import decode
+from helpers import rgba
 from mrly.core import Rng
 from mrly.core.colors import random as random_color
 from mrly.math import two
@@ -20,14 +20,14 @@ def main():
         1: [rc(), rc(), rc()],
     }
     SIZE = (1000, 1000)
-    image = decode(two.png(paint(cell, palette, "Random", RNG), 1, None, 0, "Square"))
+    image = rgba(two.image(paint(cell, palette, "Random", RNG), 1, None, 0, "Square"))
     image = image.resize(SIZE, resample=Image.Resampling.LANCZOS)
     fp = os.path.join(DATA_DIR, "blur.png")
     image.save(fp)
     print(f"Saved: {fp}")
     SIZE = (1920, 1080)
     cell = models.tile(cell, 16, 9)
-    image = decode(two.png(paint(cell, palette, "Random", RNG), 1, None, 0, "Square"))
+    image = rgba(two.image(paint(cell, palette, "Random", RNG), 1, None, 0, "Square"))
     image = image.resize(SIZE, resample=Image.Resampling.LANCZOS)
     image = image.convert("RGB")
     fp = os.path.join(DATA_DIR, "blur.jpg")

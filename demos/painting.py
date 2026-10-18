@@ -25,7 +25,7 @@ def main():
         "neighbors": paint(models.neighbors(new_cell(), new_cell()["types"], 1, False), PAINT_MAP, "Tag"),
     }
     for name, cell in cells.items():
-        save(f"{DATA_DIR}/{name}.png", two.png(cell, scale, None, 0, "Square"))
+        save(f"{DATA_DIR}/{name}.png", two.image(cell, scale, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()

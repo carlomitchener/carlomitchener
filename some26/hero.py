@@ -8,7 +8,7 @@ from mrly.math import six, three
 from mrly.math.cell import models
 from mrly.math.six import FILL, GRID, VOID
 
-from lib.canvas import H3, decode, quantize
+from lib.canvas import H3, quantize, rgba
 from lib.paths import HERO, ensure, show
 
 NUMBER = 5
@@ -64,7 +64,7 @@ def main():
     ensure()
     cell = rainbow(widen(six.cut(three.carpet(NUMBER, LEVEL))))
     scale = math.ceil(2 * WIDTH / (six.width(cell) + 1))
-    image = decode(six.png(cell, scale, None, 0))
+    image = rgba(six.image(cell, scale, None, 0))
     w, h = image.size
     image = crop(image.resize((w, round(h * H3)), Image.LANCZOS))
     image = quantize(image, COLORS)

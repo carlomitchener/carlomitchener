@@ -12,7 +12,7 @@ def from_list():
     ]
     cell = models.new(np.array(python_list, dtype=np.uint8))
     cell = paint(models.fractal(cell, 2))
-    save(f"{DATA_DIR}/from_list.png", two.png(cell, 10, None, 0, "Square"))
+    save(f"{DATA_DIR}/from_list.png", two.image(cell, 10, None, 0, "Square"))
 
 def from_array():
     numpy_array = np.array([
@@ -22,7 +22,7 @@ def from_array():
     ], dtype=np.uint8)
     cell = models.new(numpy_array)
     cell = paint(models.fractal(cell, 3))
-    save(f"{DATA_DIR}/from_array.png", two.png(cell, 10, None, 0, "Square"))
+    save(f"{DATA_DIR}/from_array.png", two.image(cell, 10, None, 0, "Square"))
 
 if __name__ == "__main__":
     from_list()

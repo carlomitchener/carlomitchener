@@ -1,33 +1,14 @@
 {
-  "name": "carlomitchener-site",
+  "name": "carlomitchener",
   "private": true,
   "type": "module",
-  "dev": false,
   "scripts": {
-    "snapshot": "bun scripts/snapshot.ts",
-    "fake": "bun scripts/fake.ts",
-    "build": "bun scripts/build.ts",
-    "test": "bun test ./kit ./scripts ./src",
-    "boot": "bun scripts/boot.ts",
-    "dev": "bun install && (test -f ../data/site/shop.json || bun scripts/snapshot.ts) && bun --hot scripts/dev.ts",
-    "vendor": "bun scripts/vendor.ts",
-    "shots": "bun scripts/shots.ts"
-  },
-  "dependencies": {
-    "@shikijs/core": "^4.4.3",
-    "@shikijs/engine-javascript": "^4.4.3",
-    "@shikijs/langs": "^4.4.3",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "rehype-stringify": "^10.0.1",
-    "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0",
-    "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.2",
-    "unified": "^11.0.5",
-    "unist-util-visit": "^5.1.0"
+    "build": "bun build.ts",
+    "dev": "bun dev.ts",
+    "deploy": "bun run build && wrangler deploy",
+    "shots": "bun run build && bun shots.ts"
   },
   "devDependencies": {
-    "@types/react": "^19.2.8"
+    "wrangler": "4.150.0"
   }
 }

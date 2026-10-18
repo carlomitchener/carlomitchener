@@ -12,8 +12,8 @@ def new_cell():
 def main():
     cell = new_cell()
     for name, shape in SHAPES.items():
-        save(f"{DATA_DIR}/cell_2d_{name}.png", two.png(cell, 10, None, 0, shape))
-        save(f"{DATA_DIR}/cell_2d_{name}_outline.png", two.png(cell, 10, RED, 1, shape))
+        save(f"{DATA_DIR}/cell_2d_{name}.png", two.image(cell, 10, None, 0, shape))
+        save(f"{DATA_DIR}/cell_2d_{name}_outline.png", two.image(cell, 10, RED, 1, shape))
 
 if __name__ == "__main__":
     main()

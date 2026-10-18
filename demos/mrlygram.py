@@ -2,7 +2,7 @@ import math
 import os
 import sys
 from config import DATA_DIR
-from helpers import decode
+from helpers import rgba
 from mrly.core.colors import ALPHA, WHITE, rgb
 from mrly.math import six, three, two
 from mrly.math.cell import paint
@@ -74,12 +74,12 @@ def cut_gram(design, number, level):
     guard(design, number, level)
     cell = six.paint(six.cut(CUTS[design](number, level)), HEX_PALETTE)
     scale = max(1, math.ceil(SUPER * WIDTH / (six.width(cell) + 1)))
-    image = flatten(decode(six.png(cell, scale, None, 0)))
+    image = flatten(rgba(six.image(cell, scale, None, 0)))
     return image.resize((WIDTH, HEIGHT), Image.BOX)
 
 def flat_gram(design, number, level):
     cell = paint(FLATS[design](number, level), FLAT_PALETTE)
-    return flatten(decode(two.png(cell, 1, None, 0, "Square"))).resize((WIDTH, WIDTH), Image.BOX)
+    return flatten(rgba(two.image(cell, 1, None, 0, "Square"))).resize((WIDTH, WIDTH), Image.BOX)
 
 VIEWS = {
     "cut": cut_gram,

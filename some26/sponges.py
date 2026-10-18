@@ -6,7 +6,7 @@ from mrly.core.colors import ALPHA, BLACK, WHITE, gradient
 from mrly.math import six, three
 from mrly.math.six import GRID, LEFT, RIGHT, UP
 
-from lib.canvas import H3, PAPER, decode, flatten, quantize
+from lib.canvas import H3, PAPER, flatten, quantize, rgba
 from lib.gif import write_gif
 from lib.paths import GIFS, data, ensure, show
 from lib.terminal import menu, pick_level, pick_number
@@ -42,7 +42,7 @@ def sponge(number, level):
 
 def picture(cell, height):
     scale = max(1, math.ceil(SUPER * height / (six.height(cell) + 2)))
-    image = flatten(decode(six.png(cell, scale, None, 0))).convert("L")
+    image = flatten(rgba(six.image(cell, scale, None, 0))).convert("L")
     w, h = image.size
     image = image.resize((max(1, round(w * H3)), h), Image.LANCZOS)
     image.thumbnail((round(height * H3), height), Image.LANCZOS)

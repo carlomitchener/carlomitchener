@@ -1,7 +1,7 @@
 import random
 from colors import random_gradient, random_primary, random_secondary
 from config import DATA_DIR
-from helpers import decode, save
+from helpers import rgba, save
 from mrly.core import Rng
 from mrly.core.colors import ALPHA, BLACK, WHITE, lightness
 from mrly.math import six, three, two
@@ -89,7 +89,7 @@ def hexagon(cell: dict, name: str) -> dict:
 
 def save_triangles_png(cell: dict, name: str):
     fp = f"{DATA_DIR}/{name}_triangles.png"
-    image = decode(six.png(hexagon(cell, name), SCALE, None, 0))
+    image = rgba(six.image(hexagon(cell, name), SCALE, None, 0))
     if RESIZE:
         image = resize(image, get_orientation(name))
     image.save(fp)
@@ -99,7 +99,7 @@ def save_triangles_svg(cell: dict, name: str):
     save(f"{DATA_DIR}/{name}_triangles.svg", six.svg(hexagon(cell, name), SCALE, None, 0))
 
 def save_squares_png(cell: dict, name: str):
-    save(f"{DATA_DIR}/{name}_squares.png", two.png(cell, SCALE, None, 0, "Square"))
+    save(f"{DATA_DIR}/{name}_squares.png", two.image(cell, SCALE, None, 0, "Square"))
 
 def save_squares_svg(cell: dict, name: str):
     save(f"{DATA_DIR}/{name}_squares.svg", two.svg(cell, SCALE, None, 0, "Square"))

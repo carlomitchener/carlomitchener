@@ -1,6 +1,6 @@
 import numpy as np
 from config import DATA_DIR
-from helpers import decode, save
+from helpers import rgba, save
 from mrly.core.colors import ALPHA, BLACK, BLUE, GREEN, RED, WHITE
 from mrly.math import six, three, two
 from mrly.math.cell import models
@@ -36,7 +36,7 @@ def get_start(name: str) -> int:
 
 def save_draw(cell: dict, name: str):
     fp = f"{DATA_DIR}/rect_{name}.png"
-    image = decode(six.rect_png(cell, 10, get_start(name)))
+    image = rgba(six.rect_image(cell, 10, get_start(name)))
     if RESIZE:
         image = resize(image, six.orientation(six.width(cell), six.height(cell)))
     image.save(fp)
@@ -45,7 +45,7 @@ def save_draw(cell: dict, name: str):
         pixels = np.array(image)
         sheet = {**models.new(np.zeros(pixels.shape[:2], dtype=np.uint8)), "colors": pixels}
         sheet = models.tile(sheet, WIDTH, HEIGHT)
-        save(f"{DATA_DIR}/rect_{name}_{WIDTH}_{HEIGHT}.png", two.png(sheet, 1, None, 0, "Square"))
+        save(f"{DATA_DIR}/rect_{name}_{WIDTH}_{HEIGHT}.png", two.image(sheet, 1, None, 0, "Square"))
     return cell
 
 def save_svg(cell: dict, name: str):

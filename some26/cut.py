@@ -8,7 +8,7 @@ from mrly.math import counts, six, three, two
 from mrly.math.atoms import carpet_3d
 from mrly.math.six import FILL, GRID, VOID
 
-from lib.canvas import H3, INK, PAPER, decode, flatten, quantize
+from lib.canvas import H3, INK, PAPER, flatten, quantize, rgba
 from lib.gif import write_gif
 from lib.paths import CUTS, GIFS, GRIDS, ensure, show, write
 from lib.terminal import menu, pick_level, pick_number
@@ -52,7 +52,7 @@ def save_png(path, image):
 
 def triangles(cell, width):
     scale = max(1, math.ceil(SUPER * width / (six.width(cell) + 1)))
-    image = flatten(decode(six.png(cell, scale, None, 0)))
+    image = flatten(rgba(six.image(cell, scale, None, 0)))
     height = max(1, round(width * image.height * H3 / image.width))
     return image.resize((width, height), Image.BOX)
 
@@ -79,7 +79,7 @@ def svg_tri(path, cell):
 # SQUARES
 
 def png_sq(path, cell):
-    image = flatten(decode(two.png(cell["cell"], 1, None, 0, "Square")))
+    image = flatten(rgba(two.image(cell["cell"], 1, None, 0, "Square")))
     height = max(1, round(SIZE * image.height / image.width))
     save_png(path, image.resize((SIZE, height), Image.NEAREST))
 
@@ -96,7 +96,7 @@ def frame(cell):
     return quantize(canvas, GREYS)
 
 def frame_sq(cell):
-    image = flatten(decode(two.png(cell["cell"], 1, None, 0, "Square"))).convert("L")
+    image = flatten(rgba(two.image(cell["cell"], 1, None, 0, "Square"))).convert("L")
     height = max(1, round(GIFW * image.height / image.width))
     image = image.resize((GIFW, height), Image.NEAREST)
     canvas = Image.new("L", (GIFW, GIFSQ), PAPER[0])

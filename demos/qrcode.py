@@ -48,7 +48,7 @@ def main():
     cells = [tile_0, tile_1, tile_2, tile_3]
     qr_cell = mosaic(mask, cells)
     qr_cell = paint(qr_cell, {0: [WHITE], 1: [BLACK]})
-    save(f"{DATA_DIR}/qrcode.png", two.png(qr_cell, 10, None, 0, "Square"))
+    save(f"{DATA_DIR}/qrcode.png", two.image(qr_cell, 10, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()

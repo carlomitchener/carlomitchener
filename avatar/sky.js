@@ -132,7 +132,7 @@ const Sky = (() => {
   if (q.get("dive")) { Bird.dive(); jump(+q.get("dive")); }
   if (q.get("debug")) console.log("bird", JSON.stringify(Bird.bird), "T", JSON.stringify(G.T));
   if (!q.get("pause")) resume();
-  return { setTheme: (name) => Mood.set({ theme: name }), dive: Bird.dive, jump, pause, resume, resize, bird: Bird.bird, wind: G.wind, G };
+  return { setTheme: (name) => Mood.set({ theme: name }), dive: Bird.dive, jump, pause, resume, resize, skip, bird: Bird.bird, wind: G.wind, G };
 })();
 
 window.Sky = Sky;

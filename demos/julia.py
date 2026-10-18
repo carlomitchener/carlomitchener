@@ -29,7 +29,7 @@ def main():
     palette = np.array(colors, dtype=np.uint8)
     grid_clipped = np.clip(grid, 0, MAX_ITER - 1)
     cell = {**models.new(grid.astype(np.uint8)), "colors": palette[grid_clipped]}
-    save(f"{DATA_DIR}/julia.png", two.png(cell, SCALE, None, 0, "Square"))
+    save(f"{DATA_DIR}/julia.png", two.image(cell, SCALE, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()

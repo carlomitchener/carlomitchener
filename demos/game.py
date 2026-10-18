@@ -4,7 +4,7 @@ import random
 import numpy as np
 from colors import random_secondary
 from config import DATA_DIR
-from helpers import decode
+from helpers import rgba
 from mrly.core import Rng
 from mrly.core.colors import ALPHA, BLACK, BLUE, GRAY, WHITE, gradient
 from mrly.math import six, three, two
@@ -44,7 +44,7 @@ class Renderer:
 
     def render(self, cell):
         orientation = six.orientation(models.width(cell), models.height(cell))
-        tile_img = decode(six.rect_png(six.new(cell, "Cut", orientation, START), SCALE, START))
+        tile_img = rgba(six.rect_image(six.new(cell, "Cut", orientation, START), SCALE, START))
         ratio = math.sqrt(3) / 2
         w, h = tile_img.size
         match orientation:

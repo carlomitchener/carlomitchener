@@ -16,11 +16,11 @@ def main():
 
     # PAINT
 
-    save(f"{DATA_DIR}/rotations_paint.png", two.png(paint(new_cell(), *params), 10, None, 0, "Square"))
+    save(f"{DATA_DIR}/rotations_paint.png", two.image(paint(new_cell(), *params), 10, None, 0, "Square"))
 
-    save(f"{DATA_DIR}/rotations_paint_rotate.png", two.png(models.rotate(paint(new_cell(), *params), 90), 10, None, 0, "Square"))
+    save(f"{DATA_DIR}/rotations_paint_rotate.png", two.image(models.rotate(paint(new_cell(), *params), 90), 10, None, 0, "Square"))
 
-    save(f"{DATA_DIR}/rotations_rotate_paint.png", two.png(paint(models.rotate(new_cell(), 90), *params), 10, None, 0, "Square"))
+    save(f"{DATA_DIR}/rotations_rotate_paint.png", two.image(paint(models.rotate(new_cell(), 90), *params), 10, None, 0, "Square"))
 
 if __name__ == "__main__":
     main()

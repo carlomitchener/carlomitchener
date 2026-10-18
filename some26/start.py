@@ -5,7 +5,7 @@ from mrly.core.colors import ALPHA
 from mrly.math import six, three
 from mrly.math.six import FILL, GRID, VOID
 
-from lib.canvas import H3, INK, PAPER, decode, flatten, quantize
+from lib.canvas import H3, INK, PAPER, flatten, quantize, rgba
 from lib.gif import write_gif
 from lib.paths import GIFS, ensure, show
 
@@ -28,7 +28,7 @@ def label(canvas, start):
 
 def frame(cell, start):
     scale = max(1, math.ceil(SUPER * GIFW / (six.width(cell) + 1)))
-    image = flatten(decode(six.png({**cell, "start": start}, scale, None, 0))).convert("L")
+    image = flatten(rgba(six.image({**cell, "start": start}, scale, None, 0))).convert("L")
     height = max(1, round(GIFW * image.height * H3 / image.width))
     image = image.resize((GIFW, height), Image.BOX)
     canvas = Image.new("L", (GIFW, GIFH), PAPER[0])

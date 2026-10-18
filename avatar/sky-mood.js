@@ -1,5 +1,6 @@
 const Mood = (() => {
   const { mix, rgba, clamp, lerp, P } = Core;
+  const scheme = matchMedia("(prefers-color-scheme: light)");
 
   /* PAINT BOX */
 
@@ -244,7 +245,7 @@ const Mood = (() => {
     weatherPass(T, wx.to, wx.u);
 
     T.tint = rgba(T.tintC, clamp(T.tintA, 0, 1));
-    T.bird = lum(T.mid) > 0.45 ? P.black : P.white;
+    T.bird = scheme.matches || lum(T.mid) <= 0.45 ? P.white : P.black;
     T.season = s.season;
     T.time = name;
     T.cover = clamp(T.cover, 0, 1);

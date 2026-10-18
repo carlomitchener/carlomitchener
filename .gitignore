@@ -24,9 +24,10 @@ target/
 
 # NODE
 node_modules/
+.wrangler/
 
 # IDE
 .vscode/
 
-shop/*.zip
+# OS
 .DS_Store

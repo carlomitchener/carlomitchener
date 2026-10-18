@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 from mrly.math import six, three, two
 from mrly.math.cell import models, paint
 
-from lib.canvas import H3, INK, PAPER, decode, quantize
+from lib.canvas import H3, INK, PAPER, quantize, rgba
 from lib.gif import write_gif
 from lib.paths import GIFS, ensure, show
 from lib.terminal import menu
@@ -33,7 +33,7 @@ def label(canvas, family):
 
 def flat_frame(family, number):
     cell = paint(FLATS[family](number, LEVEL))
-    image = decode(two.png(cell, max(1, (CANVAS - STRIP) // models.height(cell)), None, 0, "Square"))
+    image = rgba(two.image(cell, max(1, (CANVAS - STRIP) // models.height(cell)), None, 0, "Square"))
     canvas = Image.new("RGB", (CANVAS, CANVAS), PAPER[:3])
     canvas.paste(image, ((CANVAS - image.width) // 2, (CANVAS - STRIP - image.height) // 2), image)
     label(canvas, family)
@@ -46,7 +46,7 @@ def frame(family, projection, number):
     sheet = six.radial(cell, RADIUS)
     orientation = six.orientation(models.width(sheet), models.height(sheet))
     sheet = six.new(sheet, cell["projection"], orientation, 1 - cell["start"])
-    image = decode(six.png(sheet, SCALE, None, 0))
+    image = rgba(six.image(sheet, SCALE, None, 0))
     w, h = image.size
     if cell["orientation"] == "Horizontal":
         image = image.resize((w, round(h * H3)), Image.LANCZOS)

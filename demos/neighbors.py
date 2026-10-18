@@ -18,7 +18,7 @@ def main():
     fill = [BLACK]
     void = [random_color(False, rng) for _ in range(num_colors + 1)]
     cell = models.neighbors(cell, mask, 1, False)
-    save(f"{DATA_DIR}/neighbors.png", two.png(paint(cell, {0: void, 1: fill}, mode), 10, None, 0, "Square"))
+    save(f"{DATA_DIR}/neighbors.png", two.image(paint(cell, {0: void, 1: fill}, mode), 10, None, 0, "Square"))
     print(cell["tags"])
 
 if __name__ == "__main__":

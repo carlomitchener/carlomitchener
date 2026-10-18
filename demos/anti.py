@@ -12,7 +12,7 @@ def mrly(number, level, palette):
         "void": two.void(number, level),
     }
     for key, value in mrly_factory.items():
-        save(f"{DATA_DIR}/mrly_{key}.png", two.png(paint(value, palette), 1, None, 0, "Square"))
+        save(f"{DATA_DIR}/mrly_{key}.png", two.image(paint(value, palette), 1, None, 0, "Square"))
 
 def anti(number, level, palette):
     anti_factory = {
@@ -22,7 +22,7 @@ def anti(number, level, palette):
         "star": models.fractal(models.invert(two.void(number, 1)), level),
     }
     for key, value in anti_factory.items():
-        save(f"{DATA_DIR}/anti_{key}.png", two.png(paint(value, palette), 1, None, 0, "Square"))
+        save(f"{DATA_DIR}/anti_{key}.png", two.image(paint(value, palette), 1, None, 0, "Square"))
 
 def main():
     number = 3

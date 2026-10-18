@@ -337,5 +337,5 @@ const Bird = (() => {
     });
   }
 
-  return { build, step, draw, dive, init, bird, friends };
+  return { build, step, draw, dive, init, enter, bird, friends, POSES };
 })();
