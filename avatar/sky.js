@@ -5,20 +5,40 @@ const Sky = (() => {
   let grain, vignette, last = performance.now();
 
   function makeGrain() {
-    const n = 256, c = document.createElement("canvas"); c.width = c.height = n;
-    const g = c.getContext("2d"), img = g.createImageData(n, n);
-    for (let i = 0; i < n * n; i++) { const v = 128 + (Math.random() - 0.5) * 220; img.data[i * 4] = img.data[i * 4 + 1] = img.data[i * 4 + 2] = v; img.data[i * 4 + 3] = 255; }
+    const n = 512, N = n * n, c = document.createElement("canvas"); c.width = c.height = n;
+    const g = c.getContext("2d"), img = g.createImageData(n, n), d = img.data, a = new Float32Array(N), b = new Float32Array(N), m = new Float32Array(N);
+    const blur = (src, dst, r) => {
+      const k = 1 / (2 * r + 1);
+      for (let y = 0; y < n; y++) { let s = 0; for (let i = -r; i <= r; i++) s += src[y * n + ((i + n) % n)]; for (let x = 0; x < n; x++) { dst[y * n + x] = s * k; s += src[y * n + ((x + r + 1) % n)] - src[y * n + ((x - r + n) % n)]; } }
+      for (let x = 0; x < n; x++) { let s = 0; for (let i = -r; i <= r; i++) s += dst[((i + n) % n) * n + x]; for (let y = 0; y < n; y++) { src[y * n + x] = s * k; s += dst[((y + r + 1) % n) * n + x] - dst[((y - r + n) % n) * n + x]; } }
+    };
+    for (let i = 0; i < N; i++) { a[i] = Math.random() - 0.5; m[i] = Math.random() - 0.5; }
+    blur(a, b, 1); blur(a, b, 1); blur(m, b, 9); blur(m, b, 9);
+    let sa = 0, sm = 0;
+    for (let i = 0; i < N; i++) { sa += a[i] * a[i]; sm += m[i] * m[i]; }
+    sa = 1 / Math.sqrt(sa / N); sm = 1 / Math.sqrt(sm / N);
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const i = y * n + x, rel = (a[((y + n - 1) % n) * n + ((x + n - 1) % n)] - a[((y + 1) % n) * n + ((x + 1) % n)]) * sa;
+      const v = 128 + (Math.random() - 0.5) * 28 + rel * 7 + a[i] * sa * 4 + m[i] * sm * 4;
+      d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = v; d[i * 4 + 3] = 255;
+    }
     g.putImageData(img, 0, 0);
-    return ctx.createPattern(c, "repeat");
+    const p = ctx.createPattern(c, "repeat"), k = 256, e = document.createElement("canvas"); e.width = e.height = k;
+    const h = e.getContext("2d"), im = h.createImageData(k, k), q = im.data;
+    for (let i = 0; i < k * k; i++) { q[i * 4] = q[i * 4 + 1] = q[i * 4 + 2] = (Math.random() + Math.random()) * 3.5; q[i * 4 + 3] = 255; }
+    h.putImageData(im, 0, 0);
+    p.dither = ctx.createPattern(e, "repeat");
+    return p;
   }
 
   function makeVignette() {
-    const { W, H } = G, c = document.createElement("canvas");
-    c.width = Math.ceil(W / 4); c.height = Math.ceil(H / 4);
-    const g = c.getContext("2d"), r = Math.hypot(c.width, c.height) / 2;
-    const v = g.createRadialGradient(c.width / 2, c.height / 2, r * 0.45, c.width / 2, c.height / 2, r * 1.05);
-    v.addColorStop(0, Core.rgba(Core.P.black, 0)); v.addColorStop(1, Core.rgba(Core.P.black, 0.32));
-    g.fillStyle = v; g.fillRect(0, 0, c.width, c.height);
+    const { W, H } = G, w = Math.ceil(W / 4), h = Math.ceil(H / 4), c = document.createElement("canvas"); c.width = w; c.height = h;
+    const g = c.getContext("2d"), img = g.createImageData(w, h), d = img.data;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const u = ((x + 0.5) / w) * 2 - 1, v = ((y + 0.5) / h) * 2 - 1, e = Core.clamp((Math.hypot(u, v) / Math.SQRT2 - 0.42) / 0.62, 0, 1), o = (y * w + x) * 4, s = e * e * (3 - 2 * e);
+      d[o] = 6; d[o + 1] = 9; d[o + 2] = 20; d[o + 3] = 255 * s * s;
+    }
+    g.putImageData(img, 0, 0);
     return c;
   }
 
@@ -26,9 +46,14 @@ const Sky = (() => {
     grain = grain || makeGrain();
     if (resized) vignette = makeVignette();
     Clouds.build(resized);
+    Light.build(resized);
     Weather.build(resized);
     Bird.build(resized);
+    clearTimeout(warming); warming = setTimeout(warm, 40);
   }
+
+  let warming = 0;
+  function warm() { warming = 0; if (!running && !Clouds.warm(8)) warming = setTimeout(warm, 24); }
 
   function resize() {
     const box = canvas.getBoundingClientRect();
@@ -44,6 +69,8 @@ const Sky = (() => {
   function step(dt) {
     G.t += dt;
     Mood.step(dt);
+    Weather.air();
+    Light.step(dt);
     Clouds.step(dt);
     Weather.step(dt);
     Bird.step(dt);
@@ -55,17 +82,22 @@ const Sky = (() => {
     const ox = 0.01 * W * noise(t * 0.045, 12), oy = 0.01 * H * noise(t * 0.05, 14);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     ctx.translate(W / 2, H / 2); ctx.rotate(rot); ctx.scale(zoom, zoom); ctx.translate(-W / 2 + ox, -H / 2 + oy);
-    if (!skip.sky) { Clouds.drawSky(); Clouds.drawStars(); Clouds.drawSun(0); }
+    if (!skip.sky) { Light.drawSky(); Light.drawStars(); Light.drawSun(0); }
     if (!skip.weather) Weather.draw(0);
     if (!skip.clouds) { Clouds.draw(0); Clouds.draw(1); }
-    if (!skip.sky) Clouds.drawSun(1);
+    if (!skip.sky) Light.drawSun(1);
+    if (!skip.weather) Weather.draw(3);
     if (!skip.bird) Bird.draw();
     if (!skip.weather) Weather.draw(1);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     if (!skip.weather) Weather.draw(2);
     if (!skip.post) {
-      ctx.save(); ctx.globalAlpha = 0.6 - 0.25 * (T.dark || 0); ctx.drawImage(vignette, 0, 0, W, H); ctx.restore();
-      ctx.save(); ctx.globalCompositeOperation = "overlay"; ctx.globalAlpha = T.grain; ctx.fillStyle = grain; ctx.fillRect(0, 0, W, H); ctx.restore();
+      const dk = T.dark || 0;
+      if (grain.dpr !== DPR && grain.setTransform) { const m = new DOMMatrix([1 / DPR, 0, 0, 1 / DPR, 0, 0]); grain.setTransform(m); grain.dither.setTransform(m); grain.dpr = DPR; }
+      ctx.save(); ctx.imageSmoothingEnabled = true; ctx.globalAlpha = 0.05 + 0.15 * dk; ctx.drawImage(vignette, 0, 0, W, H);
+      ctx.fillStyle = grain; ctx.globalCompositeOperation = "overlay"; ctx.globalAlpha = Math.min(1, T.grain * 1.6); ctx.fillRect(0, 0, W, H);
+      if (dk > 0.3) { ctx.fillStyle = grain.dither; ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = 0.5 * Math.min(1, (dk - 0.3) / 0.4); ctx.fillRect(0, 0, W, H); }
+      ctx.restore();
     }
   }
 
@@ -73,7 +105,7 @@ const Sky = (() => {
   let running = false;
   function frame(now) {
     if (!running) return;
-    const dt = Math.min(0.05, (now - last) / 1000);
+    const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
     last = now;
     const a = performance.now(); step(dt);
     const b = performance.now(); paint();
@@ -118,7 +150,7 @@ const Sky = (() => {
   const q = new URLSearchParams(location.search), skip = {};
   for (const k of (q.get("skip") || "").split(",")) skip[k] = true;
   if (q.get("seed")) { G.seed = +q.get("seed"); G.rnd = Core.rng(G.seed); }
-  G.rebuild = () => rebuild(false);
+  G.rebuild = (fresh) => rebuild(!!fresh);
   Mood.init(q);
   Bird.init(q);
   addEventListener("resize", onResize);

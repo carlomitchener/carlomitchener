@@ -2,9 +2,8 @@ html.splashing, html.splashing body { overflow: hidden; }
 #splash { position: fixed; inset: 0; z-index: 10; overflow: hidden; background: rgba(0, 0, 0, var(--veil, 1)); touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; cursor: pointer; outline: none; }
 #splash.fly { cursor: default; }
 #splash.open { background: transparent; pointer-events: none; }
-#splash.open .glow, #splash.open .hint, #splash.open .dust { visibility: hidden; }
-#splash .glow { position: absolute; background: conic-gradient(from var(--a, 90deg), var(--stops)); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; will-change: opacity; }
+#splash.open .glow, #splash.open .hint { visibility: hidden; }
+#splash .glow { position: absolute; background: conic-gradient(from var(--a, 90deg), var(--stops)); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; opacity: 0; will-change: transform, opacity; }
 #splash .dust, #splash .ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-#splash .hint { position: absolute; left: 0; right: 0; bottom: max(28px, env(safe-area-inset-bottom)); margin: 0; text-align: center; font: 500 11px/1 ui-sans-serif, system-ui, -apple-system, sans-serif; letter-spacing: .34em; text-indent: .34em; text-transform: uppercase; color: #fff; opacity: 0; transition: opacity 1.4s ease; pointer-events: none; }
-#splash .hint.on { opacity: .5; }
-@media (prefers-color-scheme: light) { #splash { background: rgba(255, 255, 255, var(--veil, 1)); } #splash .hint { color: #000; } }
+#splash .hint { position: absolute; left: 0; right: 0; bottom: calc(max(22px, env(safe-area-inset-bottom)) + 4.5vh); margin: 0; text-align: center; font: italic 400 14px/1 "Iowan Old Style", Charter, "Palatino Linotype", Palatino, Georgia, serif; letter-spacing: .07em; text-indent: .07em; color: rgba(255, 255, 255, .62); opacity: 0; pointer-events: none; will-change: opacity, transform; }
+@media (prefers-color-scheme: light) { #splash { background: rgba(255, 255, 255, var(--veil, 1)); } #splash .hint { color: rgba(0, 0, 0, .56); } }

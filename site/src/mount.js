@@ -23,6 +23,7 @@ const Mount = (() => {
       level = next;
       const sky = Core.smooth(level);
       box.style.opacity = String(sky);
+      box.style.setProperty("--melt", Core.smooth(Math.min(1, (1 - level) * 2.5)).toFixed(3));
       box.style.visibility = level > 0 ? "visible" : "hidden";
       if (fog) fog.style.opacity = String(1 - sky);
     }

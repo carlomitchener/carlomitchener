@@ -11,7 +11,7 @@ const AVATAR = join(REPO, "avatar");
 const SRC = join(SITE, "src");
 const GITHUB = "https://github.com/carlomitchener/carlomitchener";
 const ORIGIN = "https://carlomitchener.com";
-const SKY = ["bird", "avatar", "sky-core", "sky-mood", "sky-clouds", "sky-weather", "sky-bird", "sky"];
+const SKY = ["bird", "avatar", "sky-core", "sky-mood", "sky-clouds", "sky-light", "sky-weather", "sky-bird", "sky"];
 const ICONS = ["bird-32.png", "bird-192.png", "square-180.png"];
 
 /* HEADERS */

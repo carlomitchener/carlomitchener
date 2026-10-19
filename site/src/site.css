@@ -75,6 +75,16 @@ body {
   height: 100%;
 }
 
+.sky::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 45%;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--paper) 55%, transparent) 55%, var(--paper));
+  opacity: var(--melt, 0);
+  pointer-events: none;
+}
+
 .sky.idle {
   cursor: none;
 }
