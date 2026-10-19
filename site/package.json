@@ -5,7 +5,8 @@
   "scripts": {
     "build": "bun build.ts",
     "dev": "bun dev.ts",
-    "deploy": "bun run build && wrangler deploy",
+    "stats": "bun stats.ts",
+    "deploy": "bun stats.ts && bun run build && wrangler deploy",
     "shots": "bun run build && bun shots.ts"
   },
   "devDependencies": {

@@ -83,7 +83,9 @@ try {
   await send("Page.enable");
   await send("Runtime.enable");
   await send("Log.enable");
-  const asked = process.argv.slice(2);
+  const nojs = process.argv.includes("--nojs");
+  const asked = process.argv.slice(2).filter((one) => one !== "--nojs");
+  await send("Emulation.setScriptExecutionDisabled", { value: nojs });
   for (const [route, scheme] of (asked.length ? asked : ROUTES).flatMap((one) => SCHEMES.map((two) => [one, two] as const))) {
     const stem = route.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "home";
     await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: scheme }] });
@@ -97,12 +99,17 @@ try {
       const shoot = async (name: string, full: boolean) => {
         const { cssContentSize } = await send("Page.getLayoutMetrics");
         const tall = full ? Math.min(Math.ceil(cssContentSize.height), 8000) : height;
-        const cap = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: full, clip: { x: 0, y: full ? 0 : await run("scrollY"), width, height: tall, scale: 1 } });
+        const cap = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: full, clip: { x: 0, y: full || nojs ? 0 : await run("scrollY"), width, height: tall, scale: 1 } });
         await Bun.write(join(OUT, `${stem}-${name}-${size}-${scheme}.png`), Buffer.from(cap.data, "base64"));
         const wide = Math.ceil(cssContentSize.width) > width;
         console.log(`shots: ${stem}-${name}-${size}-${scheme}.png ${width}x${tall}${wide ? " OVERFLOW" : ""}`);
         count++;
       };
+      if (nojs) {
+        await shoot("nojs", false);
+        await shoot("nojs-page", true);
+        continue;
+      }
       const splashed = await run("!!document.querySelector('#splash')");
       if (splashed) {
         const gl = await run("!!document.createElement('canvas').getContext('webgl2')");

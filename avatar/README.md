@@ -17,7 +17,7 @@
 - `sky-bird.js` is the director: soar, glide, flap, drift, roam, tumble, dive, pull, away, plus visiting crows; wing poses blend continuously and `Bird.pose()` is the one on screen.
 - `sheet.py` shoots twelve moments and tiles them into one contact sheet.
 - `render.py` renders the recipe headless to PNG and SVG in `data/avatar/`.
-- `bird.py` cuts the marks from `files/TheBird-Official.png` into `site/public/bird/` (`bird-{size}.png`, `square-180.png`, and `mark-{theme}-{128,256}.png` from the recipe), and the wallpapers into `files/`; the site's favicons are copied from there.
+- `bird.py` cuts the marks from `files/TheBird-Official.png` into `site/public/bird/` (`bird-{size}.png`, `square-180.png`, `mark-{theme}-{128,256}.png` from the recipe, and the site's no-JS still: `glow-{theme}.webp` and `still-{theme}.svg`), and the wallpapers into `files/`; the site's favicons are copied from there.
 
 ## RUN
 
@@ -25,6 +25,7 @@
 - `uv run python avatar/build.py` after editing `bird.json`.
 - `uv run --group avatar python avatar/render.py --size 1000 --theme dark --svg`
 - `uv run --group avatar python avatar/render.py --layers fringe,bird --crop --svg --name sticker`
+- `--pad 0.5` widens the canvas by half on every side, so the glow fades out inside the image.
 - `uv run --group avatar python avatar/bird.py` after any recipe change; the next `site` build picks the favicons up.
 - Open the HTML files straight from disk. No server, no build.
 - Snapshot: `bun avatar/snap.ts "file:///$PWD/avatar/sky.html?time=dusk&jump=8&pause=1&seed=7" data/avatar/sky.png` (optional width height). Prints page errors and console logs. Safe to run in parallel.

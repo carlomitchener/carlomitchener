@@ -89,5 +89,16 @@ Sequences I have published in, or contributed to, the [On-Line Encyclopedia of I
 - [mrly.net](https://mrly.net)
 - [mrlyprod/mrlyprod](https://github.com/mrlyprod/mrlyprod)
 
+## Stats
+
+| | |
+|---|---|
+| Visitors, last 30 days | 648 |
+| Page views, last 30 days | 482 |
+| Top countries | United States, Belgium, Netherlands |
+| Last updated | 2026-10-19 21:52 UTC |
+
+Updated at each deploy, not live. [View all](https://carlomitchener.com/stats.json)
+
 Thank you, come again!
 

@@ -1,0 +1,13 @@
+#splash {
+  display: none;
+}
+
+.sky {
+  background: url("/bird/still-dark.svg") center / 92vmin no-repeat, url("/bird/glow-dark.webp") center / 184vmin no-repeat, #000;
+}
+
+@media (prefers-color-scheme: light) {
+  .sky {
+    background: url("/bird/still-light.svg") center / 92vmin no-repeat, url("/bird/glow-light.webp") center / 184vmin no-repeat, #fff;
+  }
+}

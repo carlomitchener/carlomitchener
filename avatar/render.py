@@ -39,7 +39,8 @@ def fringe_offsets():
 
 def viewbox(o):
     if not o.crop:
-        return 0.0, 0.0, float(BIRD["canvas"]), float(BIRD["canvas"])
+        p = o.pad * BIRD["canvas"]
+        return 0.0 - p, 0.0 - p, BIRD["canvas"] + 2 * p, BIRD["canvas"] + 2 * p
     h = BIRD["bird"]["height"]
     pts = np.concatenate([place(flatten(BIRD["outline"]["cubics"], 4), *d) for d in [np.zeros(2)] + fringe_offsets()])
     m = 0.05 * h
@@ -138,13 +139,15 @@ def svg(o):
     d = "M" + P(place([seg[0][0]])[0]) + "".join("C" + " ".join(P(q) for q in place([p1, p2, p3])) for _, p1, p2, p3 in seg) + "Z"
     gx, gy = BIRD["gradient"]["center"]
     R = np.hypot(vw, vh) + np.hypot(gx - vx, gy - vy)
-    w = 360 / o.wedges
-    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{f(vx)} {f(vy)} {f(vw)} {f(vh)}">', "<defs>", f'<path id="a-bird" d="{d}"/>', '<g id="a-conic">']
-    for i in range(o.wedges):
-        p0, p1 = direction(i * w) * R + [gx, gy], direction((i + 1.5) * w) * R + [gx, gy]
-        c = conic_color((i + 0.5) * w)
-        out.append(f'<path d="M{f(gx)},{f(gy)}L{P(p0)}L{P(p1)}Z" fill="#{"".join("%02x" % int(round(v * 255)) for v in c)}"/>')
-    out.append("</g>")
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{f(vx)} {f(vy)} {f(vw)} {f(vh)}">', "<defs>", f'<path id="a-bird" d="{d}"/>']
+    if "glow" in o.layers:
+        w = 360 / o.wedges
+        out.append('<g id="a-conic">')
+        for i in range(o.wedges):
+            p0, p1 = direction(i * w) * R + [gx, gy], direction((i + 1.5) * w) * R + [gx, gy]
+            c = conic_color((i + 0.5) * w)
+            out.append(f'<path d="M{f(gx)},{f(gy)}L{P(p0)}L{P(p1)}Z" fill="#{"".join("%02x" % int(round(v * 255)) for v in c)}"/>')
+        out.append("</g>")
     for i, g in enumerate(BIRD["glow"]):
         shape = f'<circle cx="{f(g.get("center", [gx, gy])[0])}" cy="{f(g.get("center", [gx, gy])[1])}" r="{g["radius"]}"/>' if g["shape"] == "disc" else '<use href="#a-bird"/>'
         out.append(f'<clipPath id="a-clip-{i}">{shape}</clipPath>')
@@ -172,6 +175,7 @@ def main():
     ap.add_argument("--layers", default=",".join(LAYERS))
     ap.add_argument("--glow", default=",".join("1" for _ in BIRD["glow"]))
     ap.add_argument("--crop", action="store_true")
+    ap.add_argument("--pad", type=float, default=0.0)
     ap.add_argument("--wedges", type=int, default=360)
     ap.add_argument("--svg", action="store_true")
     ap.add_argument("--name", default=None)

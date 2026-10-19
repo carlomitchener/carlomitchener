@@ -12,7 +12,7 @@ const SRC = join(SITE, "src");
 const GITHUB = "https://github.com/carlomitchener/carlomitchener";
 const ORIGIN = "https://carlomitchener.com";
 const SKY = ["bird", "avatar", "sky-core", "sky-mood", "sky-clouds", "sky-light", "sky-weather", "sky-bird", "sky"];
-const ICONS = ["bird-32.png", "bird-192.png", "square-180.png"];
+const BIRD = ["bird-32.png", "bird-192.png", "square-180.png", "still-dark.svg", "still-light.svg", "glow-dark.webp", "glow-light.webp"];
 
 /* HEADERS */
 
@@ -80,7 +80,8 @@ ${opts.canonical ? `<link rel="canonical" href="${opts.canonical}">\n` : ""}<lin
 <link rel="apple-touch-icon" href="/bird/square-180.png">
 <link rel="stylesheet" href="/site.css">
 <script defer src="/sky.js"></script>
-${opts.splash ? "<noscript><style>#splash { display: none; }</style></noscript>\n" : ""}</head>
+<noscript><link rel="stylesheet" href="/still.css"></noscript>
+</head>
 <body>
 <div class="sky"><canvas id="sky"></canvas></div>
 ${opts.splash ? '<div id="splash"></div>\n' : ""}${opts.body}
@@ -109,7 +110,9 @@ export async function build() {
   writeFileSync(join(DIST, "404.html"), page({ title: "Nothing here", description: "Nothing here.", body: `<main class="lost"><div><p>Nothing here</p><a href="/">Home</a></div></main>` }));
   const css = [join(SRC, "site.css"), join(AVATAR, "splash.css")];
   writeFileSync(join(DIST, "site.css"), css.map(read).join("\n"));
-  for (const icon of ICONS) copyFileSync(join(SITE, "public", "bird", icon), join(DIST, "bird", icon));
+  copyFileSync(join(SRC, "still.css"), join(DIST, "still.css"));
+  if (existsSync(join(SITE, "public", "stats.json"))) copyFileSync(join(SITE, "public", "stats.json"), join(DIST, "stats.json"));
+  for (const file of BIRD) copyFileSync(join(SITE, "public", "bird", file), join(DIST, "bird", file));
   writeFileSync(join(DIST, "_headers"), `/*\n${Object.entries(HEADERS).map(([k, v]) => `  ${k}: ${v}`).join("\n")}\n`);
   await sky();
   console.log(`site: built ${relative(REPO, DIST)}/`);

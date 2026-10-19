@@ -1,7 +1,7 @@
 import os
 from types import SimpleNamespace
 from PIL import Image, ImageChops, ImageDraw
-from render import BIRD, LAYERS, render
+from render import BIRD, LAYERS, render, svg
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(DIR)
@@ -13,6 +13,8 @@ SIZES = [32, 64, 128, 180, 192, 512, 1024]
 THEME_SIZES = [128, 256]
 RENDER = 1024
 TOUCH = 180
+GLOW = 1024
+PAD = 0.5
 THRESHOLD = 24
 MARGIN = 0.04
 SUPERSAMPLE = 4
@@ -74,8 +76,11 @@ def marks():
 
 # THEMES
 
+def recipe(theme, **kwargs):
+    return SimpleNamespace(**{"size": RENDER, "theme": theme, "bird": None, "background": None, "layers": set(LAYERS), "glow": [True] * len(BIRD["glow"]), "crop": False, "pad": 0.0, "wedges": 360, **kwargs})
+
 def rendered(theme):
-    return render(SimpleNamespace(size=RENDER, theme=theme, bird=None, background=None, layers=set(LAYERS), glow=[True] * len(BIRD["glow"]), crop=False))
+    return render(recipe(theme))
 
 def themes():
     dark = rendered("dark")
@@ -84,6 +89,15 @@ def themes():
         crop = image.crop(window)
         for size in THEME_SIZES:
             save(round_off(crop, size), MARKS_DIR, f"mark-{theme}-{size}.png", optimize=True)
+
+# STILL
+
+def still():
+    for theme in BIRD["themes"]:
+        glow = render(recipe(theme, size=GLOW, layers={"background", "glow"}, pad=PAD))
+        save(glow.convert("RGB"), MARKS_DIR, f"glow-{theme}.webp", quality=90, method=6)
+        with open(os.path.join(MARKS_DIR, f"still-{theme}.svg"), "w") as f:
+            f.write(svg(recipe(theme, layers={"fringe", "bird"})))
 
 # LOGO
 
@@ -105,6 +119,7 @@ def logo():
 def main():
     marks()
     themes()
+    still()
     logo()
 
 if __name__ == "__main__":
