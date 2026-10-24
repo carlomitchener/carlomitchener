@@ -10,6 +10,6 @@
     "shots": "bun run build && bun shots.ts"
   },
   "devDependencies": {
-    "wrangler": "4.150.0"
+    "wrangler": "^4.152.0"
   }
 }
