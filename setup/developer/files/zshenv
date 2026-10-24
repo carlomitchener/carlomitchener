@@ -1,0 +1,4 @@
+export ZDOTDIR="$HOME/.config/zsh"
+export BUN_INSTALL_CACHE_DIR="$HOME/.cache/bun"
+export npm_config_cache="$HOME/.cache/npm"
+export SHELL_SESSIONS_DISABLE=1

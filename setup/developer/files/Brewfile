@@ -1,0 +1,10 @@
+brew "gh"
+brew "uv"
+brew "node"
+brew "bun"
+
+cask "ghostty"
+cask "visual-studio-code"
+cask "claude"
+
+vscode "anthropic.claude-code"

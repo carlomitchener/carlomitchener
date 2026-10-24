@@ -1,0 +1,34 @@
+typeset -U path
+path=("$HOME/.local/bin" $path)
+DEV="$HOME/Developer"
+DEVELOPER="$DEV/<you>/developer"
+
+dev() { cd "$DEV" && ls; }
+carlo() { cd "$DEV/carlomitchener/developer" && ls; }
+mrly() { cd "$DEV/mrlyprod/developer" && ls; }
+
+claude() { caffeinate -is claude "$@"; }
+github() { (cd "$DEVELOPER" && uv run --quiet utils/github.py "$@"); }
+
+alias push="github push" status="github status"
+alias ports="bash $DEVELOPER/scripts/ports.sh" spaghetti="bash $DEVELOPER/scripts/spaghetti.sh" wipe="bash $DEVELOPER/scripts/wipe.sh"
+
+help() {
+  cat <<'TXT'
+dev             go to ~/Developer
+carlo           go to carlomitchener/developer
+mrly            go to mrlyprod/developer
+
+claude          start Claude here; claude -c continues the last conversation
+push ["note"]   back up every repo to GitHub
+status          what changed in every repo
+github          more GitHub commands
+ports [kill]    list or stop dev servers
+spaghetti       free space: delete what git ignores and can rebuild
+wipe            fresh start for Claude (quit it first)
+brew upgrade    update every tool and app
+TXT
+}
+
+autoload -Uz compinit && compinit -d "$HOME/.cache/zsh/zcompdump"
+PROMPT='%~ %# '
