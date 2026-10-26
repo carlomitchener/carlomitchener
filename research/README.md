@@ -2,6 +2,7 @@
 
 Formal write-ups of [MrlyMath](../README.md#mrlymath): the mathematics that falls out of a parity rule on the corners of a cube and the Kronecker product that grows it.
 
+- Archived: this work now lives and grows at [mrlyprod/research](https://github.com/mrlyprod/mrlyprod/tree/main/research).
 - One folder per paper, each self-contained: the PDF, its LaTeX source, a sixty-second README, and the scripts that check every computational claim.
 - Every claim is a theorem with a proof, a computational fact with its exact finite domain and a script behind it, or a conjecture labelled as one.
 - A Lean 4 formalization of the headline theorem rides along in `lean/` where it is feasible.
