@@ -1,0 +1,7 @@
+{
+  "sections": [
+    { "name": "Carlo", "apps": ["about", "mrly", "oeis", "favorites", "links"] },
+    { "name": "Apps", "apps": ["sky", "bird"] }
+  ],
+  "dock": [["about", "mrly", "oeis"], ["sky", "bird"]]
+}

@@ -1,6 +1,6 @@
 const Sky = (() => {
   const { noise } = Core;
-  const canvas = document.querySelector("#sky"), ctx = canvas.getContext("2d");
+  const canvas = G.canvas || document.querySelector("#sky"), ctx = canvas.getContext("2d");
   G.canvas = canvas; G.ctx = ctx;
   let grain, vignette, last = performance.now();
 
@@ -129,7 +129,7 @@ const Sky = (() => {
   let queued = 0;
   function onResize() { cancelAnimationFrame(queued); queued = requestAnimationFrame(resize); }
 
-  const box = canvas.parentElement;
+  const box = canvas.parentElement || canvas;
 
   function fullscreen() {
     const el = box;
@@ -164,7 +164,7 @@ const Sky = (() => {
   if (q.get("dive")) { Bird.dive(); jump(+q.get("dive")); }
   if (q.get("debug")) console.log("bird", JSON.stringify(Bird.bird), "T", JSON.stringify(G.T));
   if (!q.get("pause")) resume();
-  return { setTheme: (name) => Mood.set({ theme: name }), dive: Bird.dive, jump, pause, resume, resize, skip, bird: Bird.bird, wind: G.wind, G };
+  return { setTheme: (name) => Mood.set({ theme: name }), dive: Bird.dive, jump, pause, resume, resize, step, paint, skip, bird: Bird.bird, wind: G.wind, G };
 })();
 
 window.Sky = Sky;

@@ -16,7 +16,7 @@ const BIRD = ["bird-32.png", "bird-192.png", "square-180.png", "still-dark.svg",
 
 /* HEADERS */
 
-const CSP = [
+export const POLICY = [
   "default-src 'none'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
@@ -26,7 +26,7 @@ const CSP = [
   "form-action 'none'",
   "frame-ancestors 'none'",
   "upgrade-insecure-requests",
-].join("; ");
+];
 
 export const HEADERS: Record<string, string> = {
   "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
@@ -34,8 +34,10 @@ export const HEADERS: Record<string, string> = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
   "Cross-Origin-Opener-Policy": "same-origin",
-  "Content-Security-Policy": CSP,
+  "Content-Security-Policy": POLICY.join("; "),
 };
+
+export const headers = (map: Record<string, string>) => `/*\n${Object.entries(map).map(([k, v]) => `  ${k}: ${v}`).join("\n")}\n`;
 
 /* README */
 
@@ -113,7 +115,7 @@ export async function build() {
   copyFileSync(join(SRC, "still.css"), join(DIST, "still.css"));
   if (existsSync(join(SITE, "public", "stats.json"))) copyFileSync(join(SITE, "public", "stats.json"), join(DIST, "stats.json"));
   for (const file of BIRD) copyFileSync(join(SITE, "public", "bird", file), join(DIST, "bird", file));
-  writeFileSync(join(DIST, "_headers"), `/*\n${Object.entries(HEADERS).map(([k, v]) => `  ${k}: ${v}`).join("\n")}\n`);
+  writeFileSync(join(DIST, "_headers"), headers(HEADERS));
   await sky();
   console.log(`site: built ${relative(REPO, DIST)}/`);
 }

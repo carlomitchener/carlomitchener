@@ -1,0 +1,61 @@
+{
+  "title": "Carlo Mitchener",
+  "wordmark": "CARLO MITCHENER",
+  "root": "https://carlomitchener.com",
+  "since": 2026,
+  "prefix": "cm-",
+  "mark": "/mark.svg",
+  "tint": "blue",
+  "menu": "/menu/",
+  "desk": "sky",
+  "design": "sky",
+  "designs": ["designs"],
+  "roots": ["pages", "apps"],
+  "min": [320, 480],
+  "company": "Carlo Mitchener",
+  "tagline": "Entrepreneur, inventor and Captain of MrlyProd. A bird in a painted sky.",
+  "tree": [
+    {
+      "name": "Root",
+      "nodes": [
+        { "name": "robots.txt", "href": "/robots.txt" },
+        { "name": "sitemap.xml", "href": "/sitemap.xml" },
+        { "name": "llms.txt", "href": "/llms.txt" },
+        { "name": "stats.json", "href": "/stats.json" },
+        { "name": "404.html", "href": "/404.html" }
+      ]
+    }
+  ],
+  "socials": [
+    { "name": "GitHub", "href": "https://github.com/carlomitchener" },
+    { "name": "X", "href": "https://twitter.com/carlomitchener" },
+    { "name": "Instagram", "href": "https://www.instagram.com/carlo.mitchener" },
+    { "name": "YouTube", "href": "https://www.youtube.com/@carlomitchener" },
+    { "name": "Pinterest", "href": "https://www.pinterest.com/carlomitchener" }
+  ],
+  "contact": "",
+  "shots": {
+    "routes": ["/", "/sky/", "/bird/", "/about/", "/mrly/", "/oeis/", "/favorites/", "/links/", "/menu/", "/nowhere/"],
+    "screen": [1440, 900, 2]
+  },
+  "git": { "root": ".", "slug": "carlomitchener/carlomitchener", "branch": "main" },
+  "llms": {
+    "about": "Carlo Mitchener's own site: entrepreneur, inventor and Captain of MrlyProd, born in 1998 and raised in Brussels. The bird is his avatar, captured at the Grand Canyon in 2012; the sky is where it flies, a painted sky with weather, sun, moon and crows. The pages tell the story of MrlyProd and MrlyMath, his integer sequences, his favorites and where to find him.",
+    "legend": "Links are page sources in markdown: /raw/pages/x/index.md is /x/; a link outside /raw/ is the page."
+  },
+  "fonts": {
+    "faces": [
+      { "family": "Noto Sans", "file": "sans", "axes": "wght@400..700", "weight": "400 700", "licence": "notosans" },
+      { "family": "Noto Serif", "file": "serif", "axes": "wght@400..700", "weight": "400 700", "licence": "notoserif" },
+      {
+        "family": "Noto Sans Mono",
+        "file": "mono",
+        "axes": "wght@400..700",
+        "weight": "400 700",
+        "licence": "notosansmono"
+      },
+      { "family": "Noto Sans Math", "file": "math", "weight": "400", "licence": "notosansmath" },
+      { "family": "Noto Color Emoji", "file": "emoji", "weight": "400", "licence": "notocoloremoji" }
+    ]
+  }
+}

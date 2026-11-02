@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe066"/><stop offset="1" stop-color="#e0a800"/></linearGradient>
+  </defs>
+  <rect class="back" width="1024" height="1024" fill="url(#back)" data-key="#ffe066"/>
+  <polygon points="512,200 593,418 826,428 644,573 706,797 512,669 318,797 380,573 198,428 431,418" fill="#fff"/>
+</svg>
