@@ -11,6 +11,7 @@
   "design": "sky",
   "designs": ["designs"],
   "roots": ["pages", "apps"],
+  "screen": [1440, 900, 2],
   "min": [320, 480],
   "company": "Carlo Mitchener",
   "tagline": "Entrepreneur, inventor and Captain of MrlyProd. A bird in a painted sky.",
@@ -35,8 +36,7 @@
   ],
   "contact": "",
   "shots": {
-    "routes": ["/", "/sky/", "/bird/", "/about/", "/mrly/", "/oeis/", "/favorites/", "/links/", "/menu/", "/nowhere/"],
-    "screen": [1440, 900, 2]
+    "routes": ["/", "/sky/", "/bird/", "/about/", "/mrly/", "/oeis/", "/favorites/", "/links/", "/menu/", "/nowhere/"]
   },
   "git": { "root": ".", "slug": "carlomitchener/carlomitchener", "branch": "main" },
   "llms": {

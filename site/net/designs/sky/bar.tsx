@@ -1,4 +1,4 @@
-import { Glyph } from "@mrlyprod/design-glass/glyph.tsx";
+import { Glyph } from "@mrlyprod/modern/glyph.tsx";
 import type { Bind, Props } from "@mrlyprod/shell/design.ts";
 
 /* BAR */
