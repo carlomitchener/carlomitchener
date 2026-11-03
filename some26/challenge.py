@@ -10,8 +10,6 @@ SIZE = 810
 STRIP = 110
 GREYS = 16
 
-# FRAME
-
 def label(canvas, name):
     try:
         font = ImageFont.load_default(48)
@@ -27,8 +25,6 @@ def frame(number):
     canvas.paste(image, ((SIZE - image.width) // 2, (SIZE - STRIP - image.height) // 2))
     label(canvas, name)
     return quantize(canvas, GREYS)
-
-# RUN
 
 def main():
     ensure()

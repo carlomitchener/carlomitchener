@@ -2,8 +2,6 @@ from fractions import Fraction
 from itertools import combinations
 from math import gcd
 
-# GASKET
-
 GASKET = ((0, 0), (1, 0), (0, 1))
 GASKET_SET = set(GASKET)
 CELLS = [(a, b) for a in range(3) for b in range(3)]
@@ -334,8 +332,6 @@ def word_counts(edges, m):
     return out
 
 
-# CENSUS OF DESIGNS
-
 def census_designs():
     survivors = []
     for design in combinations(CELLS, 3):
@@ -402,8 +398,6 @@ def census_diagonality():
     check("doubling determinant", 1 * 6 - 2 * 3, 0)
     print("Z_F(n) = 3^n - 2 for all four diagonal designs, n = 1..8; both phi(0) = 0 designs collapse")
 
-
-# RAY MASSES
 
 def census_masses():
     got = [mass(3, 1, n) for n in range(1, 31)]
@@ -561,8 +555,6 @@ def census_rays():
           "E(12) = 1374038, R(12) = 335704")
 
 
-# PAIR CENSUS
-
 def ray_masses(n):
     out = {}
     for (x, y) in points(GASKET, n):
@@ -652,8 +644,6 @@ def census_pairs():
     print("n = 9 pair census: 2656 active ordered multiplier pairs, 482 of them "
           "with a witness off the gasket")
 
-
-# SPECTRAL GAP
 
 def census_spectrum():
     pairs = [(s, t) for s in range(1, 53) for t in range(s + 1, 53) if gcd(s, t) == 1]
@@ -774,8 +764,6 @@ def census_spectrum():
     print("the free-digit automaton keeps the gap at three, two and the empty "
           "interval, but its largest radius below 2 is 1.8488475886 on four pairs")
 
-
-# WITNESS WEIGHTS
 
 def carry_automaton(s, t):
     index = {(0, 0): 0}
@@ -999,9 +987,6 @@ def second_moment(n):
             total += run * run
             run = 1
     return total + run * run
-
-
-# THE PROVED CEILING
 
 
 def direction_automaton(a, b):

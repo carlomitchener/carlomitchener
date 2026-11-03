@@ -5,10 +5,7 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import verify
 
-# STYLE
-
 FONT = "Helvetica,Arial,sans-serif"
-# PALETTE
 INK = "#000000"
 MUTED = "#8e8e93"
 PALE = "#bababf"
@@ -65,7 +62,6 @@ PALETTE = {
     "gray-light": "#bababf",
     "gray-dark": "#56565a",
 }
-# PALETTE END
 STROKE = 1.2
 THIN = 0.6
 MARGIN = 36
@@ -93,18 +89,12 @@ def save(parts, path):
     with open(path, "w") as handle:
         handle.write("\n".join(parts + ["</svg>"]) + "\n")
 
-# STYLE END
-
-# SVG
-
 ACCENT = CONCEPT["bound"]
 SHADES = [PALETTE["blue-dark"], PALETTE["blue"], PALETTE["blue-light"]]
 
 def path(points, stroke, width=1.8):
     d = " ".join(("M" if i == 0 else "L") + " %.1f %.1f" % p for i, p in enumerate(points))
     return '<path d="%s" fill="none" stroke="%s" stroke-width="%.1f" stroke-linejoin="round"/>' % (d, stroke, width)
-
-# DEPTH DATA
 
 def depth_data(top=40):
     out = {}
@@ -116,8 +106,6 @@ def depth_data(top=40):
             row.append((D, K))
         out[q] = row
     return out
-
-# DEPTH FIGURE
 
 def step_points(row, X, Y):
     pts = []
@@ -191,8 +179,6 @@ def draw_depth(out):
     save(rows, out)
     return data
 
-# TENT FIGURE
-
 def draw_tent(out, top=301):
     T = verify.trough_set(top)
     pts = []
@@ -237,8 +223,6 @@ def draw_tent(out, top=301):
     rows.append(text(X(peak[0]) - 10, Y(peak[1]) + 4, "D = %d, kernel %d" % peak, 11, ACCENT, "end"))
     save(rows, out)
     return pts
-
-# MAIN
 
 def main():
     here = os.path.dirname(os.path.abspath(__file__))

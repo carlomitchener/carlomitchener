@@ -1,8 +1,6 @@
 import { sky } from "../../../../data/site/net/avatar.js";
 import { type Opts, pick, type Rng, type Spec, tidy, type View } from "../../sdk.ts";
 
-/* SPEC */
-
 export type Knobs = { mood: string; time: string; season: string; weather: string; auto: number };
 
 export type Painted = ReturnType<typeof make>;
@@ -83,8 +81,6 @@ export const SAVERS = [
 ];
 
 const STEP = 0.05;
-
-/* SCENE */
 
 export function search(value: Knobs, seed: number): string {
   const q = new URLSearchParams({ seed: String(seed >>> 0), pause: "1", auto: String(value.auto) });

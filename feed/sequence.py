@@ -101,8 +101,6 @@ def create_sequence(task: Task, rng) -> Task:
     print(f"Survive counts: {task.survive_counts[:10]}")
     return task
 
-# PRIMARIES
-
 PRIMARIES = [
     Sequence.EVENS,
     Sequence.ODDS,

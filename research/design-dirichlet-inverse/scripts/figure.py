@@ -1,10 +1,7 @@
 import math
 import os
 
-# STYLE
-
 FONT = "Helvetica,Arial,sans-serif"
-# PALETTE
 INK = "#000000"
 MUTED = "#8e8e93"
 PALE = "#bababf"
@@ -61,7 +58,6 @@ PALETTE = {
     "gray-light": "#bababf",
     "gray-dark": "#56565a",
 }
-# PALETTE END
 STROKE = 1.2
 THIN = 0.6
 MARGIN = 36
@@ -89,10 +85,6 @@ def save(parts, path):
     with open(path, "w") as handle:
         handle.write("\n".join(parts + ["</svg>"]) + "\n")
 
-# STYLE END
-
-# DATA
-
 Q = 3
 K = 2
 ALPHA = math.log(K) / math.log(Q)
@@ -110,8 +102,6 @@ RIGHT_PAD = 0.90
 
 def poles(top):
     return [j * PERIOD for j in range(int(top / PERIOD) + 1)]
-
-# DRAW
 
 def panel(parts, x0, y0, w, h, abscissa, marks, bands, comb, box):
     lo, hi = abscissa - LEFT_PAD, abscissa + RIGHT_PAD
@@ -155,8 +145,6 @@ def svg(out):
     parts.append(text(MARGIN, y0 - 6, "Im s = %g" % TOP, size=8, fill=MUTED, anchor="start"))
     parts.append(text(MARGIN, y0 + h + 3, "Im s = 0", size=8, fill=MUTED, anchor="start"))
     save(parts, out)
-
-# TIKZ
 
 def tikz(out):
     xs, ys = 2.55, 0.168

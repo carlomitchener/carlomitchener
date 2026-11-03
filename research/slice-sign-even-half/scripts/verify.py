@@ -10,8 +10,6 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import certify
 
-# POLYNOMIALS
-
 def polymul(a, b):
     out = [0] * (len(a) + len(b) - 1)
     for i, x in enumerate(a):
@@ -58,8 +56,6 @@ def brute_poly(D, q):
         if sum(1 for x in v if x == m) <= 1:
             out[sum(v)] += 1
     return out
-
-# CARRY MATRIX
 
 def half_width(D):
     return (D - 1) // 2
@@ -108,8 +104,6 @@ def m_odd(D, q):
     return [[coefficient(P, c + shift - q * cp) - coefficient(P, -c + shift - q * cp)
              for c in range(1, H + 1)] for cp in range(1, H + 1)]
 
-# CENSUS BY CARRY TRANSFER
-
 def census(D, q, top):
     P = digit_poly(D, q)
     shift = middle(q) * D
@@ -139,8 +133,6 @@ def census(D, q, top):
         bs.append(sum(u))
         m0s.append(sum(u[c + H] for c in range(-H, H + 1) if c % q == 0))
     return bs, m0s
-
-# EXACT DETERMINANT
 
 def bareiss_det(A):
     n = len(A)
@@ -194,8 +186,6 @@ def fraction_det(A):
                     M[i][j] -= f * M[k][j]
     return det
 
-# COLLATZ-WIELANDT CERTIFICATES
-
 def transpose_action(D, q):
     P = digit_poly(D, q)
     shift = middle(q) * D
@@ -222,8 +212,6 @@ def certificate_depth(D, q, kmax):
             return K, x, y
         x = y
     return None, None, None
-
-# GF(2) LINEAR ALGEBRA ON BITMASKS
 
 def bit_rank(rows):
     piv = []
@@ -285,8 +273,6 @@ def nullspace(rows, ncols):
         out.append(v)
     return out
 
-# MOD-2 EVEN CORE BY LUCAS
-
 def m_even_rows_mod2(D):
     assert D % 2 == 1, "the Lucas model is stated for odd D"
     mask = 2 * D - 3
@@ -309,8 +295,6 @@ def m_even_rows_mod2(D):
         rows.append(v)
     return rows, n
 
-# JACOBSTHAL AND THE TENT
-
 def jacobsthal(k):
     return (2 ** k - (-1) ** k) // 3
 
@@ -328,8 +312,6 @@ def trough_set(top):
 
 def tent(D, T):
     return min(abs(D - t) // 2 + 1 for t in T)
-
-# THE LAYER-2 CLOSED FORM
 
 def law_e(R):
     b = 0
@@ -363,8 +345,6 @@ def layer2_closed_form(D):
     w = C - B
     ce = 2 * jacobsthal(e - 2) - 1 if e >= 3 else 1
     return K + 1, min(w + 1, ce + 1 - w)
-
-# THE MOD-4 LIFT
 
 def even_core_mod4(D):
     P = digit_poly_base3_binomial(D)
@@ -427,8 +407,6 @@ def layers_12(D):
             V2.append(v)
     return L, len(echelon(V2))
 
-# CHECK POLYNOMIALS
-
 def polyphase(P):
     parts = [[], [], []]
     for i, x in enumerate(P):
@@ -483,8 +461,6 @@ def check_polynomials():
             assert lhs == rhs, "polyphase form fails at D=%d" % D
     return "bases 3 and 5, D = 2..8; extraction and polyphase forms, odd D = 3..13"
 
-# CHECK REDUCTION
-
 def check_reduction():
     kmax = 6
     for q in (3, 5, 7):
@@ -499,8 +475,6 @@ def check_reduction():
                 assert W == pred, "step identity fails at q=%d D=%d k=%d" % (q, D, k)
     return "bases 3, 5, 7, D = 2..12, k = 1..6"
 
-# CHECK FOLD
-
 def check_fold():
     for q in (3, 5):
         for D in range(2, 26):
@@ -512,8 +486,6 @@ def check_fold():
                 assert Fraction(full) == fraction_det(m_full(D, q)), \
                     "Bareiss disagrees with fractions at q=%d D=%d" % (q, D)
     return "bases 3 and 5, D = 2..25, both parities"
-
-# CHECK EVEN CERTIFICATES
 
 def check_even_certificates():
     depths = {}
@@ -557,8 +529,6 @@ def check_even_certificates():
            "base 7 even D <= 26 plus 172, 174; base 9 even D <= 42; base 11 even D <= 60")
     return dom, depths
 
-# CHECK NO TRANSIENT
-
 def check_notransient():
     for q in (7, 9, 11):
         for D in range(2, 25, 2):
@@ -568,8 +538,6 @@ def check_notransient():
                 assert q * m0s[L] - bs[L] > 0, \
                     "V dips at q=%d D=%d L=%d" % (q, D, L)
     return "bases 7, 9, 11, even D <= 24, L <= 12, window closure included"
-
-# THE CROSSING LEVEL
 
 def k_star(D):
     levels = range(2, 60)
@@ -583,8 +551,6 @@ def l_zero(D):
     assert abs(ks - round(ks)) > 1e-6, "K* within 1e-6 of an integer at D=%d" % D
     L0 = math.floor(ks)
     return L0 if L0 % 2 else L0 - 1
-
-# THE ROW SWEEP
 
 def row_sweep(D, cap):
     P = digit_poly(D, 3)
@@ -606,8 +572,6 @@ def row_sweep(D, cap):
             return k, last_neg
     raise AssertionError("no nonnegative row within the cap at D=%d" % D)
 
-# CHECK TRANSIENT
-
 def check_transient(depths):
     table = {}
     for D in range(6, 75, 2):
@@ -626,8 +590,6 @@ def check_transient(depths):
     assert plus_two == [14, 22, 32, 38, 40, 48, 52, 54, 58, 70, 72], \
         "the K_min = Lstar + 2 rows moved: %s" % plus_two
     return "base 3, even D = 6..74, exhaustion by the row certificate", table
-
-# LEMMA M FINITE WINDOWS
 
 def valuation_1t(mask):
     v = 0
@@ -671,8 +633,6 @@ def mu_formula(r, d):
         b += 1
     return best
 
-# CHECK TENT
-
 def check_tent(deep):
     top = 583 if deep else 301
     T = trough_set(top)
@@ -692,8 +652,6 @@ def check_tent(deep):
                 "valuation window fails at r=%d d=%d" % (r, d)
     return "base 3, odd D = 3..%d, plus the valuation windows r = 0,1,2, d = 2..12" % top
 
-# CHECK LAYER 2
-
 def check_layer2(deep):
     top = 401 if deep else 151
     for D in range(5, top + 1, 2):
@@ -703,8 +661,6 @@ def check_layer2(deep):
         assert L2 == p2, "layer-2 closed form fails at D=%d: %d vs %d" % (D, L2, p2)
         assert L2 >= 1, "empty layer 2 at D=%d" % D
     return "base 3, odd D = 5..%d" % top
-
-# CHECK STRICTNESS
 
 def v2_det(A, prec):
     mod = 1 << prec
@@ -762,13 +718,9 @@ def check_strictness():
            "base 5 class members D = 6..156")
     return dom, delta7
 
-# CHECK THE INTERVAL CERTIFICATES
-
 def check_intervals():
     summary, _results, _rows, _rows5 = certify.run()
     return summary
-
-# MAIN
 
 def main():
     deep = "--deep" in sys.argv

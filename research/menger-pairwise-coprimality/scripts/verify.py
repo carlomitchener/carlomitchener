@@ -1,5 +1,3 @@
-# MENGER
-
 import cmath
 from decimal import Decimal, getcontext
 from fractions import Fraction

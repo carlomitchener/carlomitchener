@@ -3,8 +3,6 @@ import time
 from array import array
 from operator import mul
 
-# TRANSFORM
-
 def factors(q, a0, ts):
     inv = 1.0 / (q - 1)
     c = 2 * a0 - q + 1
@@ -55,8 +53,6 @@ def domination(pts=4000):
                 assert v <= u + 1e-12, f"domination fails at base {q} digit {a0}"
                 slack = max(slack, u - v)
     print(f"domination holds on 6 bases, every distinct digit, {pts} arguments: widest slack {slack:.4f}")
-
-# WINDOW MACHINE
 
 def weights(q, a0, nd, m, guard=1e-12):
     W = q ** nd
@@ -165,8 +161,6 @@ def lower(q, a0, nd, m):
     mu = cw_low(G, y, q, nd)
     return None if mu <= 0.0 else math.log(mu) / math.log(q)
 
-# THE LADDER
-
 def below_the_floor():
     t0 = time.time()
     lanes = 0
@@ -233,8 +227,6 @@ def the_calibration():
     print(f"base 10 missing 5 at five window digits: alpha_1 in [{math.floor(lo * 1e7) / 1e7:.7f}, {math.ceil(hi * 1e7) / 1e7:.7f}], under 27/77 = {27 / 77:.7f}")
     print(f"  {time.time() - t0:.1f}s")
 
-# THE LEBESGUE CONSTANT
-
 GAMMA = 0.5772156649015328606
 C1 = 2.0 / math.pi
 C0 = 0.98
@@ -265,8 +257,6 @@ def lebesgue_scan(offsets=97):
             top = max(top, (exact / M - C1 * math.log(M)))
     assert top < C0, f"the uniform constant {top} does not sit under {C0}"
     print(f"Lebesgue constant: the half offset maximises at every M scanned, and L_M/M - (2/pi) log M <= {top:.7f} < {C0} for M >= 100")
-
-# THE THRESHOLD
 
 def margin(q, c0=C0):
     w = q ** 0.25 * (1.0 - 1.0 / q)
@@ -299,8 +289,6 @@ def threshold():
         assert e < 0.25 or q < 126, "the exponent bound should clear a quarter"
         print(f"  q = {q}: alpha_1 < {math.ceil(e * 1e6) / 1e6:.6f}")
     assert abs(GAMMA * C1 + C1 * math.log(8.0 / math.pi) - 0.9625228) < 1e-7
-
-# VERIFY
 
 def main():
     t0 = time.time()

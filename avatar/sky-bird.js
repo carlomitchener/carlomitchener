@@ -13,8 +13,6 @@ const Bird = (() => {
   const ease = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * x * (x * (x * 6 - 15) + 10));
   const put = (o, a, b, k) => { for (let j = 0; j < 3; j++) o[j] = b ? lerp(a[j], b[j], k) : a[j]; return o; };
 
-  /* FRAMES */
-
   function band(src) {
     const { axis, shoulder } = BIRD.rig;
     let poly = [];
@@ -73,8 +71,6 @@ const Bird = (() => {
       enter(opt.mode || "soar");
     }
   }
-
-  /* DIRECTOR */
 
   function damp(o, k, v, to, w, dt) {
     const c = o[k] - to, d = o[v] + w * c, e = Math.exp(-w * dt);
@@ -194,8 +190,6 @@ const Bird = (() => {
     go("dive");
   }
 
-  /* FRIENDS */
-
   function spawn(n) {
     const W = G.W, H = G.H, S = G.S;
     for (let i = 0; i < n; i++) {
@@ -280,8 +274,6 @@ const Bird = (() => {
     return !(f.role === "leave" && (f.x < -0.22 * W || f.x > 1.22 * W || f.y < -0.22 * H || f.y > 1.22 * H));
   }
 
-  /* STEP */
-
   function step(dt) {
     const b = bird, t = G.t, S = G.S, W = G.W, H = G.H, T = G.T;
     const wk = T && T.windK ? T.windK : 1, wx = G.wind.x, wy = G.wind.y, wm = Math.hypot(wx, wy);
@@ -363,8 +355,6 @@ const Bird = (() => {
       }
     }
 
-    /* KEEP */
-
     if (m !== "dive" && m !== "away") {
       const inx = Math.max(0, 0.06 * W - b.x, b.x - 0.94 * W) / (0.06 * W), iny = Math.max(0, 0.06 * H - b.y, b.y - 0.94 * H) / (0.06 * H), out = clamp(Math.max(inx, iny), 0, 1);
       lim += 1.2 * out;
@@ -416,8 +406,6 @@ const Bird = (() => {
       if (e < best) { best = e; b.frame = k; }
     }
 
-    /* FRIENDS */
-
     if (opt.friends === undefined || opt.friends > 0) {
       meet -= dt;
       if (meet <= 0 && !friends.length) {
@@ -435,8 +423,6 @@ const Bird = (() => {
       }
     }
   }
-
-  /* PAINT */
 
   function rim(o, sun) {
     const T = G.T, S = G.S, d = Math.hypot(sun[0] - o.x, sun[1] - o.y), k = clamp(1 - (d - 0.16 * S * o.size) / (0.15 * S), 0, 1);
@@ -505,8 +491,6 @@ const Bird = (() => {
     for (let i = 0; i < friends.length; i++) one(friends[i], 0, far, rim(friends[i], sun) * 0.7, sun, glow);
     one(b, b.roll, ink, rim(b, sun), sun, glow);
   }
-
-  /* HOOKS */
 
   function init(q) {
     const f = q.get("friends");

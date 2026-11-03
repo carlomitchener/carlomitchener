@@ -1,5 +1,3 @@
-# AVATARS
-
 import itertools
 import math
 from decimal import Decimal, getcontext

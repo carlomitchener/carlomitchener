@@ -3,8 +3,6 @@ import { join, relative } from "node:path";
 import { REPO, SITE } from "./build.ts";
 import { serve } from "./serve.ts";
 
-/* WHERE */
-
 const CHROME = process.env.CHROME ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const PORT = 9336;
 const SERVE = 3336;
@@ -17,8 +15,6 @@ const SCHEMES = ["light", "dark"];
 const SETTLE = 1500;
 const REST = 2600;
 const HOLD = 900;
-
-/* CHROME */
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -68,8 +64,6 @@ function driver(ws: WebSocket) {
   const run = async (expression: string) => (await send("Runtime.evaluate", { expression, returnByValue: true, awaitPromise: true })).result?.value;
   return { send, once, run, noise };
 }
-
-/* SHOTS */
 
 const server = serve(SERVE);
 const { proc, target } = await launch();

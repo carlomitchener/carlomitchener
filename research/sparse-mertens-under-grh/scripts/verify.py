@@ -3,8 +3,6 @@ import math
 from decimal import Decimal, getcontext
 from fractions import Fraction
 
-# CONSTANTS
-
 GAMMA = 0.5772156649015328606065120900824024310421
 GUARD = 1e-12
 RELGUARD = 1e-9
@@ -32,8 +30,6 @@ def below(got, want, what):
 def sci(mantissa, exponent):
     whole, frac = mantissa.split(".")
     return int(whole + frac) * 10 ** (exponent - len(frac))
-
-# THE FORMULAS
 
 def harmonic(n):
     return math.log(n) + GAMMA + 1.0 / (2 * n)
@@ -70,8 +66,6 @@ def up(x, d):
 def row(q, m=1):
     return ("%.6f" % down(alpha(q, m), 6), "%.5f" % up(cost(q, m), 5), "%.5f" % down(saving(q, m), 5))
 
-# THE FORMULAS IN DECIMAL
-
 def dphi(q):
     q = Decimal(q)
     n = -((-(int(q) - 2)) // 2)
@@ -105,8 +99,6 @@ def floorbase(b):
 
 def wallbase(b, start):
     return bisect(lambda q: dgap(q, b) > 0, start, 10 ** 90)
-
-# THE LADDER EXPONENTS
 
 def bh(a):
     if a < Fraction(11, 20):
@@ -142,8 +134,6 @@ CAPPED = {
     Fraction(9, 10): (sci("3.23663", 34), sci("1.73431", 28)),
     Fraction(19, 20): (sci("9.24614", 83), sci("3.30712", 68)),
 }
-
-# THE TABLE
 
 TABLE = [
     (1000, "0.999855", "0.28087", "-0.03102", False),
@@ -261,8 +251,6 @@ def check_ladder():
     logs = [math.ceil(100 * math.log10(w if w is not None else CAPPED[a][0])) / 100 for (a, _, _, w, _) in RUNGS]
     same(["%.2f" % v for v in logs], ["3.57", "3.94", "4.53", "4.97", "4.97", "6.50", "9.85", "13.50", "34.52", "83.97"], "the log10 trend")
 
-# THE GENERAL FLOOR
-
 def lowproved(q):
     return 1 + 4 / math.pi + (2 / math.pi) * (math.log((q - 2) / 2) + GAMMA) + (1 - 2 / math.pi) * (q - 2) / q
 
@@ -287,8 +275,6 @@ def check_floor():
             assert b >= Fraction(1417, 1850), "a low b with a high floor at b = %s" % b
         else:
             atmost(q, 3689, "empty range expected at b = %s" % b)
-
-# THE ELEMENTARY INEQUALITIES
 
 def check_elementary():
     for i in range(20001):
@@ -337,8 +323,6 @@ def check_shape():
     q = 10 ** 12
     near(cost(q), (math.log(math.log(q)) + math.log(2 / math.pi)) / math.log(q), 0.01, "the asymptotic shape")
     atleast(saving(10 ** 9), 0.11695, "the saving at a large base")
-
-# DOOR
 
 def main():
     check_table()

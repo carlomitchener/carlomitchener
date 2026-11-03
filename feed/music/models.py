@@ -3,8 +3,6 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List
 from .enums import ChordType, Movement, Scale, WaveType
 
-# VOICE
-
 @dataclass
 class Voice:
     note_pool: list[int] = field(default_factory=list)
@@ -18,8 +16,6 @@ class Voice:
     def __post_init__(self):
         if self.num_notes is None:
             self.num_notes = [1]
-
-# MUSIC
 
 @dataclass
 class Music:
@@ -42,8 +38,6 @@ class Music:
         s.progression = data.get("progression")
         s.track = data.get("track")
         return s
-
-    # JSON
 
     def to_json_string(self) -> str:
         return json.dumps({

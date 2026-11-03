@@ -1,8 +1,6 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
-/* WHERE */
-
 export const SITE = import.meta.dir;
 export const REPO = resolve(SITE, "..");
 export const DIST = join(SITE, "dist");
@@ -13,8 +11,6 @@ const GITHUB = "https://github.com/carlomitchener/carlomitchener";
 const ORIGIN = "https://carlomitchener.com";
 const SKY = ["bird", "avatar", "sky-core", "sky-mood", "sky-clouds", "sky-light", "sky-weather", "sky-bird", "sky"];
 const BIRD = ["bird-32.png", "bird-192.png", "square-180.png", "still-dark.svg", "still-light.svg", "glow-dark.webp", "glow-light.webp"];
-
-/* HEADERS */
 
 export const POLICY = [
   "default-src 'none'",
@@ -39,8 +35,6 @@ export const HEADERS: Record<string, string> = {
 
 export const headers = (map: Record<string, string>) => `/*\n${Object.entries(map).map(([k, v]) => `  ${k}: ${v}`).join("\n")}\n`;
 
-/* README */
-
 const read = (path: string) => readFileSync(path, "utf8");
 
 function github(href: string) {
@@ -63,8 +57,6 @@ function summary(html: string) {
   const first = html.match(/<p>([\s\S]*?)<\/p>/)?.[1] ?? "";
   return first.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 }
-
-/* PAGE */
 
 function page(opts: { title: string; description: string; canonical?: string; splash?: boolean; body: string }) {
   return `<!doctype html>
@@ -91,8 +83,6 @@ ${opts.splash ? '<div id="splash"></div>\n' : ""}${opts.body}
 </html>
 `;
 }
-
-/* BUILD */
 
 async function sky() {
   mkdirSync(DATA_DIR, { recursive: true });

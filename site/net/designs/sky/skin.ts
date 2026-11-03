@@ -1,7 +1,5 @@
 import type { Tokens } from "@mrlyprod/shell/design.ts";
 
-/* SKIN */
-
 export const LIGHT: Tokens = {
   "--bg": "#f7f9fc",
   "--panel": "#eef2f8",

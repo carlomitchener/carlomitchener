@@ -26,8 +26,6 @@ const Clouds = (() => {
   const lum = (c) => (c[0] * 0.299 + c[1] * 0.587 + c[2] * 0.114) / 255;
   const lerp3 = (a, b, t, o) => { o[0] = a[0] + (b[0] - a[0]) * t; o[1] = a[1] + (b[1] - a[1]) * t; o[2] = a[2] + (b[2] - a[2]) * t; return o; };
 
-  /* SPRITES */
-
   function noiseTex(seed, oct) {
     const n = NS, A = new Float32Array(n * n), B = new Float32Array(n * n), rnd = rng(seed);
     for (let o = 0, c = 4, amp = 1; o < oct; o++, c *= 2, amp *= 0.5) {
@@ -304,8 +302,6 @@ const Clouds = (() => {
     }
     return (y1 - y0) * w * (c.gy >= c.ch && c.pr ? 2 : 1);
   }
-
-  /* FIELD */
 
   function palette() {
     const T = G.T;
@@ -588,8 +584,6 @@ const Clouds = (() => {
     full = 0; drawT = G.t;
     return true;
   }
-
-  /* PAINT */
 
   function makeFog() {
     const T = G.T, n = 128, c = document.createElement("canvas");

@@ -5,8 +5,6 @@ from typing import Callable, List, Tuple
 from .config import Config
 from .enums import WaveType
 
-# RENDERER
-
 class Renderer:
 
     def __init__(self, config: Config, wave_type: WaveType = WaveType.SINE,
@@ -15,8 +13,6 @@ class Renderer:
         self.wave_type = wave_type
         self.num_harmonics = num_harmonics
         self.harmonic_wave = harmonic_wave
-
-    # RENDER
 
     def render(self, track: List[Tuple[List[int], float]],
                voice_fn: Callable = None) -> np.ndarray:
@@ -51,8 +47,6 @@ class Renderer:
             audio_data /= peak_amplitude
         return (audio_data * amplitude).astype(np.int16)
 
-    # SAVE
-
     def save(self, filepath: str, audio: np.ndarray):
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         with wave.open(filepath, "w") as wf:
@@ -61,12 +55,8 @@ class Renderer:
             wf.setframerate(self.config.sample_rate)
             wf.writeframes(audio.tobytes())
 
-# MIDI
-
 def _midi_to_freq(midi_note: int) -> float:
     return 440 * 2**((midi_note - 69) / 12)
-
-# WAVES
 
 def _wave(t_array: np.ndarray, freq: float, wave_type: WaveType) -> np.ndarray:
     t = t_array * freq

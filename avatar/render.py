@@ -21,8 +21,6 @@ def direction(deg):
     a = np.radians(deg)
     return np.array([np.cos(a), -np.sin(a)])
 
-# GEOMETRY
-
 def flatten(cubics, n=12):
     t = np.linspace(0, 1, n)[:-1, None]
     return np.concatenate([(1 - t) ** 3 * np.array(p0) + 3 * (1 - t) ** 2 * t * np.array(p1) + 3 * (1 - t) * t ** 2 * np.array(p2) + t ** 3 * np.array(p3) for p0, p1, p2, p3 in cubics])
@@ -55,8 +53,6 @@ def conic_color(angle):
     i = int(np.floor(pos)) % n
     t = pos - np.floor(pos)
     return rgb(g["colors"][i]) * (1 - t) + rgb(g["colors"][(i + 1) % n]) * t
-
-# RASTER
 
 class Raster:
     def __init__(self, o):
@@ -128,8 +124,6 @@ def render(o):
     straight = np.where(a > 0, canvas[..., :3] / np.maximum(a, 1e-6), 0)
     return Image.fromarray((np.clip(np.dstack([straight, a[..., 0]]), 0, 1) * 255 + 0.5).astype(np.uint8), "RGBA")
 
-# SVG
-
 def svg(o):
     vx, vy, vw, vh = viewbox(o)
     theme = BIRD["themes"][o.theme]
@@ -163,8 +157,6 @@ def svg(o):
         out.append(f'<use id="a-top" href="#a-bird" fill="{hexa(o.bird or theme["bird"])}"/>')
     out.append("</svg>")
     return "\n".join(out) + "\n"
-
-# CLI
 
 def main():
     ap = argparse.ArgumentParser()

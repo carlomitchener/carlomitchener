@@ -21,12 +21,8 @@ NUMBERS = [1, 3, 5, 7, 9]
 LEVEL = 1
 CUBE_CAP = 8 * 1024 ** 2
 
-# SHADES
-
 SHADES = gradient([BLACK, WHITE], 4)
 PALETTE = {UP: [SHADES[2]], LEFT: [SHADES[1]], RIGHT: [SHADES[0]], GRID: [ALPHA]}
-
-# SPONGE
 
 def cost(number, level):
     return number ** (3 * level)
@@ -38,8 +34,6 @@ def sponge(number, level):
                  % (number, level, weight))
     return six.paint(six.iso(three.carpet(number, level)), PALETTE)
 
-# CANVAS
-
 def picture(cell, height):
     scale = max(1, math.ceil(SUPER * height / (six.height(cell) + 2)))
     image = flatten(rgba(six.image(cell, scale, None, 0))).convert("L")
@@ -48,15 +42,11 @@ def picture(cell, height):
     image.thumbnail((round(height * H3), height), Image.LANCZOS)
     return image
 
-# GIF
-
 def frame(cell):
     image = picture(cell, GIFH - 2 * PAD)
     canvas = Image.new("L", (GIFW, GIFH), PAPER[0])
     canvas.paste(image, ((GIFW - image.width) // 2, (GIFH - image.height) // 2))
     return quantize(canvas, GREYS)
-
-# RUN
 
 def draw_one(number, level):
     ensure()
@@ -75,8 +65,6 @@ def sweep(level):
     write_gif(path, frames)
     print("%s (%s)" % (show(path), " ".join(str(n) for n in NUMBERS)))
     return 0
-
-# TERMINAL
 
 COMMANDS = {
     "sweep": (sweep, "every number, one frame each, as a gif"),

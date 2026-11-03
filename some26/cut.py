@@ -28,8 +28,6 @@ CARPET = 23
 GLYPHS = {VOID: "0", FILL: "1", GRID: "-"}
 PALETTE = {VOID: [PAPER], FILL: [INK], GRID: [ALPHA]}
 
-# CUT
-
 def depth(number):
     return LEVELS.get(number, DEPTH)
 
@@ -43,12 +41,8 @@ def cut(number, level):
                  % (number, level, weight / 1e9))
     return six.paint(six.cut(three.carpet(number, level)), PALETTE)
 
-# CANVAS
-
 def save_png(path, image):
     image.convert("L").save(path, optimize=True)
-
-# TRIANGLES
 
 def triangles(cell, width):
     scale = max(1, math.ceil(SUPER * width / (six.width(cell) + 1)))
@@ -76,8 +70,6 @@ def equilateral(markup):
 def svg_tri(path, cell):
     write(path, equilateral(six.svg(cell, 1, None, 0)))
 
-# SQUARES
-
 def png_sq(path, cell):
     image = flatten(rgba(two.image(cell["cell"], 1, None, 0, "Square")))
     height = max(1, round(SIZE * image.height / image.width))
@@ -85,8 +77,6 @@ def png_sq(path, cell):
 
 def svg_sq(path, cell):
     write(path, two.svg(cell["cell"], 1, None, 0, "Square"))
-
-# GIF
 
 def frame(cell):
     image = triangles(cell, GIFW).convert("L")
@@ -103,8 +93,6 @@ def frame_sq(cell):
     canvas.paste(image, (0, (GIFSQ - height) // 2))
     return quantize(canvas, GREYS)
 
-# TEXT
-
 def write_txt(path, cell):
     write(path, "\n".join(two.text(cell["cell"], GLYPHS)))
 
@@ -114,8 +102,6 @@ def preview(cell):
     stride = max(1, round(step * 2 * H3))
     for row in rows[::step]:
         print(row[::stride].rstrip())
-
-# RUN
 
 def stats(number, level, cell):
     fills = int((cell["cell"]["types"] == FILL).sum())
@@ -174,8 +160,6 @@ def sweep():
                   [squares[(n, level)] for n in NUMBERS if depth(n) >= level])
     print("wrote %d gifs in %s" % (len(NUMBERS) + 2 * deepest, show(GIFS)))
     return 0
-
-# TERMINAL
 
 COMMANDS = {
     "sweep": (sweep, "every number at its level, then the gifs"),

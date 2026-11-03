@@ -20,8 +20,6 @@ const Splash = (() => {
   const mode = q.get("splash") || (quiet ? "off" : "full");
   if (!host || mode === "off") { if (host) host.remove(); return null; }
 
-  /* DOM */
-
   const make = (tag, name) => Object.assign(document.createElement(tag), { className: name });
   const glow = make("div", "glow"), dust = make("canvas", "dust"), ink = make("canvas", "ink"), hint = make("p", "hint");
   hint.textContent = "press and hold";
@@ -53,8 +51,6 @@ const Splash = (() => {
     glow.style.webkitMaskImage = glow.style.maskImage = `url("${url}")`;
     drawn = "";
   }
-
-  /* BIRD */
 
   function shape(p) {
     const path = new Path2D();
@@ -93,8 +89,6 @@ const Splash = (() => {
     return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e), h: lerp(a.h, b.h, e), rot: lerp(a.rot, b.rot, e), color: mix(a.color, b.color, e), squeeze: lerp(a.squeeze, b.squeeze, e) };
   }
 
-  /* STATES */
-
   function logo(k = 0) {
     return { x: W / 2 + (BX - GX) * u, y: H / 2 + (BY - GY) * u, h: HEIGHT * u * (1 + LIFT * k), rot: 0, color: tone(), squeeze: 0 };
   }
@@ -121,8 +115,6 @@ const Splash = (() => {
     b.heading = o.rot - rot; b.size = o.h / (zoom * S * 0.3); b.bank = 0; b.turn = 0;
     if (fly === "flap") { b.goal = 0.7; b.rate = 0.1; }
   }
-
-  /* DUST */
 
   const HEAD = `#version 300 es
 precision highp float;
@@ -300,8 +292,6 @@ void main() { vec2 p = gl_PointCoord * 2.0 - 1.0; o = vCol * max(0.0, exp(-4.0 *
     return { warm, prime, load, start, still, render, wipe };
   })();
 
-  /* PHASES */
-
   let phase = "lock", clock = 0, last = performance.now(), turn = 0, rate = IDLE, depth = 0, pull = 0, press = 0, held = false, idle = 0, age = 0, seen = false, lit = 0, lid = false, sc = 1, ga = 1, flung = false, from = null, looping = false;
 
   function look(d) {
@@ -470,14 +460,10 @@ void main() { vec2 p = gl_PointCoord * 2.0 - 1.0; o = vCol * max(0.0, exp(-4.0 *
 
   function run() { if (looping) return; looping = true; last = performance.now(); requestAnimationFrame(frame); }
 
-  /* RELOCK */
-
   addEventListener("click", (e) => {
     if (phase !== "open" || e.target !== G.canvas) return;
     relock(); run();
   });
-
-  /* INPUT */
 
   function hold(on) {
     if (phase !== "lock") return;
@@ -498,8 +484,6 @@ void main() { vec2 p = gl_PointCoord * 2.0 - 1.0; o = vCol * max(0.0, exp(-4.0 *
 
   let queued = 0;
   function queue() { cancelAnimationFrame(queued); queued = requestAnimationFrame(resize); }
-
-  /* HOOKS */
 
   root.classList.add("splashing");
   host.tabIndex = 0; host.setAttribute("role", "button"); host.setAttribute("aria-label", "Press and hold to enter");

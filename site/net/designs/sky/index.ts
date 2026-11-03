@@ -3,8 +3,6 @@ import type { Design } from "@mrlyprod/shell/design.ts";
 import { Bar } from "./bar.tsx";
 import { DARK, LIGHT } from "./skin.ts";
 
-/* SKY */
-
 const MODERN = "@mrlyprod/modern";
 
 export const sky = {

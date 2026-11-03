@@ -1,5 +1,3 @@
-/* MARK */
-
 .bar.sky .mark {
   width: auto;
   grid-auto-flow: column;
@@ -21,8 +19,6 @@
 [data-form="phone"] .bar.sky .word {
   display: none;
 }
-
-/* PROSE */
 
 .lede h1 {
   font-family: var(--serif);

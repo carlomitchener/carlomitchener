@@ -21,8 +21,6 @@ STEPS = 240
 COLORS = 256
 HUES = ["red", "orange", "yellow", "green", "mint", "cyan", "blue", "indigo", "purple", "pink", "red"]
 
-# FRAME
-
 def widen(cell):
     types = cell["cell"]["types"]
     h, w = types.shape
@@ -34,8 +32,6 @@ def widen(cell):
     grid[MARGIN:MARGIN + h, side:side + w] = types
     return {**cell, "cell": models.new(grid)}
 
-# PAINT
-
 def rainbow(cell):
     palette = {
         VOID: [WHITE],
@@ -43,8 +39,6 @@ def rainbow(cell):
         GRID: gradient([named(name) for name in HUES], STEPS),
     }
     return six.paint(cell, palette, "Random", Rng(SEED))
-
-# CROP
 
 def crop(image):
     w, h = image.size
@@ -57,8 +51,6 @@ def crop(image):
         left = (w - box) // 2
         image = image.crop((left, 0, left + box, h))
     return image.convert("RGB").resize((WIDTH, round(WIDTH / ASPECT)), Image.LANCZOS)
-
-# RUN
 
 def main():
     ensure()

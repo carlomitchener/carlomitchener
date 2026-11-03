@@ -5,14 +5,10 @@ from config import CRF, WEB, WEB_MIN, FORMAT, FPS, FRAMES_DIR, FREEZE_DURATION, 
 from frames import flash_count, mask_path
 from music.saga import compose_saga_audio
 
-# FFMPEG
-
 def run_ffmpeg(ffmpeg, args):
     done = subprocess.run([ffmpeg, "-y", "-hide_banner", "-loglevel", "error", *args], capture_output=True, text=True)
     if done.returncode != 0:
         raise RuntimeError(f"ffmpeg failed: {done.stderr.strip()}")
-
-# CONCAT
 
 def _entries(frame_dir, fps, outer_freeze, boundary_freeze, segment_lengths, masks=None):
     frames = sorted(glob.glob(f"{frame_dir}/*.{FORMAT}"))[:sum(segment_lengths)]
@@ -52,15 +48,11 @@ def _steps(entries):
         clock += duration
     return steps
 
-# SIZE
-
 def web_size(canvas):
     scale = -(-WEB_MIN // canvas)
     if canvas * scale % 2:
         scale += 1
     return canvas * scale
-
-# ENCODE
 
 VIDEO = ["-c:v", "libx264", "-crf", str(CRF), "-preset", PRESET, "-pix_fmt", "yuv420p", "-movflags", "+faststart"]
 AUDIO = ["-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-af", "afade=t=in:st=0:d=0.25,areverse,afade=t=in:st=0:d=0.25,areverse"]
@@ -70,8 +62,6 @@ def _encode(ffmpeg, concat, audio, frames, size, output):
     args += ["-vf", f"scale={size}:{size}:flags=neighbor", "-r", str(RATE)]
     run_ffmpeg(ffmpeg, args + VIDEO + AUDIO + [output])
     return output
-
-# SAGA VIDEOS
 
 def create_saga_videos(saga, work_dir, out_dir, ffmpeg, rng):
     os.makedirs(out_dir, exist_ok=True)

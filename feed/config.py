@@ -1,12 +1,10 @@
 import os
 
-# GENERATION
 MIN_GENERATIONS = 8
 MAX_GENERATIONS = 64
 MAX_SEGMENTS = 8
 ATTEMPTS = 64
 
-# CANVAS
 MIN_CANVAS = 0
 MAX_CANVAS = 256
 MIN_TILE = 0
@@ -14,7 +12,6 @@ MAX_TILE = 128
 MIN_MASK = 0
 MAX_MASK = 64
 
-# VIDEO
 FPS = 8
 FLASHES = 4
 FLASH_CONWAY = True
@@ -27,7 +24,6 @@ RATE = 32
 CRF = 23
 PRESET = "medium"
 
-# OUTPUT
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 DATA_DIR = os.path.join(REPO, "data", os.path.relpath(HERE, REPO))
@@ -36,7 +32,6 @@ FRAMES_DIR = "frames"
 MASKS_DIR = "masks"
 HEATMAP_DIR = "heatmap"
 
-# FEED
 VERSION = 2
 LIVE_DAYS = 29.53
 PREFIX = "site/cdn/feed"

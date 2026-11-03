@@ -1,8 +1,6 @@
 import math
 from fractions import Fraction
 
-# ALPHABET
-
 CODES = tuple(range(1, 16))
 UNIT = (1, 2, 4, 8)
 ROW = (3, 12)
@@ -36,8 +34,6 @@ def klass(code):
     if code in GASKET:
         return "gasket"
     return "full"
-
-# GEOMETRY
 
 def tile(code):
     return [(code & 1) | ((code >> 1 & 1) << 1), (code >> 2 & 1) | ((code >> 3 & 1) << 1)]
@@ -102,8 +98,6 @@ def contacts(rows, wide):
     v = sum(1 for j in range(wide) if (top >> j) & 1 and (bottom >> j) & 1)
     return h, v
 
-# REGIMES
-
 def regime(a, b):
     if a in FREE or b in FREE:
         return "cut"
@@ -147,8 +141,6 @@ def closed(a, b, word):
             total += word_fill(word[:i])
     return total
 
-# WEIGHTS
-
 def fill_weight(code):
     return {1: (0, 0), 2: (1, 0), 3: (0, 1), 4: (2, 0)}[fill(code)]
 
@@ -169,8 +161,6 @@ def rate_weight(a, b):
 
 def nats(weight):
     return weight[0] * math.log(2) + weight[1] * math.log(3)
-
-# TRACK
 
 def log2_int(n):
     shift = n.bit_length() - 53
@@ -236,8 +226,6 @@ def rates(a, b, word):
             out.append((fulls - full_run) / step)
         logfill += weight
     return out
-
-# CHECKS
 
 def die(message):
     raise SystemExit("verify.py: " + message)
@@ -355,8 +343,6 @@ def check_smooth(reach):
     check(biggest == 1094 and 1094 == 2 * 547, f"largest count at length 8 over (3,7) is {biggest}")
     print(f"every count on the 89 pairs outside the gasket-and-domino regime is 3-smooth to length {reach}; the largest count at length 8 over (3,7) is 1094 = 2 x 547")
 
-# MORSE
-
 def morse(length):
     return [bin(i).count("1") & 1 for i in range(length)]
 
@@ -422,8 +408,6 @@ def check_saturation():
             check(abs(float(at) - 0.2325367033) < 5e-11, f"saturation at length 4096 is {float(at)}")
     print("Thue-Morse saturation: minimum 0.0113766545 above the floor 1/108, exact maxima 43397/186624 and 151/648, and 0.2325367033 at length 4096")
 
-# BOUNDARY
-
 def check_boundary():
     squares = [6 if int(math.isqrt(i)) ** 2 == i else 3 for i in range(1, 1 << 12)]
     for n in range(2, 40):
@@ -460,8 +444,6 @@ def check_boundary():
     band = [track[length - 1][0] / length for length in range(1024, 4097)]
     check(abs(min(band) - 0.4792) < 5e-5 and abs(max(band) - 1.4379) < 5e-5, f"tripling band is [{min(band)}, {max(band)}]")
     print(f"the tripling word keeps both letters at lower density 1/4 and its prefix rate still ranges over [{min(band):.4f}, {max(band):.4f}] on 1024 <= L <= 4096")
-
-# COCYCLE
 
 def check_cocycle():
     left, right = ((0, 1), (-2, 3)), ((2, 0), (4, 0))

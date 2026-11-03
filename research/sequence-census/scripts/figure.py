@@ -1,9 +1,6 @@
 import os
 
-# STYLE
-
 FONT = "Helvetica,Arial,sans-serif"
-# PALETTE
 INK = "#000000"
 MUTED = "#8e8e93"
 PALE = "#bababf"
@@ -60,7 +57,6 @@ PALETTE = {
     "gray-light": "#bababf",
     "gray-dark": "#56565a",
 }
-# PALETTE END
 STROKE = 1.2
 THIN = 0.6
 MARGIN = 36
@@ -87,10 +83,6 @@ def circle(x, y, r, fill):
 def save(parts, path):
     with open(path, "w") as handle:
         handle.write("\n".join(parts + ["</svg>"]) + "\n")
-
-# STYLE END
-
-# DRAW
 
 POLYGONAL = CONCEPT["carpet"]
 CENTERED = CONCEPT["sponge"]

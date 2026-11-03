@@ -1,7 +1,5 @@
 import rows from "./net/redirects.json";
 
-/* RULES */
-
 export type Step = { uri: string } | { redirect: string };
 
 export type Moves = Map<string, string>;
@@ -23,15 +21,11 @@ export function decide(uri: string, moved: Moves): Step {
 export const join = (to: string, search: string) =>
   !search ? to : to.includes("?") ? `${to}&${search.slice(1)}` : to + search;
 
-/* RAW */
-
 const TEXT = "text/plain; charset=utf-8";
 
 const PASSIVE = /^(image\/(?!svg)|audio\/|video\/|font\/)|^application\/(pdf|wasm|gzip|zip)\b/;
 
 export const raw = (type: string) => (PASSIVE.test(type) ? type : TEXT);
-
-/* WORKER */
 
 type Env = { ASSETS: { fetch: (request: Request) => Promise<Response> } };
 

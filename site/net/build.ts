@@ -1,11 +1,9 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
-/* WHERE */
-
 export const NET = import.meta.dir;
 export const REPO = resolve(NET, "..", "..");
-export const HOST = resolve(process.env.MRLY_HOST ?? join(REPO, "..", "..", "mrlyprod", "mrlyprod"));
+export const HOST = resolve(process.env.MRLY_HOST ?? join(REPO, "..", "..", "mrlyprod", "net"));
 export const DATA_DIR = join(REPO, "data", relative(REPO, NET));
 export const DIST = resolve(process.env.MRLY_DIST ?? join(DATA_DIR, "dist"));
 const AVATAR = join(REPO, "avatar");
@@ -17,14 +15,12 @@ const FAVICONS = ["bird-32.png", "bird-192.png", "square-180.png"];
 
 const read = (path: string) => readFileSync(path, "utf8");
 
-/* LINKS */
-
 function link(name: string, to: string) {
   const at = join(NET, name);
-  if (!existsSync(at)) symlinkSync(relative(NET, to), at);
+  if (existsSync(at)) return;
+  rmSync(at, { force: true });
+  symlinkSync(relative(NET, to), at);
 }
-
-/* AVATAR */
 
 const SHADOW = [
   "const offs = [];",
@@ -54,8 +50,6 @@ export function avatar() {
   mkdirSync(DATA_DIR, { recursive: true });
   writeFileSync(join(DATA_DIR, "avatar.js"), out);
 }
-
-/* MARK */
 
 type Point = [number, number];
 
@@ -162,8 +156,6 @@ export function plate(back: [string, string], key: string): string {
   ].join("\n");
 }
 
-/* PUBLIC */
-
 export function stage() {
   rmSync(PUBLIC, { recursive: true, force: true });
   mkdirSync(join(PUBLIC, "bird"), { recursive: true });
@@ -174,10 +166,8 @@ export function stage() {
   writeFileSync(join(NET, "apps", "bird", "icon.svg"), plate(["#8f90ff", "#4b40d2"], "#8f90ff"));
 }
 
-/* HOST */
-
 export function prepare() {
-  link("wasm", join(HOST, "net", "mrly.net", "wasm"));
+  link("wasm", join(HOST, "mrly.net", "wasm"));
   link("node_modules", join(HOST, "node_modules"));
   avatar();
   stage();

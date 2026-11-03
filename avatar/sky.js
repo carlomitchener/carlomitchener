@@ -124,8 +124,6 @@ const Sky = (() => {
 
   function pause() { running = false; }
 
-  /* SCREEN */
-
   let queued = 0;
   function onResize() { cancelAnimationFrame(queued); queued = requestAnimationFrame(resize); }
 
@@ -142,8 +140,6 @@ const Sky = (() => {
 
   let idle;
   function wake() { box.classList.remove("idle"); clearTimeout(idle); idle = setTimeout(() => box.classList.add("idle"), 3000); }
-
-  /* HOOKS */
 
   function jump(seconds) { for (let i = 0; i < seconds * 60; i++) step(1 / 60); paint(); }
 

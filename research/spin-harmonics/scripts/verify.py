@@ -3,8 +3,6 @@ import itertools
 import math
 import time
 
-# RASTER
-
 ORDERS = 13
 TWO_PI = 2.0 * math.pi
 KIND = {0: "corner", 1: "edge", 2: "corner", 3: "edge", 4: "centre", 5: "edge", 6: "corner", 7: "edge", 8: "corner"}
@@ -111,8 +109,6 @@ def burnside(cells, group):
                 x = m[x]
         total += 1 << cycles
     return total // len(group)
-
-# HARMONICS
 
 def boxes(side):
     out = []
@@ -227,8 +223,6 @@ def rank(rows, tolerance):
                 work[i][t] -= factor * work[got][t]
         got += 1
     return got, pivots
-
-# CHECKS
 
 def say(label, value):
     print("  %-58s %s" % (label, value))

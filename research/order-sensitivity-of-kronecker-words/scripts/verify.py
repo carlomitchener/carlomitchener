@@ -1,7 +1,5 @@
 from itertools import product
 
-# KRONECKER
-
 CODES = tuple(range(1, 16))
 LIB3 = (3, 5, 6, 7, 9, 10, 11, 12, 13, 14)
 K2 = (3, 5, 6, 9, 10, 12)
@@ -74,8 +72,6 @@ def label(rows, n, diag):
         prev = cur
     return parent, segs, find
 
-
-# OBSERVABLES
 
 def components(rows, n, diag=False):
     parent, segs, find = label(rows, n, diag)
@@ -185,8 +181,6 @@ def first_sensitive(vals, index):
     return None
 
 
-# COCYCLE
-
 CLASSES = {
     (1, 2, 4, 8): ((1, 0, 0, 0), (2, 0, 0, 0), (2, 0, 0, 0), (4, 0, 0, 0)),
     (6, 9): ((2, 0, 0, 0), (4, 0, 0, 0), (4, 0, 0, 0), (8, 0, 0, 0)),
@@ -236,8 +230,6 @@ def hankel_rank(table, prefixes, index):
         col += 1
     return r
 
-
-# CHECKS
 
 def check(name, got, want):
     assert got == want, f"{name}: got {got}, want {want}"

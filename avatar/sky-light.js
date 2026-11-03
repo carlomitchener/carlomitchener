@@ -25,8 +25,6 @@ const Light = (() => {
   const solar = () => F(G.T.solar, G.T.sun ? 0.5 : -0.4);
   const lowSun = () => 1 - smooth(clamp(elev() / 0.34, 0, 1));
 
-  /* DOME */
-
   function domeAlloc() {
     D.cell = clamp(G.S / 100, 5, 9);
     D.w = Math.ceil(G.W * 1.16 / D.cell) + 1; D.h = Math.ceil(G.H * 1.16 / D.cell) + 1;
@@ -133,8 +131,6 @@ const Light = (() => {
     D.fade = 1;
   }
 
-  /* SPRITES */
-
   function falloff(g, n, col, k, pw) {
     const gr = g.createRadialGradient(n / 2, n / 2, 0, n / 2, n / 2, n / 2);
     for (let i = 0; i <= 32; i++) {
@@ -202,8 +198,6 @@ const Light = (() => {
     corona = makeCorona(L.halo);
     disc = makeDisc(L.core, L.limb);
   }
-
-  /* STARS */
 
   function starSprites() {
     const DPR = G.DPR, cols = ["#f3f5ff", "#c9d8ff", "#fff1d6", "#ffd8ae"];
@@ -281,8 +275,6 @@ const Light = (() => {
     milky = c; mwJob = null;
   }
 
-  /* MOON */
-
   const MARIA = [[-0.3, -0.36, 0.26, 0.22, 0.62], [0.17, -0.36, 0.15, 0.13, 0.55], [0.33, -0.08, 0.18, 0.15, 0.58], [0.64, -0.25, 0.09, 0.11, 0.6], [0.52, 0.15, 0.1, 0.15, 0.45], [0.3, 0.31, 0.08, 0.07, 0.42], [-0.62, -0.02, 0.2, 0.4, 0.5], [-0.42, 0.24, 0.16, 0.14, 0.38], [-0.15, 0.37, 0.15, 0.11, 0.42], [-0.44, 0.38, 0.07, 0.07, 0.4], [0.02, -0.68, 0.36, 0.07, 0.34], [0.01, -0.1, 0.08, 0.07, 0.3], [-0.12, 0.72, 0.035, 0.035, -0.6], [-0.28, -0.08, 0.03, 0.03, -0.4], [0.0, 0.55, 0.35, 0.22, -0.18]];
 
   function moonAlbedo(n) {
@@ -325,8 +317,6 @@ const Light = (() => {
     g.putImageData(img, 0, 0);
     return c;
   }
-
-  /* OPTICS */
 
   function ring(r0, r1, span, paint) {
     const k = 2, ext = r1, w = Math.ceil(ext / k), h = Math.ceil(2 * ext / k), c = cv(w, h), g = c.getContext("2d"), img = g.createImageData(w, h), d = img.data;
@@ -391,8 +381,6 @@ const Light = (() => {
 
   function luck(k, per) { return want.has("off") ? 0 : ramp(0.3, 0.62, noise(G.t / per + (seed % 997) * 0.37, k)); }
 
-  /* BUILD */
-
   let sized = "";
   function build(resized) {
     if (!seed) seed = G.seed ? 1 + Math.abs(G.seed * 7919 + 104729) % 1e9 : 1 + Math.floor(Math.random() * 1e9);
@@ -428,8 +416,6 @@ const Light = (() => {
     const a = r() * TAU, x = W * (0.15 + 0.7 * r()), y = H * (0.12 + 0.6 * r());
     meteor = { x, y, dx: Math.cos(a), dy: Math.sin(a), sp: S * (0.5 + 0.4 * r()), len: S * (0.1 + 0.08 * r()), age: 0, life: 0.55 + 0.4 * r(), b: 0.5 + 0.5 * r() };
   }
-
-  /* PAINT */
 
   function drawSky() {
     const { ctx, W, H } = G, w = D.w * D.cell, h = D.h * D.cell, x = -0.08 * W, y = -0.08 * H;

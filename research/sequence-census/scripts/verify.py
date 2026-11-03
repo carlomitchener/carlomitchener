@@ -4,8 +4,6 @@ from fractions import Fraction
 from itertools import permutations, product
 from math import comb, factorial, gcd, prod
 
-# POLYNOMIALS
-
 def pmul(a, b):
     out = [0] * (len(a) + len(b) - 1)
     for i, x in enumerate(a):
@@ -52,8 +50,6 @@ def compose_affine(a, u, v):
         out = padd(pmul(out, [v, u]), [c])
     return out
 
-# DESIGNS
-
 def corners(D):
     return list(product((0, 1), repeat=D))
 
@@ -92,8 +88,6 @@ def grid_fill(F, D, k):
             total += 1
     return total
 
-# CLASSICAL FAMILIES
-
 def polygonal(m, k):
     return ((m - 2) * k * k - (m - 4) * k) // 2
 
@@ -112,8 +106,6 @@ def is_prime(v):
             return False
         d += 1
     return True
-
-# RECORDS
 
 RECORDS = {
     "A000290": (0, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121]),
@@ -149,8 +141,6 @@ def record(name, index):
     assert 0 <= slot < len(data), "%s index %d outside the stored terms" % (name, index)
     return data[slot]
 
-# THE SIX ROWS OF THE PLANE
-
 PLANE = [
     (1, (1, 0, 0), "A000290", 0, ("polygonal", 4)),
     (3, (1, 1, 0), "A000384", 0, ("polygonal", 6)),
@@ -167,8 +157,6 @@ SOLID = [
     (129, (1, 0, 0, 1), "A005898", -1),
     (255, (1, 3, 3, 1), "A016755", -1),
 ]
-
-# CHECKS
 
 def check_fill_law():
     for D in (1, 2, 3):
@@ -597,8 +585,6 @@ def check_ladder():
     assert str(exponent)[:12] == "2.4836355003", exponent
     return "carry ladder at D = 3,4 to L = 8, level-one slice at D = 2..10 and A056040 to 16"
 
-# TABLES
-
 def show(poly):
     parts = []
     for e in range(len(poly) - 1, -1, -1):
@@ -652,8 +638,6 @@ def tables():
         terms = [peval(fillpoly(sig), k) for k in range(2, 8)]
         print("  %-8s shift %-3d %-24s %s" % (name, shift, show(fillpoly(sig)),
                                               ", ".join(map(str, terms))))
-
-# DOOR
 
 def main():
     t0 = time.time()

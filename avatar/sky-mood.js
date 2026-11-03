@@ -2,8 +2,6 @@ const Mood = (() => {
   const { mix, rgba, clamp, lerp, smooth, parse, format, P } = Core;
   const scheme = matchMedia("(prefers-color-scheme: light)");
 
-  /* PAINT BOX */
-
   const lin = (c) => ((c /= 255) <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
   const enc = (v) => 255 * (v <= 0.0031308 ? v * 12.92 : 1.055 * Math.pow(v, 1 / 2.4) - 0.055);
   const luma = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
@@ -15,8 +13,6 @@ const Mood = (() => {
 
   const MINT = "#bfeede", BLOSSOM = "#ffc4d2", AMBER = "#f0b878", FROST = "#e4f1fa", LEMON = "#fff0c8";
   const OVERCAST = "#b4c0d0", SLATE = "#76869e", STORMY = "#363b62", COPPER = "#e8a464", PEARL = "#e8e6ee", MILK = "#f4eee4";
-
-  /* KEYFRAMES */
 
   const KF = {
     night: {
@@ -112,8 +108,6 @@ const Mood = (() => {
 
   const state = { time: "morning", season: "summer", weather: "clear", moon: 0.5, auto: true, day: 0.42, theme: "light" };
   const wx = { from: "clear", to: "clear", u: 1, timer: 60 };
-
-  /* RESOLVE */
 
   function segment(day) {
     const d = ((day % 1) + 1) % 1;
@@ -287,8 +281,6 @@ const Mood = (() => {
 
   function theme() { return G.T; }
 
-  /* SUN */
-
   function arcAt(day) {
     const d = ((day % 1) + 1) % 1, n = ARC.length - 1;
     if (d <= ARC[0][0] || d >= ARC[n][0]) {
@@ -317,8 +309,6 @@ const Mood = (() => {
   }
 
 
-  /* DRIFT */
-
   function pickWeather() {
     const table = MARKOV[state.season === "winter" && state.weather === "rain" ? "snow" : state.weather] || MARKOV.clear;
     let r = G.rnd();
@@ -340,8 +330,6 @@ const Mood = (() => {
     G.T = resolve(state);
     state.theme = G.T.dark < 0.5 ? "light" : "dark";
   }
-
-  /* SHUFFLE */
 
   const HOURS = [["dawn", 0.2], ["morning", 0.11], ["noon", 0.09], ["afternoon", 0.18], ["dusk", 0.23], ["night", 0.19]];
   const SKIES = [["clear", 0.45], ["cloudy", 0.29], ["rain", 0.09], ["fog", 0.09], ["storm", 0.08]];
@@ -372,8 +360,6 @@ const Mood = (() => {
     G.rebuild(true);
   }
 
-  /* SET */
-
   function set(patch) {
     if (patch.theme) { patch = Object.assign({}, patch, { time: patch.theme === "dark" ? "night" : "noon" }); }
     if (patch.time || patch.theme) patch.auto = patch.auto !== undefined ? patch.auto : false;
@@ -390,8 +376,6 @@ const Mood = (() => {
   }
 
   function cycle(list, cur, d) { return list[(list.indexOf(cur) + (d || 1) + list.length) % list.length]; }
-
-  /* HOOKS */
 
   let wired = false;
 

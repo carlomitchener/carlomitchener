@@ -9,8 +9,6 @@ from models import Task, Tile
 SIZES = [1, 3, 5, 7, 9, 11]
 MASK_GROUPS = ["General", "Fractal", "Magic"]
 
-# RECIPES
-
 def classic(design: str, rotation: int, invert: bool) -> gen.Tile:
     recipe = gen.Tile.new("General")
     recipe.sources = [{"design": design}]
@@ -23,8 +21,6 @@ def classic(design: str, rotation: int, invert: bool) -> gen.Tile:
 
 def built(recipe: gen.Tile) -> Tile:
     return Tile(types=build.build_2d(recipe)["types"], recipe=recipe)
-
-# TILE
 
 def setup_grid(tile: Tile, max_canvas: int, rng) -> Tile:
     print(f"Setting up grid for tile")
@@ -50,8 +46,6 @@ def setup_canvas(task: Task, rng) -> Task:
     task.canvas_unit_width = task.canvas_size * task.tile.grid_unit_width
     task.canvas_unit_height = task.canvas_size * task.tile.grid_unit_height
     return task
-
-# MASK
 
 def pop_center(tile: Tile) -> Tile:
     types = tile.types.copy()

@@ -23,8 +23,6 @@ LOGO = (1000, 1000)
 WALL = (1920, 1080)
 TILES = (16, 9)
 
-# HELPERS
-
 def resize(image, size):
     return image.resize(size, resample=Image.Resampling.LANCZOS)
 
@@ -32,8 +30,6 @@ def save(image, directory, name, **kwargs):
     path = os.path.join(directory, name)
     image.save(path, **kwargs)
     print(f"{os.path.relpath(path, REPO)}  {os.path.getsize(path)} bytes")
-
-# CROP
 
 def bounds(image):
     ground = Image.new("RGB", image.size, (0, 0, 0))
@@ -51,8 +47,6 @@ def box(image):
 def square(image):
     return image.crop(box(image))
 
-# MASK
-
 def circle(size):
     big = size * SUPERSAMPLE
     mask = Image.new("L", (big, big), 0)
@@ -65,16 +59,12 @@ def round_off(image, size):
     tile.putalpha(mask)
     return tile
 
-# MARKS
-
 def marks():
     os.makedirs(MARKS_DIR, exist_ok=True)
     crop = square(Image.open(SOURCE).convert("RGBA"))
     for size in SIZES:
         save(round_off(crop, size), MARKS_DIR, f"bird-{size}.png", optimize=True)
     save(resize(crop, (TOUCH, TOUCH)).convert("RGB"), MARKS_DIR, f"square-{TOUCH}.png", optimize=True)
-
-# THEMES
 
 def recipe(theme, **kwargs):
     return SimpleNamespace(**{"size": RENDER, "theme": theme, "bird": None, "background": None, "layers": set(LAYERS), "glow": [True] * len(BIRD["glow"]), "crop": False, "pad": 0.0, "wedges": 360, **kwargs})
@@ -90,16 +80,12 @@ def themes():
         for size in THEME_SIZES:
             save(round_off(crop, size), MARKS_DIR, f"mark-{theme}-{size}.png", optimize=True)
 
-# STILL
-
 def still():
     for theme in BIRD["themes"]:
         glow = render(recipe(theme, size=GLOW, layers={"background", "glow"}, pad=PAD))
         save(glow.convert("RGB"), MARKS_DIR, f"glow-{theme}.webp", quality=90, method=6)
         with open(os.path.join(MARKS_DIR, f"still-{theme}.svg"), "w") as f:
             f.write(svg(recipe(theme, layers={"fringe", "bird"})))
-
-# LOGO
 
 def tile(image, columns, rows):
     width, height = image.size

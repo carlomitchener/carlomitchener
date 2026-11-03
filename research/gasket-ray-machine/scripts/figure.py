@@ -1,10 +1,7 @@
 import os
 from math import gcd
 
-# STYLE
-
 FONT = "Helvetica,Arial,sans-serif"
-# PALETTE
 INK = "#000000"
 MUTED = "#8e8e93"
 PALE = "#bababf"
@@ -61,7 +58,6 @@ PALETTE = {
     "gray-light": "#bababf",
     "gray-dark": "#56565a",
 }
-# PALETTE END
 STROKE = 1.2
 THIN = 0.6
 MARGIN = 36
@@ -88,10 +84,6 @@ def circle(x, y, r, fill):
 def save(parts, path):
     with open(path, "w") as handle:
         handle.write("\n".join(parts + ["</svg>"]) + "\n")
-
-# STYLE END
-
-# RAYS
 
 GASKET = ((0, 0), (1, 0), (0, 1))
 SWAP01 = ((0, 1), (1, 0), (2, 2))

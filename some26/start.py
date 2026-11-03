@@ -17,8 +17,6 @@ GIFH = round(GIFW * H3)
 GREYS = 16
 PALETTE = {VOID: [PAPER], FILL: [INK], GRID: [ALPHA]}
 
-# FRAME
-
 def label(canvas, start):
     try:
         font = ImageFont.load_default(48)
@@ -35,8 +33,6 @@ def frame(cell, start):
     canvas.paste(image, ((GIFW - image.width) // 2, (GIFH - image.height) // 2))
     label(canvas, start)
     return quantize(canvas, GREYS)
-
-# RUN
 
 def main():
     ensure()

@@ -22,8 +22,6 @@ FLATS = {"carpet": two.carpet, "net": two.net, "tree": two.vtree, "void": two.vo
 CUBES = {"carpet": three.carpet, "net": three.net, "tree": three.ztree, "void": three.void}
 PROJECTIONS = {"iso": six.iso, "pro": six.pro, "cut": six.cut}
 
-# FRAME
-
 def label(canvas, family):
     try:
         font = ImageFont.load_default(48)
@@ -58,8 +56,6 @@ def frame(family, projection, number):
     label(canvas, family)
     return quantize(canvas, COLORS)
 
-# SHEETS
-
 def sheets(projection, numbers):
     for number in numbers:
         frames = [frame(family, projection, number) for family in FAMILIES]
@@ -89,8 +85,6 @@ def pick(token):
     if not token.isdigit() or int(token) not in NUMBERS:
         sys.exit(f"'{token}' is not in the showcase: " + ", ".join(str(n) for n in NUMBERS))
     return [int(token)]
-
-# TERMINAL
 
 COMMANDS = {
     "all": (every, "every view at every number"),

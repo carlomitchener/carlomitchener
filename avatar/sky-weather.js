@@ -1,8 +1,6 @@
 const Weather = (() => {
   const { TAU, clamp, smooth, noise, rng, mix, rgba, P } = Core;
 
-  /* HOOKS */
-
   const Q = new URLSearchParams(location.search);
   const hook = (k) => (Q.has(k) ? clamp(+Q.get(k) || 1, 0, 1) : 0);
   const HK = { rain: hook("rain"), snow: hook("snow"), storm: hook("storm"), fog: hook("fog"), leaves: hook("leaves"), dust: hook("dust") };
@@ -27,8 +25,6 @@ const Weather = (() => {
   let SP = null, buf = null, bufG = null, bufN = 0, rainLk = 0, tintKey = "", ribCol = "", ribHalo = "", boltCol = "", liftCol = "", veilCol = "";
   let rainN = 0, snowN = 0, carryN = 0, moteN = 0, wet = 0, ffK = 0, ribT = -1, dn = 1;
   G.flash = { e: 0, x: 0, y: 0, r: 0 };
-
-  /* SPRITES */
 
   const cv = (w, h) => { const c = document.createElement("canvas"); c.width = w; c.height = h || w; return c; };
   const GAUSS = [0, 1, 0.2, 0.84, 0.4, 0.5, 0.6, 0.2, 0.8, 0.05, 1, 0];
@@ -275,8 +271,6 @@ const Weather = (() => {
     rainLk = 0.5 * smooth(((c[0] * 0.299 + c[1] * 0.587 + c[2] * 0.114) / 255 - 0.42) / 0.25);
   }
 
-  /* FIELDS */
-
   function entry(p, m) {
     const W = G.W, H = G.H, x = G.rnd() * W, y = G.rnd() * H, ux = A.ux, uy = A.uy;
     const tx = ux > 0.01 ? (x + m) / ux : ux < -0.01 ? (W + m - x) / -ux : 1e9, ty = uy > 0.01 ? (y + m) / uy : uy < -0.01 ? (H + m - y) / -uy : 1e9, d = Math.min(tx, ty);
@@ -348,8 +342,6 @@ const Weather = (() => {
     tintKey = "";
   }
 
-  /* LOOK */
-
   function look() {
     const T = G.T;
     let mine = 0;
@@ -376,8 +368,6 @@ const Weather = (() => {
     const base = s === "winter" ? 0.82 : s === "summer" ? 0.42 : s === "spring" ? 0.36 : 0.3;
     return Math.round(MAXMOTE * clamp(base + 0.6 * T.dust, 0, 1) * dry * (T.sun ? 1 : 0.7));
   }
-
-  /* STEP */
 
   function front(u) { return u > 0 ? Math.exp(-u * u * 4) : Math.exp(-u * u * 0.45); }
 
@@ -675,8 +665,6 @@ const Weather = (() => {
     stepStorm(dt, T);
     stepLens(dt, T);
   }
-
-  /* PAINT */
 
   function put(ctx, a, b, c, d, e, f) { ctx.setTransform(M.a * a + M.c * b, M.b * a + M.d * b, M.a * c + M.c * d, M.b * c + M.d * d, M.a * e + M.c * f + M.e, M.b * e + M.d * f + M.f); }
 

@@ -19,8 +19,6 @@ MUSIC_CONFIG = Config(
     chord_types={ChordType.TRIAD: [0, 2, 4], ChordType.SEVENTH: [0, 2, 4, 6]},
 )
 
-# VOICES
-
 def _build_voices(scale: Scale, rng):
     intervals = MUSIC_CONFIG.scales[scale]
     lows = [ROOT_NOTE + i for i in intervals]
@@ -60,8 +58,6 @@ def _build_progression(way: Way, rng) -> str:
         progression.extend([chords[i]] * duration)
     return "".join(progression)
 
-# PARAMS
-
 def compose_music_params(way: Way, rng) -> MusicParams:
     scale = rng.choice(list(Scale))
     progression = _build_progression(way, rng)
@@ -76,8 +72,6 @@ def compose_music_params(way: Way, rng) -> MusicParams:
         num_harmonics=num_harmonics,
     )
 
-# COMPOSE
-
 def _compose(params: MusicParams, count: int, rng):
     composer = Composer(MUSIC_CONFIG, rng)
     music = composer.compose(
@@ -89,8 +83,6 @@ def _compose(params: MusicParams, count: int, rng):
     renderer = Renderer(MUSIC_CONFIG, wave_type=params.wave_type, num_harmonics=params.num_harmonics)
     return music, renderer, MUSIC_CONFIG
 
-# ASSEMBLY
-
 def assemble_segment_track(track, beat_duration, open_freeze, close_freeze, rest):
     edge = track or [rest]
     timed = [(edge[0], open_freeze)] if open_freeze > 0 else []
@@ -98,13 +90,9 @@ def assemble_segment_track(track, beat_duration, open_freeze, close_freeze, rest
     timed += [(edge[-1], close_freeze)] if close_freeze > 0 else []
     return timed
 
-# FLASH
-
 def flash_track(chord, flashes, frame_duration):
     staccato = [(chord, frame_duration / 2), ([], frame_duration / 2)]
     return staccato * (2 * flashes)
-
-# HEATMAP TRACK
 
 def create_heatmap_track(scale, target, target_len, music_config, rng):
     if target_len <= 0:
@@ -120,8 +108,6 @@ def create_heatmap_track(scale, target, target_len, music_config, rng):
         current = [note_pool[(note_pool.index(n) + step) % len(note_pool)] for n in current]
         track.append(current)
     return list(reversed(track))
-
-# SAGA AUDIO
 
 def _halve_segment_lengths(segment_lengths):
     halved = []

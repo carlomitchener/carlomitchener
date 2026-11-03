@@ -6,10 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import verify as V
 
-# STYLE
-
 FONT = "Helvetica,Arial,sans-serif"
-# PALETTE
 INK = "#000000"
 MUTED = "#8e8e93"
 PALE = "#bababf"
@@ -66,7 +63,6 @@ PALETTE = {
     "gray-light": "#bababf",
     "gray-dark": "#56565a",
 }
-# PALETTE END
 STROKE = 1.2
 THIN = 0.6
 MARGIN = 36
@@ -93,10 +89,6 @@ def circle(x, y, r, fill):
 def save(parts, path):
     with open(path, "w") as handle:
         handle.write("\n".join(parts + ["</svg>"]) + "\n")
-
-# STYLE END
-
-# DRAW
 
 CELL = 20
 PLATE = 17
@@ -186,8 +178,6 @@ def main():
     save(parts, os.path.join(out, "ledger.svg"))
     plates(os.path.join(out, "plates.tex"))
     print("drew figures/ledger.svg and figures/plates.tex")
-
-# TIKZ
 
 def tikz_board(lines, x, y, word, unit):
     filled, wide = cells(word)

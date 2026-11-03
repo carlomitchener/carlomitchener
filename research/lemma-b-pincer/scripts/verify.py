@@ -1,8 +1,6 @@
 from fractions import Fraction
 from math import comb, gcd, log, sqrt
 
-# PINCER
-
 F = ((0, 0), (1, 0), (0, 1))
 FS = set(F)
 PHI = (1 + sqrt(5)) / 2
@@ -87,8 +85,6 @@ def rays(h):
 def typ(cls, a, b, s):
     c1, c2 = divmod(s, b)
     return c1 % 3 if cls == "div" else (c1 + c2) % 3
-
-# LADDER
 
 def rung(lam, order):
     k = order - log(lam, 3)
@@ -258,8 +254,6 @@ def ladder():
     assert b10 > 0.4475978, "short edge: got %.7f want > 0.4475978" % b10
     assert b10 < rung(6664.113662506, 10), "certified rung 10 must sit below the floating value"
     print("ladder: order-10 carry matrix 25 states, energies to a = 5, exact charpoly factorisation, Sturm gives lambda_10 < 6664.1136626 and beta_0^(10) > 0.447597813453")
-
-# PINCER
 
 def constants():
     L = log(PHI, 3)

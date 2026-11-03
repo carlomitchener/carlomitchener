@@ -1,9 +1,6 @@
 import os
 
-# STYLE
-
 FONT = "Helvetica,Arial,sans-serif"
-# PALETTE
 PALETTE = {
     "black": "#000000",
     "white": "#ffffff",
@@ -21,7 +18,6 @@ PALETTE = {
     "brown": "#b18462",
     "gray": "#8e8e93",
 }
-# PALETTE END
 INK = PALETTE["black"]
 MUTED = PALETTE["gray"]
 PALE = "#c6c6c9"
@@ -53,10 +49,6 @@ def circle(x, y, r, fill):
 def save(parts, path):
     with open(path, "w") as handle:
         handle.write("\n".join(parts + ["</svg>"]) + "\n")
-
-# STYLE END
-
-# DRAW
 
 def main():
     width, height = 480, 200

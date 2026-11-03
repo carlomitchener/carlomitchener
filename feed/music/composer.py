@@ -3,15 +3,11 @@ from .config import Config
 from .enums import ChordType, Movement, Scale
 from .models import Music, Voice
 
-# COMPOSER
-
 class Composer:
 
     def __init__(self, config: Config, rng):
         self.config = config
         self.rng = rng
-
-    # COMPOSE
 
     def compose(
         self,
@@ -30,8 +26,6 @@ class Composer:
             track=track,
         )
 
-    # CHORDS
-
     def _create_chord(self, note_pool: list[int], chord: str, chord_type: ChordType) -> list[int]:
         chord_map = {"C": 0, "D": 1, "E": 2, "F": 3, "G": 4, "A": 5, "B": 6}
         degree_idx = chord_map[chord]
@@ -49,8 +43,6 @@ class Composer:
         if voice.chord_type is None:
             return voice.note_pool
         return self._create_chord(voice.note_pool, chord, voice.chord_type)
-
-    # BARS
 
     def _notes(self, note_pool: list[int], num_notes: list[int]) -> list[int]:
         return [note_pool[i] for i in self.rng.sample_indices(len(note_pool), self.rng.choice(num_notes))]
@@ -83,8 +75,6 @@ class Composer:
     def _voice_bar(self, voice: Voice, chord: str, bar_length: int) -> List[List[int]]:
         chord_pool = self._chord_pool(voice, chord)
         return self._bar(bar_length, voice.movements, chord_pool, voice.num_notes)
-
-    # TRACKS
 
     def _concatenate(self, voices: list[Voice], tracks: dict[int, List[List[int]]]) -> List[List[int]]:
         track = []

@@ -1,13 +1,9 @@
 import { Avatar, BIRD, PALETTE } from "../../data/site/net/avatar.js";
 import type { Pen, Point } from "./sdk.ts";
 
-/* TYPES */
-
 type Color = readonly number[];
 
 type Box = { center: () => Point; radius: () => number };
-
-/* BIRD */
 
 const WIDTH = Avatar.width(BIRD) as number;
 const BASE = Avatar.flatten(BIRD.outline.cubics, 3) as Point[];
@@ -27,8 +23,6 @@ export function bird(pen: Pen, box: Box, fill: Color, k = 1.1, fringe = true) {
       pen.polygon(at(-(i + 1) * step * Math.cos(LIGHT), (i + 1) * step * Math.sin(LIGHT)), RAINBOW[i]!);
   pen.polygon(at(0, 0), fill);
 }
-
-/* GRID */
 
 export function grid(pen: Pen, box: Box, rows: string[], fill: Color, gap = 0.12) {
   const [cx, cy] = box.center();

@@ -3,8 +3,6 @@ from lib.paths import data
 FLIP = str.maketrans("01", "10")
 HEIGHT = 3 ** 0.5 / 2
 
-# BINARY
-
 def mrlygram(number: int):
     a = "0"
     b = "101"
@@ -43,8 +41,6 @@ def mrlygram(number: int):
         binary = [row.translate(FLIP) for row in binary]
     return binary
 
-# COORDINATES
-
 def coordinates(binary):
     width = max(len(row) for row in binary)
     cells = []
@@ -56,8 +52,6 @@ def coordinates(binary):
             kind = {"1": "fill", "0": "void", "-": "grid"}[cell]
             cells.append({"type": kind, "x": x + 1, "y": y + 1})
     return cells
-
-# POINTS
 
 def points(cells):
     triangles = []
@@ -73,8 +67,6 @@ def points(cells):
         north = not north
     return triangles
 
-# SVG
-
 def svg(triangles, scale=50):
     width = max(x for t in triangles for x, y in t["points"]) * scale
     height = max(y for t in triangles for x, y in t["points"]) * HEIGHT * scale
@@ -87,8 +79,6 @@ def svg(triangles, scale=50):
         shapes.append('<polygon points="%s" fill="%s"/>' % (corners, color))
     header = '<svg xmlns="http://www.w3.org/2000/svg" width="%g" height="%g">' % (width, height)
     return "\n".join([header] + shapes + ["</svg>"])
-
-# PRINT
 
 def pretty_print(binary):
     target = 0

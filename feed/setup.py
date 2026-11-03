@@ -13,8 +13,6 @@ from variations import (
     tile_from_grid,
 )
 
-# SAGA
-
 def setup_saga_boundary(saga: Saga, rng) -> Saga:
     saga.boundary = rng.choice(list(Boundary))
     print(f"Setting up saga boundary: {saga.boundary}")
@@ -33,8 +31,6 @@ def setup_saga(saga: Saga, seed: int, key: str, rng) -> Saga:
     saga = setup_saga_boundary(saga, rng)
     saga = setup_saga_colors(saga)
     return saga
-
-# WAYS
 
 def setup_conway(task: Task, rng) -> Task:
     print(f"Setting up ConWay for segment: {task.key}")
@@ -58,8 +54,6 @@ def setup_way(task: Task, rng) -> Task:
             return setup_conway(task, rng)
         case Way.MRLYWAY:
             return setup_mrlyway(task, rng)
-
-# SEGMENT
 
 def _setup_chained_conway(task: Task) -> Task:
     print(f"Setting up ConWay rules for segment: {task.key}")

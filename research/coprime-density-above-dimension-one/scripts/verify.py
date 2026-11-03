@@ -2,8 +2,6 @@ import math
 from fractions import Fraction
 from itertools import permutations, product
 
-# COPRIME
-
 DESIGNS = [
     ("or-triangle", 2, 2, [(1, 0), (0, 1), (1, 1)], 11,
      [3, 6, 22, 58, 200, 576, 1798, 5174, 15944, 47744, 143808]),
@@ -97,8 +95,6 @@ def walk(q, F, D, n):
         pts = [tuple(q * a + b for a, b in zip(x, f)) for x in pts for f in F]
         yield pts
 
-# CONSTANTS
-
 def constants(z2, z3):
     named = [
         ("gasket", 2, 2, [(0, 0), (1, 0), (0, 1)], Fraction(2, 3), 16.0 / (3 * math.pi ** 2)),
@@ -124,8 +120,6 @@ def constants(z2, z3):
     close("delta sponge", predicted(3, 3, SPONGE, z3), sponge, 1e-12)
     print("constant sponge: B = 19/20, delta = %.12f" % sponge)
     print("brackets at composite bases separate equal k: 3/4 vs 7/8 at q = 4, 7/8 vs 1/2 at q = 6")
-
-# ENUMERATION
 
 def enumeration(z2, z3):
     rows = 0
@@ -156,8 +150,6 @@ def enumeration(z2, z3):
     print("enumerated %d level rows, %d points, no sampling" % (rows, points))
     print("all ten designs have lattice index 1, so all ten are spanning")
 
-# FACTOR
-
 def factor():
     q, D = 6, 2
     F = DESIGNS[9][3]
@@ -176,8 +168,6 @@ def factor():
             print("n=%d  |S_n|=%-7d coprime to 6 = %-7d naive = %.0f" % (n, k ** n, got, naive))
     print("the bracket 1/2 is not (1-3/8)(1-2/8) = 0.46875")
 
-# SHARPNESS
-
 def sharpness(z2):
     dust = [(0, 0), (0, 2), (2, 0), (2, 2)]
     for n, pts in enumerate(walk(3, dust, 2, 8), start=1):
@@ -195,8 +185,6 @@ def sharpness(z2):
         base = sum(1 for x in level(3, sheared, 2, n) if gcd_of(x) == 1)
         check("shear bijection at n = %d" % n, got, base)
     print("sheared design {0,1}^2: gcd = 2 density -> 81/(16 pi^2) = %.12f" % want)
-
-# BOX
 
 def box():
     trials = [("gasket", 2, 2, DESIGNS[1][3]), ("carpet", 3, 2, DESIGNS[2][3]),
@@ -218,8 +206,6 @@ def box():
                     die("box bound %s n=%d m=%d" % (name, n, m), got, "at most %.4f" % bound)
                 tested += 1
     print("box bound holds in %d exact cases, m <= 60, n <= 6" % tested)
-
-# CENSUS
 
 CUBE = list(product([0, 1], repeat=4))
 CIDX = {v: i for i, v in enumerate(CUBE)}

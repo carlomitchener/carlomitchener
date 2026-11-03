@@ -7,8 +7,6 @@ from config import FLASHES, FLASH_CONWAY, FORMAT
 from enums import Boundary, Way
 from models import Saga, Task
 
-# FRAMES
-
 def frame_path(output_dir: str, key: str, index: int) -> str:
     return f"{output_dir}/{key}_{index:03d}.{FORMAT}"
 
@@ -27,8 +25,6 @@ def create_saga_frames(saga: Saga, output_dir: str, rng) -> Saga:
         cursor += seg_len
     print(f"frames {len(saga.grids)} -> {output_dir}")
     return saga
-
-# MASKS
 
 def flash_count(seg: Task) -> int:
     if seg.way == Way.CONWAY and not FLASH_CONWAY:
@@ -53,8 +49,6 @@ def create_saga_masks(saga: Saga, output_dir: str) -> Saga:
         Image.fromarray(canvas, "RGBA").convert("RGB").save(mask_path(output_dir, saga.key, index), format=FORMAT)
     print(f"masks {len(saga.segments)} -> {output_dir}")
     return saga
-
-# POSTER
 
 def create_saga_poster(source: str, path: str, size: int) -> str:
     Image.open(source).convert("RGB").resize((size, size), Image.NEAREST).save(path, format="WEBP", lossless=True)

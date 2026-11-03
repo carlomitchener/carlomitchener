@@ -1,5 +1,3 @@
-# WALSH
-
 from fractions import Fraction
 from itertools import permutations
 

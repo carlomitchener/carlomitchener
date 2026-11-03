@@ -19,12 +19,8 @@ from video import create_saga_videos
 
 FFMPEG = shutil.which("ffmpeg") or "/opt/bin/ffmpeg"
 
-# NAME
-
 def name_for(seed: int) -> str:
     return hashlib.sha256(str(seed).encode()).hexdigest()[:8]
-
-# SEGMENT
 
 def _segment_life_config(task: Task) -> life.Config:
     config = life.Config.new(cell.new(task.mask.types), life.Counts.list(task.birth_counts), life.Counts.list(task.survive_counts))
@@ -71,8 +67,6 @@ def _truncate_segment(segment: Task, length: int) -> Task:
     segment.result.count = segment.count
     return segment
 
-# SAGA
-
 def _pad_grids(grids: List[Cell], size: int) -> List[Cell]:
     current = grids[0]["types"].shape[0]
     if current >= size:
@@ -112,8 +106,6 @@ def generate_saga(seed: int, key: str, rng) -> Saga:
         print(f"Attempt {attempt} found no LIFE, retrying.")
     raise RuntimeError(f"seed {seed} found no LIFE in {ATTEMPTS} attempts")
 
-# STORY
-
 def _count(n: int, word: str) -> str:
     return f"{n} {word}" if n == 1 else f"{n} {word}s"
 
@@ -122,8 +114,6 @@ def _story(saga: Saga) -> str:
     cells = int(saga.grids[0]["types"].shape[0])
     return (f"{_count(len(saga.segments), 'segment')}, {_count(saga.count, 'generation')} "
             f"on a {cells} cell grid, {saga.boundary.value} boundary, {ways}, ending {saga.fate.value}")
-
-# MANIFEST
 
 def _segment_rows(saga: Saga) -> List[Dict[str, Any]]:
     rows = []
@@ -209,13 +199,9 @@ def write_index(root: str, row: Dict[str, Any]) -> str:
         json.dump(rows, handle)
     return path
 
-# POSTER
-
 def poster_frame(saga: Saga) -> int:
     longest = max(range(len(saga.segment_lengths)), key=lambda i: saga.segment_lengths[i])
     return sum(saga.segment_lengths[:longest + 1])
-
-# MAKE
 
 def make(seed: int, root: str) -> Dict[str, Any]:
     marks = {}

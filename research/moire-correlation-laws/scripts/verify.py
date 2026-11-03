@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# CARPETS
 
 import math
 from fractions import Fraction

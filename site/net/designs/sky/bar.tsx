@@ -1,8 +1,6 @@
 import { Glyph } from "@mrlyprod/modern/glyph.tsx";
 import type { Bind, Props } from "@mrlyprod/shell/design.ts";
 
-/* BAR */
-
 const href = (bind: Bind) => String(bind().href ?? "");
 
 export function Bar({ site, app, bind }: Props["bar"]) {

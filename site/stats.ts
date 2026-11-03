@@ -2,8 +2,6 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { REPO, SITE } from "./build.ts";
 
-/* WHERE */
-
 const README = join(REPO, "README.md");
 const JSON_FILE = join(SITE, "public", "stats.json");
 const ENV = join(REPO, ".env");
@@ -16,8 +14,6 @@ const DAYS = 30;
 const TOP = 3;
 const SECTION = /## Stats\n\n(?:\|.*\n)+\n(?:.*\[View all\].*\n\n)?/;
 const CLOSER = /^Thank you, come again!/m;
-
-/* CLOUDFLARE */
 
 export function token() {
   if (process.env[KEY]) return process.env[KEY];
@@ -63,8 +59,6 @@ export async function fetchDays(auth: string) {
   return groups.map(({ dimensions, uniq, sum }: any) => ({ date: dimensions.date, uniques: uniq.uniques, ...sum }));
 }
 
-/* STATS.JSON */
-
 export function merge(old: any[], fresh: any[]) {
   const all = new Map(old.map((d) => [d.date, d]));
   for (const d of fresh) all.set(d.date, d);
@@ -74,8 +68,6 @@ export function merge(old: any[], fresh: any[]) {
 export function serialise(days: any[], updated: string) {
   return `{"zone":"${ZONE}","updated":"${updated}","days":[\n${days.map((d) => JSON.stringify(d)).join(",\n")}\n]}\n`;
 }
-
-/* README */
 
 export function summary(days: any[], updated: string) {
   const recent = days.filter((d) => d.date >= day(DAYS - 1));

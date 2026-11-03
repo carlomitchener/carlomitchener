@@ -2,8 +2,6 @@ from fractions import Fraction
 from itertools import product
 from math import comb, log, cos, pi
 
-# SLICE
-
 def choose(n, k):
     if k < 0 or k > n or n < 0:
         return 0
@@ -198,8 +196,6 @@ def gap_ratio(D):
     z = sorted((abs(r) for r in roots(scaled)), reverse=True)
     return z[0] / z[1]
 
-
-# SIGN LAW
 
 def core_transfer(D):
     r = (D - 1) // 2

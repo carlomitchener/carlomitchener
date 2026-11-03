@@ -1,8 +1,6 @@
 import { Avatar, BIRD, PALETTE } from "../../../../data/site/net/avatar.js";
 import { type Opts, type Spec, tidy, type View } from "../../sdk.ts";
 
-/* SPEC */
-
 export type Knobs = { spin: number; wings: number; glow: number; fringe: number };
 
 export type Drawn = ReturnType<typeof make>;
@@ -21,8 +19,6 @@ export const PAGE = {
     "Here the glow turns and breathes, and the wings flex on the recipe's own rig. The same bird flies in the sky.",
   ],
 };
-
-/* RECIPE */
 
 type Point = [number, number];
 
@@ -82,8 +78,6 @@ const night = () => {
   const asked = document.documentElement.dataset.theme;
   return asked ? asked === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
 };
-
-/* SCENE */
 
 export function make(canvas: HTMLCanvasElement, view: View, opts: Opts = {}) {
   const ctx = canvas.getContext("2d")!;

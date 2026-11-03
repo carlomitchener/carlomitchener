@@ -9,8 +9,6 @@ from typing import Any, Dict
 from config import DATA_DIR, INDEX, POSTS, PREFIX, files
 from main import expired, make
 
-# PLACE
-
 LAMBDA = "AWS_LAMBDA_FUNCTION_NAME"
 TMP = "/tmp/feed"
 IMMUTABLE = "public, max-age=31536000, immutable"
@@ -30,8 +28,6 @@ def root() -> str:
 
 def content_type(name: str) -> str:
     return TYPES.get(os.path.splitext(name)[1], "application/octet-stream")
-
-# S3
 
 def wake_site(name: str) -> None:
     import boto3
@@ -72,8 +68,6 @@ def upload(base: str, name: str, row: Dict[str, Any]) -> int:
     )
     print(f"upload {count + 1} keys to s3://{bucket}/{PREFIX}/ ({len(rows)} posts)")
     return count + 1
-
-# RUN
 
 def run(seed: int = None) -> Dict[str, Any]:
     started = time.time()

@@ -3,16 +3,12 @@ import { join, relative } from "node:path";
 import { HEADERS, POLICY, REPO, headers } from "./build.ts";
 import { DIST, build } from "./net/build.ts";
 
-/* HEADERS */
-
 export const NET_POLICY = [
   ...POLICY.map((rule) => (rule === "script-src 'self'" ? `${rule} 'wasm-unsafe-eval'` : rule)),
   "font-src 'self' data:",
 ];
 
 export const NET_HEADERS: Record<string, string> = { ...HEADERS, "Content-Security-Policy": NET_POLICY.join("; ") };
-
-/* SHIP */
 
 if (import.meta.main) {
   const code = await build();

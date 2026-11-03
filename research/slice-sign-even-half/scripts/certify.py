@@ -3,8 +3,6 @@ import time
 from fractions import Fraction
 from math import factorial, isqrt
 
-# ROUNDING
-
 PREC = 192
 
 TOL = 1e-52
@@ -22,8 +20,6 @@ def down(x):
 
 def up(x):
     return -down(-x)
-
-# INTERVALS
 
 def num(x):
     f = Fraction(x)
@@ -83,8 +79,6 @@ def relwidth(a):
 def below(a, b):
     return a[1] < b[0]
 
-# SQUARE ROOTS
-
 def isqrt_interval(m):
     r = isqrt(m << (2 * PREC))
     return (Fraction(r, 1 << PREC), Fraction(r + 1, 1 << PREC))
@@ -92,8 +86,6 @@ def isqrt_interval(m):
 SQRT2 = isqrt_interval(2)
 
 SQRT3 = isqrt_interval(3)
-
-# PI BY MACHIN
 
 def _arctan_reciprocal(n, terms):
     s = Fraction(0)
@@ -111,8 +103,6 @@ PI = isub(imul(num(16), _arctan_reciprocal(5, 80)),
 
 PI2 = imul(PI, PI)
 
-# LOGARITHM OF TWO
-
 def _log_two():
     z = Fraction(1, 3)
     terms = 130
@@ -126,8 +116,6 @@ def _log_two():
     return (down(2 * (s)), up(2 * (s + e)))
 
 LOG2 = _log_two()
-
-# SERIES
 
 def _cos_order(a):
     x = float(a)
@@ -222,8 +210,6 @@ def iexp(x):
     assert e >= 0, "exponential tail bound went negative"
     return iadd(s, (Fraction(0), e))
 
-# BASE THREE SPECTRUM
-
 TAIL_LEVEL = 20
 
 def _versin_grid_three(kind, i):
@@ -291,8 +277,6 @@ def k_one(D):
     assert abs(q - round(q)) > Fraction(1, 10 ** 12), "K1 sits on an integer boundary at D=%d" % D
     return int(q) + 2
 
-# THE ENVELOPE
-
 C_PI = num(Fraction(7528157, 10 ** 7))
 
 C_ZERO = num(Fraction(7052518, 10 ** 7))
@@ -310,8 +294,6 @@ def envelope(D, K):
 def delta_of(D, K):
     t = imul(PI, num(Fraction(D - 2, 3 ** (K + 1))))
     return (Fraction(0), hi(idiv(imul(t, t), num(2))))
-
-# CHECK THE FREQUENCY SEPARATION AT BASE FIVE
 
 def g_five_small(i):
     a = iversin(imul(PI, num(Fraction(2, 5 ** i))))
@@ -366,8 +348,6 @@ def check_sep5():
     assert best < Fraction(768, 1000), "the separation constant r = 0.768 is no longer valid"
     return "lem:sep5, three branches and 18 level-two residues", g2, g3
 
-# CHECK THE EXIT AND SUBTREE CONSTANTS AT BASE THREE
-
 def ghat3(i):
     return imul(num(2), icos_grid(1, 3 ** i))
 
@@ -395,8 +375,6 @@ def check_exit3():
     assert hi(sub) <= Fraction(8900159, 10 ** 7), "the subtree constant moved"
     return "lem:exit3 four constants and lem:subtree3"
 
-# CHECK THE CROSSING TAILS
-
 def check_cross3():
     worst_lt = Fraction(0)
     worst_st = Fraction(0)
@@ -409,8 +387,6 @@ def check_cross3():
             assert hi(st) < 7, "the ST tail exceeds 7 at K=%d D=%d" % (K, D)
             worst_st = max(worst_st, hi(st))
     return "lem:cross3 tails, LT <= %.4f and ST <= %.4f" % (float(worst_lt), float(worst_st))
-
-# CHECK THE BASE FIVE CRITERION
 
 def check_crit5(g2, g3):
     r = num(Fraction(768, 1000))
@@ -446,8 +422,6 @@ def check_crit5(g2, g3):
     assert lo(idiv(ONE, ineg(ilog(r)))) >= Fraction(37883, 10 ** 4), "1/|ln r| moved"
     return "prop:crit5, eight rows at even D = 18..32 and the D >= 34 chain", rows
 
-# CHECK THE MONOTONE DOMINATION BEYOND FOUR HUNDRED
-
 def check_domination(k400):
     growth = Fraction(402 * 401, 400 * 399)
     assert growth <= Fraction(10104, 10 ** 4), "the K1 growth ratio moved"
@@ -457,8 +431,6 @@ def check_domination(k400):
     assert lo(margin_step) >= Fraction(9950, 10 ** 4), "the margin per-step ratio moved"
     assert k400 >= 12, "the 3^-K1 bound assumed a deeper certificate at D=400"
     return "thm:base3 tail, growth 1.0104, envelope step 0.573, margin step 0.9950"
-
-# THE STAR SCAN
 
 def star_scan():
     worst_slack = None
@@ -492,8 +464,6 @@ def star_scan():
             k400 = K
     return worst_slack, worst_slack_at, worst_width, worst_width_at, rows, k400
 
-# RUN
-
 def run():
     results = []
     t = time.time()
@@ -518,8 +488,6 @@ def run():
                "inequalities of (star) at even D = 38..400; worst slack %.4f at D = %d, "
                "worst relative interval width %.1e" % (float(slack), slack_at, width))
     return summary, results, rows, rows5
-
-# MAIN
 
 def main():
     t0 = time.time()

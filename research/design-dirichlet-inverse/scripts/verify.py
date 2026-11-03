@@ -3,8 +3,6 @@ import math
 import sys
 import time
 
-# DESIGNS
-
 def strings(q, F, L):
     out = [0]
     for _ in range(L):
@@ -31,8 +29,6 @@ def report(name, got, want, tol):
 def exact(name, got, want):
     print("  %-56s %s  %s" % (name, want, "ok" if got == want else "FAILED"))
     assert got == want, "%s: got %r, wanted %r" % (name, got, want)
-
-# INVERSE
 
 def inverse(q, F, N):
     inside = member(q, F, N)
@@ -117,8 +113,6 @@ def check_inverse():
         exact("base %d full digit set: nu_F = mu term for term to n = %d" % (q, M), nuf[1:] == mu[1:], True)
     return nu, inside
 
-# THE WALL
-
 def repunit(q, a):
     return (q ** a - 1) // (q - 1)
 
@@ -161,8 +155,6 @@ def check_wall():
     exact("base 2, F = {1}: the constructed pair", witness(2, [1]), ("even base", 3, 5))
     exact("base 12, F = {1}: the constructed pair", witness(12, [1]), ("repunit", 13, 157))
 
-# THE POSITION PRODUCT
-
 def position(q, F, L):
     Q = q ** L
     root = [cmath.exp(-2j * math.pi * j / Q) for j in range(Q)]
@@ -197,8 +189,6 @@ def check_position():
     print("THE POSITION PRODUCT: int G_L(t) e(-nt) dt is the indicator of the level")
     report("base 3 {0,1}, L = 5, every n < 243", position(3, [0, 1], 5), 0.0, 1e-10)
     report("base 10 missing 9, L = 3, every n < 1000", position(10, list(range(9)), 3), 0.0, 1e-9)
-
-# THE DESIGN ZETA
 
 def design_zeta(q, F, s, J=260, cut=14.0):
     k = len(F)
@@ -249,8 +239,6 @@ def check_zeta():
     probe = complex(0.6, 3.1)
     report("base 3: zeta_{0,2}(s) = 2^(-s) zeta_{0,1}(s)", design_zeta(3, scaled, probe), complex(a) ** (-probe) * design_zeta(3, base, probe), 1e-11)
 
-# THE LYNDON PRODUCT
-
 def lyndon(k, L):
     total = 0
     for d in range(1, L + 1):
@@ -290,8 +278,6 @@ def check_lyndon():
         want = [k ** i for i in range(top + 1)]
         exact("k = %2d: the Lyndon product is 1/(1 - k u) through u^%d" % (k, top), series, want)
     exact("c_2(L), L = 1..10, is A001037", [lyndon(2, L) for L in range(1, 11)], [2, 1, 2, 3, 6, 9, 18, 30, 56, 99])
-
-# VERIFY
 
 def main():
     clock = time.time()
