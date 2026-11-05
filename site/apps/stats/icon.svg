@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5bd679"/><stop offset=".7" stop-color="#32cc58"/></linearGradient>
+    <linearGradient id="area" x1="0" y1="330" x2="0" y2="748" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".72"/><stop offset="1" stop-color="#fff" stop-opacity=".18"/></linearGradient>
+    <linearGradient id="aread" x1="0" y1="330" x2="0" y2="748" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#32cc58" stop-opacity=".72"/><stop offset="1" stop-color="#32cc58" stop-opacity=".18"/></linearGradient>
+  </defs>
+  <rect class="back" width="1024" height="1024" fill="url(#back)"/>
+  <path d="M244 640L352 548L444 596L560 428L652 492L756 332L756 748L244 748Z" fill="url(#area)" data-dark="url(#aread)" data-mono="dim"/>
+  <polyline points="244,640 352,548 444,596 560,428 652,492 756,332" fill="none" stroke="#fff" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" data-dark-stroke="#32cc58"/>
+  <circle cx="756" cy="332" r="50" fill="#fff"/>
+</svg>

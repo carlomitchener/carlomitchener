@@ -4,14 +4,11 @@
   "type": "module",
   "scripts": {
     "build": "bun build.ts",
-    "net": "bun net/build.ts",
-    "dev": "bun dev.ts",
+    "dev": "bun build.ts dev",
+    "types": "tsc -p tsconfig.json",
+    "lint": "biome check .",
     "stats": "bun stats.ts",
-    "deploy": "bun stats.ts && bun run build && wrangler deploy",
-    "ship": "bun ship.ts",
-    "deploy:net": "bun stats.ts && bun ship.ts && wrangler deploy -c wrangler.net.jsonc",
-    "preview:net": "bun ship.ts && wrangler dev -c wrangler.net.jsonc",
-    "shots": "bun run build && bun shots.ts"
+    "deploy": "bun stats.ts && bun build.ts && wrangler deploy"
   },
   "devDependencies": {
     "wrangler": "^4.157.0"

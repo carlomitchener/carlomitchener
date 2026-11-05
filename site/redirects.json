@@ -1,0 +1,22 @@
+{
+  "/bird/": {
+    "to": "/avatar/",
+    "since": "2026-11-05"
+  },
+  "/links/": {
+    "to": "/about/",
+    "since": "2026-11-05"
+  },
+  "/favorites/": {
+    "to": "/about/",
+    "since": "2026-11-05"
+  },
+  "/mrly/": {
+    "to": "/about/",
+    "since": "2026-11-05"
+  },
+  "/oeis/": {
+    "to": "/about/",
+    "since": "2026-11-05"
+  }
+}

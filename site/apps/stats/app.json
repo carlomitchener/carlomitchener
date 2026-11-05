@@ -1,0 +1,5 @@
+{
+  "title": "Stats",
+  "line": "Visitors and page views of this site, updated at each deploy.",
+  "aliases": ["visitors", "views", "traffic", "analytics"]
+}

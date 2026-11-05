@@ -1,6 +1,0 @@
-# BUILD
-public/
-wasm
-node_modules
-pages/home/icon.svg
-apps/bird/icon.svg

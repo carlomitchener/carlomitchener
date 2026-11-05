@@ -1,0 +1,8 @@
+{
+  "extends": "../../../mrlyprod/mrlyprod/ui/tsconfig.json",
+  "include": ["**/*.ts", "**/*.tsx", "../../../mrlyprod/mrlyprod/ui/shell/site.d.ts"],
+  "exclude": ["node_modules", "../data"],
+  "compilerOptions": {
+    "typeRoots": ["../../../mrlyprod/mrlyprod/node_modules/@types"]
+  }
+}

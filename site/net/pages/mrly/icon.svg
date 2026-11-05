@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <defs>
-    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e57af2"/><stop offset="1" stop-color="#a51fbb"/></linearGradient>
-  </defs>
-  <rect class="back" width="1024" height="1024" fill="url(#back)" data-key="#e57af2"/>
-  <g fill="#fff"><rect x="219" y="219" width="106" height="106" rx="22"/><rect x="339" y="219" width="106" height="106" rx="22"/><rect x="459" y="219" width="106" height="106" rx="22"/><rect x="579" y="219" width="106" height="106" rx="22"/><rect x="699" y="219" width="106" height="106" rx="22"/><rect x="219" y="339" width="106" height="106" rx="22"/><rect x="459" y="339" width="106" height="106" rx="22"/><rect x="699" y="339" width="106" height="106" rx="22"/><rect x="219" y="459" width="106" height="106" rx="22"/><rect x="339" y="459" width="106" height="106" rx="22"/><rect x="459" y="459" width="106" height="106" rx="22"/><rect x="579" y="459" width="106" height="106" rx="22"/><rect x="699" y="459" width="106" height="106" rx="22"/><rect x="219" y="579" width="106" height="106" rx="22"/><rect x="459" y="579" width="106" height="106" rx="22"/><rect x="699" y="579" width="106" height="106" rx="22"/><rect x="219" y="699" width="106" height="106" rx="22"/><rect x="339" y="699" width="106" height="106" rx="22"/><rect x="459" y="699" width="106" height="106" rx="22"/><rect x="579" y="699" width="106" height="106" rx="22"/><rect x="699" y="699" width="106" height="106" rx="22"/></g>
-</svg>

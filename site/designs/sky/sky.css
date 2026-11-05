@@ -1,0 +1,14 @@
+.lede h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.lede .lead {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--dim);
+}
+main h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+}

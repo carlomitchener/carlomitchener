@@ -1,4 +1,4 @@
-import rows from "./net/redirects.json";
+import rows from "./redirects.json";
 
 export type Step = { uri: string } | { redirect: string };
 

@@ -1,22 +1,20 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
 export const SITE = import.meta.dir;
 export const REPO = resolve(SITE, "..");
-export const DIST = join(SITE, "dist");
-const DATA_DIR = join(REPO, "data", relative(REPO, SITE));
+export const HOST = resolve(process.env.MRLY_HOST ?? join(REPO, "..", "..", "mrlyprod", "mrlyprod"));
+export const DATA_DIR = join(REPO, "data", relative(REPO, SITE));
+export const DIST = resolve(process.env.MRLY_DIST ?? join(DATA_DIR, "dist"));
 const AVATAR = join(REPO, "avatar");
-const SRC = join(SITE, "src");
-const GITHUB = "https://github.com/carlomitchener/carlomitchener";
-const ORIGIN = "https://carlomitchener.com";
-const SKY = ["bird", "avatar", "sky-core", "sky-mood", "sky-clouds", "sky-light", "sky-weather", "sky-bird", "sky"];
-const BIRD = ["bird-32.png", "bird-192.png", "square-180.png", "still-dark.svg", "still-light.svg", "glow-dark.webp", "glow-light.webp"];
+const SKY = ["sky-core", "sky-mood", "sky-clouds", "sky-light", "sky-weather", "sky-bird", "sky"];
 
 export const POLICY = [
   "default-src 'none'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
   "connect-src 'self'",
   "base-uri 'none'",
   "form-action 'none'",
@@ -33,81 +31,69 @@ export const HEADERS: Record<string, string> = {
   "Content-Security-Policy": POLICY.join("; "),
 };
 
-export const headers = (map: Record<string, string>) => `/*\n${Object.entries(map).map(([k, v]) => `  ${k}: ${v}`).join("\n")}\n`;
+const SHADOW = [
+  "const offs = [];",
+  "const location = { search };",
+  "const window = { visualViewport: null };",
+  "const addEventListener = (type, fn, how) => {",
+  '  if (type === "keydown") return;',
+  "  globalThis.addEventListener(type, fn, how);",
+  "  offs.push(() => globalThis.removeEventListener(type, fn, how));",
+  "};",
+].join("\n");
 
 const read = (path: string) => readFileSync(path, "utf8");
 
-function github(href: string) {
-  if (/^([a-z][a-z0-9+.-]*:|\/\/|#)/i.test(href)) return href;
-  const [path = "", hash = ""] = href.split("#");
-  const clean = path.replace(/^\.?\//, "").replace(/\/$/, "");
-  const full = join(REPO, clean);
-  const tree = !clean || path.endsWith("/") || (existsSync(full) && statSync(full).isDirectory());
-  return `${GITHUB}/${tree ? "tree" : "blob"}/main/${clean}${hash ? `#${hash}` : ""}`;
+function link(name: string, to: string) {
+  const at = join(SITE, name);
+  if (existsSync(at)) return;
+  rmSync(at, { force: true });
+  symlinkSync(to, at);
 }
 
-function readme() {
-  const html = Bun.markdown.html(read(join(REPO, "README.md")), { headings: { ids: true } });
-  return html
-    .replace(/<thead>\s*<tr>(?:<th[^>]*><\/th>)+<\/tr>\s*<\/thead>\s*/g, "")
-    .replace(/href="([^"]*)"/g, (_, href: string) => `href="${github(href)}"`);
-}
-
-function summary(html: string) {
-  const first = html.match(/<p>([\s\S]*?)<\/p>/)?.[1] ?? "";
-  return first.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
-}
-
-function page(opts: { title: string; description: string; canonical?: string; splash?: boolean; body: string }) {
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>${opts.title}</title>
-<meta name="description" content="${opts.description.replace(/"/g, "&quot;")}">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
-${opts.canonical ? `<link rel="canonical" href="${opts.canonical}">\n` : ""}<link rel="icon" href="/bird/bird-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/bird/bird-192.png" sizes="192x192" type="image/png">
-<link rel="apple-touch-icon" href="/bird/square-180.png">
-<link rel="stylesheet" href="/site.css">
-<script defer src="/sky.js"></script>
-<noscript><link rel="stylesheet" href="/still.css"></noscript>
-</head>
-<body>
-<div class="sky"><canvas id="sky"></canvas></div>
-${opts.splash ? '<div id="splash"></div>\n' : ""}${opts.body}
-</body>
-</html>
-`;
-}
-
-async function sky() {
+export function avatar() {
+  const head = ["bird", "avatar"].map((name) => read(join(AVATAR, `${name}.js`))).join("\n");
+  const [core, ...rest] = SKY.map((name) => read(join(AVATAR, `${name}.js`)));
+  const out = [
+    head,
+    "export { Avatar, BIRD, PALETTE };",
+    "export function sky(canvas, search) {",
+    SHADOW,
+    core,
+    "G.canvas = canvas;",
+    ...rest,
+    "return { sky: Sky, mood: Mood, off: () => offs.splice(0).forEach((one) => one()) };",
+    "}",
+  ].join("\n");
   mkdirSync(DATA_DIR, { recursive: true });
-  const all = join(DATA_DIR, "sky.js");
-  const parts = [...SKY.map((name) => join(AVATAR, `${name}.js`)), join(SRC, "mount.js"), join(AVATAR, "splash.js")];
-  writeFileSync(all, parts.map(read).join("\n"));
-  const out = await Bun.build({ entrypoints: [all], outdir: DIST, naming: "sky.js", format: "iife", target: "browser", minify: true });
-  if (!out.success) throw new Error(`site: sky bundle failed\n${out.logs.map(String).join("\n")}`);
+  writeFileSync(join(DATA_DIR, "avatar.js"), out);
 }
 
-export async function build() {
-  rmSync(DIST, { recursive: true, force: true });
-  mkdirSync(join(DIST, "bird"), { recursive: true });
-  const body = readme();
-  const name = body.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1]?.replace(/<[^>]+>/g, "").replace(/^Hi, I'm /, "") ?? "Carlo Mitchener";
-  writeFileSync(join(DIST, "index.html"), page({ title: name, description: summary(body), canonical: `${ORIGIN}/`, splash: true, body: `<main class="page"><article class="readme">\n${body}</article></main>\n<div class="fog"></div>` }));
-  writeFileSync(join(DIST, "404.html"), page({ title: "Nothing here", description: "Nothing here.", body: `<main class="lost"><div><p>Nothing here</p><a href="/">Home</a></div></main>` }));
-  const css = [join(SRC, "site.css"), join(AVATAR, "splash.css")];
-  writeFileSync(join(DIST, "site.css"), css.map(read).join("\n"));
-  copyFileSync(join(SRC, "still.css"), join(DIST, "still.css"));
-  if (existsSync(join(SITE, "public", "stats.json"))) copyFileSync(join(SITE, "public", "stats.json"), join(DIST, "stats.json"));
-  for (const file of BIRD) copyFileSync(join(SITE, "public", "bird", file), join(DIST, "bird", file));
-  writeFileSync(join(DIST, "_headers"), headers(HEADERS));
-  await sky();
-  console.log(`site: built ${relative(REPO, DIST)}/`);
+function prepare() {
+  link("node_modules", join(HOST, "node_modules"));
+  avatar();
 }
 
-if (import.meta.main) await build();
+const run = (script: string, env: Record<string, string>) =>
+  Bun.spawn(["bun", script], {
+    cwd: join(HOST, "ui"),
+    env: { ...process.env, MRLY_ROOT: SITE, ...env },
+    stdout: "inherit",
+    stderr: "inherit",
+  }).exited;
+
+export async function build(dist = DIST): Promise<number> {
+  prepare();
+  const code = await run("web/scripts/build.ts", { MRLY_DIST: dist });
+  if (code) return code;
+  const rules = Object.entries(HEADERS).map(([key, value]) => `  ${key}: ${value}`);
+  writeFileSync(join(dist, "_headers"), `/*\n${rules.join("\n")}\n`);
+  return 0;
+}
+
+export function dev(): Promise<number> {
+  prepare();
+  return run("web/scripts/dev.ts", {});
+}
+
+if (import.meta.main) process.exit(await (process.argv[2] === "dev" ? dev() : build()));
