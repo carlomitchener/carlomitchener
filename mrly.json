@@ -1,5 +1,0 @@
-{
-  "commands": {
-    "serve": "bun run --cwd site dev"
-  }
-}
