@@ -1,5 +1,5 @@
-import * as num from "@mrlyprod/num";
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
+import * as num from "mrly-num/wasm";
 
 export const units = { num };
 

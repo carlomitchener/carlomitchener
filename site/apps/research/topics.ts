@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { front, plain, summary } from "@mrlyprod/ui/kit/md/md.ts";
+import { front, plain, summary } from "mrly-md/md.ts";
 
 export type Topic = {
   slug: string;

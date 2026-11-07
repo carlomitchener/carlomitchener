@@ -1,4 +1,4 @@
-use mrly_roulette::{
+use roulette::{
     cover, disc, pencils, point, representatives, signed_area, track, Kind, Pencil, Track,
 };
 use std::f64::consts::{PI, TAU};

@@ -1,8 +1,9 @@
-import * as bang from "@mrlyprod/bang";
-import * as math from "@mrlyprod/math";
-import { type Color, type Frame, frame, Grid, type Ink, type Pen, type Tensor } from "@mrlyprod/draw";
+import { type Color, type Frame, frame, Grid, type Ink, type Pen, type Tensor } from "mrly-draw";
+import * as math from "mrly-math/wasm";
+import * as tensor from "mrly-tensor/wasm";
+import { fill, magic, side as wordSide } from "../../shared/ts/word.ts";
 
-export const units = { bang, math };
+export const units = { math, tensor };
 
 const SIDE = 15;
 
@@ -22,15 +23,14 @@ export default function draw(pen: Pen, ink: Ink) {
 
   const forward = letters([7, 3], [14, 5]);
   const reverse = letters([14, 5], [7, 3]);
-  if (bang.word.side(forward) !== String(SIDE))
-    throw new Error(`research-magic: forward side ${bang.word.side(forward)}, want ${SIDE}`);
-  if (bang.word.side(reverse) !== String(SIDE))
-    throw new Error(`research-magic: reverse side ${bang.word.side(reverse)}, want ${SIDE}`);
-  if (bang.word.fill(forward) !== bang.word.fill(reverse))
-    throw new Error("research-magic: the two orders fill differently");
+  if (wordSide(forward) !== BigInt(SIDE))
+    throw new Error(`research-magic: forward side ${wordSide(forward)}, want ${SIDE}`);
+  if (wordSide(reverse) !== BigInt(SIDE))
+    throw new Error(`research-magic: reverse side ${wordSide(reverse)}, want ${SIDE}`);
+  if (fill(forward) !== fill(reverse)) throw new Error("research-magic: the two orders fill differently");
 
-  const left = math.factory.magic(forward);
-  const right = math.factory.magic(reverse);
+  const left = magic(forward);
+  const right = magic(reverse);
   for (const tensor of [left, right]) {
     if (
       tensor.shape.length !== 2 ||

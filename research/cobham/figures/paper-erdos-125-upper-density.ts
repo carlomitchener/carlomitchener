@@ -1,11 +1,8 @@
-import * as sumset from "@mrlyprod/sumset";
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
 import census from "./paper-erdos-125-upper-density.json" with { type: "json" };
 
 const LEVEL = 6;
 const SAMPLES = 3072;
-
-export const units = { sumset };
 
 const { curves, orbit: chain } = census as { curves: number[][]; orbit: [number, number][] };
 
@@ -15,9 +12,7 @@ function orbit() {
   if (memo) return memo;
   memo = chain.map(([four, h], three) => {
     if (three === 0) return [1, h];
-    const pair = new sumset.Pair(three, four);
-    const tau = pair.scale();
-    pair.free();
+    const tau = 4 ** four / 3 ** three;
     if (!(tau >= 1 && tau < 4))
       throw new Error(`paper-erdos-125-upper-density: scale ${tau} of pair (${three}, ${four}) off [1, 4)`);
     return [tau, h];

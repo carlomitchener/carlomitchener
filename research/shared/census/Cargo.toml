@@ -6,17 +6,21 @@ publish = false
 
 [dependencies]
 mrly-error = "0.2.0"
+gaussian = { path = "../gaussian" }
 mrly-gaussian = "0.2.0"
 mrly-json = "0.2.0"
 mrly-math = "0.2.0"
 mrly-num = "0.2.0"
 mrly-rand = "0.2.0"
-mrly-roulette = "0.2.0"
-sumset = { path = "../../../packages/rs/sumset" }
+sumset = { path = "../sumset" }
 mrly-three = "0.2.0"
 mrly-tile = "0.2.0"
 mrly-two = "0.2.0"
 mrly-zeta = "0.2.0"
 ledger = { path = "../ledger" }
+math = { path = "../math" }
+num = { path = "../num" }
+zeta = { path = "../zeta" }
+roulette = { path = "../roulette" }
 
 [workspace]

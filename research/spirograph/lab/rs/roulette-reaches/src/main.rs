@@ -1,4 +1,4 @@
-use mrly_roulette::{distinct, pencils, point, trace, track, Kind, Pencil};
+use roulette::{distinct, pencils, point, trace, track, Kind, Pencil};
 use std::f64::consts::{PI, TAU};
 
 #[derive(Clone, Copy)]
@@ -971,7 +971,7 @@ fn survey() {
     let breach: usize = rows.iter().map(|r| r.breach).sum();
     let held: usize = rows.iter().map(|r| r.held).sum();
     let bent: usize = rows.iter().map(|r| r.bent).sum();
-    println!("  {total} alignment reaches over {} circle tracks, {bent} of them tangential; every one is read against mrly_roulette::point and mrly_roulette::trace and holds, {held} of the {} transversal ones also show a class past two branches in the census, and {breach} control reaches show one", deck().len(), total - bent);
+    println!("  {total} alignment reaches over {} circle tracks, {bent} of them tangential; every one is read against roulette::point and roulette::trace and holds, {held} of the {} transversal ones also show a class past two branches in the census, and {breach} control reaches show one", deck().len(), total - bent);
     for (a, b, inside) in [
         (7usize, 3usize, true),
         (12, 7, true),

@@ -1,4 +1,4 @@
-import { Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { Grid, type Ink, type Pen } from "mrly-draw";
 
 const BASE = 19;
 const DIGITS = [0, 1, 3, 12, 14, 15];

@@ -68,7 +68,9 @@ impl Lab {
         walk.iter().fold((0, 0), |acc, &k| add(acc, self.units[k]))
     }
     fn power(&self, level: usize) -> Z {
-        self.base.power(level)
+        (0..level).fold((1, 0), |out, _| {
+            self.base.ring().mul(out, self.base.value())
+        })
     }
     fn modulus(&self) -> f64 {
         (self.base.norm() as f64).sqrt()

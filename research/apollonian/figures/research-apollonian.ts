@@ -1,6 +1,6 @@
-import * as apollonian from "@mrlyprod/apollonian";
-import * as num from "@mrlyprod/num";
-import { type Color, field, type Ink, type Pen, type Point } from "@mrlyprod/draw";
+import * as apollonian from "mrly-apollonian/wasm";
+import { type Color, field, type Ink, type Pen, type Point } from "mrly-draw";
+import * as num from "mrly-num/wasm";
 
 export const units = { apollonian, num };
 
@@ -14,9 +14,55 @@ const RULE = 2;
 const OVER = 0.035;
 
 type Circle = { k: number; x: number; y: number };
+type Quad = Circle[];
 type Packing = { seed: Circle[]; grown: Circle[]; resting: Circle[]; depth: Map<number, number> };
 
 let memo: Packing | undefined;
+
+function form(u: number[], v: number[]) {
+  const su = u.reduce((a, b) => a + b, 0);
+  const sv = v.reduce((a, b) => a + b, 0);
+  return su * sv - 2 * u.reduce((a, b, i) => a + b * v[i], 0);
+}
+
+function sound(q: Quad) {
+  const [k, x, y] = [q.map((c) => c.k), q.map((c) => c.x), q.map((c) => c.y)];
+  return (
+    form(k, k) === 0 &&
+    form(k, x) === 0 &&
+    form(k, y) === 0 &&
+    form(x, y) === 0 &&
+    form(x, x) === -4 &&
+    form(y, y) === -4
+  );
+}
+
+function reflect(q: Quad, at: number): Circle {
+  const rest = q.filter((_, i) => i !== at);
+  const sum = (key: keyof Circle) => rest.reduce((a, c) => a + c[key], 0);
+  return { k: 2 * sum("k") - q[at].k, x: 2 * sum("x") - q[at].x, y: 2 * sum("y") - q[at].y };
+}
+
+function broken(seed: Quad, cap: number) {
+  const swap = (q: Quad, at: number) => q.map((c, i) => (i === at ? reflect(q, at) : c));
+  let count = sound(seed) ? 0 : 1;
+  const stack: [Quad, number][] = [];
+  for (let i = 0; i < 4; i++) {
+    if (seed[i].k !== 0) continue;
+    if (reflect(seed, i).k <= cap) stack.push([swap(seed, i), i]);
+  }
+  for (let top = stack.pop(); top; top = stack.pop()) {
+    const [q, last] = top;
+    if (!sound(q)) count++;
+    for (let j = 0; j < 4; j++) {
+      if (j === last) continue;
+      const next = reflect(q, j);
+      if (next.k > cap || next.k <= q[j].k) continue;
+      stack.push([swap(q, j), j]);
+    }
+  }
+  return count;
+}
 
 function packing() {
   if (memo) return memo;
@@ -30,8 +76,8 @@ function packing() {
   let nodes = -1;
   for (let n = 1; n <= DEEP; n++) nodes += Number(phi[n]);
   const resting = grown.circles.filter((c) => c.y === 1);
-  if (grown.broken !== 0)
-    throw new Error(`research-apollonian: ${grown.broken} quadruples break the Descartes form, want none`);
+  const unsound = broken(seed, TOP);
+  if (unsound !== 0) throw new Error(`research-apollonian: ${unsound} quadruples break the Descartes form, want none`);
   if (grown.circles.length !== CIRCLES)
     throw new Error(`research-apollonian: ${grown.circles.length} circles, want ${CIRCLES}`);
   if (resting.length !== RESTING) throw new Error(`research-apollonian: ${resting.length} resting, want ${RESTING}`);

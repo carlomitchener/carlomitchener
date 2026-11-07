@@ -1,6 +1,6 @@
-import * as three from "@mrlyprod/three";
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
-import { plot } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
+import { plot } from "mrly-draw";
+import * as three from "mrly-three/wasm";
 
 export const units = { three };
 
@@ -12,8 +12,8 @@ const HALF = 6;
 let memo: Point[][] | undefined;
 
 function place(point: ArrayLike<number>): Point {
-  const [u, v] = three.shadow(point);
-  return [Number(u) / Math.SQRT2, Number(v) / Math.sqrt(6)];
+  const [x, y, z] = [point[0], point[1], point[2]];
+  return [(x - y) / Math.SQRT2, (x + y - 2 * z) / Math.sqrt(6)];
 }
 
 function pieces(points: Uint32Array[]) {

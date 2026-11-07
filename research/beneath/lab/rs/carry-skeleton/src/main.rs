@@ -1,4 +1,4 @@
-use mrly_automaton::memory::{allowed_windows, kappa, perron, transfer, Rule};
+use automaton::memory::{allowed_windows, kappa, perron, transfer, Rule};
 use std::collections::BTreeSet;
 use std::time::Instant;
 

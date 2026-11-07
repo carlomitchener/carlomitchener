@@ -1,4 +1,4 @@
-import { island } from "@mrlyprod/ui/kit/island.tsx";
+import { island } from "mrly-kit/island.tsx";
 import { useEffect, useState } from "react";
 import type { Data } from "./sums.ts";
 import { load, SPAN, sums } from "./sums.ts";

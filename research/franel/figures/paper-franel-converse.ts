@@ -1,5 +1,5 @@
-import * as num from "@mrlyprod/num";
-import { type Color, type Frame, frame, type Ink, type Pen, type Point, plot } from "@mrlyprod/draw";
+import { type Color, type Frame, frame, type Ink, type Pen, type Point, plot } from "mrly-draw";
+import * as num from "mrly-num/wasm";
 import census from "./paper-franel-converse.json" with { type: "json" };
 
 const BASE = 3;

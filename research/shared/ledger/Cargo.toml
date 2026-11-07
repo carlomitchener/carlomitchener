@@ -19,5 +19,12 @@ mrly-tensor = "0.2.0"
 mrly-three = "0.2.0"
 mrly-two = "0.2.0"
 witness = { path = "../witness" }
+bang = { path = "../bang" }
+counts = { path = "../counts" }
+life = { path = "../life" }
+math = { path = "../math" }
+arcs = { path = "../arcs" }
+hex = { path = "../hex" }
+three = { path = "../three" }
 
 [workspace]

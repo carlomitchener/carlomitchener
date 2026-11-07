@@ -1,5 +1,7 @@
+use counts::counting::*;
+use counts::counting::*;
+use math::factory;
 use mrly_math::code::Code;
-use mrly_math::factory;
 use mrly_sequences::counts::counting::*;
 
 pub const ALL: &[witness::Witness] = &[("fill_matches_rendered_sum", fill_matches_rendered_sum)];

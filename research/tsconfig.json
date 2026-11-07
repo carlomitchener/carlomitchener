@@ -12,10 +12,10 @@
     "allowImportingTsExtensions": true,
     "skipLibCheck": false,
     "paths": {
-      "@mrlyprod/*": ["../../../mrlyprod/mrlyprod/data/packages/rs/bindgen/js/*/index", "../../../mrlyprod/mrlyprod/data/packages/rs/bindgen/js/*"],
-      "@mrlyprod/loader": ["../../../mrlyprod/mrlyprod/packages/js/loader/src/index.ts"],
-      "@mrlyprod/draw": ["../../../mrlyprod/mrlyprod/packages/js/draw/src/index.ts"],
-      "@mrlyprod/draw/*": ["../../../mrlyprod/mrlyprod/packages/js/draw/src/*"]
+      "mrly-*/wasm": ["../../../mrlyprod/mrlyprod/data/packages/bindgen/js/*/index"],
+      "mrly-loader": ["../../../mrlyprod/mrlyprod/packages/loader/src/index.ts"],
+      "mrly-draw": ["../../../mrlyprod/mrlyprod/packages/draw/src/index.ts"],
+      "mrly-draw/*": ["../../../mrlyprod/mrlyprod/packages/draw/src/*"]
     }
   },
   "include": ["*/figures/*.ts", "shared/figures/*.ts"],

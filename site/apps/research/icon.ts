@@ -1,8 +1,8 @@
-import type { Pen, Point } from "@mrlyprod/draw";
-import { frame, Grid } from "@mrlyprod/draw";
-import { plate } from "@mrlyprod/draw/plate.ts";
-import type { Cell } from "@mrlyprod/math";
-import * as two from "@mrlyprod/two";
+import type { Pen, Point } from "mrly-draw";
+import { frame, Grid } from "mrly-draw";
+import { plate } from "mrly-draw/plate.ts";
+import type { Cell } from "mrly-math";
+import * as two from "mrly-two/wasm";
 
 export const units = { two };
 

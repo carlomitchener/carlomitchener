@@ -1,6 +1,6 @@
-import * as sequences from "@mrlyprod/sequences";
-import * as two from "@mrlyprod/two";
-import { frame as boxed, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { frame as boxed, Grid, type Ink, type Pen } from "mrly-draw";
+import * as sequences from "mrly-sequences/wasm";
+import * as two from "mrly-two/wasm";
 
 export const units = { sequences, two };
 

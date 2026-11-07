@@ -1,15 +1,50 @@
-import * as ladder from "@mrlyprod/ladder";
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
 import census from "./paper-sparse-mertens-under-grh.json" with { type: "json" };
-
-export const units = { ladder };
 
 const BASE = 7;
 const DROP = 3;
 const LEVEL = 3;
 
+function modulus(missing: number[], digits: number[], a: number, y: number) {
+  const turn = (k: number) => (Math.PI * ((k * a) % (2 * y))) / y;
+  const term = (k: number) => [Math.sin(2 * turn(k)), Math.cos(2 * turn(k))];
+  let im: number;
+  let re: number;
+  if (missing.length < digits.length) {
+    const kernel = a === 0 ? BASE : Math.sin(turn(BASE)) / Math.sin(turn(1));
+    im = kernel * Math.sin(turn(BASE - 1));
+    re = kernel * Math.cos(turn(BASE - 1));
+    for (const e of missing) {
+      const [s, c] = term(e);
+      im -= s;
+      re -= c;
+    }
+  } else {
+    im = 0;
+    re = 0;
+    for (const d of digits) {
+      const [s, c] = term(d);
+      im += s;
+      re += c;
+    }
+  }
+  return Math.hypot(re, im);
+}
+
+function rise(digits: number[], row: number[]) {
+  const missing = Array.from({ length: BASE }, (_, d) => d).filter((d) => !digits.includes(d));
+  const y = row.length * BASE;
+  return Array.from({ length: y }, (_, a) => modulus(missing, digits, a, y) * row[a % row.length]);
+}
+
+function product(digits: number[], level: number) {
+  let row = [1];
+  for (let i = 0; i < level; i++) row = rise(digits, row);
+  return row;
+}
+
 function masses(kept: number[], span: number, half: number) {
-  const weights = ladder.dissection.weights(BASE, kept, LEVEL);
+  const weights = product(kept, LEVEL);
   if (weights.length !== span)
     throw new Error(`paper-sparse-mertens-under-grh: ${weights.length} weights, want ${span}`);
   return Array.from({ length: span }, (_, i) => weights[(((i - half) % span) + span) % span]);

@@ -1,4 +1,4 @@
-import type { Color, Ink, Pen, Point } from "@mrlyprod/draw";
+import type { Color, Ink, Pen, Point } from "mrly-draw";
 import census from "./paper-half-interval-mobius.json" with { type: "json" };
 
 export const units = {};

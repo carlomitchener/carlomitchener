@@ -1,5 +1,5 @@
-import type { Pen } from "@mrlyprod/draw";
-import { plate } from "@mrlyprod/draw/plate.ts";
+import type { Pen } from "mrly-draw";
+import { plate } from "mrly-draw/plate.ts";
 import { grid } from "../../figures.ts";
 
 export const units = {};

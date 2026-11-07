@@ -1,5 +1,5 @@
-import type { Desk } from "@mrlyprod/ui/kit/rows.ts";
-import { app, KNOWN } from "@mrlyprod/ui/shell/catalog.ts";
+import { app, KNOWN } from "mrly-shell/catalog.ts";
+import type { Desk } from "mrly-shell/rows.ts";
 import { useEffect, useState } from "react";
 import { type Note, notes } from "./notes.ts";
 

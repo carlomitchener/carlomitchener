@@ -1,6 +1,6 @@
 # crate-witnesses
 
-- The `80` crate tests the research notes cite, back as witnesses against the split crates of `packages/rs`.
+- The `79` crate tests the research notes cite, back as witnesses against the split crates of `packages/rs`.
 - Source: the inline tests of `crates/math`, `crates/num` and `crates/life` at commit `559ca940`, the last to carry them.
 - One module a source file, named for the crate module it witnesses.
 - The bodies are the originals but for the crate paths. One helper differs: `counts_faces::brute` builds its `Skeleton` field by field, `Skeleton::from_counts` being private.
@@ -8,7 +8,7 @@
 
 ## RUN
 
-- `bash research/scripts/witness.sh crate-witnesses` from the repo root: `80` witnesses, about `22` s, `21.6` s of it `the_deep_slices_hold_their_spectral_exponents`.
+- `bash research/scripts/witness.sh crate-witnesses` from the repo root: `79` witnesses, about `22` s, `21.6` s of it `the_deep_slices_hold_their_spectral_exponents`.
 - `bash research/scripts/witness.sh crate-witnesses <name>` runs one.
 - `the_classics_close` names two witnesses, one in `counts_faces` and one in `counts_surface`; asking for it runs both.
 
@@ -25,7 +25,6 @@
 | `counts_ladder` | `mrly_sequences::counts::ladder` | 1 |
 | `counts_hex` | `mrly_sequences::counts::hex` | 3 |
 | `counts_surface` | `mrly_sequences::counts::surface` | 3 |
-| `life_step` | `mrly_life::step` | 1 |
 | `num_sieve` | `mrly_zeta::sieve` | 1 |
 | `radix` | `mrly_radix` | 2 |
 | `roulette` | `mrly_roulette::crossings` | 4 |

@@ -279,7 +279,7 @@ fn shift_add(out: &mut [i32], src: &[i32], h: usize, w: usize, dr: i64, dc: i64)
 pub mod witnesses {
     use super::*;
     use crate::design::standard_shapes;
-    use mrly_life::{design_mask, moore, next_grid, Boundary};
+    use mrly_life::{design_mask, moore};
     use mrly_math::code::Code;
     use mrly_rand::Rng;
 
@@ -304,22 +304,9 @@ pub mod witnesses {
     }
 
     fn mrly_counts(grid: &Grid, mask: &Grid, wrap: bool) -> Vec<i32> {
-        let boundary = if wrap {
-            Boundary::Wrap
-        } else {
-            Boundary::Constant
-        };
         let mut out = vec![0i32; grid.h * grid.w];
         for n in 0..=mask.population() {
-            let fired = next_grid(
-                &grid.cell().unwrap(),
-                &[n],
-                &[n],
-                &mask.tensor().unwrap(),
-                boundary,
-            )
-            .unwrap();
-            let fired = Grid::from_cell(&fired).unwrap();
+            let fired = grid.step(&[n], &[n], mask, wrap);
             for (o, &b) in out.iter_mut().zip(&fired.bits) {
                 if b != 0 {
                     *o = n as i32;
@@ -364,7 +351,7 @@ pub mod witnesses {
             Kernel::design(Shape::parse("code3").unwrap(), 5, 1).unwrap(),
             Kernel::copy(Shape::parse("net").unwrap(), 3, 1, 3, true).unwrap(),
             Kernel::copy(Shape::parse("htree").unwrap(), 5, 1, 3, false).unwrap(),
-            Kernel::from_grid(&Grid::from_cell(&moore().unwrap()).unwrap()).unwrap(),
+            Kernel::from_grid(&Grid::from_tensor(&moore()).unwrap()).unwrap(),
         ];
         for kernel in &cases {
             let mask = kernel.dense();

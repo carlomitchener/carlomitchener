@@ -1,4 +1,4 @@
-use mrly_roulette::{frame, trace, track, Kind, Pencil};
+use roulette::{frame, trace, track, Kind, Pencil};
 use std::f64::consts::{PI, TAU};
 
 fn rim(a: i64, b: i64, out: bool) -> i64 {

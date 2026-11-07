@@ -72,47 +72,11 @@
     "slug": "carlomitchener/carlomitchener",
     "branch": "main"
   },
-  "fonts": {
-    "faces": [
-      {
-        "family": "Noto Sans",
-        "file": "sans",
-        "axes": "wght@400..700",
-        "weight": "400 700",
-        "licence": "notosans"
-      },
-      {
-        "family": "Noto Serif",
-        "file": "serif",
-        "axes": "wght@400..700",
-        "weight": "400 700",
-        "licence": "notoserif"
-      },
-      {
-        "family": "Noto Sans Mono",
-        "file": "mono",
-        "axes": "wght@400..700",
-        "weight": "400 700",
-        "licence": "notosansmono"
-      },
-      {
-        "family": "Noto Sans Math",
-        "file": "math",
-        "weight": "400",
-        "licence": "notosansmath"
-      },
-      {
-        "family": "Noto Color Emoji",
-        "file": "emoji",
-        "weight": "400",
-        "licence": "notocoloremoji"
-      }
-    ]
-  },
   "marks": {
     "touch": "/apple-touch-icon.png"
   },
   "desk": "sky",
-  "designs": ["designs/sky"],
-  "roots": ["apps"]
+  "themes": ["./themes/sky"],
+  "roots": ["apps"],
+  "wasm": { "design": ["two"] }
 }

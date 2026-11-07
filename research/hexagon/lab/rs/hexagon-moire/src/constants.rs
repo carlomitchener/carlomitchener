@@ -1,7 +1,7 @@
 use crate::lattice::{Family, FAMILIES};
 use crate::star::{law, slice};
 use crate::sums::odds;
-use mrly_num::series::{beta, chi4, dirichlet, zeta, CATALAN};
+use num::series::{beta, chi4, dirichlet, zeta, CATALAN};
 use num_bigint::BigInt;
 use num_rational::{BigRational, Ratio};
 use std::f64::consts::PI;

@@ -12,7 +12,7 @@ wheels = [
 ]
 
 [[package]]
-name = "mrly"
+name = "mrly-py"
 version = "0.2.0"
 source = { editable = "../../../mrlyprod/mrlyprod/packages/py" }
 dependencies = [
@@ -36,7 +36,7 @@ dependencies = [
 
 [package.dev-dependencies]
 mrly = [
-    { name = "mrly" },
+    { name = "mrly-py" },
 ]
 
 [package.metadata]
@@ -49,7 +49,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-mrly = [{ name = "mrly", editable = "../../../mrlyprod/mrlyprod/packages/py" }]
+mrly = [{ name = "mrly-py", editable = "../../../mrlyprod/mrlyprod/packages/py" }]
 
 [[package]]
 name = "numpy"

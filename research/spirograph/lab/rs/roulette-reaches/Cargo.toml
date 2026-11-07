@@ -3,6 +3,6 @@ name = "roulette-reaches"
 edition = "2021"
 
 [dependencies]
-mrly-roulette = "0.2.0"
+roulette = { path = "../../../../shared/roulette" }
 
 [workspace]

@@ -1,4 +1,4 @@
-use mrly_moire::pairs::{correlation, sampled, witness};
+use moire::pairs::{correlation, sampled, witness};
 use mrly_num::factor::gcd;
 use mrly_num::prime::is_prime;
 

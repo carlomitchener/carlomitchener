@@ -1,5 +1,5 @@
 use crate::sums::{mean, odds};
-use mrly_num::series::chi4;
+use num::series::chi4;
 
 fn triangle(value: f64) -> f64 {
     let rest = value.rem_euclid(2.0);

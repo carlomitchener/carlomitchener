@@ -1,6 +1,6 @@
-import * as num from "@mrlyprod/num";
-import * as two from "@mrlyprod/two";
-import { Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { Grid, type Ink, type Pen } from "mrly-draw";
+import * as num from "mrly-num/wasm";
+import * as two from "mrly-two/wasm";
 
 export const units = { num, two };
 

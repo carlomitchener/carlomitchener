@@ -1,5 +1,5 @@
-import * as color from "@mrlyprod/color";
-import { frame as box, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import * as color from "mrly-color/wasm";
+import { frame as box, Grid, type Ink, type Pen } from "mrly-draw";
 import census from "./research-tilings.json" with { type: "json" };
 
 const LEVELS = 3;

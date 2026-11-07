@@ -1,4 +1,5 @@
-use mrly_roulette::*;
+use roulette::*;
+use roulette::*;
 use std::f64::consts::{PI, TAU};
 
 pub const ALL: &[witness::Witness] = &[
@@ -103,7 +104,7 @@ fn the_mean_winding_is_the_signed_areas_over_the_disc() {
         format!("{:.6} {:.6}", bounds.radius, bounds.hole),
         "5.800000 2.200000"
     );
-    let walled = mrly_roulette::cover(&seven, &fills, true, 2, 256).unwrap();
+    let walled = roulette::cover(&seven, &fills, true, 2, 256).unwrap();
     assert_eq!(walled.mask.len(), 256 * 256);
     assert_eq!(
         format!(

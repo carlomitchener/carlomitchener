@@ -1,7 +1,7 @@
+use counts::faces::*;
+use counts::surface::exposure_of_tile;
+use math::factory;
 use mrly_math::code::Code;
-use mrly_math::factory;
-use mrly_sequences::counts::exposure_of_tile;
-use mrly_sequences::counts::faces::*;
 use mrly_tensor::Tensor;
 use mrly_three;
 use mrly_two;

@@ -1,4 +1,4 @@
 {
-  "sections": [{ "name": "Carlo", "apps": ["about", "avatar", "stats"] }],
+  "sections": [{ "name": "Carlo", "apps": ["about", "avatar", "research", "stats"] }],
   "dock": [["about", "avatar", "stats"]]
 }

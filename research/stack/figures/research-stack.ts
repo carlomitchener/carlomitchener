@@ -1,5 +1,5 @@
-import * as gaussian from "@mrlyprod/gaussian";
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
+import * as gaussian from "mrly-gaussian/wasm";
 import census from "./research-stack.json" with { type: "json" };
 
 const RING = "Gaussian";

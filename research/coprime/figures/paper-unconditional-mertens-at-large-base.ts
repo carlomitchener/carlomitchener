@@ -1,8 +1,7 @@
-import * as ladder from "@mrlyprod/ladder";
-import * as num from "@mrlyprod/num";
-import type { Color, Ink, Pen, Point } from "@mrlyprod/draw";
+import type { Color, Ink, Pen, Point } from "mrly-draw";
+import * as num from "mrly-num/wasm";
 
-export const units = { ladder, num };
+export const units = { num };
 
 const BASE = 10;
 const LEVEL = 3;
@@ -12,17 +11,59 @@ const NAMES = ["A", "B", "C1", "C2"];
 
 let memo: number[] | undefined;
 
+function fraction(a: number, y: number, cap: number): [number, number] {
+  let [p0, q0, p1, q1] = [0, 1, 1, 0];
+  let [n, d] = [a, y];
+  let best: [number, number] = [0, 1];
+  while (d > 0) {
+    const c = Math.floor(n / d);
+    const [p2, q2] = [c * p1 + p0, c * q1 + q0];
+    if (q2 > cap) break;
+    [p0, q0, p1, q1] = [p1, q1, p2, q2];
+    best = [p2, q2];
+    [n, d] = [d, n - c * d];
+  }
+  return best;
+}
+
+function cap(y: number) {
+  const cube = BigInt(y) ** 3n;
+  let c = Math.floor(y ** 0.6);
+  while (BigInt(c + 1) ** 5n <= cube) c++;
+  while (c > 0 && BigInt(c) ** 5n > cube) c--;
+  return c;
+}
+
+function smooth(d: number) {
+  for (;;) {
+    const g = Number(num.factor.gcd(d, BASE));
+    if (g === 1) return d === 1;
+    while (d % g === 0) d /= g;
+  }
+}
+
+function classify(y: number): number[] {
+  const top = cap(y);
+  return Array.from({ length: y }, (_, a) => {
+    const [l, d] = fraction(a, y, top);
+    const h = Math.abs(a * d - l * y);
+    if (BigInt(d) ** 5n >= BigInt(y) ** 2n) return 0;
+    if (d < Z && h < Z) return smooth(d) ? 3 : 2;
+    return 1;
+  });
+}
+
 function regions() {
   if (memo) return memo;
   const y = BASE ** LEVEL;
-  const found = ladder.dissection.regions(BASE, LEVEL, Z).map((name) => NAMES.indexOf(name));
+  const found = classify(y);
   if (found.length !== y || found.includes(-1))
     throw new Error(`paper-unconditional-mertens-at-large-base: ${found.length} regions, want ${y} named ${NAMES}`);
-  const cap = ladder.dissection.cap(y);
+  const top = cap(y);
   for (let a = 0; a < y; a++) {
-    const [l, d] = ladder.dissection.fraction(a, y, cap);
-    const h = BigInt(a) * d - l * BigInt(y);
-    if (d > cap || (h < 0n ? -h : h) * cap > BigInt(y) || num.factor.gcd(l, d) !== "1")
+    const [l, d] = fraction(a, y, top);
+    const h = Math.abs(a * d - l * y);
+    if (d > top || h * top > y || num.factor.gcd(l, d) !== "1")
       throw new Error(
         `paper-unconditional-mertens-at-large-base: frequency ${a} has fraction ${l}/${d} off the Dirichlet bound`,
       );

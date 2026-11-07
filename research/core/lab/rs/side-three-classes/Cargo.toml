@@ -5,5 +5,6 @@ edition = "2021"
 [dependencies]
 mrly-bang = "0.2.0"
 mrly-math = "0.2.0"
+bang = { path = "../../../../shared/bang" }
 
 [workspace]

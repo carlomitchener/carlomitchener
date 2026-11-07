@@ -1,6 +1,6 @@
-import * as crop from "@mrlyprod/crop";
-import * as two from "@mrlyprod/two";
-import { Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import * as crop from "mrly-crop/wasm";
+import { Grid, type Ink, type Pen } from "mrly-draw";
+import * as two from "mrly-two/wasm";
 
 export const units = { crop, two };
 

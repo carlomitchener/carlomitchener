@@ -7,8 +7,9 @@ publish = false
 mrly-math = "0.2.0"
 mrly-moire = "0.2.0"
 mrly-num = "0.2.0"
-mrly-roulette = "0.2.0"
 mrly-spin = "0.2.0"
 witness = { path = "../witness" }
+moire = { path = "../moire" }
+roulette = { path = "../roulette" }
 
 [workspace]

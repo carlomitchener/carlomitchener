@@ -1,4 +1,4 @@
-import { Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { Grid, type Ink, type Pen } from "mrly-draw";
 import census from "./research-integers.json" with { type: "json" };
 
 const WINDOW = 10000;

@@ -1,16 +1,16 @@
 use crate::row::{Row, SECONDS, TERMS};
-use mrly_bang::baseq;
+use bang::baseq;
+use counts;
+use counts::surface::Exposure;
+use hex;
+use math::factory;
 use mrly_error::Result;
 use mrly_math::code::Code;
-use mrly_math::factory;
 use mrly_math::factory::code_to_corners;
-use mrly_sequences::counts;
-use mrly_sequences::counts::Exposure;
-use mrly_hex as hex;
-use mrly_three as three;
 use mrly_two as two;
 use std::collections::{HashMap, HashSet};
 use std::time::{Duration, Instant};
+use three;
 
 pub const SPACES: [(usize, usize); 9] = [
     (1, 2),

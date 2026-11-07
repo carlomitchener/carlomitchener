@@ -1,8 +1,8 @@
 use crate::lattice::{Family, Rule, FAMILIES};
 use crate::sums::{mean, odds};
-use mrly_num::series::{beta, dirichlet, CATALAN, EULER};
 use mrly_hex::geometry::cut;
 use mrly_hex::{FILL, GRID};
+use num::series::{beta, dirichlet, CATALAN, EULER};
 use num_rational::Ratio;
 
 pub struct Slice {

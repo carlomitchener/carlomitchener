@@ -1,8 +1,7 @@
-import * as num from "@mrlyprod/num";
-import * as two from "@mrlyprod/two";
-import { Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { Grid, type Ink, type Pen } from "mrly-draw";
+import * as two from "mrly-two/wasm";
 
-export const units = { num, two };
+export const units = { two };
 
 const SIDE = 32;
 const STRONG = "286747428434478734107892712789";
@@ -148,7 +147,7 @@ function designs(): Design[] {
 }
 
 function brackets() {
-  const zeta = (dim: number) => (dim === 2 ? num.series.BASEL() : num.series.APERY());
+  const zeta = (dim: number) => (dim === 2 ? Math.PI ** 2 / 6 : 1.202056903159594);
   for (const [name, base, dim, corners, [top, bottom], printed] of designs()) {
     const fill = corners.length;
     const good = corners.filter((v) => gcd(v.reduce(gcd, 0), base) === 1).length;

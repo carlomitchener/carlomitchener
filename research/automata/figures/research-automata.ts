@@ -1,5 +1,5 @@
-import * as wolfram from "@mrlyprod/wolfram";
-import type { Color, Ink, Pen } from "@mrlyprod/draw";
+import type { Color, Ink, Pen } from "mrly-draw";
+import * as wolfram from "mrly-wolfram/wasm";
 
 export const units = { wolfram };
 

@@ -11,13 +11,13 @@ dependencies = [
 ]
 
 [dependency-groups]
-mrly = ["mrly"]
+mrly = ["mrly-py"]
 
 [tool.uv]
 package = false
 
 [tool.uv.sources]
-mrly = { path = "../../../mrlyprod/mrlyprod/packages/py", editable = true }
+mrly-py = { path = "../../../mrlyprod/mrlyprod/packages/py", editable = true }
 
 [tool.ruff]
 target-version = "py313"

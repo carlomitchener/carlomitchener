@@ -1,0 +1,13 @@
+[package]
+name = "two"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[dependencies]
+mrly-error = "0.2.0"
+mrly-graph = "0.2.0"
+mrly-math = "0.2.0"
+mrly-two = "0.2.0"
+
+[workspace]

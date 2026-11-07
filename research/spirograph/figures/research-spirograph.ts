@@ -1,6 +1,6 @@
-import * as roulette from "@mrlyprod/roulette";
-import * as two from "@mrlyprod/two";
-import { field, type Ink, type Pen, type Point, plot } from "@mrlyprod/draw";
+import { field, type Ink, type Pen, type Point, plot } from "mrly-draw";
+import * as roulette from "mrly-roulette/wasm";
+import * as two from "mrly-two/wasm";
 import census from "./research-spirograph.json" with { type: "json" };
 
 type Wheel = { bounds: roulette.Disc; shape: roulette.Cover; points: Float32Array };
@@ -27,6 +27,14 @@ export const units = { roulette, two };
 
 let memo: Wheel | undefined;
 
+function nodes(path: roulette.Track, pens: roulette.Pencil[], curves: number) {
+  if (path.kind !== "in" && path.kind !== "out") return undefined;
+  const [a, b] = path.ratio;
+  const window = Math.min(Math.abs(a / b + path.side), 1);
+  if (pens.some((p) => !(Math.hypot(p.x, p.y) > 0 && Math.hypot(p.x, p.y) < window))) return undefined;
+  return 2 * a * b * ((curves * (curves - 1)) / 2) + curves * a * (b - 1);
+}
+
 function wheel(): Wheel {
   if (memo) return memo;
   const tile = two.create(CODE, SIDE, LEVEL, 0, BASE);
@@ -34,9 +42,8 @@ function wheel(): Wheel {
   const pens = roulette.pencils(tile.types, tile.shape[1], tile.shape[0], "fill", REACH, 0, 1);
   const curves = roulette.distinct(path, pens, true);
   if (curves !== CURVES) throw new Error(`research-spirograph: ${curves} curves, want ${CURVES}`);
-  const law = roulette.nodes(path, pens, true);
-  if (law !== BigInt(CROSSINGS))
-    throw new Error(`research-spirograph: the law counts ${law} crossings, want ${CROSSINGS}`);
+  const law = nodes(path, pens, curves);
+  if (law !== CROSSINGS) throw new Error(`research-spirograph: the law counts ${law} crossings, want ${CROSSINGS}`);
   const points = roulette.trace(path, pens, SAMPLES);
   if (points.length !== 2 * CURVES * SAMPLES)
     throw new Error(`research-spirograph: trace of ${points.length} numbers, want ${2 * CURVES * SAMPLES}`);

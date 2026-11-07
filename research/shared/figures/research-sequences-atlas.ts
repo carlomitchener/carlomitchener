@@ -1,4 +1,4 @@
-import { frame, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { frame, Grid, type Ink, type Pen } from "mrly-draw";
 import census from "./research-sequences-atlas.json" with { type: "json" };
 
 export const units = {};

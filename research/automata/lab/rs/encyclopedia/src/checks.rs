@@ -4,7 +4,6 @@ use crate::mask::{Factor, Kernel};
 use crate::readings::readings;
 use crate::recipe::{Mode, Recipe};
 use crate::{run_named, Grammar, Shape};
-use mrly_life::{next_grid, Boundary};
 use mrly_rand::Rng;
 
 pub const ALL: &[witness::Witness] = &[
@@ -71,20 +70,7 @@ fn noise(h: usize, w: usize, seed: u64, density: f64) -> Grid {
 }
 
 fn reference(grid: &Grid, birth: &[usize], survive: &[usize], mask: &Grid, wrap: bool) -> Grid {
-    let boundary = if wrap {
-        Boundary::Wrap
-    } else {
-        Boundary::Constant
-    };
-    let next = next_grid(
-        &grid.cell().unwrap(),
-        birth,
-        survive,
-        &mask.tensor().unwrap(),
-        boundary,
-    )
-    .unwrap();
-    Grid::from_cell(&next).unwrap()
+    grid.step(birth, survive, mask, wrap)
 }
 
 fn pentomino() -> Grid {

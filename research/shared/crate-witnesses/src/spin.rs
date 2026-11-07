@@ -1,5 +1,7 @@
-use mrly_math::atoms;
+use math::atoms;
 use mrly_spin::*;
+use spin::*;
+use spin::*;
 
 pub const ALL: &[witness::Witness] = &[
     (

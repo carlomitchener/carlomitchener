@@ -1,6 +1,6 @@
-import * as bang from "@mrlyprod/bang";
-import * as two from "@mrlyprod/two";
-import { frame, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import * as bang from "mrly-bang/wasm";
+import { frame, Grid, type Ink, type Pen } from "mrly-draw";
+import * as two from "mrly-two/wasm";
 
 export const units = { bang, two };
 
@@ -8,7 +8,8 @@ export default function draw(pen: Pen, ink: Ink) {
   const area = pen.frame(0.08);
   const universe = bang.bang(2);
   if (universe.total !== 16) throw new Error(`research-core: ${universe.total} codes, want 16`);
-  if (universe.distinct() !== 6) throw new Error(`research-core: ${universe.distinct()} orbits, want 6`);
+  if (Number(bang.baseq.distinct_designs(2, 2)) !== 6)
+    throw new Error(`research-core: ${Number(bang.baseq.distinct_designs(2, 2))} orbits, want 6`);
   const canonical = universe.canonical().map((d) => String(d.i));
   if (canonical.join() !== "0,1,3,6,7,15") throw new Error(`research-core: canonical ${canonical}, want 0,1,3,6,7,15`);
   const gutter = area.w * 0.03;

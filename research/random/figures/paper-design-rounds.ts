@@ -1,4 +1,4 @@
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
 
 const SIDE = 4;
 const CELLS = SIDE * SIDE;

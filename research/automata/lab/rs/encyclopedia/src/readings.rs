@@ -1,8 +1,9 @@
 use crate::engine::{Frame, Run, Stop};
 use crate::grid::Grid;
+use life::metrics::churn;
+use life::metrics::entropy;
 use mrly_error::Result;
 use mrly_json::{json, Json};
-use mrly_life::{churn, entropy};
 
 pub fn growth(boxes: &[u32]) -> f64 {
     let points: Vec<(f64, f64)> = boxes

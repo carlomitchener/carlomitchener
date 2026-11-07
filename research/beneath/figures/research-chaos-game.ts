@@ -1,6 +1,6 @@
-import * as math from "@mrlyprod/math";
-import * as radix from "@mrlyprod/radix";
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
+import * as math from "mrly-math/wasm";
+import * as radix from "mrly-radix/wasm";
 
 export const units = { math, radix };
 

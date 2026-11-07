@@ -1,6 +1,6 @@
-import * as three from "@mrlyprod/three";
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
-import { iso } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
+import { iso } from "mrly-draw";
+import * as three from "mrly-three/wasm";
 
 export const units = { three };
 

@@ -1,5 +1,6 @@
-use mrly_bang::baseq::{fill_from_corners, group, orbit, representatives};
-use mrly_bang::universe::permutations;
+use bang::baseq::fill_from_corners;
+use bang::universe::permutations;
+use mrly_bang::baseq::{group, orbit, representatives};
 use mrly_math::code::Code;
 use mrly_math::factory::code_to_corners;
 use mrly_math::factory::residue_corners;

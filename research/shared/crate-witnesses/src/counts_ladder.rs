@@ -1,4 +1,4 @@
-use mrly_sequences::counts::ladder::*;
+use counts::ladder::*;
 
 pub const ALL: &[witness::Witness] = &[(
     "the_three_dimensional_block_is_the_published_anchor",

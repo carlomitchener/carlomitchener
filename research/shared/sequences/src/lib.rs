@@ -6,7 +6,7 @@ pub mod page;
 pub mod row;
 pub mod write;
 
-use mrly_bang::baseq;
+use bang::baseq;
 use mrly_error::Result;
 use row::Row;
 use std::path::PathBuf;

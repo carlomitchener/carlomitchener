@@ -1,5 +1,5 @@
-use mrly_three::sponge::{deep, dimension, distance, exact, profile, COVER, EDGE};
 use std::time::Instant;
+use three::sponge::{deep, dimension, distance, exact, profile, COVER, EDGE};
 
 const PLUS: f64 = 7.0 / 27.0;
 const SIDE: usize = 40;

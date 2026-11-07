@@ -1,5 +1,5 @@
-import type { Opts, View } from "@mrlyprod/ui/kit/run.ts";
-import { type Spec, tidy } from "@mrlyprod/ui/kit/spec.ts";
+import type { Opts, View } from "mrly-kit/run.ts";
+import { type Spec, tidy } from "mrly-kit/spec.ts";
 import { sky } from "../../../data/site/avatar.js";
 
 export type Knobs = { mood: string; time: string; season: string; weather: string; auto: number };

@@ -7,7 +7,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!node_modules", "!**/*.svg", "!public/stats.json", "!site.json"]
+    "includes": ["**", "!node_modules", "!wasm", "!**/*.svg", "!public/stats.json", "!site.json"]
   },
   "formatter": {
     "indentStyle": "space",

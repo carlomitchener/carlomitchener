@@ -1,8 +1,9 @@
-import * as bang from "@mrlyprod/bang";
-import * as math from "@mrlyprod/math";
-import { Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { Grid, type Ink, type Pen } from "mrly-draw";
+import * as math from "mrly-math/wasm";
+import * as tensor from "mrly-tensor/wasm";
+import { constantFunctional, rates } from "../../shared/ts/word.ts";
 
-export const units = { bang, math };
+export const units = { math, tensor };
 
 const CODES = 15;
 const LENGTH = 32;
@@ -20,9 +21,9 @@ function alternating(a: number, b: number) {
 
 function verdict(a: number, b: number): [boolean, boolean] {
   const letters = alternating(a, b);
-  const rates = bang.word.rates(letters);
-  const [component, fill] = rates[rates.length - 1];
-  const constant = bang.word.constant_functional(letters);
+  const curve = rates(letters);
+  const [component, fill] = curve[curve.length - 1];
+  const constant = constantFunctional(letters);
   return [Math.abs(component - fill) < SLACK, Math.abs(component - constant) < SLACK];
 }
 

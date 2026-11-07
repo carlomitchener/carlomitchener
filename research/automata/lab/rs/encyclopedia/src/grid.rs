@@ -10,6 +10,36 @@ pub struct Grid {
 }
 
 impl Grid {
+    pub fn step(&self, birth: &[usize], survive: &[usize], mask: &Grid, wrap: bool) -> Grid {
+        let (ch, cw) = ((mask.h / 2) as isize, (mask.w / 2) as isize);
+        let mut out = Grid::new(self.h, self.w);
+        for r in 0..self.h {
+            for c in 0..self.w {
+                let mut count = 0usize;
+                for i in 0..mask.h {
+                    for j in 0..mask.w {
+                        if mask.get(i, j) == 0 {
+                            continue;
+                        }
+                        let mut y = r as isize + i as isize - ch;
+                        let mut x = c as isize + j as isize - cw;
+                        if wrap {
+                            y = y.rem_euclid(self.h as isize);
+                            x = x.rem_euclid(self.w as isize);
+                        } else if y < 0 || x < 0 || y >= self.h as isize || x >= self.w as isize {
+                            continue;
+                        }
+                        count += usize::from(self.get(y as usize, x as usize));
+                    }
+                }
+                let alive = self.get(r, c) != 0;
+                let rule = if alive { survive } else { birth };
+                out.bits[r * self.w + c] = u8::from(rule.contains(&count));
+            }
+        }
+        out
+    }
+
     pub fn new(h: usize, w: usize) -> Grid {
         Grid {
             h,

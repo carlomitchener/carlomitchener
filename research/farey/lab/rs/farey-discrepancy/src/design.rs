@@ -1,5 +1,5 @@
 use mrly_num::factor::mobius_sieve;
-use mrly_num::factor::totients;
+use num::factor::totients;
 
 pub struct Design {
     pub name: &'static str,

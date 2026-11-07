@@ -1,5 +1,5 @@
-import type { Color, Ink, Pen } from "@mrlyprod/draw";
-import { Grid } from "@mrlyprod/draw";
+import type { Color, Ink, Pen } from "mrly-draw";
+import { Grid } from "mrly-draw";
 import census from "./research-franel.json" with { type: "json" };
 
 export const units = {};

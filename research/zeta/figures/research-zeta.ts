@@ -1,4 +1,4 @@
-import { type Frame, frame, type Ink, type Pen, type Point, plot } from "@mrlyprod/draw";
+import { type Frame, frame, type Ink, type Pen, type Point, plot } from "mrly-draw";
 import census from "./research-zeta.json" with { type: "json" };
 
 type Panel = { columns: number[]; ordinates: number[]; family: number[][]; teeth: number[][]; hollow: number[][] };

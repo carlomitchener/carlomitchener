@@ -1,10 +1,13 @@
-use mrly_bang::universe::{orbit, total_exposure, touches_every_corner};
+use bang::universe::{total_exposure, touches_every_corner};
+use mrly_bang::universe::orbit;
 use mrly_math::code::Code;
 use mrly_three::census::*;
 use mrly_three::designs;
-use mrly_three::vertices;
 use mrly_two;
 use std::collections::BTreeSet;
+use three::census::*;
+use three::census::*;
+use three::graph::vertices;
 
 pub const ALL: &[witness::Witness] = &[
     (
@@ -209,6 +212,6 @@ fn the_net_falls_short_of_the_grid_corners() {
     }
     for k in 1..17usize {
         let flat = mrly_two::net(2 * k - 1, 1).unwrap();
-        assert_eq!(mrly_two::vertices(&flat).unwrap(), 4 * k * k - 4, "k={k}");
+        assert_eq!(two::vertices(&flat).unwrap(), 4 * k * k - 4, "k={k}");
     }
 }

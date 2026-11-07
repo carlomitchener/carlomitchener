@@ -4,6 +4,6 @@ edition = "2021"
 
 [dependencies]
 mrly-num = "0.2.0"
-mrly-roulette = "0.2.0"
+roulette = { path = "../../../../shared/roulette" }
 
 [workspace]

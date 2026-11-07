@@ -1,5 +1,5 @@
-import * as two from "@mrlyprod/two";
-import { frame as box, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { frame as box, Grid, type Ink, type Pen } from "mrly-draw";
+import * as two from "mrly-two/wasm";
 
 export const units = { two };
 

@@ -1,5 +1,4 @@
-import * as ladder from "@mrlyprod/ladder";
-import { type Ink, type Pen, type Point, plot } from "@mrlyprod/draw";
+import { type Ink, type Pen, type Point, plot } from "mrly-draw";
 import census from "./research-dimensions.json" with { type: "json" };
 
 const RE_LO = -1;
@@ -8,17 +7,11 @@ const IM_REACH = 40;
 const CONTROL = 21;
 const LATTICE = 13;
 
-export const units = { ladder };
-
 function lattice(): { real: number; poles: Point[] } {
-  const design = new ladder.Design(3, [0, 1]);
-  const real = design.abscissa();
+  const real = Math.log(2) / Math.log(3);
+  const period = (2 * Math.PI) / Math.log(3);
   const poles: Point[] = [];
-  for (let m = -6; m <= 6; m++) {
-    const pole = design.pole(0, m);
-    poles.push([pole.re, pole.im]);
-  }
-  design.free();
+  for (let m = -6; m <= 6; m++) poles.push([real, period * m]);
   if (poles.length !== LATTICE) throw new Error(`research-dimensions: ${poles.length} lattice poles, want ${LATTICE}`);
   return { real, poles };
 }

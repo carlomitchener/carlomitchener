@@ -1,6 +1,6 @@
-import { download, text } from "@mrlyprod/ui/kit/export.ts";
-import type { Opts, View } from "@mrlyprod/ui/kit/run.ts";
-import { type Spec, tidy, type Value } from "@mrlyprod/ui/kit/spec.ts";
+import { download, text } from "mrly-kit/export.ts";
+import type { Opts, View } from "mrly-kit/run.ts";
+import { type Spec, tidy, type Value } from "mrly-kit/spec.ts";
 import { Avatar, BIRD, PALETTE } from "../../../data/site/avatar.js";
 
 type Glow = { shape: string; sigma: number; radius?: number };

@@ -2,9 +2,10 @@ use census::save;
 use mrly_error::Result;
 use mrly_json::json;
 use mrly_math::code::Code;
-use mrly_roulette::crossings as roulette;
-use mrly_roulette::{distinct, nodes as law, pencils, trace, track, Pencil, Track};
 use mrly_two as two;
+use roulette::crossings;
+use roulette::nodes as law;
+use roulette::{distinct, pencils, trace, track, Pencil, Track};
 use std::collections::HashSet;
 
 const NAME: &str = "research-spirograph";
@@ -29,7 +30,7 @@ fn main() -> Result<()> {
     assert_eq!(distinct(&path, &pens, true), CURVES);
     assert_eq!(law(&path, &pens, true), Some(CROSSINGS as u64));
     assert_eq!(
-        roulette::nodes(&path, &pens, SAMPLES, TOL)?.total(),
+        crossings::nodes(&path, &pens, SAMPLES, TOL)?.total(),
         CROSSINGS
     );
     let marks = crossings(&path, &pens, SAMPLES)?;

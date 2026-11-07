@@ -12,6 +12,8 @@ mrly-rand = "0.2.0"
 mrly-tensor = "0.2.0"
 mrly-two = "0.2.0"
 witness = { path = "../../../../shared/witness" }
+life = { path = "../../../../shared/life" }
+math = { path = "../../../../shared/math" }
 
 [profile.release]
 opt-level = 3

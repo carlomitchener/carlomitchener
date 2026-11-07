@@ -1,8 +1,9 @@
-import * as bang from "@mrlyprod/bang";
-import * as math from "@mrlyprod/math";
-import { frame as box, type Color, type Frame, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { frame as box, type Color, type Frame, Grid, type Ink, type Pen } from "mrly-draw";
+import * as math from "mrly-math/wasm";
+import * as tensor from "mrly-tensor/wasm";
+import { components, magic } from "../../shared/ts/word.ts";
 
-export const units = { bang, math };
+export const units = { math, tensor };
 
 const LENGTH = 6;
 const SIDE = 64;
@@ -60,12 +61,12 @@ function pieces(cells: ArrayLike<number>) {
 }
 
 function panel(pen: Pen, frame: Frame, letters: ReturnType<typeof letter>[], inks: Color[], rule: number, ink: Ink) {
-  const picture = math.factory.magic(letters);
+  const picture = magic(letters);
   if (picture.shape.join() !== `${SIDE},${SIDE}`)
     throw new Error(`paper-kronecker-word-order: picture ${picture.shape}, want ${SIDE} square`);
   const { label, count, filled } = pieces(picture.data);
   if (filled !== CELLS) throw new Error(`paper-kronecker-word-order: ${filled} cells, want ${CELLS}`);
-  const claimed = String(bang.word.components(letters));
+  const claimed = String(components(letters));
   if (claimed !== String(count))
     throw new Error(`paper-kronecker-word-order: crate counts ${claimed} pieces, the drawing ${count}`);
   const edge = frame.inset(-rule * 2);

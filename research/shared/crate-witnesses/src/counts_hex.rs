@@ -1,3 +1,5 @@
+use counts::hex::*;
+use counts::hex::*;
 use mrly_math::code::Code;
 use mrly_num::prime::is_prime;
 use mrly_sequences::counts::hex::*;

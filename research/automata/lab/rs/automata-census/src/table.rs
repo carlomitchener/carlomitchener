@@ -2,7 +2,7 @@ use crate::groups::{group, orbit, Elem};
 use crate::rules::RULES;
 use mrly_bang::universe::degree;
 use mrly_math::code::Code;
-use mrly_num::boolean::walsh_spectrum;
+use num::boolean::walsh_spectrum;
 use std::collections::BTreeSet;
 
 pub fn levelset(code: usize) -> bool {

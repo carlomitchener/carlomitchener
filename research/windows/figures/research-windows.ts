@@ -1,5 +1,5 @@
-import * as math from "@mrlyprod/math";
-import type { Color, Ink, Pen } from "@mrlyprod/draw";
+import type { Color, Ink, Pen } from "mrly-draw";
+import * as math from "mrly-math/wasm";
 import census from "./research-windows.json" with { type: "json" };
 
 export const units = { math };

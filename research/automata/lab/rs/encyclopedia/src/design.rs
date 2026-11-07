@@ -1,8 +1,9 @@
 use crate::grid::Grid;
+use math::catalog::ANTIS_2D;
 use mrly_bang::universe::orbit;
 use mrly_error::value_error;
 use mrly_error::Result;
-use mrly_math::catalog::{Design, ANTIS_2D, CLASSICS_2D};
+use mrly_math::catalog::{Design, CLASSICS_2D};
 use mrly_math::code::Code;
 use mrly_two as two;
 

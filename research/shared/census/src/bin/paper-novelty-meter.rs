@@ -1,9 +1,9 @@
 use census::save;
 use mrly_error::Result;
 use mrly_json::json;
-use mrly_num::factor::totients;
-use mrly_zeta::{novelty_main, sharp_novelty, smoothed_novelty};
+use num::factor::totients;
 use std::f64::consts::PI;
+use zeta::{novelty_main, sharp_novelty, smoothed_novelty};
 
 const NAME: &str = "paper-novelty-meter";
 const REACH: usize = 3_000_000;

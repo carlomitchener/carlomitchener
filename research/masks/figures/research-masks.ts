@@ -1,4 +1,4 @@
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
 import census from "./research-masks.json" with { type: "json" };
 
 const MARGIN = 0.08;

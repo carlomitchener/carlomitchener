@@ -30,7 +30,7 @@ pub fn variant(zeros: bool, ones: bool) -> Vec<Named> {
         .filter(|source| !source.is_random())
         .map(|source| Named {
             name: source.name(),
-            oeis: source.oeis(),
+            oeis: life::source::oeis(source),
             source,
             zeros,
             ones,

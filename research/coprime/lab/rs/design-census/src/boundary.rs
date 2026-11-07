@@ -1,5 +1,6 @@
 use crate::coprime::{bracket, foreign, index};
-use mrly_bang::baseq::{group_order, representatives};
+use bang::baseq::group_order;
+use mrly_bang::baseq::representatives;
 use mrly_math::code::Code;
 use mrly_math::factory::{code_to_corners, residue_corners};
 use std::collections::BTreeMap;

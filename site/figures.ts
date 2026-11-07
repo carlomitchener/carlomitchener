@@ -1,5 +1,5 @@
-import type { Pen, Point } from "@mrlyprod/draw";
-import type { Color } from "@mrlyprod/draw/ink.ts";
+import type { Pen, Point } from "mrly-draw";
+import type { Color } from "mrly-draw/ink.ts";
 import { Avatar, BIRD, PALETTE } from "../data/site/avatar.js";
 
 type Box = { center: () => Point; radius: () => number };

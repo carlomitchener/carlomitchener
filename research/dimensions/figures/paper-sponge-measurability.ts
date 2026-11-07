@@ -1,5 +1,5 @@
-import * as three from "@mrlyprod/three";
-import { type Frame, field, frame, Grid, type Ink, type Pen, plot } from "@mrlyprod/draw";
+import { type Frame, field, frame, Grid, type Ink, type Pen, plot } from "mrly-draw";
+import * as three from "mrly-three/wasm";
 
 export const units = { three };
 
@@ -17,14 +17,177 @@ const TUBES = [
   [1 / 8, 0.234186414, 0.234701259],
 ];
 
-const sponge = three.sponge;
-const point = new Float64Array([0, 0, 0.5]);
+const EDGE = 1 / 6;
+const COVER = Math.SQRT2 / 6;
+const PLUS = 7 / 27;
+const DEPTH = 40;
+const DIGITS = 40;
+const FLOOR = 32;
+const REACH = 14;
+const WEIGHT = [3, 2, 3];
+const RUNNING = [0, 3, 5];
 
-function dist(x: number, y: number) {
-  point[0] = x;
-  point[1] = y;
-  return sponge.distance(point);
+const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
+
+function split(x: number): [number, number] {
+  const digit = clamp(Math.floor(3 * x), 0, 2);
+  return [digit, clamp(3 * x - digit, 0, 1)];
 }
+
+function carpet(across: number, along: number) {
+  let scale = 1 / 3;
+  for (let i = 0; i < DIGITS; i++) {
+    const [a, fa] = split(across);
+    const [b, fb] = split(along);
+    if (a === 1 && b === 1) return scale * Math.min(fa, 1 - fa, fb, 1 - fb);
+    across = fa;
+    along = fb;
+    scale /= 3;
+  }
+  return 0;
+}
+
+const gap = (v: number) => Math.min(Math.abs(v - 1 / 3), Math.abs(v - 2 / 3));
+
+function plus(point: number[]) {
+  const middle = point.map((v) => v >= 1 / 3 && v <= 2 / 3);
+  const gaps = point.map(gap);
+  const axis = [0, 1, 2].find((k) => !middle[k]);
+  if (axis === undefined) {
+    const sorted = [...gaps].sort((a, b) => a - b);
+    return Math.hypot(sorted[0], sorted[1]);
+  }
+  const v = point[axis];
+  const along = 3 * (v < 1 / 3 ? v : v - 2 / 3);
+  const [i, j] = [(axis + 1) % 3, (axis + 2) % 3];
+  const wallI = carpet(3 * point[j] - 1, along) / 3;
+  const wallJ = carpet(3 * point[i] - 1, along) / 3;
+  return Math.min(Math.hypot(gaps[i], wallI), Math.hypot(gaps[j], wallJ));
+}
+
+function distance(point: number[]) {
+  let local = point.map((v) => clamp(v, 0, 1));
+  let scale = 1;
+  for (let i = 0; i < DIGITS; i++) {
+    const digits = local.map(split);
+    if (digits.filter(([d]) => d === 1).length >= 2) return scale * plus(local);
+    local = digits.map(([, rest]) => rest);
+    scale /= 3;
+  }
+  return 0;
+}
+
+function sweep(t: number, radius: number) {
+  if (t >= radius) return (Math.PI * radius * radius) / 4;
+  return (t / 2) * Math.sqrt(radius * radius - t * t) + ((radius * radius) / 2) * Math.asin(t / radius);
+}
+
+function moment(t: number, radius: number) {
+  const r2 = radius * radius;
+  if (t >= radius) return (r2 * radius) / 3;
+  const rest = r2 - t * t;
+  return (t * t * (3 * r2 * r2 - 3 * r2 * t * t + t ** 4)) / (3 * (r2 * radius + rest * Math.sqrt(rest)));
+}
+
+function piece(from: number, to: number, width: number, slope: number, radius: number) {
+  if (to <= from) return 0;
+  return width * (sweep(to, radius) - sweep(from, radius)) - slope * (moment(to, radius) - moment(from, radius));
+}
+
+const hole = (side: number, radius: number) => 4 * piece(0, side / 2, side, 2, radius);
+
+function partial(side: number, cut: number, radius: number) {
+  const left = piece(0, Math.min(side / 2, cut), side, 2, radius);
+  const right = piece(Math.max(side - cut, 0), side / 2, side, 2, radius);
+  const bottom =
+    cut <= side / 2
+      ? piece(0, cut, cut, 1, radius)
+      : piece(0, side - cut, cut, 1, radius) + piece(side - cut, side / 2, side, 2, radius);
+  return left + right + 2 * bottom;
+}
+
+function places(count: number, digits: number) {
+  const out: number[] = [];
+  for (let i = 0; i < digits; i++) {
+    const rest = Math.floor(count / 3);
+    out.push(Math.min(count - 3 * rest, 2));
+    count = rest;
+  }
+  return out;
+}
+
+const column = (index: number, digits: number) => places(index, digits).reduce((p, k) => p * WEIGHT[k], 1);
+
+function below(count: number, digits: number) {
+  if (count >= 3 ** digits) return 8 ** digits;
+  let [total, prefix, eight] = [0, 1, 8 ** digits];
+  for (const k of places(count, digits).reverse()) {
+    eight /= 8;
+    total += prefix * RUNNING[k] * eight;
+    prefix *= WEIGHT[k];
+  }
+  return total;
+}
+
+const levels = (radius: number) => Math.max(Math.ceil(Math.log(1 / radius) / Math.log(3)) + REACH, FLOOR);
+
+const width = (level: number) => 3 ** (-level - 1);
+
+function wall(radius: number, top: number) {
+  let total = 0;
+  for (let level = 1; level <= top; level++) total += 8 ** (level - 1) * hole(width(level), radius);
+  return total / 2 + (radius * (8 / 9) ** top) / 18;
+}
+
+function strip(radius: number, top: number) {
+  let [total, share] = [0, 0];
+  for (let level = 1; level <= top; level++) {
+    const side = width(level);
+    const ratio = radius / side;
+    const columns = 3 ** (level - 1);
+    let here = 0;
+    const full = Math.floor((ratio - 2) / 3) + 1;
+    if (full > 0) here += below(Math.min(full, columns), level - 1) * hole(side, radius);
+    const cut = Math.floor((ratio - 1) / 3);
+    const start = (3 * cut + 1) * side;
+    if (cut >= 0 && cut < columns && start < radius && radius < start + side)
+      here += column(cut, level - 1) * partial(side, radius - start, radius);
+    total += here;
+    share = here / (8 ** (level - 1) * radius * side * side);
+  }
+  return total + (share * radius * (8 / 9) ** top) / 9;
+}
+
+function inside(radius: number) {
+  const top = levels(radius);
+  return (Math.PI + 8) * radius * radius - 8 * Math.SQRT2 * radius ** 3 + 48 * (wall(radius, top) - strip(radius, top));
+}
+
+function tube(radius: number) {
+  if (Number.isNaN(radius) || (radius > EDGE && radius < COVER)) return undefined;
+  if (radius <= 0) return 0;
+  if (radius >= COVER) return PLUS;
+  return inside(radius);
+}
+
+function profile(radius: number) {
+  if (!(radius > 0 && Number.isFinite(radius))) return undefined;
+  let phase = radius;
+  while (phase > COVER) phase /= 3;
+  while (phase <= COVER / 3) phase *= 3;
+  if (phase > EDGE) return undefined;
+  let [total, weight, reach] = [20 / 27, 1, phase];
+  for (let i = 0; i <= DEPTH; i++) {
+    const t = tube(reach);
+    if (t === undefined) return undefined;
+    total += weight * t;
+    weight *= 27 / 20;
+    reach /= 3;
+  }
+  return phase ** (Math.log(20) / Math.log(3) - 3) * total;
+}
+
+const dist = (x: number, y: number) => distance([x, y, 0.5]);
 
 let memo: { cells: ArrayLike<number>; covers: Float64Array } | undefined;
 
@@ -43,22 +206,22 @@ function facts() {
   if (lit !== 256) throw new Error(`paper-sponge-measurability: slice lights ${lit} cells, want 256`);
 
   const ident = (Math.PI + 8) / 36 - Math.sqrt(2) / 27;
-  if (!(Math.abs((sponge.tube(1 / 6) ?? 0) - ident) < 1e-9))
+  if (!(Math.abs((tube(1 / 6) ?? 0) - ident) < 1e-9))
     throw new Error("paper-sponge-measurability: tube(1/6) is off the closed form");
   for (const [delta, lo, hi] of TUBES) {
-    const t = sponge.tube(delta) ?? 0;
+    const t = tube(delta) ?? 0;
     if (!(lo <= t && t <= hi))
       throw new Error(`paper-sponge-measurability: tube(${delta}) is ${t}, want ${lo} to ${hi}`);
   }
   const values = [0, 0, 0];
   BANDS.forEach(([eps, lo, hi], k) => {
-    values[k] = sponge.profile(eps) ?? 0;
+    values[k] = profile(eps) ?? 0;
     if (!(lo <= values[k] && values[k] <= hi))
       throw new Error(`paper-sponge-measurability: profile(${eps}) is ${values[k]}, want ${lo} to ${hi}`);
   });
   if (!(values[2] - values[0] >= 0.012296))
     throw new Error("paper-sponge-measurability: the profile gap is under 0.012296");
-  if (!(Math.abs(dist(0.5, 0.5) - sponge.COVER()) < 1e-15))
+  if (!(Math.abs(dist(0.5, 0.5) - COVER) < 1e-15))
     throw new Error("paper-sponge-measurability: the centre is off the covering radius");
   if (!(Math.abs(dist(1 / 6, 1 / 6) - Math.sqrt(2) / 18) < 1e-15))
     throw new Error("paper-sponge-measurability: the arm is off sqrt(2)/18");

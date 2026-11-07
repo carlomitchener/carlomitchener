@@ -1,4 +1,4 @@
-use mrly_num::factor::coprime;
+use num::factor::coprime;
 use std::thread;
 
 pub const THREADS: u64 = 8;

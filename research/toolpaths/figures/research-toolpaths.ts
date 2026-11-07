@@ -1,4 +1,4 @@
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
 import census from "./research-toolpaths.json" with { type: "json" };
 
 const STEPS = 2401;

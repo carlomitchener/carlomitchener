@@ -1,6 +1,7 @@
 use crate::fills::cell_index;
 use crate::tables::write_csv;
-use mrly_bang::baseq::{distinct_designs, fill_from_corners};
+use bang::baseq::fill_from_corners;
+use mrly_bang::baseq::distinct_designs;
 use mrly_math::code::Code;
 use mrly_math::factory::code_to_corners;
 use mrly_math::rules::render;

@@ -5,5 +5,6 @@ edition = "2021"
 [dependencies]
 mrly-math = "0.2.0"
 mrly-rand = "0.2.0"
+math = { path = "../../../../shared/math" }
 
 [workspace]

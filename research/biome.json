@@ -3,7 +3,7 @@
   "root": true,
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true, "root": ".." },
   "files": {
-    "includes": ["*/figures/**", "shared/figures/**", "!**/*.json"]
+    "includes": ["*/figures/**", "shared/figures/**", "shared/ts/**", "!**/*.json"]
   },
   "formatter": { "indentStyle": "space", "lineWidth": 120, "includes": ["**"] },
   "linter": {

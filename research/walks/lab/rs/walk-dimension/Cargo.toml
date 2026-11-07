@@ -13,5 +13,6 @@ mrly-three = "0.2.0"
 mrly-two = "0.2.0"
 faer = "0.24"
 png = "0.17"
+bang = { path = "../../../../shared/bang" }
 
 [workspace]

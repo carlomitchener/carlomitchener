@@ -6,5 +6,6 @@ license = "MIT"
 [dependencies]
 mrly-num = "0.2.0"
 witness = { path = "../../../../shared/witness" }
+num = { path = "../../../../shared/num" }
 
 [workspace]

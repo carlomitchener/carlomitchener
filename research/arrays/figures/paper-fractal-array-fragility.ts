@@ -1,7 +1,4 @@
-import * as coarray from "@mrlyprod/coarray";
-import type { Color, Ink, Pen } from "@mrlyprod/draw";
-
-export const units = { coarray };
+import type { Color, Ink, Pen } from "mrly-draw";
 
 const GENERATOR = [0, 1, 2, 4];
 const BASE = 9;
@@ -13,16 +10,52 @@ const CORNER = 0.16;
 
 type Cell = { x: number; w: number; essential: boolean; digits: number[] };
 
+function fractal(order: number) {
+  let sensors = [0];
+  for (let i = 0; i < order; i++) {
+    const place = BASE ** i;
+    sensors = sensors.flatMap((s) => GENERATOR.map((d) => s + d * place));
+  }
+  return sensors.sort((a, b) => a - b);
+}
+
+function weights(sensors: number[]) {
+  const span = sensors[sensors.length - 1] - sensors[0];
+  const out = new Array<number>(2 * span + 1).fill(0);
+  for (const p of sensors) for (const q of sensors) out[p + span - q]++;
+  return out;
+}
+
+function pairedDigits(sensors: number[]) {
+  const span = sensors[sensors.length - 1] - sensors[0];
+  const w = weights(sensors);
+  return sensors.filter((g) => sensors.some((h) => h !== g && w[g + span - h] === 1));
+}
+
+function essentialFlags(sensors: number[]) {
+  const least = sensors[0];
+  const span = sensors[sensors.length - 1] - least;
+  const w = weights(sensors);
+  const member = new Set(sensors);
+  const holds = (x: number) => x - least >= 0 && x - least <= span && member.has(x);
+  return sensors.map((s) =>
+    sensors.some((q) => {
+      const t = s - q;
+      return t !== 0 && (w[t + span] === 1 || (w[t + span] === 2 && holds(s + t)));
+    }),
+  );
+}
+
 function flags(order: number): Map<number, boolean> {
-  const sensors = Array.from(coarray.fractal(GENERATOR, BASE, order), Number);
-  const essential = coarray.essential(sensors);
+  const sensors = fractal(order);
+  const essential = essentialFlags(sensors);
   if (sensors.length !== GENERATOR.length ** order)
     throw new Error(`paper-fractal-array-fragility: ${sensors.length} sensors at order ${order}`);
   return new Map(sensors.map((s, i) => [s, essential[i]]));
 }
 
 function rows(width: number): Cell[][] {
-  const paired = Array.from(coarray.paired(GENERATOR), Number);
+  const paired = pairedDigits(GENERATOR);
   if (paired.join() !== "0,1,4") throw new Error(`paper-fractal-array-fragility: U(G) = ${paired}, want 0,1,4`);
   const out: Cell[][] = [];
   let parents: { x: number; w: number; digits: number[] }[] = [{ x: 0, w: width, digits: [] }];

@@ -9,5 +9,8 @@ mrly-num = "0.2.0"
 mrly-sequences = "0.2.0"
 num-bigint = "0.4"
 num-rational = "0.4"
+bang = { path = "../../../../shared/bang" }
+counts = { path = "../../../../shared/counts" }
+num = { path = "../../../../shared/num" }
 
 [workspace]

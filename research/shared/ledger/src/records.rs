@@ -231,9 +231,10 @@ pub mod witnesses {
     }
 
     fn every_design_family_reads_its_record_by_value() {
-        use mrly_life::source::{sequence, Source};
+        use life::source::sequence;
+        use mrly_life::source::Source;
         for family in Source::designs() {
-            let id = family.oeis().expect("every design family carries an id");
+            let id = life::source::oeis(family).expect("every design family carries an id");
             let known = record_by_id(&id)
                 .expect("the family's id is a record")
                 .parsed();

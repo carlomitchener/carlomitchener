@@ -1,5 +1,5 @@
-use mrly_roulette::crossings::*;
-use mrly_roulette::{distinct, pencils, track};
+use roulette::crossings::*;
+use roulette::{distinct, pencils, track};
 
 pub const ALL: &[witness::Witness] = &[
     (

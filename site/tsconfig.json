@@ -1,6 +1,12 @@
 {
-  "extends": "../../../mrlyprod/mrlyprod/ui/tsconfig.json",
-  "include": ["**/*.ts", "**/*.tsx", "../../../mrlyprod/mrlyprod/ui/shell/site.d.ts"],
+  "extends": "../../../mrlyprod/mrlyprod/packages/shell/tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../../../mrlyprod/mrlyprod/packages/shell/src/site.d.ts",
+    "../../../mrlyprod/mrlyprod/packages/kit/src/drawn.d.ts",
+    "../../../mrlyprod/mrlyprod/packages/loader/src/wasm.d.ts"
+  ],
   "exclude": ["node_modules", "../data"],
   "compilerOptions": {
     "typeRoots": ["../../../mrlyprod/mrlyprod/node_modules/@types"]

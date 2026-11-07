@@ -1,4 +1,4 @@
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
 
 const NAME = "research-random-primes";
 const TOP = 22;

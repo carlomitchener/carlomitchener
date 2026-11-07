@@ -3,7 +3,7 @@ use mrly_error::Result;
 use mrly_json::json;
 use mrly_num::digits::elements;
 use mrly_num::factor::{gcd, mobius_sieve};
-use mrly_num::lattice::farey;
+use num::lattice::farey;
 
 const NAME: &str = "paper-franel-converse";
 const BASE: u64 = 3;

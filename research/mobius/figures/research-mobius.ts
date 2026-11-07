@@ -1,9 +1,8 @@
-import * as ladder from "@mrlyprod/ladder";
-import * as num from "@mrlyprod/num";
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
-import { plot } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
+import { plot } from "mrly-draw";
+import * as num from "mrly-num/wasm";
 
-export const units = { ladder, num };
+export const units = { num };
 
 const LENGTH = 16;
 const STEPS = 2 ** LENGTH;
@@ -17,7 +16,8 @@ function walk(digits: number[]) {
   if (values.length !== STEPS - 1)
     throw new Error(`research-mobius: ${values.length} elements of ${digits}, want ${STEPS - 1}`);
   const mu = [num.factor.mobius(0), ...Array.from(values, (v) => num.factor.mobius(Number(v)))];
-  return Float64Array.from([0, ...Array.from(ladder.design.meter(mu), Number)]);
+  let total = 0;
+  return Float64Array.from([0, ...mu.map((value) => (total += value))]);
 }
 
 function walks() {

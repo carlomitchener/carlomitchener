@@ -69,31 +69,30 @@ export function avatar() {
   writeFileSync(join(DATA_DIR, "avatar.js"), out);
 }
 
-function prepare() {
-  link("node_modules", join(HOST, "node_modules"));
-  avatar();
-}
-
-const run = (script: string, env: Record<string, string>) =>
-  Bun.spawn(["bun", script], {
-    cwd: join(HOST, "ui"),
+const run = (script: string, env: Record<string, string>, args: string[] = []) =>
+  Bun.spawn(["bun", script, ...args], {
+    cwd: join(HOST, "packages", "shell"),
     env: { ...process.env, MRLY_ROOT: SITE, ...env },
     stdout: "inherit",
     stderr: "inherit",
   }).exited;
 
+function prepare(): Promise<number> {
+  link("node_modules", join(HOST, "node_modules"));
+  avatar();
+  return run("scripts/wasm.ts", {}, ["--copy"]);
+}
+
 export async function build(dist = DIST): Promise<number> {
-  prepare();
-  const code = await run("web/scripts/build.ts", { MRLY_DIST: dist });
+  const code = (await prepare()) || (await run("scripts/build.ts", { MRLY_DIST: dist }));
   if (code) return code;
   const rules = Object.entries(HEADERS).map(([key, value]) => `  ${key}: ${value}`);
   writeFileSync(join(dist, "_headers"), `/*\n${rules.join("\n")}\n`);
   return 0;
 }
 
-export function dev(): Promise<number> {
-  prepare();
-  return run("web/scripts/dev.ts", {});
+export async function dev(): Promise<number> {
+  return (await prepare()) || run("scripts/dev.ts", {});
 }
 
 if (import.meta.main) process.exit(await (process.argv[2] === "dev" ? dev() : build()));

@@ -15,7 +15,7 @@ fn nodes(bound: u64) -> Vec<(i64, i64, i64)> {
         let n = RING.norm(den.0, den.1) as i64;
         for p in 0..n {
             for q in 0..n {
-                let g = RING.gaussian_gcd((p, q), den);
+                let g = gaussian::gaussian_gcd(RING, (p, q), den);
                 if RING.norm(g.0, g.1) != 1 {
                     continue;
                 }

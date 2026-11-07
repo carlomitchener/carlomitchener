@@ -1,5 +1,5 @@
-use mrly_bang::baseq::axis_maps;
-use mrly_bang::universe::permutations;
+use bang::baseq::axis_maps;
+use bang::universe::permutations;
 use mrly_graph::core_graph;
 use mrly_math::code::Code;
 use mrly_math::factory::{corners_to_code, residue_corners};

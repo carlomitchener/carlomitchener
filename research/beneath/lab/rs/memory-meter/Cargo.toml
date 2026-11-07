@@ -3,7 +3,7 @@ name = "memory-meter"
 edition = "2021"
 
 [dependencies]
-mrly-automaton = "0.2.0"
+automaton = { path = "../../../../shared/automaton" }
 mrly-num = "0.2.0"
 
 [workspace]

@@ -1,5 +1,5 @@
-import type { Ink, Pen } from "@mrlyprod/draw";
-import { hex } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
+import { hex } from "mrly-draw";
 import census from "./research-hexagon.json" with { type: "json" };
 
 export const units = {};

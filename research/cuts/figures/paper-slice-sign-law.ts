@@ -1,4 +1,4 @@
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
 
 export const units = {};
 

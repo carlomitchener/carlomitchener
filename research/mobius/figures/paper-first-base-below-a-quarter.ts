@@ -1,4 +1,4 @@
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
 import census from "./paper-first-base-below-a-quarter.json" with { type: "json" };
 
 export const units = {};

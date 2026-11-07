@@ -1,14 +1,15 @@
 use crate::row::{timed, Row, TERMS};
-use mrly_arcs as arcs;
-use mrly_bang::baseq;
-use mrly_bang::press;
+use arcs;
+use bang::baseq;
+use bang::press;
+use counts;
+use counts::{hex, ladder};
+use life::source::sequence as source_sequence;
+use math::factory;
 use mrly_error::Result;
-use mrly_life::source::{counts as source_counts, sequence as source_sequence};
+use mrly_life::source::counts as source_counts;
 use mrly_life::Source;
 use mrly_math::code::Code;
-use mrly_math::factory;
-use mrly_sequences::counts;
-use mrly_sequences::counts::{hex, ladder};
 
 const LIMIT: usize = 4000;
 const LONG: usize = 24;
@@ -265,7 +266,7 @@ pub fn sources() -> Vec<Row> {
                     "source",
                     take(raw),
                 )
-                .stated(source.oeis()),
+                .stated(life::source::oeis(source)),
             );
         }
         if let Ok(raw) = source_counts(source, LIMIT, false, false) {

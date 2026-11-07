@@ -1,5 +1,5 @@
-import * as two from "@mrlyprod/two";
-import { frame, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { frame, Grid, type Ink, type Pen } from "mrly-draw";
+import * as two from "mrly-two/wasm";
 import census from "./research-information.json" with { type: "json" };
 
 export const units = { two };

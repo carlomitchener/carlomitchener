@@ -1,4 +1,4 @@
-import type { Color, Ink, Pen } from "@mrlyprod/draw";
+import type { Color, Ink, Pen } from "mrly-draw";
 import census from "./research-erdos.json" with { type: "json" };
 
 const TERMS = 29;

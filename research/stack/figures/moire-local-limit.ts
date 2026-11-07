@@ -1,4 +1,4 @@
-import { type Frame, field, frame, type Ink, type Pen, type Point } from "@mrlyprod/draw";
+import { type Frame, field, frame, type Ink, type Pen, type Point } from "mrly-draw";
 import census from "./moire-local-limit.json" with { type: "json" };
 
 const SIDE = 410;

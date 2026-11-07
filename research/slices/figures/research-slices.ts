@@ -1,6 +1,6 @@
-import type { Ink, Pen } from "@mrlyprod/draw";
-import { hex as comb } from "@mrlyprod/draw";
-import * as hex from "@mrlyprod/hex";
+import type { Ink, Pen } from "mrly-draw";
+import { hex as comb } from "mrly-draw";
+import * as hex from "mrly-hex/wasm";
 
 export const units = { hex };
 

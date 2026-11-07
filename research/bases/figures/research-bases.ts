@@ -1,6 +1,6 @@
-import * as gaussian from "@mrlyprod/gaussian";
-import * as num from "@mrlyprod/num";
-import type { Ink, Pen } from "@mrlyprod/draw";
+import type { Ink, Pen } from "mrly-draw";
+import * as gaussian from "mrly-gaussian/wasm";
+import * as num from "mrly-num/wasm";
 
 export const units = { gaussian, num };
 

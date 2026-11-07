@@ -1,5 +1,5 @@
-import * as radix from "@mrlyprod/radix";
-import type { Frame, Ink, Pen, Point } from "@mrlyprod/draw";
+import type { Frame, Ink, Pen, Point } from "mrly-draw";
+import * as radix from "mrly-radix/wasm";
 
 export const units = { radix };
 

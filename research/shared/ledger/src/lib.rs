@@ -3,13 +3,16 @@ pub mod records;
 pub mod terms;
 pub mod windows;
 
+pub use counts::closed::fill_polynomial;
+pub use counts::closed::Closed;
+pub use counts::measure::Cost;
+pub use counts::measure::Measure;
+pub use counts::{Axis, Key, Sequence, Tag};
 pub use markdown::markdown;
-pub use mrly_sequences::counts::{fill_polynomial, Closed};
-pub use mrly_sequences::{Axis, Cost, Key, Measure, Sequence, Tag};
 pub use records::{identify, Record, RECORDS};
 pub use terms::{closed, terms};
 
-use mrly_bang::baseq;
+use bang::baseq;
 use mrly_error::{value_error, Result};
 use std::collections::BTreeMap;
 use std::sync::{Mutex, OnceLock};

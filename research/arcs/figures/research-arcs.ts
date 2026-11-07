@@ -1,6 +1,6 @@
-import * as arcsUnit from "@mrlyprod/arcs";
-import * as math from "@mrlyprod/math";
-import { Grid, type Ink, type Pen, type Point } from "@mrlyprod/draw";
+import * as arcsUnit from "mrly-arcs/wasm";
+import { Grid, type Ink, type Pen, type Point } from "mrly-draw";
+import * as math from "mrly-math/wasm";
 
 export const units = { arcs: arcsUnit, math };
 
@@ -34,8 +34,8 @@ function arcs() {
   }
   if (drawn.strands !== STRANDS) throw new Error(`research-arcs: ${drawn.strands} strands, want ${STRANDS}`);
   if (drawn.loops !== LOOPS) throw new Error(`research-arcs: ${drawn.loops} loops, want ${LOOPS}`);
-  const law = arcsUnit.law(495, 3, LEVEL);
-  if (law?.loops !== LOOPS) throw new Error(`research-arcs: the loop law gives ${law?.loops}, want ${LOOPS}`);
+  const law = (8 ** LEVEL - 1) / 7 - 3 ** LEVEL + LEVEL + 1;
+  if (law !== LOOPS) throw new Error(`research-arcs: the loop law gives ${law}, want ${LOOPS}`);
   memo = drawn.cells;
   return memo;
 }

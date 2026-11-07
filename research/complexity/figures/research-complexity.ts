@@ -1,7 +1,7 @@
-import * as graph from "@mrlyprod/graph";
-import * as two from "@mrlyprod/two";
-import type { Ink, Pen, Point } from "@mrlyprod/draw";
-import { plot } from "@mrlyprod/draw";
+import type { Ink, Pen, Point } from "mrly-draw";
+import { plot } from "mrly-draw";
+import * as graph from "mrly-graph/wasm";
+import * as two from "mrly-two/wasm";
 
 export const units = { graph, two };
 
@@ -14,7 +14,7 @@ function spectrum() {
   const cell = two.create(7, 2, LEVEL, 0, 2);
   const network = graph.core_graph({ shape: cell.shape, data: cell.types });
   const values = graph.spectrum.laplacian_spectrum(network, true);
-  const ones = graph.spectrum.multiplicity(values, 1, 1e-9);
+  const ones = values.filter((v) => Math.abs(v - 1) <= 1e-9).length;
   if (values.length !== 729) throw new Error(`research-complexity: ${values.length} eigenvalues, want 729`);
   if (ones !== 243) throw new Error(`research-complexity: ${ones} ones, want 243`);
   memo = { values, ones };

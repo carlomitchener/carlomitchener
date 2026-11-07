@@ -1,12 +1,14 @@
-use mrly_math::code::Code;
-use mrly_sequences::counts::hex::{
+use counts::hex::{
     solid_slice_boundary, solid_slice_edges, solid_slice_interior, solid_slice_triangles,
-    solid_slice_vertices,
 };
+use hex::census::*;
+use hex::census::*;
 use mrly_hex::census::*;
 use mrly_hex::geometry::cut;
 use mrly_hex::graph::slice_core_graph;
 use mrly_hex::CellHex;
+use mrly_math::code::Code;
+use mrly_sequences::counts::hex::solid_slice_vertices;
 use mrly_three;
 
 pub const ALL: &[witness::Witness] = &[

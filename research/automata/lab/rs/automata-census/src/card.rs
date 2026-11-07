@@ -4,7 +4,7 @@ use crate::seed::Census;
 use crate::table::{genus, levels};
 use mrly_bang::universe::degree;
 use mrly_math::code::Code;
-use mrly_num::boolean::walsh_spectrum;
+use num::boolean::walsh_spectrum;
 use std::collections::BTreeSet;
 
 fn line(rule: usize, census: &Census, b3: &[crate::groups::Elem]) -> String {

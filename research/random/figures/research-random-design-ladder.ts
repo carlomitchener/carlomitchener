@@ -1,6 +1,6 @@
-import * as life from "@mrlyprod/life";
-import * as wolfram from "@mrlyprod/wolfram";
-import { frame, Grid, type Ink, type Pen } from "@mrlyprod/draw";
+import { frame, Grid, type Ink, type Pen } from "mrly-draw";
+import * as life from "mrly-life/wasm";
+import * as wolfram from "mrly-wolfram/wasm";
 
 export const units = { life, wolfram };
 

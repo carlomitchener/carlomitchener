@@ -6,9 +6,9 @@ publish = false
 
 [dependencies]
 mrly-apollonian = "0.2.0"
-mrly-automaton = "0.2.0"
+automaton = { path = "../automaton" }
 mrly-bang = "0.2.0"
-coarray = { path = "../../../packages/rs/coarray" }
+coarray = { path = "../coarray" }
 mrly-error = "0.2.0"
 mrly-fft = "0.2.0"
 mrly-gaussian = "0.2.0"
@@ -19,7 +19,6 @@ mrly-name = "0.2.0"
 mrly-num = "0.2.0"
 mrly-radix = "0.2.0"
 mrly-rand = "0.2.0"
-mrly-roulette = "0.2.0"
 mrly-sequences = "0.2.0"
 mrly-hex = "0.2.0"
 mrly-spin = "0.2.0"
@@ -28,5 +27,16 @@ mrly-three = "0.2.0"
 mrly-two = "0.2.0"
 mrly-zeta = "0.2.0"
 witness = { path = "../witness" }
+bang = { path = "../bang" }
+counts = { path = "../counts" }
+graph = { path = "../graph" }
+hex = { path = "../hex" }
+math = { path = "../math" }
+spin = { path = "../spin" }
+three = { path = "../three" }
+two = { path = "../two" }
+zeta = { path = "../zeta" }
+roulette = { path = "../roulette" }
+apollonian = { path = "../apollonian" }
 
 [workspace]

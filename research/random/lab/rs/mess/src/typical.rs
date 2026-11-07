@@ -1,5 +1,6 @@
 use crate::mess::{balanced, ceiling, profile, Tables};
-use mrly_life::source::{sequence, Source};
+use life::source::sequence;
+use mrly_life::source::Source;
 
 pub const SEED: u64 = 0x6D65_7373;
 pub const DRAWS: usize = 2000;

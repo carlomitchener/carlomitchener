@@ -1,8 +1,9 @@
+use counts::hex::centered_hexagonal;
+use graph::census::components as network_components;
+use hex::topology::*;
+use hex::topology::*;
 use mrly_bang::universe::orbit;
-use mrly_graph::census::components as network_components;
 use mrly_graph::spectrum::laplacian_spectrum;
-use mrly_math::code::Code;
-use mrly_sequences::counts::hex::centered_hexagonal;
 use mrly_hex::census::census;
 use mrly_hex::geometry::cut;
 use mrly_hex::graph::slice_core_graph;
@@ -10,6 +11,7 @@ use mrly_hex::topology::*;
 use mrly_hex::CellHex;
 use mrly_hex::FILL;
 use mrly_hex::GRID;
+use mrly_math::code::Code;
 use mrly_three::{self, Cell3d};
 
 pub const ALL: &[witness::Witness] = &[

@@ -1,4 +1,4 @@
-use mrly_zeta::sieve::*;
+use zeta::sieve::*;
 
 pub const ALL: &[witness::Witness] = &[(
     "the_plane_ratio_at_two_million_factors_rounds_to_nine_digits",

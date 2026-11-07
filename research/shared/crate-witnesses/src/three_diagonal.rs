@@ -1,7 +1,9 @@
+use math::factory;
 use mrly_math::code::Code;
-use mrly_math::factory;
 use mrly_three::diagonal::*;
 use std::collections::{BTreeMap, HashSet};
+use three::diagonal::*;
+use three::diagonal::*;
 
 pub const ALL: &[witness::Witness] = &[
     (

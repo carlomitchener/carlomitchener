@@ -1,7 +1,7 @@
-import * as bang from "@mrlyprod/bang";
-import * as three from "@mrlyprod/three";
-import type { Ink, Pen } from "@mrlyprod/draw";
-import { iso } from "@mrlyprod/draw";
+import * as bang from "mrly-bang/wasm";
+import type { Ink, Pen } from "mrly-draw";
+import { iso } from "mrly-draw";
+import * as three from "mrly-three/wasm";
 
 export const units = { bang, three };
 
@@ -13,10 +13,14 @@ type Quad = ReturnType<typeof three.quads>[number];
 
 let memo: Quad[][][] | undefined;
 
+function popcount(code: string) {
+  return BigInt(code).toString(2).replaceAll("0", "").length;
+}
+
 function rows() {
   if (memo) return memo;
   const codes: string[][] = Array.from({ length: ROWS }, () => []);
-  for (const design of bang.bang(3).canonical()) codes[design.rule().length].push(design.i);
+  for (const design of bang.bang(3).canonical()) codes[popcount(design.i)].push(design.i);
   if (codes.some((row, r) => row.length !== COUNTS[r]))
     throw new Error(`research-method: rows of ${codes.map((row) => row.length)}, want ${COUNTS}`);
   memo = codes.map((row, r) =>

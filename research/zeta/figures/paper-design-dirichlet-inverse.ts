@@ -1,5 +1,4 @@
-import * as ladderUnit from "@mrlyprod/ladder";
-import { frame as box, type Color, type Frame, type Ink, type Pen, type Point, plot } from "@mrlyprod/draw";
+import { frame as box, type Color, type Frame, type Ink, type Pen, type Point, plot } from "mrly-draw";
 
 const RE_WIDTH = 1;
 const IM_REACH = 60;
@@ -13,13 +12,10 @@ const BANDS = [
 const BAND_RE = 3.02;
 const OVER = 22;
 
-export const units = { ladder: ladderUnit };
-
-function comb(design: ladderUnit.Design): Point[] {
+function comb(alpha: number, period: number): Point[] {
   const poles: Point[] = [];
   for (let j = 0; ; j++) {
-    const pole = design.pole(0, j);
-    const point: Point = [pole.re, pole.im];
+    const point: Point = [alpha, period * j];
     if (point[1] > IM_REACH) return poles;
     poles.push(point);
   }
@@ -77,11 +73,9 @@ function band(pen: Pen, ink: Ink, rect: Frame, abscissa: number, span: number[])
 }
 
 export default function draw(pen: Pen, ink: Ink) {
-  const ladder = new ladderUnit.Design(3, [0, 1]);
-  const alpha = ladder.abscissa();
-  const period = ladder.period();
-  const poles = comb(ladder);
-  ladder.free();
+  const alpha = Math.log(2) / Math.log(3);
+  const period = (2 * Math.PI) / Math.log(3);
+  const poles = comb(alpha, period);
   check(alpha, period, poles);
 
   const work = pen.frame(0.08).inset(OVER + 2);

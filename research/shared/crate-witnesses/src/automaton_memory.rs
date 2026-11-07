@@ -1,4 +1,4 @@
-use mrly_automaton::memory::*;
+use automaton::memory::*;
 use mrly_math::code::Code;
 
 pub const ALL: &[witness::Witness] = &[

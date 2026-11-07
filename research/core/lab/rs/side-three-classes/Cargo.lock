@@ -3,6 +3,18 @@
 version = 4
 
 [[package]]
+name = "bang"
+version = "0.0.0"
+dependencies = [
+ "mrly-bang",
+ "mrly-error",
+ "mrly-math",
+ "mrly-tensor",
+ "num",
+ "serde",
+]
+
+[[package]]
 name = "equivalent"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -49,7 +61,6 @@ dependencies = [
  "mrly-error",
  "mrly-math",
  "mrly-name",
- "mrly-num",
  "mrly-tensor",
  "serde",
 ]
@@ -60,7 +71,6 @@ version = "0.2.0"
 dependencies = [
  "mrly-error",
  "mrly-rand",
- "mrly-tensor",
  "serde",
 ]
 
@@ -133,6 +143,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "num"
+version = "0.0.0"
+dependencies = [
+ "mrly-error",
+ "mrly-num",
+ "serde",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -199,6 +218,7 @@ dependencies = [
 name = "side-three-classes"
 version = "0.0.0"
 dependencies = [
+ "bang",
  "mrly-bang",
  "mrly-math",
 ]
@@ -235,43 +255,11 @@ name = "mrly-arcs"
 version = "0.2.0"
 
 [[patch.unused]]
-name = "mrly-audio"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-auth"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-automaton"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-avatar"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-chaos"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-chladni"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-coarray"
-version = "0.2.0"
-
-[[patch.unused]]
 name = "mrly-crop"
 version = "0.2.0"
 
 [[patch.unused]]
 name = "mrly-fft"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-font"
 version = "0.2.0"
 
 [[patch.unused]]
@@ -287,23 +275,11 @@ name = "mrly-graph"
 version = "0.2.0"
 
 [[patch.unused]]
-name = "mrly-graphics"
-version = "0.2.0"
-
-[[patch.unused]]
 name = "mrly-hex"
 version = "0.2.0"
 
 [[patch.unused]]
 name = "mrly-image"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-kummer"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-ladder"
 version = "0.2.0"
 
 [[patch.unused]]
@@ -319,15 +295,7 @@ name = "mrly-moire"
 version = "0.2.0"
 
 [[patch.unused]]
-name = "mrly-music"
-version = "0.2.0"
-
-[[patch.unused]]
 name = "mrly-obj"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-pixels"
 version = "0.2.0"
 
 [[patch.unused]]
@@ -335,19 +303,7 @@ name = "mrly-png"
 version = "0.2.0"
 
 [[patch.unused]]
-name = "mrly-quotes"
-version = "0.2.0"
-
-[[patch.unused]]
 name = "mrly-radix"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-readings"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-roulette"
 version = "0.2.0"
 
 [[patch.unused]]
@@ -355,19 +311,7 @@ name = "mrly-sequences"
 version = "0.2.0"
 
 [[patch.unused]]
-name = "mrly-space"
-version = "0.2.0"
-
-[[patch.unused]]
 name = "mrly-spin"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-star"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-sumset"
 version = "0.2.0"
 
 [[patch.unused]]
@@ -375,39 +319,11 @@ name = "mrly-three"
 version = "0.2.0"
 
 [[patch.unused]]
-name = "mrly-thue"
-version = "0.2.0"
-
-[[patch.unused]]
 name = "mrly-tile"
 version = "0.2.0"
 
 [[patch.unused]]
-name = "mrly-tourbillon"
-version = "0.2.0"
-
-[[patch.unused]]
 name = "mrly-two"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-ulam"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-video"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-voxels"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-wang"
-version = "0.2.0"
-
-[[patch.unused]]
-name = "mrly-wav"
 version = "0.2.0"
 
 [[patch.unused]]
