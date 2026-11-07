@@ -1,0 +1,8 @@
+[package]
+name = "two-bases"
+edition = "2021"
+
+[dependencies]
+witness = { path = "../../../../shared/witness" }
+
+[workspace]

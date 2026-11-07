@@ -1,0 +1,23 @@
+[package]
+name = "encyclopedia"
+edition = "2021"
+
+[dependencies]
+mrly-bang = "0.2.0"
+mrly-error = "0.2.0"
+mrly-json = "0.2.0"
+mrly-life = "0.2.0"
+mrly-math = "0.2.0"
+mrly-rand = "0.2.0"
+mrly-tensor = "0.2.0"
+mrly-two = "0.2.0"
+witness = { path = "../../../../shared/witness" }
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+
+[profile.test]
+opt-level = 2
+
+[workspace]

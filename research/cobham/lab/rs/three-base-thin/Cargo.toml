@@ -1,0 +1,9 @@
+[package]
+name = "three-base-thin"
+edition = "2021"
+
+[dependencies]
+num-bigint = "0.4"
+witness = { path = "../../../../shared/witness" }
+
+[workspace]

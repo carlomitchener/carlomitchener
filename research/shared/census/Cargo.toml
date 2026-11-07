@@ -1,0 +1,22 @@
+[package]
+name = "census"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[dependencies]
+mrly-error = "0.2.0"
+mrly-gaussian = "0.2.0"
+mrly-json = "0.2.0"
+mrly-math = "0.2.0"
+mrly-num = "0.2.0"
+mrly-rand = "0.2.0"
+mrly-roulette = "0.2.0"
+sumset = { path = "../../../packages/rs/sumset" }
+mrly-three = "0.2.0"
+mrly-tile = "0.2.0"
+mrly-two = "0.2.0"
+mrly-zeta = "0.2.0"
+ledger = { path = "../ledger" }
+
+[workspace]

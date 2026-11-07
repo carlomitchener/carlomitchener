@@ -1,0 +1,12 @@
+[package]
+name = "machine"
+edition = "2021"
+
+[dependencies]
+witness = { path = "../../../../shared/witness" }
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+
+[workspace]

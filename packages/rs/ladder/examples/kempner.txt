@@ -1,0 +1,2 @@
+sum of 1/n, n without a 9 = 22.920676619264
+certified error bound     = 1.8e-11

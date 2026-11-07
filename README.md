@@ -68,13 +68,15 @@ Sequences I have published in, or contributed to, the [On-Line Encyclopedia of I
 
 | | |
 |---|---|
-| [A395241](https://oeis.org/A395241) | Void cubes of the 3D carpet, n²(4n+3) |
-| [A396934](https://oeis.org/A396934) | Coprime points of the Sierpinski triangle |
-| [A398348](https://oeis.org/A398348) | Toroidal n×n×n binary arrays up to symmetry |
-| [A399018](https://oeis.org/A399018) | Solid triangles in the Menger sponge cross-section |
-| [A399019](https://oeis.org/A399019) | Empty triangles in the Menger sponge cross-section |
-| [A399364](https://oeis.org/A399364) | Coprime points of the Menger sponge |
-| [A103532](https://oeis.org/A103532) | Divisors of 240^n, the cell count of the generalized Menger sponge (contributed) |
+| [A395241](https://oeis.org/A395241) | a(n) = n^2\*(4\*n + 3). |
+| [A396934](https://oeis.org/A396934) | Number of pairs (i,j) with 0 <= i,j < 2^n, i AND j = 0, and gcd(i,j) = 1. |
+| [A398348](https://oeis.org/A398348) | Number of toroidal n X n X n binary arrays, allowing rotation and/or reflection of the layers along each axis as well as all permutations of the axes. |
+| [A399018](https://oeis.org/A399018) | Number of solid unit triangles in the hexagonal cross-section of the first iteration of the generalized Menger sponge with subdivision 2n+1, cut through the center perpendicular to a space diagonal. |
+| [A399019](https://oeis.org/A399019) | Number of empty unit triangles in the hexagonal cross-section of the first iteration of the generalized Menger sponge with subdivision 2n+1, cut through the center perpendicular to a space diagonal. |
+| [A399364](https://oeis.org/A399364) | Number of triples (i,j,k) with 0 <= i,j,k < 3^n such that no two of i, j, k have digit 1 in the same base-3 position, and gcd(i,j,k) = 1. |
+| [A400221](https://oeis.org/A400221) | Number of divisors of 3360^n. |
+| [A400227](https://oeis.org/A400227) | Number of distinct positive distances from the origin to points of (1/n)\*Z^2 in the closed disc of radius sqrt(2) that do not occur for (1/m)\*Z^2 with any m < n. |
+| [A103532](https://oeis.org/A103532) | Number of divisors of 240^n. (contributed) |
 
 ## Social
 

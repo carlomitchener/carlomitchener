@@ -1,0 +1,53 @@
+[build]
+target-dir = "target"
+
+[patch.crates-io]
+mrly-apollonian = { path = "../../../mrlyprod/mrlyprod/packages/rs/apollonian" }
+mrly-arcs = { path = "../../../mrlyprod/mrlyprod/packages/rs/arcs" }
+mrly-audio = { path = "../../../mrlyprod/mrlyprod/packages/rs/audio" }
+mrly-automaton = { path = "../../../mrlyprod/mrlyprod/packages/rs/automaton" }
+mrly-avatar = { path = "../../../mrlyprod/mrlyprod/packages/rs/avatar" }
+mrly-bang = { path = "../../../mrlyprod/mrlyprod/packages/rs/bang" }
+mrly-chaos = { path = "../../../mrlyprod/mrlyprod/packages/rs/chaos" }
+mrly-chladni = { path = "../../../mrlyprod/mrlyprod/packages/rs/chladni" }
+mrly-color = { path = "../../../mrlyprod/mrlyprod/packages/rs/color" }
+mrly-crop = { path = "../../../mrlyprod/mrlyprod/packages/rs/crop" }
+mrly-error = { path = "../../../mrlyprod/mrlyprod/packages/rs/error" }
+mrly-fft = { path = "../../../mrlyprod/mrlyprod/packages/rs/fft" }
+mrly-font = { path = "../../../mrlyprod/mrlyprod/packages/rs/font" }
+mrly-gaussian = { path = "../../../mrlyprod/mrlyprod/packages/rs/gaussian" }
+mrly-gif = { path = "../../../mrlyprod/mrlyprod/packages/rs/gif" }
+mrly-graph = { path = "../../../mrlyprod/mrlyprod/packages/rs/graph" }
+mrly-hex = { path = "../../../mrlyprod/mrlyprod/packages/rs/hex" }
+mrly-image = { path = "../../../mrlyprod/mrlyprod/packages/rs/image" }
+mrly-json = { path = "../../../mrlyprod/mrlyprod/packages/rs/json" }
+mrly-life = { path = "../../../mrlyprod/mrlyprod/packages/rs/life" }
+mrly-linalg = { path = "../../../mrlyprod/mrlyprod/packages/rs/linalg" }
+mrly-math = { path = "../../../mrlyprod/mrlyprod/packages/rs/math" }
+mrly-moire = { path = "../../../mrlyprod/mrlyprod/packages/rs/moire" }
+mrly-music = { path = "../../../mrlyprod/mrlyprod/packages/rs/music" }
+mrly-name = { path = "../../../mrlyprod/mrlyprod/packages/rs/name" }
+mrly-num = { path = "../../../mrlyprod/mrlyprod/packages/rs/num" }
+mrly-obj = { path = "../../../mrlyprod/mrlyprod/packages/rs/obj" }
+mrly-pixels = { path = "../../../mrlyprod/mrlyprod/packages/rs/pixels" }
+mrly-png = { path = "../../../mrlyprod/mrlyprod/packages/rs/png" }
+mrly-radix = { path = "../../../mrlyprod/mrlyprod/packages/rs/radix" }
+mrly-rand = { path = "../../../mrlyprod/mrlyprod/packages/rs/rand" }
+mrly-readings = { path = "../../../mrlyprod/mrlyprod/packages/rs/readings" }
+mrly-roulette = { path = "../../../mrlyprod/mrlyprod/packages/rs/roulette" }
+mrly-sequences = { path = "../../../mrlyprod/mrlyprod/packages/rs/sequences" }
+mrly-space = { path = "../../../mrlyprod/mrlyprod/packages/rs/space" }
+mrly-spin = { path = "../../../mrlyprod/mrlyprod/packages/rs/spin" }
+mrly-star = { path = "../../../mrlyprod/mrlyprod/packages/rs/star" }
+mrly-tensor = { path = "../../../mrlyprod/mrlyprod/packages/rs/tensor" }
+mrly-three = { path = "../../../mrlyprod/mrlyprod/packages/rs/three" }
+mrly-thue = { path = "../../../mrlyprod/mrlyprod/packages/rs/thue" }
+mrly-tile = { path = "../../../mrlyprod/mrlyprod/packages/rs/tile" }
+mrly-tourbillon = { path = "../../../mrlyprod/mrlyprod/packages/rs/tourbillon" }
+mrly-two = { path = "../../../mrlyprod/mrlyprod/packages/rs/two" }
+mrly-ulam = { path = "../../../mrlyprod/mrlyprod/packages/rs/ulam" }
+mrly-voxels = { path = "../../../mrlyprod/mrlyprod/packages/rs/voxels" }
+mrly-wang = { path = "../../../mrlyprod/mrlyprod/packages/rs/wang" }
+mrly-wav = { path = "../../../mrlyprod/mrlyprod/packages/rs/wav" }
+mrly-wolfram = { path = "../../../mrlyprod/mrlyprod/packages/rs/wolfram" }
+mrly-zeta = { path = "../../../mrlyprod/mrlyprod/packages/rs/zeta" }

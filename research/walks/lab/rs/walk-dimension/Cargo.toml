@@ -1,0 +1,17 @@
+[package]
+name = "walk-dimension"
+edition = "2021"
+
+[dependencies]
+mrly-bang = "0.2.0"
+mrly-color = "0.2.0"
+mrly-graph = "0.2.0"
+mrly-math = "0.2.0"
+mrly-rand = "0.2.0"
+mrly-tensor = "0.2.0"
+mrly-three = "0.2.0"
+mrly-two = "0.2.0"
+faer = "0.24"
+png = "0.17"
+
+[workspace]

@@ -1,0 +1,11 @@
+[package]
+name = "evasive-saturation"
+edition = "2021"
+
+[dependencies]
+witness = { path = "../../../../shared/witness" }
+
+[workspace]
+
+[profile.release]
+opt-level = 3

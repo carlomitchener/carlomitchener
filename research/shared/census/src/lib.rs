@@ -1,0 +1,51 @@
+pub mod integers;
+
+use mrly_error::Error;
+use mrly_error::{value_error, Result};
+use mrly_json::Json;
+use std::path::PathBuf;
+
+fn path(name: &str) -> Result<PathBuf> {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let found: Vec<PathBuf> = std::fs::read_dir(&root)
+        .map_err(|e| Error::Value(format!("cannot read {root:?}: {e}")))?
+        .flatten()
+        .map(|entry| entry.path().join("figures").join(format!("{name}.ts")))
+        .filter(|figure| figure.is_file())
+        .collect();
+    match found.as_slice() {
+        [figure] => Ok(figure.with_extension("json")),
+        _ => value_error(format!(
+            "census {name} needs exactly one figures/{name}.ts, found {}.",
+            found.len()
+        )),
+    }
+}
+
+fn has_null(value: &Json) -> bool {
+    match value {
+        Json::Null => true,
+        Json::Array(items) => items.iter().any(has_null),
+        Json::Object(map) => map.values().any(has_null),
+        _ => false,
+    }
+}
+
+pub fn save(name: &str, value: &Json) -> Result<()> {
+    if name.is_empty()
+        || !name
+            .bytes()
+            .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-')
+    {
+        return value_error(format!("census name {name:?} is not a-z, 0-9 and -."));
+    }
+    if has_null(value) {
+        return value_error(format!("census {name} holds a null, a NaN or an infinity."));
+    }
+    let file = path(name)?;
+    let text = format!("{value}\n");
+    std::fs::write(&file, &text)
+        .map_err(|e| Error::Value(format!("cannot write {file:?}: {e}")))?;
+    println!("census {name} {} bytes", text.len());
+    Ok(())
+}

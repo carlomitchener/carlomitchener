@@ -1,0 +1,9 @@
+[package]
+name = "coprime-terms"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+witness = { path = "../../../../shared/witness" }
+
+[workspace]

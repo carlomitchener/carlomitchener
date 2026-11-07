@@ -1,0 +1,8 @@
+k = 13, member = false
+  digit 1  state (0, 0)  left 2  right 0  next Some((0, 1))
+  digit 1  state (0, 1)  left 2  right 1  next None
+k = 16, member = true
+  digit 1  state (0, 0)  left 2  right 0  next Some((0, 1))
+  digit 2  state (0, 1)  left 1  right 1  next Some((1, 2))
+  digit 1  state (1, 2)  left 0  right 2  next Some((1, 1))
+  digit 0  state (1, 1)  left 1  right 1  next Some((0, 0))

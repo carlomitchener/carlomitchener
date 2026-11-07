@@ -1,0 +1,7 @@
+6 states, digits 0..3
+state (0, 0) closes true   digit 0, 1, 2 go to (0, 0)  (0, 1)  (1, 2)
+state (0, 1) closes true   digit 0, 1, 2 go to (0, 0)  -  (1, 2)
+state (0, 2) closes true   digit 0, 1, 2 go to (0, 0)  -  -
+state (1, 0) closes true   digit 0, 1, 2 go to (0, 0)  (1, 1)  (1, 2)
+state (1, 1) closes true   digit 0, 1, 2 go to (0, 0)  (1, 1)  -
+state (1, 2) closes false  digit 0, 1, 2 go to -  (1, 1)  -
