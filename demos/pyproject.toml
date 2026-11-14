@@ -1,0 +1,20 @@
+[project]
+
+name = "demos"
+version = "0.1.0"
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy",
+    "pillow",
+    "matplotlib",
+    "mrly",
+]
+
+[tool.uv]
+
+package = false
+
+[tool.uv.sources]
+
+mrly = { git = "https://github.com/mrlyprod/mrlyprod", subdirectory = "bindings/py", rev = "45d81db48a1c9bed2d597893acf4508d61d0a934" }

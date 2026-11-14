@@ -1,0 +1,13 @@
+n (n)
+  scale 2 offset 0  level 1  sign  1  exact true
+  scale 2 offset 1  level 1  sign -1  exact true
+  scale 4 offset 0  level 2  sign  1  exact true
+  scale 4 offset 1  level 2  sign -1  exact true
+  scale 4 offset 2  level 2  sign -1  exact true
+  scale 4 offset 3  level 2  sign  1  exact true
+square (n^2)
+  scale 2 offset 0  level 2  sign  1  exact true
+  scale 4 offset 0  level 4  sign  1  exact true
+cube (n^3)
+  scale 2 offset 0  level 3  sign  1  exact true
+  scale 4 offset 0  level 6  sign  1  exact true

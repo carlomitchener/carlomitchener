@@ -1,0 +1,36 @@
+[build]
+target-dir = "target"
+
+[patch.crates-io]
+mrly-apollonian = { path = "../../../mrlyprod/mrlyprod/packages/apollonian" }
+mrly-arcs = { path = "../../../mrlyprod/mrlyprod/packages/arcs" }
+mrly-bang = { path = "../../../mrlyprod/mrlyprod/packages/bang" }
+mrly-color = { path = "../../../mrlyprod/mrlyprod/packages/color" }
+mrly-crop = { path = "../../../mrlyprod/mrlyprod/packages/crop" }
+mrly-error = { path = "../../../mrlyprod/mrlyprod/packages/error" }
+mrly-fft = { path = "../../../mrlyprod/mrlyprod/packages/fft" }
+mrly-gaussian = { path = "../../../mrlyprod/mrlyprod/packages/gaussian" }
+mrly-gif = { path = "../../../mrlyprod/mrlyprod/packages/gif" }
+mrly-graph = { path = "../../../mrlyprod/mrlyprod/packages/graph" }
+mrly-hex = { path = "../../../mrlyprod/mrlyprod/packages/hex" }
+mrly-image = { path = "../../../mrlyprod/mrlyprod/packages/image" }
+mrly-json = { path = "../../../mrlyprod/mrlyprod/packages/json" }
+mrly-life = { path = "../../../mrlyprod/mrlyprod/packages/life" }
+mrly-linalg = { path = "../../../mrlyprod/mrlyprod/packages/linalg" }
+mrly-math = { path = "../../../mrlyprod/mrlyprod/packages/math" }
+mrly-moire = { path = "../../../mrlyprod/mrlyprod/packages/moire" }
+mrly-name = { path = "../../../mrlyprod/mrlyprod/packages/name" }
+mrly-num = { path = "../../../mrlyprod/mrlyprod/packages/num" }
+mrly-obj = { path = "../../../mrlyprod/mrlyprod/packages/obj" }
+mrly-png = { path = "../../../mrlyprod/mrlyprod/packages/png" }
+mrly-radix = { path = "../../../mrlyprod/mrlyprod/packages/radix" }
+mrly-rand = { path = "../../../mrlyprod/mrlyprod/packages/rand" }
+mrly-sequences = { path = "../../../mrlyprod/mrlyprod/packages/sequences" }
+mrly-spin = { path = "../../../mrlyprod/mrlyprod/packages/spin" }
+mrly-tensor = { path = "../../../mrlyprod/mrlyprod/packages/tensor" }
+mrly-three = { path = "../../../mrlyprod/mrlyprod/packages/three" }
+mrly-tile = { path = "../../../mrlyprod/mrlyprod/packages/tile" }
+mrly-two = { path = "../../../mrlyprod/mrlyprod/packages/two" }
+mrly-wire = { path = "../../../mrlyprod/mrlyprod/packages/wire" }
+mrly-wolfram = { path = "../../../mrlyprod/mrlyprod/packages/wolfram" }
+mrly-zeta = { path = "../../../mrlyprod/mrlyprod/packages/zeta" }

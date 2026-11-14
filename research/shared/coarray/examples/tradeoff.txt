@@ -1,0 +1,8 @@
+base  sensors  holes  essential  law
+   4        9      0          5  9
+   5        9      0          8  9
+   6        9      0          9  9
+   7        9      0          9  9
+   8        9      6          9  9
+   9        9     12          9  9
+  10        9     18          9  9

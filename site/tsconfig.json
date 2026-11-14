@@ -1,0 +1,14 @@
+{
+  "extends": "../../../mrlyprod/private/packages/os/shell/tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../../../mrlyprod/private/packages/os/shell/src/site.d.ts",
+    "../../../mrlyprod/private/packages/os/kit/src/drawn.d.ts",
+    "../../../mrlyprod/private/packages/os/bind/js/src/wasm.d.ts"
+  ],
+  "exclude": ["node_modules", "../data"],
+  "compilerOptions": {
+    "typeRoots": ["../../../mrlyprod/private/node_modules/@types"]
+  }
+}

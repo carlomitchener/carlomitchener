@@ -1,0 +1,88 @@
+{
+  "title": "Carlo Mitchener",
+  "wordmark": "CARLO MITCHENER",
+  "root": "https://carlomitchener.com",
+  "port": 3007,
+  "since": 2026,
+  "prefix": "cm-",
+  "mark": "/mark.svg",
+  "tint": "blue",
+  "menu": "/menu/",
+  "screen": [1440, 900, 2],
+  "min": [320, 480],
+  "company": "Carlo Mitchener",
+  "tree": [
+    {
+      "name": "Root",
+      "nodes": [
+        {
+          "name": "robots.txt",
+          "href": "/robots.txt"
+        },
+        {
+          "name": "sitemap.xml",
+          "href": "/sitemap.xml"
+        },
+        {
+          "name": "llms.txt",
+          "href": "/llms.txt"
+        },
+        {
+          "name": "404.html",
+          "href": "/404.html"
+        },
+        {
+          "name": "404.html",
+          "href": "/404.html"
+        },
+        {
+          "name": "stats.json",
+          "href": "/stats.json"
+        }
+      ]
+    }
+  ],
+  "socials": [
+    {
+      "name": "GitHub",
+      "href": "https://github.com/carlomitchener"
+    },
+    {
+      "name": "X",
+      "href": "https://twitter.com/carlomitchener"
+    },
+    {
+      "name": "Instagram",
+      "href": "https://www.instagram.com/carlo.mitchener"
+    },
+    {
+      "name": "YouTube",
+      "href": "https://www.youtube.com/@carlomitchener"
+    },
+    {
+      "name": "Pinterest",
+      "href": "https://www.pinterest.com/carlomitchener"
+    }
+  ],
+  "contact": "",
+  "shots": {
+    "routes": ["/", "/menu/", "/about/", "/avatar/", "/stats/", "/nowhere/"]
+  },
+  "git": {
+    "root": ".",
+    "slug": "carlomitchener/carlomitchener",
+    "branch": "main"
+  },
+  "marks": {
+    "touch": "/apple-touch-icon.png"
+  },
+  "desk": "sky",
+  "themes": ["./themes/sky"],
+  "roots": ["apps"],
+  "seams": {
+    "palette": "../../../mrlyprod/private/packages/palettes/src",
+    "fonts": "../../../mrlyprod/private/packages/font/src/fonts.css",
+    "skin": "../../../mrlyprod/private/packages/designs/src/skin.css",
+    "home": "../../../mrlyprod/private/packages/marks/home"
+  }
+}

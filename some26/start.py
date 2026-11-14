@@ -1,0 +1,45 @@
+import math
+
+from PIL import Image, ImageDraw, ImageFont
+from mrly.core.colors import ALPHA
+from mrly.math import six, three
+from mrly.math.six import FILL, GRID, VOID
+
+from lib.canvas import H3, INK, PAPER, flatten, quantize, rgba
+from lib.gif import write_gif
+from lib.paths import GIFS, ensure, show
+
+NUMBER = 5
+LEVEL = 2
+SUPER = 3
+GIFW = 810
+GIFH = round(GIFW * H3)
+GREYS = 16
+PALETTE = {VOID: [PAPER], FILL: [INK], GRID: [ALPHA]}
+
+def label(canvas, start):
+    try:
+        font = ImageFont.load_default(48)
+    except TypeError:
+        font = ImageFont.load_default()
+    ImageDraw.Draw(canvas).text((30, GIFH - 78), f"start={start}", fill=INK[0], font=font)
+
+def frame(cell, start):
+    scale = max(1, math.ceil(SUPER * GIFW / (six.width(cell) + 1)))
+    image = flatten(rgba(six.image({**cell, "start": start}, scale, None, 0))).convert("L")
+    height = max(1, round(GIFW * image.height * H3 / image.width))
+    image = image.resize((GIFW, height), Image.BOX)
+    canvas = Image.new("L", (GIFW, GIFH), PAPER[0])
+    canvas.paste(image, ((GIFW - image.width) // 2, (GIFH - image.height) // 2))
+    label(canvas, start)
+    return quantize(canvas, GREYS)
+
+def main():
+    ensure()
+    cell = six.paint(six.cut(three.carpet(NUMBER, LEVEL)), PALETTE)
+    path = GIFS / ("start-%d-%d.gif" % (NUMBER, LEVEL))
+    write_gif(path, [frame(cell, start) for start in (0, 1)])
+    print("%s (start 0, start 1)" % show(path))
+
+if __name__ == "__main__":
+    main()

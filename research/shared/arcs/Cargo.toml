@@ -1,0 +1,13 @@
+[package]
+name = "arcs"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[dependencies]
+mrly-arcs = "0.2.0"
+mrly-error = "0.2.0"
+mrly-math = "0.2.0"
+serde = { version = "1", features = ["derive"] }
+
+[workspace]

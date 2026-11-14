@@ -1,0 +1,8 @@
+[package]
+name = "radix-carpet"
+edition = "2021"
+
+[dependencies]
+mrly-radix = "0.2.0"
+
+[workspace]

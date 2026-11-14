@@ -1,0 +1,16 @@
+{
+  "name": "carlomitchener",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun build.ts",
+    "dev": "bun build.ts dev",
+    "types": "tsc -p tsconfig.json",
+    "lint": "biome check .",
+    "stats": "bun stats.ts",
+    "deploy": "bun stats.ts && bun build.ts && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.157.0"
+  }
+}

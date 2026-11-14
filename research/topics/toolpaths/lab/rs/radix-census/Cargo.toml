@@ -1,0 +1,9 @@
+[package]
+name = "radix-census"
+edition = "2021"
+
+[dependencies]
+mrly-gaussian = "0.2.0"
+mrly-radix = "0.2.0"
+
+[workspace]

@@ -1,0 +1,8 @@
+[package]
+name = "roulette-reaches"
+edition = "2021"
+
+[dependencies]
+roulette = { path = "../../../../../shared/roulette" }
+
+[workspace]

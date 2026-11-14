@@ -1,0 +1,8 @@
+layers 1: odd     constant -0.16876 residual None
+layers 2: 2 mod 4 constant -0.29376 residual Some(0.13020833333333334)
+layers 3: odd     constant -0.16876 residual None
+layers 4: 0 mod 4 constant -0.29376 residual Some(-0.11979166666666667)
+layers 5: odd     constant -0.16876 residual None
+layers 6: 2 mod 4 constant -0.29376 residual Some(0.13020833333333334)
+layers 7: odd     constant -0.16876 residual None
+layers 8: 0 mod 4 constant -0.29376 residual Some(-0.11979166666666667)

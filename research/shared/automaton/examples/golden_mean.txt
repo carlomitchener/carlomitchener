@@ -1,0 +1,7 @@
+transfer matrix [[1, 1], [1, 0]]
+words of length 1..12: [2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377]
+perron root     1.618033988750
+golden ratio    1.618033988750
+entropy (log2)  0.694242 bits per letter
+[0, 1, 0, 1, 0] allowed: true
+[0, 1, 1, 0] allowed: false

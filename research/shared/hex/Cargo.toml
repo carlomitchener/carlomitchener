@@ -1,0 +1,13 @@
+[package]
+name = "hex"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[dependencies]
+mrly-error = "0.2.0"
+graph = { path = "../graph" }
+mrly-graph = "0.2.0"
+mrly-hex = "0.2.0"
+
+[workspace]

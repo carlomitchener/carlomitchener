@@ -1,0 +1,10 @@
+[package]
+name = "radix-designs"
+edition = "2021"
+
+[dependencies]
+mrly-gaussian = "0.2.0"
+mrly-math = "0.2.0"
+mrly-radix = "0.2.0"
+
+[workspace]

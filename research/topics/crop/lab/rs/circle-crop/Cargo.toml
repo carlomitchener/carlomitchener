@@ -1,0 +1,10 @@
+[package]
+name = "circle-crop"
+edition = "2021"
+
+[dependencies]
+mrly-crop = "0.2.0"
+mrly-math = "0.2.0"
+mrly-tensor = "0.2.0"
+
+[workspace]

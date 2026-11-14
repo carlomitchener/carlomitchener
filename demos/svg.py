@@ -1,0 +1,19 @@
+from config import DATA_DIR
+from helpers import save
+from mrly.core.colors import RED
+from mrly.math import two
+from mrly.math.cell import paint
+
+SCALE = 10
+
+def cell_2d():
+    cell = paint(two.carpet(3, 2))
+    data = two.svg(cell, SCALE, RED, 3, "Square")
+    print(data)
+    save(f"{DATA_DIR}/cell.svg", data)
+
+def main():
+    cell_2d()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,14 @@
+[package]
+name = "spectral-spacings"
+edition = "2021"
+
+[dependencies]
+mrly-graph = "0.2.0"
+mrly-math = "0.2.0"
+mrly-rand = "0.2.0"
+mrly-tensor = "0.2.0"
+mrly-three = "0.2.0"
+mrly-two = "0.2.0"
+faer = "0.24"
+
+[workspace]
